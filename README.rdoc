@@ -170,7 +170,12 @@ You have an app where users login and then need to re-login to view / change the
   @secure_user_session.id
   # => :secure
 
-This will keep everything separate. The :secure session will store its info in a separate cookie, separate session, etc. Just set the id and you are good to go. For more information on ids checkout Authgasm::Session::Base#initialize
+This will keep everything separate. The :secure session will store its info in a separate cookie, separate session, etc. Just set the id and you are good to go. Need to retrieve the session?
+
+  @user_session = UserSession.find
+  @secure_user_session = UserSession.find(:secure)
+
+For more information on ids checkout Authgasm::Session::Base#initialize
 
 == How it works
 
