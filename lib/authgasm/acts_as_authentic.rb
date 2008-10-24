@@ -43,7 +43,7 @@ module Authgasm
       # * <tt>password_salt_field:</tt> default: depends on which columns are present, checks: password_salt, pw_salt, salt, if none are present defaults to password_salt. This is the name of the field your salt is stored, only relevant for a hash crypto provider.
       # * <tt>remember_token_field:</tt> default: options[:session_class].remember_token_field, the name of the field your remember token is stored. What the cookie stores so the session can be "remembered"
       # * <tt>logged_in_timeout:</tt> default: 10.minutes, this allows you to specify a time the determines if a user is logged in or out. Useful if you want to count how many users are currently logged in.
-      # * <tt>session_scopes:</tt> default: [nil], the sessions that we want to automatically reset when a user is created or updated so you don't have to worry about this. Set to [] to disable. Should be an array of scopes. See Authgasm::Session::Base#initialize for information on scopes.
+      # * <tt>session_ids:</tt> default: [nil], the sessions that we want to automatically reset when a user is created or updated so you don't have to worry about this. Set to [] to disable. Should be an array of ids. See Authgasm::Session::Base#initialize for information on ids.
       def acts_as_authentic(options = {})
         # Setup default options
         options[:session_class] ||= "#{name}Session".constantize
@@ -65,7 +65,7 @@ module Authgasm
           :password_salt
         options[:remember_token_field] ||= options[:session_class].remember_token_field
         options[:logged_in_timeout] ||= 10.minutes
-        options[:session_scopes] ||= [nil]
+        options[:session_ids] ||= [nil]
         
         # Validations
         case options[:login_field_type]
@@ -167,11 +167,17 @@ module Authgasm
           
           protected
             def create_sessions!
-              #{options[:session_scopes].inspect}.each { |scope| #{options[:session_class]}.create(self) }
+              #{options[:session_ids].inspect}.each do |session_id|
+                args = [self, session_id].compact
+                #{options[:session_class]}.create(*args)
+              end
             end
             
             def update_sessions!
-              #{options[:session_scopes].inspect}.each { |scope| #{options[:session_class]}.update(self) }
+              #{options[:session_ids].inspect}.each do |session_id|
+                args = [self, session_id].compact
+                #{options[:session_class]}.update(*args)
+              end
             end
             
             def saving_from_session?

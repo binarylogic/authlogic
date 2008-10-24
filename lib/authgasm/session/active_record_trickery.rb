@@ -17,10 +17,6 @@ module Authgasm
       end
       
       module InstanceMethods # :nodoc:
-        def id
-          nil
-        end
-      
         def new_record?
           true
         end

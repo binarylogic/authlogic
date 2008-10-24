@@ -1,0 +1,3 @@
+== 0.9.1 released 2008-10-24
+
+* Changed scope to id. Makes more sense to call it an id and fits better with the ActiveRecord model.

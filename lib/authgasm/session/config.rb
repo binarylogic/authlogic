@@ -57,7 +57,7 @@ module Authgasm
         attr_writer :cookie_separator
         
         # The name of the cookie or the key in the cookies hash. Be sure and use a unique name. If you have multiple sessions and they use the same cookie it will cause problems.
-        # Also, if a scope is set it will be inserted into the beginning of the string. Exmaple:
+        # Also, if a id is set it will be inserted into the beginning of the string. Exmaple:
         #
         #   session = UserSession.new(:super_high_secret)
         #   session.cookie_key => "super_high_secret_user_credentials"
@@ -155,7 +155,7 @@ module Authgasm
       
       module InstanceMethods # :nodoc:
         def cookie_key
-          key_parts = [scope, self.class.cookie_key].compact
+          key_parts = [id, self.class.cookie_key].compact
           key_parts.join("_")
         end
         
@@ -180,7 +180,7 @@ module Authgasm
         end
         
         def session_key
-          key_parts = [scope, self.class.session_key].compact
+          key_parts = [id, self.class.session_key].compact
           key_parts.join("_")
         end
       

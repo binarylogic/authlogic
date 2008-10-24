@@ -44,9 +44,9 @@ module Authgasm
         #     @current_user = @user_session && @user_session.record
         #   end
         #
-        # Accepts a single parameter as the scope. See initialize for more information on scopes.
-        def find(scope = nil)
-          args = [scope].compact
+        # Accepts a single parameter as the id. See initialize for more information on ids.
+        def find(id = nil)
+          args = [id].compact
           session = new(*args)
           return session if session.valid_session? || session.valid_cookie?(true) || session.valid_http_auth?(true)
           nil
@@ -89,7 +89,7 @@ module Authgasm
           end
       end
     
-      attr_accessor :login_with, :remember_me, :scope
+      attr_accessor :login_with, :remember_me, :id
       attr_reader :record, :unauthorized_record
     
       # You can initialize a session by doing any of the following:
@@ -98,18 +98,18 @@ module Authgasm
       #   UserSession.new(login, password)
       #   UserSession.new(:login => login, :password => password)
       #
-      # If a user has more than one session you need to pass a scope so that Authgasm knows how to differentiate the sessions. The scope MUST be a Symbol.
+      # If a user has more than one session you need to pass an id so that Authgasm knows how to differentiate the sessions. The id MUST be a Symbol.
       #
-      #   UserSession.new(:my_scope)
-      #   UserSession.new(login, password, :my_scope)
-      #   UserSession.new({:login => loing, :password => password}, :my_scope)
+      #   UserSession.new(:my_id)
+      #   UserSession.new(login, password, :my_id)
+      #   UserSession.new({:login => loing, :password => password}, :my_id)
       #
-      # Scopes are rarely used, but they can be useful. For example, what if users allow other users to login into their account via proxy? Now that user can "technically" be logged into 2 accounts at once.
-      # To solve this just pass a scope called :proxy, or whatever you want. Authgasm will separate everything out.s
+      # Ids are rarely used, but they can be useful. For example, what if users allow other users to login into their account via proxy? Now that user can "technically" be logged into 2 accounts at once.
+      # To solve this just pass a id called :proxy, or whatever you want. Authgasm will separate everything out.
       def initialize(*args)
         create_configurable_methods!
         
-        self.scope = args.pop if args.last.is_a?(Symbol)
+        self.id = args.pop if args.last.is_a?(Symbol)
         
         case args.size
         when 1

@@ -14,7 +14,7 @@ Wouldn't it be nice if we could do something like:
     def create
       @user_session = UserSession.new(params[:user_session])
       if @user_session.create
-        redirect_to my_account_url
+        redirect_to account_url
       else
         render :action => :new
       end
