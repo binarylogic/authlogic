@@ -91,11 +91,11 @@ module Authgasm
         end
         
         after_create :create_sessions!
-        after_create :update_sessions!
+        after_update :update_sessions!
         
         # Attributes
         attr_writer "confirm_#{options[:password_field]}"
-        attr_accessor "tried_to_set_#{options[:password_field]}", :saving_from_session
+        attr_accessor "tried_to_set_#{options[:password_field]}"
         
         # Class methods
         class_eval <<-"end_eval", __FILE__, __LINE__
@@ -178,10 +178,6 @@ module Authgasm
                 args = [self, session_id].compact
                 #{options[:session_class]}.update(*args)
               end
-            end
-            
-            def saving_from_session?
-              saving_from_session == true
             end
             
             def tried_to_set_password?

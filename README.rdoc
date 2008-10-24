@@ -181,7 +181,7 @@ For more information on ids checkout Authgasm::Session::Base#initialize
 
 Interested in how this all works. Basically a before_filter is set in your controller which lets Authgasm know about the current controller object. This allows Authgasm to set sessions, cookies, login via basic http auth, etc. Don't worry, this is thread safe.
 
-From there is it pretty simple. When you try to create a new session the record is authenticated and then all of the session / cookie magic is done for you.
+From there it is pretty simple. When you try to create a new session the record is authenticated and then all of the session / cookie magic is done for you.
 
 
 Copyright (c) 2008 Ben Johnson of [Binary Logic](http://www.binarylogic.com), released under the MIT license

@@ -153,7 +153,6 @@ module Authgasm
               record.current_login_ip = controller.request.remote_ip
             end
             
-            record.saving_from_session = true
             record.save(false)
           end
           
@@ -269,7 +268,6 @@ module Authgasm
           session[session_key] = record.id
           if record.class.column_names.include?("last_click_at")
             record.last_click_at = Time.now
-            record.saving_from_session = true
             record.save(false)
           end
         end
