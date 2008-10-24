@@ -1,0 +1,10 @@
+db/schema.rb
+config/database.yml
+config/locomotive.yml
+config/mongrel_cluster.yml
+tmp/*
+log/*
+private/images/*
+public/cache/*
+.DS_Store
+

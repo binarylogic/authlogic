@@ -1,0 +1,19 @@
+<h1><%= @current_user.login %></h1>
+
+<table>
+  <tr>
+    <td>Login:</td>
+    <td><%= @current_user.login %></td>
+  </tr>
+  <tr>
+    <td>First name:</td>
+    <td><%= @current_user.first_name %></td>
+  </tr>
+  <tr>
+    <td>Last name:</td>
+    <td><%= @current_user.last_name %></td>
+  </tr>
+</table>
+<br />
+
+<%= link_to "Edit", edit_account_path %><br />

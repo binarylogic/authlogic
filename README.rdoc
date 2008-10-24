@@ -1,0 +1,164 @@
+= Authgasm
+
+Authgasm is "RESTful rails authentication done right"
+
+The last thing we need is another authentication solution for rails, right? That's what I thought. It was disappointing to find that all of the solutions were overly complicated, bloated, made too many assumptions about my app, written poorly, or were just plain confusing. I wanted something simple. Something that feels like it is a part of rails. Something that I could understand and not feel like authentication is this daunting / annoying task that litters my application with redundant code. So I decided to scratch my own itch by creating Authgasm.
+
+Wouldn't it be nice if we could do something like:
+
+  class UserSessionsController < ApplicationController
+    def new
+      @user_session = UserSession.new
+    end
+    
+    def create
+      @user_session = UserSession.new(params[:user_session])
+      if @user_session.create
+        redirect_to my_account_url
+      else
+        render :action => :new
+      end
+    end
+    
+    def destroy
+      @user_session.destroy
+    end
+  end
+
+Look familiar? If you didn't know any better, you would think UserSession was an ActiveRecord model. I think that's pretty cool. Why is that cool? Because it fits nicely into the RESTful development pattern and its a style we all know and love. Wouldn't this be cool too...
+
+  <%= error_messages_for "user_session" %>
+  <% form_for @user_session do |f| %>
+    <%= f.label :login %><br />
+    <%= f.text_field :login %><br />
+    <br />
+    <%= f.label :password %><br />
+    <%= f.password_field :password %><br />
+    <br />
+    <%= f.submit "Login" %>
+  <% end %>
+
+Oh, and how about this...
+
+  class ApplicationController
+    before_filter :load_user
+    
+    protected
+      def load_user
+        @user_session = UserSession.find
+        @current_user = @user_session && @user_session.record
+      end
+  end
+
+Authgasm makes this a reality. Hopefully I got your interest. This is just the tip of the ice berg. Keep reading to find out everything Authgasm can do.
+
+== Helpful links
+
+*	<b>Documentation:</b> http://authgasm.rubyforge.org
+*	<b>Authgasm tutorial:</b> coming soon...
+*	<b>Live example of the tutorial above (with source):</b> coming soon....
+* <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authgasm
+
+== Install and use
+
+Installing Authgasm and setting it up is very simple. Just like rails, Authgasm favors convention over configuration. As a result, it assumes a few things about your app. This guide will walk you through setting up Authgasm in your app and what Authgasm assumes.
+
+=== Install the gem / plugin
+
+  $ sudo gem install authgasm
+  $ cd vendor/plugins
+  $ sudo gem unpack authgasm
+
+Or as a plugin
+
+  script/plugin install git://github.com/binarylogic/authgasm.git
+
+=== Configuration
+
+Before we start, it is important you understand the basics behind Authgasm. Authgasm is split into 2 parts.
+
+1. Your model that you will be authenticating with, such as User
+2. Your session that represents a login, such as UserSession
+
+Each have their own configuration, so it can be as flexible as you need it to be. What's convenient is that the configuration for your model defaults to the configuration you set in your session. So if you set the configuration in your session, you won't have to repeat yourself in your model.
+
+For information on configuration please see Searchgasm::ActsAsAuthentic and Authgasm::Session::Config::ClassMethods
+
+=== Set up your model
+
+Make sure you have a model that you will be authenticating with. For this example let's say you have a User model:
+
+  class User < ActiveRecord::Base
+    acts_as_authentic # for options see documentation: Authgasm::ActsAsAuthentic
+  end
+  
+The user model needs to have the following columns. The names of these columns can be changed with configuration.
+
+    t.string    :login, :null => false
+    t.string    :crypted_password, :null => false
+    t.string    :password_salt, :null => false # not needed if you are encrypting your pw instead of using a hash algorithm
+    t.string    :remember_token, :null => false
+    t.integer   :loging_count # This is optional, it is a "magic" column, just like "created_at". See below for a list of all magic columns.
+
+Create your user_session.rb file:
+
+  # app/models/user_session.rb
+  class UserSession < Authgasm::Session::Base
+  end
+
+Done! Now go use it just like you would with any other ActiveRecord model (see above).
+
+== Magic Columns
+
+Just like ActiveRecord has "magic" columns, such as: created_at and updated_at. Authgasm has its own "magic" columns too:
+
+  Column name           Description
+  login_count           Increased every time and explicit login is made. This will *NOT* increase if logging in by a session, cookie, or basic http auth
+  last_click_at         Updates every time the user logs in, either by explicitly logging in, or logging in by cookie, session, or http auth
+  current_login_at      Updates with the current time when an explicit login is made.
+  last_login_at         Updates with the value of current_login_at before it is reset.
+  current_login_ip      Updates with the request remote_ip when an explicit login is made.
+  last_login_ip         Updates with the value of current_login_ip before it is reset.
+  
+== Magic States
+
+Authgasm tries to check the state of the record before creating the session. If your record responds to the following methods and any of them return false, validation will fail:
+
+  Method name           Description
+  approved?             Has the record been approved?
+  confirmed?            Has the record been conirmed?
+  inactive?             Is the record marked as inactive?
+  
+What's neat about these is that these are checked upon any type of login. When logging in explicitly, by cookie, session, or basic http auth. If any of these return false validation will fail and a session will not be created.
+
+== Hooks / Callbacks
+
+Just like ActiveRecord you can create your own hooks / callbacks so that you can do whatever you want when certain actions are performed. Here they are:
+
+  before_create
+  after_create
+  before_destroy
+  after_destroy
+  before_update
+  after_update
+  before_validation
+  after_validation
+
+== Automatic Session Updating
+
+This is one of my favorite features that I think is pretty cool. What if a user changes their password? You have to re-log them in with the new password, recreate the session, etc, pain in the ass. Or what if a user creates a new user account? You have to do the same thing. It makes your UsersController kind of dirty and it's kind of annoying. What's cool about this is that we pulled the UserSession down into the models, where we can play around with it. Why not have the User model take care of this for us in an after_save? Whoa! Now you don't have to worry about it at all. In fact, the acts_as_authentic method has an option to do this automatically for you. Zing! Man, Authgasm might be a little too awesome. So...
+
+  @current_user.password = "my new password"
+  @current_user.confirm_password = "my new password"
+  @current_user.save # automatically updates the sessions for you!
+
+When things come together like this I think its a sign that you are doing something right. Put that in your pipe and smoke it!
+
+== How it works
+
+Interested in how this all works. Basically a before_filter is set in your controller which lets Authgasm know about the current controller object. This allows Authgasm to set sessions, cookies, login via basic http auth, etc. Don't worry, this is thread safe.
+
+From there is it pretty simple. When you try to create a new session the record is authenticated and then all of the session / cookie magic is done for you.
+
+
+Copyright (c) 2008 Ben Johnson of [Binary Logic](http://www.binarylogic.com), released under the MIT license

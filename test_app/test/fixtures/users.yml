@@ -1,0 +1,6 @@
+ben:
+  id: 1
+  login: bjohnson
+  crypted_password: <%= Authgasm::Sha256CryptoProvider.encrypt("benrocks") %>
+  first_name: Ben
+  last_name: Johnson

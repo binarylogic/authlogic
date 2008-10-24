@@ -1,0 +1,13 @@
+<h1>Login</h1>
+
+<%= error_messages_for "user_session", :header_message => nil %>
+
+<% form_for @user_session do |f| %>
+  <%= f.label :login %><br />
+  <%= f.text_field :login %><br />
+  <br />
+  <%= f.label :password %><br />
+  <%= f.password_field :password %><br />
+  <br />
+  <%= f.submit "Login" %>
+<% end %>
