@@ -154,6 +154,24 @@ This is one of my favorite features that I think is pretty cool. What if a user 
 
 When things come together like this I think its a sign that you are doing something right. Put that in your pipe and smoke it!
 
+== Multiple Sessions
+
+You're asking: "why would I want multiple sessions?". Take this example:
+
+You have an app where users login and then need to re-login to view / change their billing information. Similar to how mobileme works, if you've ever used it. What you could do is have the user login with their normal session, then have an entirely new session that represents their "ultra_secure" session. But wait, this is 2 users sessions. No problem:
+
+  # regular user session
+  @user_session = UserSession.new
+  @user_session.id
+  # => nil
+  
+  # secure user session
+  @secure_user_session = UserSession.new(:secure)
+  @secure_user_session.id
+  # => :secure
+
+This will keep everything separate. The :secure session will store its info in a separate cookie, separate session, etc. Just set the id and you are good to go. For more information on ids checkout Authgasm::Session::Base#initialize
+
 == How it works
 
 Interested in how this all works. Basically a before_filter is set in your controller which lets Authgasm know about the current controller object. This allows Authgasm to set sessions, cookies, login via basic http auth, etc. Don't worry, this is thread safe.
