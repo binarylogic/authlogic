@@ -18,28 +18,28 @@ module Authgasm
       def create_with_callbacks(updating = false) # :nodoc:
         run_callbacks(:before_create)
         result = create_without_callbacks(updating)
-        run_callbacks(:after_create)
+        run_callbacks(:after_create) if result
         result
       end
       
       def destroy_with_callbacks # :nodoc:
         run_callbacks(:before_destroy)
         result = destroy_without_callbacks
-        run_callbacks(:after_destroy)
+        run_callbacks(:after_destroy) if result
         result
       end
       
       def update_with_callbacks # :nodoc:
         run_callbacks(:before_update)
         result = update_without_callbacks
-        run_callbacks(:after_update)
+        run_callbacks(:after_update) if result
         result
       end
       
       def valid_with_callbacks?(set_session = false) # :nodoc:
         run_callbacks(:before_validation)
         result = valid_without_callbacks?(set_session)
-        run_callbacks(:after_validation)
+        run_callbacks(:after_validation) if result
         result
       end
     end

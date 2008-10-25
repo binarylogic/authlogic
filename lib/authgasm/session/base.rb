@@ -189,6 +189,7 @@ module Authgasm
         @record = nil
         cookies.delete cookie_key
         session[session_key] = nil
+        true
       end
       
       # Errors when authentication fails, just like ActiveRecord errors. In fact it uses the same exact class.
