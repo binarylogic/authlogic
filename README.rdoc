@@ -126,7 +126,7 @@ Authgasm tries to check the state of the record before creating the session. If 
   confirmed?            Has the record been conirmed?
   inactive?             Is the record marked as inactive?
   
-What's neat about these is that these are checked upon any type of login. When logging in explicitly, by cookie, session, or basic http auth. If any of these return false validation will fail and a session will not be created.
+What's neat about this is that these are checked upon any type of login. When logging in explicitly, by cookie, session, or basic http auth. So if you mark a user inactive in the middle of their session they wont be logged back in next time they refresh the page. Giving you complete control.
 
 == Hooks / Callbacks
 
@@ -147,9 +147,9 @@ This is one of my favorite features that I think its pretty cool. It's things li
 
 What if a user changes their password? You have to re-log them in with the new password, recreate the session, etc, pain in the ass. Or what if a user creates a new user account? You have to do the same thing. Here's an even better one: what if a user is in the admin area and changes his own password? There might even be another place passwords can change.
 
-Instead of updating sessions all over the place, doesn't it make sense to do this at a lower level? Like the User model? You're saying "but Ben, models can't mess around with sessions and cookies". True...but with Authgasm they can. I know in most situations it's not good practice to do this but I view this in the same class as sweepers, and feel like it actually is good practice here.
+Instead of updating sessions all over the place, doesn't it make sense to do this at a lower level? Like the User model? You're saying "but Ben, models can't mess around with sessions and cookies". True...but Authgasm they can, and you can access an Authgasm class just like a model. I know in most situations it's not good practice to do this but I view this in the same class as sweepers, and feel like it actually is good practice here.
 
-So, acts_as_authentic takes care of this for you by adding an after_create and after_update callback to automatically keep the session up to date. You don't have to worry about it anymore. Don't even think about it. Let your UsersController deal with users, not users AND sessions.
+Fear not, because acts_as_authentic takes care of this for you by adding an after_create and after_update callback to automatically keep the session up to date. You don't have to worry about it anymore. Don't even think about it. Let your UsersController deal with users, not users AND sessions. *ANYTIME* the user changes his password in *ANY* way, his session will be updated.
 
 A simple example...
 
@@ -159,11 +159,11 @@ A simple example...
 
 When things come together like this I think its a sign that you are doing something right. Put that in your pipe and smoke it!
 
-== Multiple Sessions
+== Multiple Sessions / Session Identifiers
 
 You're asking: "why would I want multiple sessions?". Take this example:
 
-You have an app where users login and then need to re-login to view / change their billing information. Similar to how mobileme works, if you've ever used it. What you could do is have the user login with their normal session, then have an entirely new session that represents their "ultra_secure" session. But wait, this is 2 users sessions. No problem:
+You have an app where users login and then need to re-login to view / change their billing information. Similar to how Apples' me.com works, if you've ever used it. What you could do is have the user login with their normal session, then have an entirely new session that represents their "secure" session. But wait, this is 2 users sessions. No problem:
 
   # regular user session
   @user_session = UserSession.new
@@ -184,7 +184,7 @@ For more information on ids checkout Authgasm::Session::Base#initialize
 
 == How it works
 
-Interested in how all of this all works? Basically a before_filter is set in your controller which lets Authgasm know about the current controller object. This allows Authgasm to set sessions, cookies, login via basic http auth, etc. Don't worry, this is thread safe.
+Interested in how all of this all works? Basically a before_filter is automatically set in your controller which lets Authgasm know about the current controller object. This allows Authgasm to set sessions, cookies, login via basic http auth, etc. If you are using rails in a multiple thread environment, don't worry. I kept that in mind and made this is thread safe.
 
 From there it is pretty simple. When you try to create a new session the record is authenticated and then all of the session / cookie magic is done for you. The sky is the limit.
 
