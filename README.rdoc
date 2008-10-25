@@ -89,7 +89,7 @@ Create your user_session.rb file:
 
 It is important to set your configuration for your session before you set the configuration for your model. This will save you some time. Your model will try to guess its own configuration based on what you set in the session. These are completely separate, making Authgasm as flexible as it needs to be, but no one likes to repeat their self.
 
-== Ensure proper database fields
+=== Ensure proper database fields
 
 The user model needs to have the following columns. The names of these columns can be changed with configuration.
 
