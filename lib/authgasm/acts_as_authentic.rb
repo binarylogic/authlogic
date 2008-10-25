@@ -43,7 +43,7 @@ module Authgasm
       # * <tt>password_salt_field:</tt> default: depends on which columns are present, checks: password_salt, pw_salt, salt, if none are present defaults to password_salt. This is the name of the field your salt is stored, only relevant for a hash crypto provider.
       # * <tt>remember_token_field:</tt> default: options[:session_class].remember_token_field, the name of the field your remember token is stored. What the cookie stores so the session can be "remembered"
       # * <tt>logged_in_timeout:</tt> default: 10.minutes, this allows you to specify a time the determines if a user is logged in or out. Useful if you want to count how many users are currently logged in.
-      # * <tt>session_ids:</tt> default: [nil], the sessions that we want to automatically reset when a user is created or updated so you don't have to worry about this. Set to [] to disable. Should be an array of ids. See Authgasm::Session::Base#initialize for information on ids.
+      # * <tt>session_ids:</tt> default: [nil], the sessions that we want to automatically reset when a user is created or updated so you don't have to worry about this. Set to [] to disable. Should be an array of ids. See Authgasm::Session::Base#initialize for information on ids. The order is important. The first id should be your main session, the session they need to log into first. This is generally nil, meaning so explicitly set id.
       def acts_as_authentic(options = {})
         # Setup default options
         options[:session_class] ||= "#{name}Session".constantize
@@ -168,6 +168,8 @@ module Authgasm
           
           protected
             def create_sessions!
+              return if #{options[:session_ids].inspect}.blank?
+              
               # We only want to automatically login into the first session, since this is the main session. The other sessions are sessions
               # that need to be created after logging into the main session.
               session_id = #{options[:session_ids].inspect}.first
