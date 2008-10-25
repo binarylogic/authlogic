@@ -96,6 +96,7 @@ module Authgasm
         # Attributes
         attr_writer "confirm_#{options[:password_field]}"
         attr_accessor "tried_to_set_#{options[:password_field]}"
+        attr_protected "tried_to_set_#{options[:password_field]}"
         
         # Class methods
         class_eval <<-"end_eval", __FILE__, __LINE__
@@ -167,16 +168,27 @@ module Authgasm
           
           protected
             def create_sessions!
-              #{options[:session_ids].inspect}.each do |session_id|
-                args = [self, session_id].compact
-                #{options[:session_class]}.create(*args)
-              end
+              # We only want to automatically login into the first session, since this is the main session. The other sessions are sessions
+              # that need to be created after logging into the main session.
+              session_id = #{options[:session_ids].inspect}.first
+              
+              # If we are already logged in, ignore this completely. All that we care about is updating ourself.
+              next if #{options[:session_class]}.find(*[session_id].compact)
+              
+              # Log me in
+              args = [self, session_id].compact
+              #{options[:session_class]}.create(*args)
             end
             
             def update_sessions!
               #{options[:session_ids].inspect}.each do |session_id|
-                args = [self, session_id].compact
-                #{options[:session_class]}.update(*args)
+                session = #{options[:session_class]}.find(*[session_id].compact)
+                
+                # Ignore if we can't find the session or the session isn't this record
+                next if !session || session.record != self
+                
+                # We know we are logged in and this is our record, update the session
+                session.update
               end
             end
             

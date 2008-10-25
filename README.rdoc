@@ -98,7 +98,7 @@ The user model needs to have the following columns. The names of these columns c
     t.string    :crypted_password, :null => false
     t.string    :password_salt, :null => false # not needed if you are encrypting your pw instead of using a hash algorithm
     t.string    :remember_token, :null => false
-    t.integer   :loging_count # This is optional, it is a "magic" column, just like "created_at". See below for a list of all magic columns.
+    t.integer   :login_count # This is optional, it is a "magic" column, just like "created_at". See below for a list of all magic columns.
 
 Create your user_session.rb file:
 
@@ -146,7 +146,7 @@ Just like ActiveRecord you can create your own hooks / callbacks so that you can
 
 == Automatic Session Updating
 
-This is one of my favorite features that I think is pretty cool. What if a user changes their password? You have to re-log them in with the new password, recreate the session, etc, pain in the ass. Or what if a user creates a new user account? You have to do the same thing. It makes your UsersController kind of dirty and it's kind of annoying. What's cool about this is that we pulled the UserSession down into the models, where we can play around with it. Why not have the User model take care of this for us in an after_save? Whoa! Now you don't have to worry about it at all. In fact, the acts_as_authentic method has an option to do this automatically for you. Zing! Man, Authgasm might be a little too awesome. So...
+This is one of my favorite features that I think is pretty cool. What if a user changes their password? You have to re-log them in with the new password, recreate the session, etc, pain in the ass. Or what if a user creates a new user account? You have to do the same thing. It makes your UsersController kind of dirty and it's kind of annoying. What's cool about this is that we pulled the UserSession down into the models, where we can play around with it. Why not have the User model take care of this for us in an after_save? Now you don't have to worry about it at all. In fact, the acts_as_authentic method has an option to do this automatically for you. Authgasm might be a little too awesome. So...
 
   @current_user.password = "my new password"
   @current_user.confirm_password = "my new password"
