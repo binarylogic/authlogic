@@ -84,6 +84,15 @@ module Authgasm
         end
         attr_writer :find_by_login_method
         
+        # Calling UserSession.find tries to find the user session by session, then cookie, then basic http auth. This option allows you to change the order or remove any of these.
+        #
+        # * <tt>Default:</tt> [:session, :cookie, :http_auth]
+        # * <tt>Accepts:</tt> Array, and can only use any of the 3 options above
+        def find_with
+          @find_with ||= [:session, :cookie, :http_auth]
+        end
+        attr_writer :find_with
+        
         # The name of the method you want Authgasm to create for storing the login / username. Keep in mind this is just for your Authgasm::Session, if you want it can be something completely different
         # than the field in your model. So if you wanted people to login with a field called "login" and then find users by email this is compeltely doable. See the find_by_login_method configuration option for
         # more details.

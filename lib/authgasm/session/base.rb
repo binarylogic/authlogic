@@ -44,11 +44,15 @@ module Authgasm
         #     @current_user = @user_session && @user_session.record
         #   end
         #
-        # Accepts a single parameter as the id. See initialize for more information on ids.
+        # Accepts a single parameter as the id. See initialize for more information on ids. Lastly, how it finds the session can be modified via configuration.
         def find(id = nil)
           args = [id].compact
           session = new(*args)
-          return session if session.valid_session? || session.valid_cookie?(true) || session.valid_http_auth?(true)
+          find_with.each do |find_method|
+            args = []
+            args << true unless find_method == :session
+            return session if session.send("valid_#{find_method}?", *args)
+          end
           nil
         end
         
@@ -266,8 +270,8 @@ module Authgasm
         # Now lets set the session to make things easier on successive requests. This is nice when logging in from a cookie, the next requests will be right from the session, which is quicker.
         if set_session
           session[session_key] = record.id
-          if record.class.column_names.include?("last_click_at")
-            record.last_click_at = Time.now
+          if record.class.column_names.include?("last_request_at")
+            record.last_request_at = Time.now
             record.save(false)
           end
         end
