@@ -2,13 +2,13 @@
 
 Authgasm is "rails authentication done right"
 
-The last thing we need is another authentication solution for rails, right? That's what I thought. It was disappointing to find that all of the solutions were overly complicated, bloated, written poorly, and were just plain confusing. They felt very Windowsish. This is not the simple / elegant rails we all fell in love with. It's like the Microsoft engineers decided to dabble in ruby / rails for a day and their project was to write an authentication solution. That's what went through my head when I was trying out all of these solutions. It's time we need a "rails like" authentication solution. So I give you Authgasm...
+The last thing we need is another authentication solution for rails, right? That's what I thought. It was disappointing to find that all of the solutions were overly complicated, bloated, written poorly, and were just plain confusing. They felt very Windowsish. This is not the simple / elegant rails we all fell in love with. It's like the Microsoft engineers decided to dabble in ruby / rails for a day and their project was to write an authentication solution. That's what went through my head when I was trying out all of the current solutions. It's time we need a "rails like" authentication solution. So I give you Authgasm...
 
-What if logging in a user could be as simple as...
+What if creating a user session could be as simple as...
 
   UserSession.create(params[:user])
 
-What if your sessions controller could look just like your other controllers...
+What if your user sessions controller could look just like your other controllers...
 
   class UserSessionsController < ApplicationController
     def new
@@ -42,7 +42,7 @@ Look familiar? If you didn't know any better, you would think UserSession was an
     <%= f.submit "Login" %>
   <% end %>
 
-Or how about this...
+Or how about persisting the session...
 
   class ApplicationController
     before_filter :load_user
@@ -54,7 +54,7 @@ Or how about this...
       end
   end
 
-Authgasm makes this a reality. Hopefully I got your interest. This is just the tip of the ice berg. Keep reading to find out everything Authgasm can do.
+Authgasm makes this a reality. This is just the tip of the ice berg. Keep reading to find out everything Authgasm can do.
 
 == Helpful links
 
@@ -151,15 +151,29 @@ This is one of my favorite features that I think its pretty cool. It's things li
 
 What if a user changes their password? You have to re-log them in with the new password, recreate the session, etc, pain in the ass. Or what if a user creates a new user account? You have to do the same thing. Here's an even better one: what if a user is in the admin area and changes his own password? There might even be another place passwords can change.
 
-Instead of updating sessions all over the place, doesn't it make sense to do this at a lower level? Like the User model? You're saying "but Ben, models can't mess around with sessions and cookies". True...but Authgasm they can, and you can access an Authgasm class just like a model. I know in most situations it's not good practice to do this but I view this in the same class as sweepers, and feel like it actually is good practice here. User sessions are directly tied to users, they should be connected on the model level.
+Instead of updating sessions all over the place, doesn't it make sense to do this at a lower level? Like the User model? You're saying "but Ben, models can't mess around with sessions and cookies". True...but Authgasm can, and you can access Authgasm just like a model. I know in most situations it's not good practice to do this but I view this in the same class as sweepers, and feel like it actually is good practice here. User sessions are directly tied to users, they should be connected on the model level.
 
-Fear not, because the acts_as_authentic method you call in your model takes care of this for you, by adding an after_create and after_update callback to automatically keep the session up to date. You don't have to worry about it anymore. Don't even think about it. Let your UsersController deal with users, not users AND sessions. *ANYTIME* the user changes his password in *ANY* way, his session will be updated.
+Fear not, because the acts_as_authentic method you call in your model takes care of this for you, by adding an after_create and after_update callback to automatically keep the session up to date. You don't have to worry about it anymore. Don't even think about it. Let your UsersController deal with users, not users *AND* sessions. *ANYTIME* the user changes his password in *ANY* way, his session will be updated.
 
-A simple example...
+Here is basically how this is done....
 
-  @current_user.password = "my new password"
-  @current_user.confirm_password = "my new password"
-  @current_user.save # automatically updates the sessions for you!
+  class User < ActiveRecord::Base
+    after_create :create_sessions!
+    after_update :update_sessions!
+    
+    private
+      def create_sessions!
+        # create a new UserSession if they are not logged in
+      end
+      
+      def update_sessions!
+        # find their session
+        # check that their session's record is the same one as this one: session.record == self
+        # update the session with the new info: session.update
+      end
+  end
+
+Obviously there is a little more to it than this, but hopefully this clarifies any confusion.
 
 When things come together like this I think its a sign that you are doing something right. Put that in your pipe and smoke it!
 
