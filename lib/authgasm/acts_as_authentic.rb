@@ -168,7 +168,7 @@ module Authgasm
           
           protected
             def create_sessions!
-              return if #{options[:session_ids].inspect}.blank?
+              return if !#{options[:session_class]}.activated? || #{options[:session_ids].inspect}.blank?
               
               # We only want to automatically login into the first session, since this is the main session. The other sessions are sessions
               # that need to be created after logging into the main session.
@@ -183,6 +183,8 @@ module Authgasm
             end
             
             def update_sessions!
+              return if !#{options[:session_class]}.activated?
+              
               #{options[:session_ids].inspect}.each do |session_id|
                 session = #{options[:session_class]}.find(*[session_id].compact)
                 

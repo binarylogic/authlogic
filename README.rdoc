@@ -38,7 +38,7 @@ Look familiar? If you didn't know any better, you would think UserSession was an
     <%= f.submit "Login" %>
   <% end %>
 
-Oh, and how about this...
+Or how about this...
 
   class ApplicationController
     before_filter :load_user
@@ -61,8 +61,6 @@ Authgasm makes this a reality. Hopefully I got your interest. This is just the t
 
 == Install and use
 
-Installing Authgasm and setting it up is very simple. Just like rails, Authgasm favors convention over configuration. As a result, it assumes a few things about your app. This guide will walk you through setting up Authgasm in your app and what Authgasm assumes.
-
 === Install the gem / plugin
 
   $ sudo gem install authgasm
@@ -73,25 +71,22 @@ Or as a plugin
 
   script/plugin install git://github.com/binarylogic/authgasm.git
 
-=== Configuration
+=== Create your session
 
-Before we start, it is important you understand the basics behind Authgasm. Authgasm is split into 2 parts.
+For this walk through lets assume you are setting up a session for your User model.
 
-1. Your model that you will be authenticating with, such as User
-2. Your session that represents a login, such as UserSession
+Create your user_session.rb file:
 
-Each have their own configuration, so it can be as flexible as you need it to be. What's convenient is that the configuration for your model defaults to the configuration you set in your session. So if you set the configuration in your session, you won't have to repeat yourself in your model.
-
-For information on configuration please see Searchgasm::ActsAsAuthentic and Authgasm::Session::Config::ClassMethods
-
-=== Set up your model
-
-Make sure you have a model that you will be authenticating with. For this example let's say you have a User model:
-
-  class User < ActiveRecord::Base
-    acts_as_authentic # for options see documentation: Authgasm::ActsAsAuthentic
+  # app/models/user_session.rb
+  class UserSession < Authgasm::Session::Base
+    # configuration here, just like ActiveRecord, or in an initializer
+    # See Authgasm::Session::Config::ClassMethods for more details
   end
-  
+
+It is important to set your configuration for your session before you set the configuration for your model. This will save you some time. Your model will try to guess its own configuration based on what you set in the session. These are completely separate, making Authgasm as flexible as it needs to be, but no one likes to repeat their self.
+
+== Ensure proper database fields
+
 The user model needs to have the following columns. The names of these columns can be changed with configuration.
 
     t.string    :login, :null => false
@@ -100,10 +95,12 @@ The user model needs to have the following columns. The names of these columns c
     t.string    :remember_token, :null => false
     t.integer   :login_count # This is optional, it is a "magic" column, just like "created_at". See below for a list of all magic columns.
 
-Create your user_session.rb file:
+=== Set up your model
 
-  # app/models/user_session.rb
-  class UserSession < Authgasm::Session::Base
+Make sure you have a model that you will be authenticating with. For this example let's say you have a User model:
+
+  class User < ActiveRecord::Base
+    acts_as_authentic # for options see documentation: Authgasm::ActsAsAuthentic::ClassMethods
   end
 
 Done! Now go use it just like you would with any other ActiveRecord model (see above).
@@ -187,9 +184,9 @@ For more information on ids checkout Authgasm::Session::Base#initialize
 
 == How it works
 
-Interested in how this all works. Basically a before_filter is set in your controller which lets Authgasm know about the current controller object. This allows Authgasm to set sessions, cookies, login via basic http auth, etc. Don't worry, this is thread safe.
+Interested in how all of this all works? Basically a before_filter is set in your controller which lets Authgasm know about the current controller object. This allows Authgasm to set sessions, cookies, login via basic http auth, etc. Don't worry, this is thread safe.
 
-From there it is pretty simple. When you try to create a new session the record is authenticated and then all of the session / cookie magic is done for you.
+From there it is pretty simple. When you try to create a new session the record is authenticated and then all of the session / cookie magic is done for you. The sky is the limit.
 
 
 Copyright (c) 2008 Ben Johnson of [Binary Logic](http://www.binarylogic.com), released under the MIT license
