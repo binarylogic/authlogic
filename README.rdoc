@@ -2,7 +2,9 @@
 
 Authgasm is "rails authentication done right"
 
-The last thing we need is another authentication solution for rails, right? That's what I thought. It was disappointing to find that all of the solutions were overly complicated, bloated, written poorly, and were just plain confusing. They felt very Windowsish. This is not the simple / elegant rails we all fell in love with. It's like the Microsoft engineers decided to dabble in ruby / rails for a day and their project was to write an authentication solution. That's what went through my head when I was trying out all of the current solutions. It's time we need a "rails like" authentication solution. So I give you Authgasm...
+The last thing we need is another authentication solution for rails, right? That's what I thought. It was disappointing to find that all of the current solutions were overly complicated, bloated, poorly written, littered my application with code, and were just plain confusing. They felt very Microsoftish. This is not the simple / elegant rails we all fell in love with. It's like some Microsoft .NET engineers decided to dabble in ruby / rails for a day and their project was to write an authentication solution. That's what went through my head when I was trying out all of the current solutions. It's time someone makes a "rails like" authentication solution. So I give you Authgasm...
+
+What if you could have authentication up and running in minutes without having to run a generator? All because it's simple, like everything else in rails.
 
 What if creating a user session could be as simple as...
 
@@ -87,7 +89,7 @@ Create your user_session.rb file:
     # See Authgasm::Session::Config::ClassMethods for more details
   end
 
-It is important to set your configuration for your session before you set the configuration for your model. This will save you some time. Your model will try to guess its own configuration based on what you set in the session. These are completely separate, making Authgasm as flexible as it needs to be, but no one likes to repeat their self.
+It is important to set your configuration for your session before you set the configuration for your model. This will save you some time. Your model will try to guess its own configuration based on what you set in the session. These are completely separate, making Authgasm as flexible as it needs to be, but the majority of the time they will be the same and no one likes to repeat their self.
 
 === Ensure proper database fields
 
@@ -114,7 +116,7 @@ Done! Now go use it just like you would with any other ActiveRecord model (see a
 Just like ActiveRecord has "magic" columns, such as: created_at and updated_at. Authgasm has its own "magic" columns too:
 
   Column name           Description
-  login_count           Increased every time and explicit login is made. This will *NOT* increase if logging in by a session, cookie, or basic http auth
+  login_count           Increased every time an explicit login is made. This will *NOT* increase if logging in by a session, cookie, or basic http auth
   last_request_at       Updates every time the user logs in, either by explicitly logging in, or logging in by cookie, session, or http auth
   current_login_at      Updates with the current time when an explicit login is made.
   last_login_at         Updates with the value of current_login_at before it is reset.
@@ -147,9 +149,9 @@ Just like ActiveRecord you can create your own hooks / callbacks so that you can
 
 == Automatic Session Updating
 
-This is one of my favorite features that I think its pretty cool. It's things like this that make a library great and set it apart from other libraries.
+This is one of my favorite features that I think its pretty cool. It's things like this that make a library great and let you know you are on the right track.
 
-What if a user changes their password? You have to re-log them in with the new password, recreate the session, etc, pain in the ass. Or what if a user creates a new user account? You have to do the same thing. Here's an even better one: what if a user is in the admin area and changes his own password? There might even be another place passwords can change.
+What if a user changes their password? You have to re-log them in with the new password, recreate the session, etc, pain in the ass. Or what if a user creates a new user account? You have to do the same thing. Here's an even better one: what if a user is in the admin area and changes his own password? There might even be another place passwords can change. It shouldn't matter, your code should be written in a way where you don't have to remember to do this.
 
 Instead of updating sessions all over the place, doesn't it make sense to do this at a lower level? Like the User model? You're saying "but Ben, models can't mess around with sessions and cookies". True...but Authgasm can, and you can access Authgasm just like a model. I know in most situations it's not good practice to do this but I view this in the same class as sweepers, and feel like it actually is good practice here. User sessions are directly tied to users, they should be connected on the model level.
 
@@ -173,7 +175,7 @@ Here is basically how this is done....
       end
   end
 
-Obviously there is a little more to it than this, but hopefully this clarifies any confusion.
+Obviously there is a little more to it than this, but hopefully this clarifies any confusion. Lastly, this can be altered / disabled via a configuration option.
 
 When things come together like this I think its a sign that you are doing something right. Put that in your pipe and smoke it!
 

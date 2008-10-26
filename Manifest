@@ -1,3 +1,4 @@
+CHANGELOG.rdoc
 init.rb
 lib/authgasm/acts_as_authentic.rb
 lib/authgasm/controller.rb
@@ -21,10 +22,6 @@ test_app/app/helpers/user_sessions_helper.rb
 test_app/app/helpers/users_helper.rb
 test_app/app/models/user.rb
 test_app/app/models/user_session.rb
-test_app/app/views/asses/edit.html.erb
-test_app/app/views/asses/index.html.erb
-test_app/app/views/asses/new.html.erb
-test_app/app/views/asses/show.html.erb
 test_app/app/views/layouts/application.html.erb
 test_app/app/views/user_sessions/new.html.erb
 test_app/app/views/users/_form.erb

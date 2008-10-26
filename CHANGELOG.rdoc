@@ -4,6 +4,7 @@
 * Removed saving_from_session flag, apparently it is not needed.
 * Fixed updating sessions to make more sense and be stricter.
 * change last_click_at to last_request_at
+* Only run "after" callbacks if the result is successful.
 
 == 0.9.0 released 2008-10-24
 
