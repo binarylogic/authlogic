@@ -1,5 +1,9 @@
 == 0.10.0 released 2008-10-24
 
+* Sessions now store the "remember token" instead of the id. This is much safer and guarantees all "sessions" that are logged in are logged in with a valid password. This way stale sessions can't be persisted.
+
+== 0.10.0 released 2008-10-24
+
 * Do not allow instantiation if the session has not been activated with a controller object. Just like ActiveRecord won't let you do anything without a DB connection.
 * Abstracted controller implementation to allow for rails, merb, etc adapters. So this is not confined to the rails framework.
 * Removed create and update methods and added save, like ActiveRecord.

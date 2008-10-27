@@ -336,7 +336,7 @@ module Authgasm
       
       def valid_session?
         if session_credentials
-          self.unauthorized_record = klass.find_by_id(session_credentials)
+          self.unauthorized_record = klass.send("find_by_#{remember_token_field}", cookie_credentials)
           result = valid?
           if result
             self.new_session = false
@@ -394,7 +394,7 @@ module Authgasm
         end
         
         def update_session!
-          controller.session[session_key] = record && record.id
+          controller.session[session_key] = record && record.send(remember_token_field)
         end
     end
   end

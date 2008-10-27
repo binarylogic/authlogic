@@ -26,7 +26,7 @@ class UserSessionTest < ActionController::IntegrationTest
   
   def test_find
     assert_equal nil, UserSession.find
-    post user_sessions_url, {:user_session => {:login => "bjohnson", :password => "benrocks"}}
+    login_successfully("bjohnson", "benrocks")
     assert UserSession.find
   end
   

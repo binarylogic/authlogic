@@ -84,6 +84,7 @@ module Authgasm
         end
         
         validates_uniqueness_of options[:login_field]
+        validates_uniqueness_of options[:remember_token_field]
         validate :validate_password
         validates_numericality_of :login_count, :only_integer => :true, :greater_than_or_equal_to => 0, :allow_nil => true if column_names.include?("login_count")
         
@@ -93,6 +94,7 @@ module Authgasm
         end
         
         after_create :create_sessions!
+        before_update :find_my_sessions
         after_update :update_sessions!
         
         # Attributes
@@ -208,18 +210,28 @@ module Authgasm
               #{options[:session_class]}.create(*args)
             end
             
-            def update_sessions!
+            def find_my_sessions
               return if @saving_from_session || !#{options[:session_class]}.activated?
               
+              @my_sessions = []
               #{options[:session_ids].inspect}.each do |session_id|
                 session = #{options[:session_class]}.find(*[session_id].compact)
                 
                 # Ignore if we can't find the session or the session isn't this record
                 next if !session || session.record != self
                 
-                # We know we are logged in and this is our record, update the session
-                session.save
+                @my_sessions << session
               end
+            end
+            
+            def update_sessions!
+              return if @saving_from_session || !#{options[:session_class]}.activated?
+              
+              @my_sessions.each do |stale_session|
+                stale_session.unauthorized_record = self
+                stale_session.save
+              end
+              @my_sessions = nil
             end
             
             def tried_to_set_password?

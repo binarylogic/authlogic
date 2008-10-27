@@ -63,7 +63,7 @@ class ActionController::IntegrationTest
       # Perform multiple requests to make sure the session is persisting properly, just being anal here
       3.times do
         get account_url
-        assert_equal user.id, session["user_id"]
+        assert_equal user.remember_token, session["user_credentials"]
         assert_equal user.remember_token, cookies["user_credentials"]
         assert_response :success
         assert_template "users/show"
@@ -76,7 +76,7 @@ class ActionController::IntegrationTest
       assert_redirected_to redirecting_to # because I tried to access registration above, and it stored it
       follow_redirect!
       assert flash.key?(:notice)
-      assert_equal nil, session["user_id"]
+      assert_equal nil, session["user_credentials"]
       assert_equal "", cookies["user_credentials"]
       assert_template redirecting_to.gsub("http://www.example.com/", "")
     end

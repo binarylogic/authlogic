@@ -136,10 +136,10 @@ module Authgasm
         
         # Works exactly like cookie_key, but for sessions. See cookie_key for more info.
         #
-        # * <tt>Default:</tt> :#{klass_name.underscore}_id
+        # * <tt>Default:</tt> cookie_key
         # * <tt>Accepts:</tt> Symbol or String
         def session_key
-          @session_key ||= "#{klass_name.underscore}_id".to_sym
+          @session_key ||= cookie_key
         end
         attr_writer :session_key
         
