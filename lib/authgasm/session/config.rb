@@ -22,15 +22,6 @@ module Authgasm
       #     # ... more configuration
       #   end
       #
-      # or...
-      #
-      #   class UserSession < Authgasm::Session::Base
-      #     configure do |config|
-      #       config.authenticate_with = User
-      #       # ... more configuration
-      #     end
-      #   end
-      #
       # See the methods belows for all configuration options.
       module ClassMethods
         # Lets you change which model to use for authentication.
@@ -181,6 +172,7 @@ module Authgasm
         end
         
         def remember_me_for
+          return unless remember_me?
           self.class.remember_me_for
         end
         

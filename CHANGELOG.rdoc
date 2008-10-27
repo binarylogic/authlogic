@@ -1,3 +1,11 @@
+== 0.10.0 released 2008-10-24
+
+* Do not allow instantiation if the session has not been activated with a controller object. Just like ActiveRecord won't let you do anything without a DB connection.
+* Abstracted controller implementation to allow for rails, merb, etc adapters. So this is not confined to the rails framework.
+* Removed create and update methods and added save, like ActiveRecord.
+* after_validation should be able to change the result if it adds errors on callbacks.
+* Completed tests.
+
 == 0.9.1 released 2008-10-24
 
 * Changed scope to id. Makes more sense to call it an id and fits better with the ActiveRecord model.

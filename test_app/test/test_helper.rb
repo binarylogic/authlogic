@@ -33,6 +33,51 @@ class Test::Unit::TestCase
   # Note: You'll currently still have to declare fixtures explicitly in integration tests
   # -- they do not yet inherit this setting
   fixtures :all
+end
 
-  # Add more helper methods to be used by all tests here...
+class ActionController::IntegrationTest
+  def setup
+    get new_user_session_url # to active authgasm
+  end
+  
+  def teardown
+    Authgasm::Session::Base.controller = nil
+  end
+  
+  private
+    def login_successfully(login, password)
+      post user_sessions_url, :user_session => {:login => login, :password => password}
+      assert_redirected_to account_url
+      follow_redirect!
+      assert_template "users/show"
+    end
+  
+    def login_unsuccessfully(login = nil, password = nil)
+      params = (login || password) ? {:user_session => {:login => login, :password => password}} : nil
+      post user_sessions_url, params
+      assert_template "user_sessions/new"
+    end
+  
+    def access_account(user = nil)
+      user ||= users(:ben)
+      # Perform multiple requests to make sure the session is persisting properly, just being anal here
+      3.times do
+        get account_url
+        assert_equal user.id, session["user_id"]
+        assert_equal user.remember_token, cookies["user_credentials"]
+        assert_response :success
+        assert_template "users/show"
+      end
+    end
+  
+    def logout(alt_redirect = nil)
+      redirecting_to = alt_redirect || new_user_session_url
+      get logout_url
+      assert_redirected_to redirecting_to # because I tried to access registration above, and it stored it
+      follow_redirect!
+      assert flash.key?(:notice)
+      assert_equal nil, session["user_id"]
+      assert_equal "", cookies["user_credentials"]
+      assert_template redirecting_to.gsub("http://www.example.com/", "")
+    end
 end

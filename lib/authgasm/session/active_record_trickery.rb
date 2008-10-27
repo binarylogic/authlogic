@@ -18,7 +18,7 @@ module Authgasm
       
       module InstanceMethods # :nodoc:
         def new_record?
-          true
+          new_session?
         end
       end
     end

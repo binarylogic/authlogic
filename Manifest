@@ -1,7 +1,8 @@
 CHANGELOG.rdoc
 init.rb
 lib/authgasm/acts_as_authentic.rb
-lib/authgasm/controller.rb
+lib/authgasm/controller_adapters/abstract_adapter.rb
+lib/authgasm/controller_adapters/rails_adapter.rb
 lib/authgasm/session/active_record_trickery.rb
 lib/authgasm/session/base.rb
 lib/authgasm/session/callbacks.rb
@@ -77,6 +78,7 @@ test_app/script/server
 test_app/test/fixtures/users.yml
 test_app/test/functional/user_sessions_controller_test.rb
 test_app/test/functional/users_controller_test.rb
+test_app/test/integration/user_sesion_stories_test.rb
+test_app/test/integration/user_session_test.rb
 test_app/test/test_helper.rb
-test_app/test/unit/ass_test.rb
 test_app/test/unit/user_test.rb

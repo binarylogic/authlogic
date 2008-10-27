@@ -43,8 +43,8 @@ module Authgasm # :nodoc:
     end
 
     MAJOR = 0
-    MINOR = 9
-    TINY  = 1
+    MINOR = 10
+    TINY  = 0
 
     # The current version as a Version instance
     CURRENT = new(MAJOR, MINOR, TINY)

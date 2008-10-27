@@ -1,6 +1,8 @@
 ben:
   id: 1
   login: bjohnson
-  crypted_password: <%= Authgasm::Sha256CryptoProvider.encrypt("benrocks") %>
+  password_salt: <%= salt = User.unique_token %>
+  crypted_password: <%= Authgasm::Sha256CryptoProvider.encrypt("benrocks" + salt) %>
+  remember_token: 23a1d7c66f456b14b45211aa656ce8ba7052fd220cd2d07a5c323792938f2a14
   first_name: Ben
   last_name: Johnson
