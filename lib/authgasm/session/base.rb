@@ -261,8 +261,8 @@ module Authgasm
         
         case login_with
         when :credentials
-          errors.add(login_field, "can not be blank") if login.blank?
-          errors.add(password_field, "can not be blank") if protected_password.blank?
+          errors.add(login_field, "can not be blank") if send(login_field).blank?
+          errors.add(password_field, "can not be blank") if send("protected_#{password_field}").blank?
           return false if errors.count > 0
 
           temp_record = klass.send(find_by_login_method, send(login_field))
@@ -272,7 +272,7 @@ module Authgasm
             return false
           end
           
-          unless temp_record.send(verify_password_method, protected_password)
+          unless temp_record.send(verify_password_method, send("protected_#{password_field}"))
             errors.add(password_field, "is invalid")
             return false
           end
@@ -373,6 +373,12 @@ module Authgasm
             end
 
             def #{password_field}; end
+            
+            private
+              # The password should not be accessible publicly. This way forms using form_for don't fill the password with the attempted password. The prevent this we just create this method that is private.
+              def protected_#{password_field}
+                @#{password_field}
+              end
           end_eval
         end
         
@@ -382,11 +388,6 @@ module Authgasm
       
         def klass_name
           self.class.klass_name
-        end
-        
-        # The password should not be accessible publicly. This way forms using form_for don't fill the password with the attempted password. The prevent this we just create this method that is private.
-        def protected_password
-          @password
         end
         
         def session_credentials
