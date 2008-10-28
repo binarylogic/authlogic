@@ -100,7 +100,6 @@ module Authgasm
         # Attributes
         attr_writer "confirm_#{options[:password_field]}"
         attr_accessor "tried_to_set_#{options[:password_field]}"
-        attr_protected "tried_to_set_#{options[:password_field]}"
         
         # Class methods
         class_eval <<-"end_eval", __FILE__, __LINE__
