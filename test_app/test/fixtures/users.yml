@@ -2,7 +2,7 @@ ben:
   id: 1
   login: bjohnson
   password_salt: <%= salt = User.unique_token %>
-  crypted_password: <%= Authgasm::Sha256CryptoProvider.encrypt("benrocks" + salt) %>
-  remember_token: 23a1d7c66f456b14b45211aa656ce8ba7052fd220cd2d07a5c323792938f2a14
+  crypted_password: <%= Authgasm::Sha512CryptoProvider.encrypt("benrocks" + salt) %>
+  remember_token: 6cde0674657a8a313ce952df979de2830309aa4c11ca65805dd00bfdc65dbcc2f5e36718660a1d2e68c1a08c276d996763985d2f06fd3d076eb7bc4d97b1e317
   first_name: Ben
   last_name: Johnson

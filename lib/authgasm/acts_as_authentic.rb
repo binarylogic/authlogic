@@ -49,7 +49,7 @@ module Authgasm
       def acts_as_authentic(options = {})
         # Setup default options
         options[:session_class] ||= "#{name}Session".constantize
-        options[:crypto_provider] ||= Sha256CryptoProvider
+        options[:crypto_provider] ||= Sha512CryptoProvider
         options[:crypto_provider_type] ||= options[:crypto_provider].respond_to?(:decrypt) ? :encryption : :hash
         options[:login_field] ||= options[:session_class].login_field
         options[:login_field_type] ||= options[:login_field] == :email ? :email : :login

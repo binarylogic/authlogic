@@ -14,8 +14,8 @@ class UserSessionsControllerTest < ActionController::TestCase
   
   def test_successful_create
     get :create, {:user_session => {:login => "bjohnson", :password => "benrocks"}}
-    assert_equal "23a1d7c66f456b14b45211aa656ce8ba7052fd220cd2d07a5c323792938f2a14", session[:user_credentials]
-    assert_equal ["23a1d7c66f456b14b45211aa656ce8ba7052fd220cd2d07a5c323792938f2a14"], cookies["user_credentials"]
+    assert_equal "6cde0674657a8a313ce952df979de2830309aa4c11ca65805dd00bfdc65dbcc2f5e36718660a1d2e68c1a08c276d996763985d2f06fd3d076eb7bc4d97b1e317", session[:user_credentials]
+    assert_equal ["6cde0674657a8a313ce952df979de2830309aa4c11ca65805dd00bfdc65dbcc2f5e36718660a1d2e68c1a08c276d996763985d2f06fd3d076eb7bc4d97b1e317"], cookies["user_credentials"]
     assert_redirected_to account_url
   end
   
