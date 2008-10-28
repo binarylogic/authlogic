@@ -6,8 +6,11 @@ module Authgasm
   #
   # If you are encrypting via a hash just don't include a decrypt method, since hashes can't be decrypted. Authgasm will notice this adjust accordingly.
   class Sha512CryptoProvider
+    STRETCHES = 20
     def self.encrypt(pass)
-      Digest::SHA512.hexdigest(pass)
+      digest = pass
+      STRETCHES.times { digest = Digest::SHA512.hexdigest(digest) }
+      digest
     end
   end
 end

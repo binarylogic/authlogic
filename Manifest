@@ -8,7 +8,7 @@ lib/authgasm/session/base.rb
 lib/authgasm/session/callbacks.rb
 lib/authgasm/session/config.rb
 lib/authgasm/session/errors.rb
-lib/authgasm/sha256_crypto_provider.rb
+lib/authgasm/sha512_crypto_provider.rb
 lib/authgasm/version.rb
 lib/authgasm.rb
 Manifest
