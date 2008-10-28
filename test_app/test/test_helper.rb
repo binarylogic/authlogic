@@ -46,7 +46,7 @@ class ActionController::IntegrationTest
   
   private
     def login_successfully(login, password)
-      post user_sessions_url, :user_session => {:login => login, :password => password}
+      post user_session_url, :user_session => {:login => login, :password => password}
       assert_redirected_to account_url
       follow_redirect!
       assert_template "users/show"
@@ -54,7 +54,7 @@ class ActionController::IntegrationTest
   
     def login_unsuccessfully(login = nil, password = nil)
       params = (login || password) ? {:user_session => {:login => login, :password => password}} : nil
-      post user_sessions_url, params
+      post user_session_url, params
       assert_template "user_sessions/new"
     end
   
@@ -72,12 +72,12 @@ class ActionController::IntegrationTest
   
     def logout(alt_redirect = nil)
       redirecting_to = alt_redirect || new_user_session_url
-      get logout_url
+      delete user_session_url
       assert_redirected_to redirecting_to # because I tried to access registration above, and it stored it
       follow_redirect!
       assert flash.key?(:notice)
       assert_equal nil, session["user_credentials"]
       assert_equal "", cookies["user_credentials"]
-      assert_template redirecting_to.gsub("http://www.example.com/", "")
+      assert_template redirecting_to.gsub("http://www.example.com/", "").gsub("user_session", "user_sessions").gsub("account", "users")
     end
 end

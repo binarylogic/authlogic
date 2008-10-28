@@ -10,11 +10,11 @@ class UserSessionStoriesTest < ActionController::IntegrationTest
     assert_template "user_sessions/new"
     
     # Try to register with no info
-    post users_url
+    post account_url
     assert_template "users/new"
     
     # Register successfully
-    post users_url, {:user => {:login => "binarylogic", :password => "pass", :confirm_password => "pass", :first_name => "Ben", :last_name => "Johnson"}}
+    post account_url, {:user => {:login => "binarylogic", :password => "pass", :confirm_password => "pass", :first_name => "Ben", :last_name => "Johnson"}}
     assert_redirected_to account_url
     assert flash.key?(:notice)
     
@@ -41,14 +41,14 @@ class UserSessionStoriesTest < ActionController::IntegrationTest
     assert_template "users/show"
     
     # Try to register after a successful login
-    get new_user_url
+    get new_account_url
     assert_redirected_to account_url
     follow_redirect!
     assert flash.key?(:notice)
     assert_template "users/show"
     
     access_account
-    logout(new_user_url) # before I tried to register, it stored my location
+    logout(new_account_url) # before I tried to register, it stored my location
     
     # Try to access my account again
     get account_url
