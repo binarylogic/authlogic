@@ -3,6 +3,8 @@
 * Sessions now store the "remember token" instead of the id. This is much safer and guarantees all "sessions" that are logged in are logged in with a valid password. This way stale sessions can't be persisted.
 * Bumped security to Sha512 from Sha256.
 * Remove attr_protected call in acts_as_authentic
+* protected_password should use pasword_field configuration value
+* changed magic state "inactive" to "active"
 
 == 0.10.0 released 2008-10-24
 

@@ -2,9 +2,11 @@
 
 Authgasm is "rails authentication done right"
 
-The last thing we need is another authentication solution for rails, right? That's what I thought. It was disappointing to find that all of the current solutions were overly complicated, bloated, poorly written, littered my application with code, and were just plain confusing. They felt very Microsoftish. This is not the simple / elegant rails we all fell in love with. It's like some Microsoft .NET engineers decided to dabble in ruby / rails for a day and their project was to write an authentication solution. That's what went through my head when I was trying out all of the current solutions. It's time someone makes a "rails like" authentication solution. So I give you Authgasm...
+The last thing we need is another authentication solution for rails, right? That's what I thought. It was disappointing to find that all of the current solutions were overly complicated, bloated, poorly written, littered my application with code, or were just plain confusing. They felt very Microsoftish. It's like some Microsoft .NET engineers decided to dabble in ruby / rails for a day and their project was to write an authentication solution. This is not the simple / elegant rails we all fell in love with. It's time someone makes a "rails like" authentication solution. So I give you Authgasm...
 
 What if you could have authentication up and running in minutes without having to run a generator? All because it's simple, like everything else in rails.
+
+Wouldn't it be nice to keep your app up to date with the latest and greatest security techniques with a simple update of a plugin?
 
 What if creating a user session could be as simple as...
 
@@ -128,9 +130,9 @@ Just like ActiveRecord has "magic" columns, such as: created_at and updated_at. 
 Authgasm tries to check the state of the record before creating the session. If your record responds to the following methods and any of them return false, validation will fail:
 
   Method name           Description
+  active?               Is the record marked as active?
   approved?             Has the record been approved?
   confirmed?            Has the record been conirmed?
-  inactive?             Is the record marked as inactive?
   
 What's neat about this is that these are checked upon any type of login. When logging in explicitly, by cookie, session, or basic http auth. So if you mark a user inactive in the middle of their session they wont be logged back in next time they refresh the page. Giving you complete control.
 
@@ -231,6 +233,24 @@ As of now, authgasm supports rails right out of the box. But I designed authgasm
 Interested in how all of this all works? Basically a before_filter is automatically set in your controller which lets Authgasm know about the current controller object. This allows Authgasm to set sessions, cookies, login via basic http auth, etc. If you are using rails in a multiple thread environment, don't worry. I kept that in mind and made this thread safe.
 
 From there it is pretty simple. When you try to create a new session the record is authenticated and then all of the session / cookie magic is done for you. The sky is the limit.
+
+== Why do you think the current solutions suck?
+
+You probably don't care, but I think releasing the millionth authentication solution for a framework that has been around for over 4 years requires a little explanation.
+
+I don't necessarily think the current solutions suck, nor am I saying Authgasm is the answer to our prayers. But the current solutions were pretty disappointing. Especially when the rails community is full of brilliant programmers, and the best we could come up with was the "restful-authentication" plugin. This was just sad, and frankly kind of irritated me. Here's why...
+
+=== Generators suck as an authentication solution
+
+Generators have their place, and it certainly is not to add authentication to a rails app. It doesn't make sense. Generators are meant to be a starting point for repetitive tasks that have no sustainable pattern. Take controllers, the set up is the same thing over and over, but they eventually evolve to a point where there is no clear cut pattern. Trying to extract a pattern out into a library would be extremely hard, messy, and overly complicated. As a result, generators make sense here.
+
+Authentication is a one time set up process for your app. It's the same thing over and over and the pattern never really changes. The only time it changes is to conform with newer / stricter security techniques. This is exactly why generators suck as an authentication solution. Generators litter your application with code that you get to maintain. You get to make sure it stays up with the latest and greatest security techniques. How fun! Oh, and when the plugin you used releases some major update, you can't just re-run the generator, you get to sift through the code to see what changed! Awesome! The cherry on top is the fact that you get to go through every app you've made and apply this update. When ActiveRecord releases an update do you go through it line by line and manually apply it in each one of your apps? No.
+
+Security moves fast, and hackers make sure of this. If there is a security update or improvement it should not be ignored. As a result, it should be easy to update. Doesn't it make sense to leverage a library to handle this functionality for you? This way, when some new security technique is released, or a bug with your authentication system is found, you can fix it with a simple update. Just like everything else in ruby / rails.
+
+=== Limited to a single authentication
+
+I recently had an app where you could log in as a user and also log in as an employee. I won't go into the specifics of the app, but it make the most sense to do it this way. So I had two sessions in one app. None of the current solutions I found easily supported this. They all assumed a single session. One session was messy enough, adding another just put me over the edge and eventually forced me to write Authgasm. Authgasm can support 100 different sessions easily and in a clean format. Just like an app can support 100 different models and 100 different records of each model.
 
 
 Copyright (c) 2008 Ben Johnson of [Binary Logic](http://www.binarylogic.com), released under the MIT license

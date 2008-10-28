@@ -291,9 +291,9 @@ module Authgasm
           return false
         end
 
-        [:approved, :confirmed, :inactive].each do |required_status|
+        [:active, :approved, :confirmed].each do |required_status|
           if temp_record.respond_to?("#{required_status}?") && !temp_record.send("#{required_status}?") 
-            errors.add_to_base("Your account has not been #{required_status}")       
+            errors.add_to_base("Your account has not been marked as #{required_status}")       
             return false
           end
         end
