@@ -234,13 +234,13 @@ Interested in how all of this all works? Basically a before_filter is automatica
 
 From there it is pretty simple. When you try to create a new session the record is authenticated and then all of the session / cookie magic is done for you. The sky is the limit.
 
-== Why do you think the current solutions suck?
+== What's wrong with the current solutions?
 
 You probably don't care, but I think releasing the millionth authentication solution for a framework that has been around for over 4 years requires a little explanation.
 
 I don't necessarily think the current solutions suck, nor am I saying Authgasm is the answer to our prayers. But the current solutions were pretty disappointing. Especially when the rails community is full of brilliant programmers, and the best we could come up with was the "restful-authentication" plugin. This was just sad, and frankly kind of irritated me. Here's why...
 
-=== Generators suck as an authentication solution
+=== Generators are not the right solution
 
 Generators have their place, and it certainly is not to add authentication to a rails app. It doesn't make sense. Generators are meant to be a starting point for repetitive tasks that have no sustainable pattern. Take controllers, the set up is the same thing over and over, but they eventually evolve to a point where there is no clear cut pattern. Trying to extract a pattern out into a library would be extremely hard, messy, and overly complicated. As a result, generators make sense here.
 
