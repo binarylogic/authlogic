@@ -169,7 +169,9 @@ The errors in Authgasm work JUST LIKE ActiveRecord. In fact, it uses the exact s
 
 This is one of my favorite features that I think its pretty cool. It's things like this that make a library great and let you know you are on the right track.
 
-What if a user changes their password? You have to re-log them in with the new password, recreate the session, etc, pain in the ass. Or what if a user creates a new user account? You have to do the same thing. Here's an even better one: what if a user is in the admin area and changes his own password? There might even be another place passwords can change. It shouldn't matter, your code should be written in a way where you don't have to remember to do this.
+Just to clear up any confusion, Authgasm does not store the plain id in the session. It stores a token. This token changes with the password, this way stale sessions can not be persisted.
+
+That being said...What if a user changes their password? You have to re-log them in with the new password, recreate the session, etc, pain in the ass. Or what if a user creates a new user account? You have to do the same thing. Here's an even better one: what if a user is in the admin area and changes his own password? There might even be another place passwords can change. It shouldn't matter, your code should be written in a way where you don't have to remember to do this.
 
 Instead of updating sessions all over the place, doesn't it make sense to do this at a lower level? Like the User model? You're saying "but Ben, models can't mess around with sessions and cookies". True...but Authgasm can, and you can access Authgasm just like a model. I know in most situations it's not good practice to do this but I view this in the same class as sweepers, and feel like it actually is good practice here. User sessions are directly tied to users, they should be connected on the model level.
 

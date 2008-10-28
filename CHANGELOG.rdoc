@@ -1,6 +1,7 @@
-== 0.10.0 released 2008-10-24
+== 0.10.1 released 2008-10-24
 
 * Sessions now store the "remember token" instead of the id. This is much safer and guarantees all "sessions" that are logged in are logged in with a valid password. This way stale sessions can't be persisted.
+* Bumped security to Sha512 from Sha256.
 
 == 0.10.0 released 2008-10-24
 
