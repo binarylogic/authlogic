@@ -225,7 +225,7 @@ module Authgasm
             end
             
             def update_sessions!
-              return if @my_sessions.blank?
+              return if @saving_from_session || @my_sessions.blank?
               
               @my_sessions.each do |stale_session|
                 stale_session.unauthorized_record = self
