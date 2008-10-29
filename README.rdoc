@@ -33,7 +33,7 @@ What if your user sessions controller could look just like your other controller
     end
   end
 
-Look familiar? If you didn't know any better, you would think UserSession was an ActiveRecord model. I think that's pretty cool, because it fits nicely into the RESTful development pattern, is a style we all know and love. What about the view...
+Look familiar? If you didn't know any better, you would think UserSession was an ActiveRecord model. I think that's pretty cool, because it fits nicely into the RESTful development pattern, a style we all know and love. What about the view...
 
   <%= error_messages_for "user_session" %>
   <% form_for @user_session do |f| %>
@@ -95,7 +95,7 @@ It is important to set your configuration for your session before you set the co
 
 === Ensure proper database fields
 
-The user model needs to have the following columns. The names of these columns can be changed with configuration.
+The user model needs to have the following columns. The names of these columns can be changed with configuration. Better yet, Authgasm tries to guess these names by checking for the existence of common names. See Authgasm::Session::Config::ClassMethods for more details, but chances are you won't have to specify any configuration for your field names.
 
     t.string    :login, :null => false
     t.string    :crypted_password, :null => false

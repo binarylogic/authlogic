@@ -257,51 +257,12 @@ module Authgasm
       
       def valid?
         errors.clear
-        temp_record = unauthorized_record
-        
-        case login_with
-        when :credentials
-          errors.add(login_field, "can not be blank") if send(login_field).blank?
-          errors.add(password_field, "can not be blank") if send("protected_#{password_field}").blank?
-          return false if errors.count > 0
-
-          temp_record = klass.send(find_by_login_method, send(login_field))
-
-          if temp_record.blank?
-            errors.add(login_field, "was not found")
-            return false
-          end
-          
-          unless temp_record.send(verify_password_method, send("protected_#{password_field}"))
-            errors.add(password_field, "is invalid")
-            return false
-          end
-        when :unauthorized_record
-          if temp_record.blank?
-            errors.add_to_base("You can not log in with a blank record.")
-            return false
-          end
-          
-          if temp_record.new_record?
-            errors.add_to_base("You can not login with a new record.") if temp_record.new_record?
-            return false
-          end
-        else
-          errors.add_to_base("You must provide some form of credentials before logging in.")
-          return false
+        temp_record = validate_credentials
+        if errors.empty?
+          @record = temp_record
+          return true
         end
-
-        [:active, :approved, :confirmed].each do |required_status|
-          if temp_record.respond_to?("#{required_status}?") && !temp_record.send("#{required_status}?") 
-            errors.add_to_base("Your account has not been marked as #{required_status}")       
-            return false
-          end
-        end
-        
-        # All is good, lets set the record
-        @record = temp_record
-        
-        true
+        false
       end
       
       def valid_http_auth?
@@ -396,6 +357,51 @@ module Authgasm
         
         def update_session!
           controller.session[session_key] = record && record.send(remember_token_field)
+        end
+        
+        def validate_credentials
+          temp_record = unauthorized_record
+
+          case login_with
+          when :credentials
+            errors.add(login_field, "can not be blank") if send(login_field).blank?
+            errors.add(password_field, "can not be blank") if send("protected_#{password_field}").blank?
+            return if errors.count > 0
+
+            temp_record = klass.send(find_by_login_method, send(login_field))
+
+            if temp_record.blank?
+              errors.add(login_field, "was not found")
+              return
+            end
+
+            unless temp_record.send(verify_password_method, send("protected_#{password_field}"))
+              errors.add(password_field, "is invalid")
+              return
+            end
+          when :unauthorized_record
+            if temp_record.blank?
+              errors.add_to_base("You can not log in with a blank record.")
+              return
+            end
+
+            if temp_record.new_record?
+              errors.add_to_base("You can not login with a new record.") if temp_record.new_record?
+              return
+            end
+          else
+            errors.add_to_base("You must provide some form of credentials before logging in.")
+            return
+          end
+
+          [:active, :approved, :confirmed].each do |required_status|
+            if temp_record.respond_to?("#{required_status}?") && !temp_record.send("#{required_status}?") 
+              errors.add_to_base("Your account has not been marked as #{required_status}")       
+              return
+            end
+          end
+          
+          temp_record
         end
     end
   end

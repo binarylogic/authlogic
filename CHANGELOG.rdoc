@@ -2,6 +2,7 @@
 
 * Added in stretches to the default Sha512 encryption algorithm.
 * Use column_names instead of columns when determining if a column is present.
+* Improved validation callbacks. after_validation should only be run if valid? = true. Also clear errors before the "before_validation" callback.
 
 == 0.10.1 released 2008-10-24
 

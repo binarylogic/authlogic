@@ -7,7 +7,7 @@ module Authgasm
       CALLBACKS = %w(before_create after_create before_destroy after_destroy before_save after_save before_update after_update before_validation after_validation)
 
       def self.included(base) #:nodoc:
-        [:destroy, :save, :valid?].each do |method|
+        [:destroy, :save, :valid?, :validate_credentials].each do |method|
           base.send :alias_method_chain, method, :callbacks
         end
 
@@ -41,14 +41,15 @@ module Authgasm
         result
       end
       
-      def valid_with_callbacks? # :nodoc:
-        run_callbacks(:before_validation)
+      def valid_with_callbacks?
         result = valid_without_callbacks?
-        if result
-          run_callbacks(:after_validation)
-          result = errors.empty?
-        end
+        run_callbacks(:after_validation) if result
         result
+      end
+      
+      def validate_credentials_with_callbacks # :nodoc:
+        run_callbacks(:before_validation)
+        validate_credentials_without_callbacks
       end
     end
   end
