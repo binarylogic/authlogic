@@ -2,7 +2,7 @@
 
 Authgasm is "rails authentication done right"
 
-The last thing we need is another authentication solution for rails, right? That's what I thought. It was disappointing to find that all of the current solutions were overly complicated, bloated, poorly written, littered my application with code, or were just plain confusing. They felt very Microsoftish. It's like some Microsoft .NET engineers decided to dabble in ruby / rails for a day and their project was to write an authentication solution. This is not the simple / elegant rails we all fell in love with. It's time someone makes a "rails like" authentication solution. So I give you Authgasm...
+The last thing we need is another authentication solution for rails, right? That's what I thought until I tried out some of the current solutions. None of them felt right. They were either too complicated, bloated, littered my application with tons of code, or were just confusing. This is not the simple / elegant rails we all fell in love with. We need a "rails like" authentication solution. Authgasm is my attempt to satisfy that need...
 
 What if you could have authentication up and running in minutes without having to run a generator? All because it's simple, like everything else in rails.
 
@@ -95,7 +95,7 @@ It is important to set your configuration for your session before you set the co
 
 === Ensure proper database fields
 
-The user model needs to have the following columns. The names of these columns can be changed with configuration. Better yet, Authgasm tries to guess these names by checking for the existence of common names. See Authgasm::Session::Config::ClassMethods for more details, but chances are you won't have to specify any configuration for your field names.
+The user model needs to have the following columns. The names of these columns can be changed with configuration. Better yet, Authgasm tries to guess these names by checking for the existence of common names. See Authgasm::Session::Config::ClassMethods for more details, but chances are you won't have to specify any configuration for your field names, even if they aren't the same names as below.
 
     t.string    :login, :null => false
     t.string    :crypted_password, :null => false
@@ -238,19 +238,25 @@ From there it is pretty simple. When you try to create a new session the record 
 
 You probably don't care, but I think releasing the millionth authentication solution for a framework that has been around for over 4 years requires a little explanation.
 
-I don't necessarily think the current solutions are "wrong", nor am I saying Authgasm is the answer to our prayers. But the current solutions were pretty disappointing. Especially when the rails community is full of brilliant programmers, and the best we could come up with was the "restful-authentication" plugin. This was just sad, and frankly kind of irritated me. Here's why...
+I don't necessarily think the current solutions are "wrong", nor am I saying Authgasm is the answer to your prayers. But, to me, the current solutions were lacking something. Here's what I came up with...
 
 === Generators are not the answer
 
-Generators have their place, and it certainly is not to add authentication to a rails app. It doesn't make sense. Generators are meant to be a starting point for repetitive tasks that have no sustainable pattern. Take controllers, the set up is the same thing over and over, but they eventually evolve to a point where there is no clear cut pattern. Trying to extract a pattern out into a library would be extremely hard, messy, and overly complicated. As a result, generators make sense here.
+Generators have their place, and it is not to add authentication to a rails app. It doesn't make sense. Generators are meant to be a starting point for repetitive tasks that have no sustainable pattern. Take controllers, the set up is the same thing over and over, but they eventually evolve to a point where there is no clear cut pattern. Trying to extract a pattern out into a library would be extremely hard, messy, and overly complicated. As a result, generators make sense here.
 
-Authentication is a one time set up process for your app. It's the same thing over and over and the pattern never really changes. The only time it changes is to conform with newer / stricter security techniques. This is exactly why generators should not be an authentication solution. Generators litter your application with code that you get to maintain. You get to make sure it stays up with the latest and greatest security techniques. How fun! Oh, and when the plugin you used releases some major update, you can't just re-run the generator, you get to sift through the code to see what changed! Awesome! The cherry on top is the fact that you get to go through every app you've made and apply this update. You don't really have a choice either, because you can't ignore security updates.
+Authentication is a one time set up process for your app. It's the same thing over and over and the pattern never really changes. The only time it changes is to conform with newer / stricter security techniques. This is exactly why generators should not be an authentication solution. Generators add code to your application, once code crosses that line, you are responsible for maintaining it. You get to make sure it stays up with the latest and greatest security techniques. And when the plugin you used releases some major update, you can't just re-run the generator, you get to sift through the code to see what changed! Awesome! The cherry on top is the fact that you get to go through every app you've made and apply this update. You don't really have a choice either, because you can't ignore security updates.
 
-Security moves fast, and hackers make sure of this. As a result, it should be easy to update. Doesn't it make sense to leverage a library to handle this functionality for you? This way, when some new security technique is released, or a bug with your authentication system is found, you can fix it with a simple update. Just like everything else in ruby / rails.
+Using a library that hundreds of other people use has it advantages. Probably one of the biggest advantages if that you get to benefit from other people using the same code. When Bob in California figures out a new awesome security technique and adds it into Authgasm, you get to benefit from that with a single update. The catch is that this benefit is limited to code that is not "generated" or added into your app. As I said above, once code is "generated" and added into your app, it's your responsibility.
+
+Lastly, there is a pattern here, why clutter up all of your applications with the same code? I recently switched over one of my apps to Authgasm and its amazing how much cleaner my app feels.
 
 === Limited to a single authentication
 
 I recently had an app where you could log in as a user and also log in as an employee. I won't go into the specifics of the app, but it made the most sense to do it this way. So I had two sessions in one app. None of the current solutions I found easily supported this. They all assumed a single session. One session was messy enough, adding another just put me over the edge and eventually forced me to write Authgasm. Authgasm can support 100 different sessions easily and in a clean format. Just like an app can support 100 different models and 100 different records of each model.
+
+=== Too presumptuous
+
+A lot of them forced me to name my password column as "this", or the key of my cookie had to be "this". They were a little too presumptuous. I am probably overly picky, but little details like that should be configurable. This also make it very hard to implement into an existing app.
 
 
 Copyright (c) 2008 Ben Johnson of [Binary Logic](http://www.binarylogic.com), released under the MIT license
