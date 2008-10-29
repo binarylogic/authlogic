@@ -1,6 +1,7 @@
 == 0.10.2 released 2008-10-24
 
-* Added in stretched to the default Sha512 encryption algorithm
+* Added in stretches to the default Sha512 encryption algorithm.
+* Use column_names instead of columns when determining if a column is present.
 
 == 0.10.1 released 2008-10-24
 

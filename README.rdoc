@@ -10,7 +10,7 @@ Wouldn't it be nice to keep your app up to date with the latest and greatest sec
 
 What if creating a user session could be as simple as...
 
-  UserSession.create(params[:user])
+  UserSession.create(params[:user_session])
 
 What if your user sessions controller could look just like your other controllers...
 
@@ -33,7 +33,7 @@ What if your user sessions controller could look just like your other controller
     end
   end
 
-Look familiar? If you didn't know any better, you would think UserSession was an ActiveRecord model. I think that's pretty cool. Why is that cool? Because it fits nicely into the RESTful development pattern and its a style we all know and love. Wouldn't this be cool too...
+Look familiar? If you didn't know any better, you would think UserSession was an ActiveRecord model. I think that's pretty cool, because it fits nicely into the RESTful development pattern, is a style we all know and love. What about the view...
 
   <%= error_messages_for "user_session" %>
   <% form_for @user_session do |f| %>
@@ -169,7 +169,7 @@ The errors in Authgasm work JUST LIKE ActiveRecord. In fact, it uses the exact s
 
 == Automatic Session Updating
 
-This is one of my favorite features that I think its pretty cool. It's things like this that make a library great and let you know you are on the right track.
+This is one of my favorite features that I think is pretty cool. It's things like this that make a library great and let you know you are on the right track.
 
 Just to clear up any confusion, Authgasm does not store the plain id in the session. It stores a token. This token changes with the password, this way stale sessions can not be persisted.
 

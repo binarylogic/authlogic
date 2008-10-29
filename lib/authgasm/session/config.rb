@@ -91,7 +91,7 @@ module Authgasm
         # * <tt>Default:</tt> Guesses based on the model columns, tries login, username, and email. If none are present it defaults to login
         # * <tt>Accepts:</tt> Symbol or String
         def login_field
-          @login_field ||= (klass.columns.include?("login") && :login) || (klass.columns.include?("username") && :username) || (klass.columns.include?("email") && :email) || :login
+          @login_field ||= (klass.column_names.include?("login") && :login) || (klass.column_names.include?("username") && :username) || (klass.column_names.include?("email") && :email) || :login
         end
         attr_writer :login_field
         
@@ -100,7 +100,7 @@ module Authgasm
         # * <tt>Default:</tt> Guesses based on the model columns, tries password and pass. If none are present it defaults to password
         # * <tt>Accepts:</tt> Symbol or String
         def password_field
-          @password_field ||= (klass.columns.include?("password") && :password) || (klass.columns.include?("pass") && :pass) || :password
+          @password_field ||= (klass.column_names.include?("password") && :password) || (klass.column_names.include?("pass") && :pass) || :password
         end
         attr_writer :password_field
         
@@ -126,10 +126,10 @@ module Authgasm
         # * <tt>Accepts:</tt> Symbol or String
         def remember_token_field
           @remember_token_field ||=
-            (klass.columns.include?("remember_token") && :remember_token) ||
-            (klass.columns.include?("remember_key") && :remember_key) ||
-            (klass.columns.include?("cookie_token") && :cookie_token) ||
-            (klass.columns.include?("cookie_key") && :cookie_key) ||
+            (klass.column_names.include?("remember_token") && :remember_token) ||
+            (klass.column_names.include?("remember_key") && :remember_key) ||
+            (klass.column_names.include?("cookie_token") && :cookie_token) ||
+            (klass.column_names.include?("cookie_key") && :cookie_key) ||
             :remember_token
         end
         attr_writer :remember_token_field
