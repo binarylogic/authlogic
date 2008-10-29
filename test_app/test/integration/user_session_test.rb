@@ -89,7 +89,7 @@ class UserSessionTest < ActionController::IntegrationTest
     assert_equal({:login => "ben", :password => "<Protected>"}, session.credentials)
     
     session = UserSession.new
-    assert_raise(ArgumentError) { session.credentials = {:login => "ben", :random_field => "test"} }
+    assert_nothing_raised { session.credentials = {:login => "ben", :random_field => "test"} }
     
     session = UserSession.new
     session.credentials = {:login => "ben", :password => "awesome"}
