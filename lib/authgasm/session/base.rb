@@ -131,11 +131,14 @@ module Authgasm
         {login_field => send(login_field), password_field => "<Protected>"}
       end
       
-      # Lets you set your loging and password via a hash format.
+      # Lets you set your loging and password via a hash format. This is "params" safe. It only allows for 3 keys: your login field name, password field name, and remember me.
       def credentials=(values)
         return if values.blank? || !values.is_a?(Hash)
-        raise(ArgumentError, "Only 2 credentials are allowed: #{login_field} and #{password_field}") if (values.keys - [login_field.to_sym, login_field.to_s, password_field.to_sym, password_field.to_s]).size > 0
-        values.each { |field, value| send("#{field}=", value) }
+        values.symbolize_keys!
+        [login_field.to_sym, password_field.to_sym, :remember_me].each do |field|
+          next unless values.key?(field)
+          send("#{field}=", values[field])
+        end
       end
       
       # Resets everything, your errors, record, cookies, and session. Basically "logs out" a user.

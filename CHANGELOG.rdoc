@@ -1,3 +1,7 @@
+== 0.10.3 released 2008-10-29
+
+* Instead of raising an error when extra fields are passed in credentials=, just ignore them.
+
 == 0.10.2 released 2008-10-24
 
 * Added in stretches to the default Sha512 encryption algorithm.

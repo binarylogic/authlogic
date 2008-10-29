@@ -256,7 +256,7 @@ I recently had an app where you could log in as a user and also log in as an emp
 
 === Too presumptuous
 
-A lot of them forced me to name my password column as "this", or the key of my cookie had to be "this". They were a little too presumptuous. I am probably overly picky, but little details like that should be configurable. This also make it very hard to implement into an existing app.
+A lot of them forced me to name my password column as "this", or the key of my cookie had to be "this". They were a little too presumptuous. I am probably overly picky, but little details like that should be configurable. This also made it very hard to implement into an existing app.
 
 
 Copyright (c) 2008 Ben Johnson of [Binary Logic](http://www.binarylogic.com), released under the MIT license
