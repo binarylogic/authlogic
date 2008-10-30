@@ -89,9 +89,9 @@ module Authgasm
         validate :validate_password
         validates_numericality_of :login_count, :only_integer => :true, :greater_than_or_equal_to => 0, :allow_nil => true if column_names.include?("login_count")
         
-        if column_names.include?("last_click_at")
-          named_scope :logged_in, lambda { {:conditions => ["last_click_at > ?", options[:logged_in_timeout].ago]} }
-          named_scope :logged_out, lambda { {:conditions => ["last_click_at <= ?", options[:logged_in_timeout].ago]} }
+        if column_names.include?("last_request_at")
+          named_scope :logged_in, lambda { {:conditions => ["last_request_at > ?", options[:logged_in_timeout].ago]} }
+          named_scope :logged_out, lambda { {:conditions => ["last_request_at <= ?", options[:logged_in_timeout].ago]} }
         end
         
         after_create :create_sessions!
@@ -125,10 +125,10 @@ module Authgasm
         end_eval
         
         # Instance methods
-        if column_names.include?("last_click_at")
+        if column_names.include?("last_request_at")
           class_eval <<-"end_eval", __FILE__, __LINE__
             def logged_in?
-              !last_click_at.nil? && last_click_at > #{options[:logged_in_timeout].to_i}.seconds.ago
+              !last_request_at.nil? && last_request_at > #{options[:logged_in_timeout].to_i}.seconds.ago
             end
           end_eval
         end
@@ -185,6 +185,7 @@ module Authgasm
             1.upto(10) { |i| newpass << chars[rand(chars.size-1)] }
             self.#{options[:password_field]} = newpass
             self.confirm_#{options[:password_field]} = newpass
+            save(false)
           end
           
           def save_from_session(*args)
