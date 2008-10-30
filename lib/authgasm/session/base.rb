@@ -84,7 +84,7 @@ module Authgasm
           end
       end
     
-      attr_accessor :login_with, :new_session, :remember_me
+      attr_accessor :login_with, :new_session
       attr_reader :record, :unauthorized_record
       attr_writer :id
     
@@ -119,9 +119,9 @@ module Authgasm
             self.unauthorized_record = credentials_or_record
           end
         else
-          send("#{login_field}=", args[0])
-          send("#{password_field}=", args[1])
-          self.remember_me = args[2]
+          send("#{login_field}=", args[0]) if args.size > 0
+          send("#{password_field}=", args[1]) if args.size > 1
+          self.remember_me = args[2] if args.size > 2
         end
       end
       
@@ -136,7 +136,7 @@ module Authgasm
         return if values.blank? || !values.is_a?(Hash)
         values.symbolize_keys!
         [login_field.to_sym, password_field.to_sym, :remember_me].each do |field|
-          next unless values.key?(field)
+          next if !values.key?(field)
           send("#{field}=", values[field])
         end
       end
@@ -195,9 +195,20 @@ module Authgasm
         "#<#{self.class.name} #{details.inspect}>"
       end
       
-      
+      # Similar to ActiveRecord's new_record? Returns true if the session has not been saved yet.
       def new_session?
         new_session != false
+      end
+      
+      def remember_me # :nodoc:
+        return @remember_me if @set_remember_me
+        @remember_me ||= self.class.remember_me
+      end
+      
+      # Accepts a boolean as a flag to remember the session or not. Basically to expire the cookie at the end of the session or keep it for "remember_me_until".
+      def remember_me=(value)
+        @set_remember_me = true
+        @remember_me = value
       end
       
       # Allows users to be remembered via a cookie.

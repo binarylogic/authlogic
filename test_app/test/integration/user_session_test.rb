@@ -105,6 +105,9 @@ class UserSessionTest < ActionController::IntegrationTest
     # don't need to go crazy here since we are using ActiveRecord's error class, which has been thorough tested there
     session = UserSession.new
     assert !session.valid?
+    session.login = ""
+    session.password = ""
+    assert !session.valid?
     assert session.errors.on(:login)
     assert session.errors.on(:password)
   end

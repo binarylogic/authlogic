@@ -104,6 +104,15 @@ module Authgasm
         end
         attr_writer :password_field
         
+        # If sessions should be remembered by default or not.
+        #
+        # * <tt>Default:</tt> false
+        # * <tt>Accepts:</tt> Boolean
+        def remember_me
+          @remember_me
+        end
+        attr_writer :remember_me
+        
         # The length of time until the cookie expires.
         #
         # * <tt>Default:</tt> 3.months

@@ -1,6 +1,8 @@
 == 0.10.3 released 2008-10-29
 
 * Instead of raising an error when extra fields are passed in credentials=, just ignore them.
+* Added remember_me config option to set the default value.
+* Only call credential methods if an argument was passed.
 
 == 0.10.2 released 2008-10-24
 
