@@ -18,7 +18,7 @@ class UserSessionStoriesTest < ActionController::IntegrationTest
     assert_redirected_to account_url
     assert flash.key?(:notice)
     
-    access_account(User.find(2))
+    access_account(User.last)
   end
   
   def test_login_process
