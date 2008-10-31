@@ -177,27 +177,22 @@ That being said...What if a user changes their password? You have to re-log them
 
 Instead of updating sessions all over the place, doesn't it make sense to do this at a lower level? Like the User model? You're saying "but Ben, models can't mess around with sessions and cookies". True...but Authgasm can, and you can access Authgasm just like a model. I know in most situations it's not good practice to do this but I view this in the same class as sweepers, and feel like it actually is good practice here. User sessions are directly tied to users, they should be connected on the model level.
 
-Fear not, because the acts_as_authentic method you call in your model takes care of this for you, by adding an after_create and after_update callback to automatically keep the session up to date. You don't have to worry about it anymore. Don't even think about it. Let your UsersController deal with users, not users *AND* sessions. *ANYTIME* the user changes his password in *ANY* way, his session will be updated.
+Fear not, because the acts_as_authentic method you call in your model takes care of this for you, by adding an after_save callback to automatically keep the session up to date. You don't have to worry about it anymore. Don't even think about it. Let your UsersController deal with users, not users *AND* sessions. *ANYTIME* the user changes his password in *ANY* way, his session will be updated.
 
 Here is basically how this is done....
 
   class User < ActiveRecord::Base
-    after_create :create_sessions!
+    after_save :maintain_sessions!
     after_update :update_sessions!
     
     private
-      def create_sessions!
-        # create a new UserSession if they are not logged in
-      end
-      
-      def update_sessions!
-        # find their session
-        # check that their session's record is the same one as this one: session.record == self
-        # update the session with the new info: session.update
+      def maintain_sessions!
+        # If we aren't logged in at all and the password was changed, go ahead and log the user in
+        # If we are logged in and the password has change, update the sessions
       end
   end
 
-Obviously there is a little more to it than this, but hopefully this clarifies any confusion. Lastly, this can be altered / disabled via a configuration option.
+Obviously there is a little more to it than this, but hopefully this clarifies any confusion. Lastly, this can be altered / disabled via a configuration option. Just set :session_ids => nil when calling acts_as_authentic.
 
 When things come together like this I think its a sign that you are doing something right. Put that in your pipe and smoke it!
 
@@ -230,7 +225,7 @@ As of now, authgasm supports rails right out of the box. But I designed authgasm
 
 == How it works
 
-Interested in how all of this all works? Basically a before_filter is automatically set in your controller which lets Authgasm know about the current controller object. This allows Authgasm to set sessions, cookies, login via basic http auth, etc. If you are using rails in a multiple thread environment, don't worry. I kept that in mind and made this thread safe.
+Interested in how all of this all works? Basically a before_filter is automatically set in your controller which lets Authgasm know about the current controller object. This "activates" Authgasm and allows Authgasm to set sessions, cookies, login via basic http auth, etc. If you are using rails in a multiple thread environment, don't worry. I kept that in mind and made this thread safe.
 
 From there it is pretty simple. When you try to create a new session the record is authenticated and then all of the session / cookie magic is done for you. The sky is the limit.
 
@@ -240,7 +235,7 @@ You probably don't care, but I think releasing the millionth authentication solu
 
 I don't necessarily think the current solutions are "wrong", nor am I saying Authgasm is the answer to your prayers. But, to me, the current solutions were lacking something. Here's what I came up with...
 
-=== Generators are not the answer
+=== Generators are messy
 
 Generators have their place, and it is not to add authentication to a rails app. It doesn't make sense. Generators are meant to be a starting point for repetitive tasks that have no sustainable pattern. Take controllers, the set up is the same thing over and over, but they eventually evolve to a point where there is no clear cut pattern. Trying to extract a pattern out into a library would be extremely hard, messy, and overly complicated. As a result, generators make sense here.
 
@@ -248,7 +243,7 @@ Authentication is a one time set up process for your app. It's the same thing ov
 
 Using a library that hundreds of other people use has it advantages. Probably one of the biggest advantages if that you get to benefit from other people using the same code. When Bob in California figures out a new awesome security technique and adds it into Authgasm, you get to benefit from that with a single update. The catch is that this benefit is limited to code that is not "generated" or added into your app. As I said above, once code is "generated" and added into your app, it's your responsibility.
 
-Lastly, there is a pattern here, why clutter up all of your applications with the same code? I recently switched over one of my apps to Authgasm and its amazing how much cleaner my app feels.
+Lastly, there is a pattern here, why clutter up all of your applications with the same code over and over?
 
 === Limited to a single authentication
 
@@ -257,6 +252,10 @@ I recently had an app where you could log in as a user and also log in as an emp
 === Too presumptuous
 
 A lot of them forced me to name my password column as "this", or the key of my cookie had to be "this". They were a little too presumptuous. I am probably overly picky, but little details like that should be configurable. This also made it very hard to implement into an existing app.
+
+=== Disclaimer
+
+I am not trying to  "bash" any other authentication solutions. These are just my opinions, formulate your own opinion. I released Authgasm because it has made my life easier and I enjoy using it, hopefully it does the same for you.
 
 
 Copyright (c) 2008 Ben Johnson of [Binary Logic](http://www.binarylogic.com), released under the MIT license
