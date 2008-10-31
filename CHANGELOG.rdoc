@@ -1,9 +1,10 @@
-== 0.10.3 released 2008-10-29
+== 0.10.3 released 2008-10-31
 
 * Instead of raising an error when extra fields are passed in credentials=, just ignore them.
 * Added remember_me config option to set the default value.
 * Only call credential methods if an argument was passed.
 * More unit tests
+* Hardened automatic session updating. Also automatically log the user in if they change their password when logged out.
 
 == 0.10.2 released 2008-10-24
 

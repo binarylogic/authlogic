@@ -17,8 +17,8 @@ class UserSessionStoriesTest < ActionController::IntegrationTest
     post account_url, {:user => {:login => "binarylogic", :password => "pass", :confirm_password => "pass", :first_name => "Ben", :last_name => "Johnson"}}
     assert_redirected_to account_url
     assert flash.key?(:notice)
-    
-    access_account(User.last)
+        
+    assert_account_access(User.last)
   end
   
   def test_login_process
@@ -29,9 +29,9 @@ class UserSessionStoriesTest < ActionController::IntegrationTest
     assert flash.key?(:notice)
     assert_template "user_sessions/new"
     
-    login_unsuccessfully
-    login_unsuccessfully("bjohnson", "badpassword")
-    login_successfully("bjohnson", "benrocks")
+    assert_unsuccessful_login
+    assert_unsuccessful_login("bjohnson", "badpassword")
+    assert_successful_login("bjohnson", "benrocks")
     
     # Try to log in again after a successful login
     get new_user_session_url
@@ -47,8 +47,8 @@ class UserSessionStoriesTest < ActionController::IntegrationTest
     assert flash.key?(:notice)
     assert_template "users/show"
     
-    access_account
-    logout(new_account_url) # before I tried to register, it stored my location
+    assert_account_access
+    assert_successful_logout(new_account_url) # before I tried to register, it stored my location
     
     # Try to access my account again
     get account_url
@@ -58,7 +58,7 @@ class UserSessionStoriesTest < ActionController::IntegrationTest
   
   def test_changing_password
     # Try logging in with correct credentials
-    login_successfully("bjohnson", "benrocks")
+    assert_successful_login("bjohnson", "benrocks")
     
     # Go to edit form
     get edit_account_path
@@ -71,15 +71,35 @@ class UserSessionStoriesTest < ActionController::IntegrationTest
     assert flash.key?(:notice)
     assert_template "users/show"
     
-    access_account
-    logout
+    assert_account_access
+    assert_successful_logout
     
     # Try to access my account again
     get account_url
     assert_redirected_to new_user_session_url
     assert flash.key?(:notice)
     
-    login_successfully("bjohnson", "sillywilly")
-    access_account
+    assert_successful_login("bjohnson", "sillywilly")
+    assert_account_access
+  end
+  
+  def test_updating_user_with_no_password_change
+    ben = users(:ben)
+    profile_views = ben.profile_views
+    assert_no_account_access
+    get user_url(ben)
+    ben.reload
+    assert ben.profile_views > profile_views
+    assert_no_account_access
+  end
+  
+  def test_updating_user_with_password_change
+    ben = users(:ben)
+    crypted_password = ben.crypted_password
+    assert_no_account_access
+    get reset_password_user_url(ben)
+    ben.reload
+    assert_not_equal crypted_password, ben.crypted_password
+    assert_account_access
   end
 end

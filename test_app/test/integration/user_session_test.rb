@@ -26,7 +26,7 @@ class UserSessionTest < ActionController::IntegrationTest
   
   def test_find
     assert_equal nil, UserSession.find
-    login_successfully("bjohnson", "benrocks")
+    assert_successful_login("bjohnson", "benrocks")
     assert UserSession.find
   end
   
@@ -139,7 +139,7 @@ class UserSessionTest < ActionController::IntegrationTest
     session.save
     assert !session.new_session?
     
-    login_successfully("bjohnson", "benrocks")
+    assert_successful_login("bjohnson", "benrocks")
     session = UserSession.find
     assert !session.new_session?
   end

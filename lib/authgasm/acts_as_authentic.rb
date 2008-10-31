@@ -31,7 +31,7 @@ module Authgasm
       #   user.password=              Method name based on the :password_field option. This is used to set the password. Pass the *raw* password to this.
       #   user.confirm_password=      Confirms the password, needed to change the password.
       #   user.valid_password?(pass)  Determines if the password passed is valid. The password could be encrypted or raw.
-      #   user.randomize_password!    Basically resets the password to a random password using only letters and numbers.
+      #   user.reset_password!        Basically resets the password to a random password using only letters and numbers.
       #   user.logged_in?             Based on the :logged_in_timeout option. Tells you if the user is logged in or not.
       #   user.forget!                Changes their remember token, making their cookie and session invalid. A way to log the user out withouth changing their password.
       #
@@ -94,9 +94,8 @@ module Authgasm
           named_scope :logged_out, lambda { {:conditions => ["last_request_at <= ?", options[:logged_in_timeout].ago]} }
         end
         
-        after_create :create_sessions!
-        before_update :find_my_sessions
-        after_update :update_sessions!
+        before_save :get_session_information, :if => :update_sessions?
+        after_save :maintain_sessions!, :if => :update_sessions?
         
         # Attributes
         attr_writer "confirm_#{options[:password_field]}"
@@ -176,63 +175,75 @@ module Authgasm
           end
           
           def forget!
-            update_attribute(:#{options[:remember_token_field]}, self.class.unique_token)
+            self.#{options[:remember_token_field]} = self.class.unique_token
+            save_without_session_maintenance(false)
           end
           
-          def randomize_#{options[:password_field]}!
+          def reset_#{options[:password_field]}!
             chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
             newpass = ""
             1.upto(10) { |i| newpass << chars[rand(chars.size-1)] }
             self.#{options[:password_field]} = newpass
             self.confirm_#{options[:password_field]} = newpass
-            save(false)
+            save_without_session_maintenance(false)
           end
+          alias_method :randomize_password!, :reset_password!
           
-          def save_from_session(*args)
-            @saving_from_session = true
+          def save_without_session_maintenance(*args)
+            @skip_session_maintenance = true
             result = save(*args)
-            @saving_from_session = false
+            @skip_session_maintenance = false
             result
           end
           
           protected
-            def create_sessions!
-              return if !#{options[:session_class]}.activated? || #{options[:session_ids].inspect}.blank?
+            def update_sessions?
+              !@skip_session_maintenance && #{options[:session_class]}.activated? && !#{options[:session_ids].inspect}.blank? && #{options[:remember_token_field]}_changed?
+            end
+            
+            def get_session_information
+              # Need to determine if we are completely logged out, or logged in as another user
+              @_sessions = []
+              @_logged_out = true
               
+              #{options[:session_ids].inspect}.each do |session_id|
+                session = #{options[:session_class]}.find(*[session_id].compact)
+                if session
+                  if !session.record.blank?
+                    @_logged_out = false
+                    @_sessions << session if session.record == self
+                  end
+                end
+              end
+            end
+            
+            def maintain_sessions!
+              if @_logged_out
+                create_session!
+              elsif !@_sessions.blank?
+                update_sessions!
+              end
+            end
+            
+            def create_session!
               # We only want to automatically login into the first session, since this is the main session. The other sessions are sessions
               # that need to be created after logging into the main session.
               session_id = #{options[:session_ids].inspect}.first
               
               # If we are already logged in, ignore this completely. All that we care about is updating ourself.
               next if #{options[:session_class]}.find(*[session_id].compact)
-              
+                            
               # Log me in
               args = [self, session_id].compact
               #{options[:session_class]}.create(*args)
             end
             
-            def find_my_sessions
-              return if @saving_from_session || !#{options[:session_class]}.activated? || #{options[:session_ids].inspect}.blank?
-              
-              @my_sessions = []
-              #{options[:session_ids].inspect}.each do |session_id|
-                session = #{options[:session_class]}.find(*[session_id].compact)
-                
-                # Ignore if we can't find the session or the session isn't this record
-                next if !session || session.record != self
-                
-                @my_sessions << session
-              end
-            end
-            
             def update_sessions!
-              return if @saving_from_session || @my_sessions.blank?
-              
-              @my_sessions.each do |stale_session|
+              # We found sessions above, let's update them with the new info
+              @_sessions.each do |stale_session|
                 stale_session.unauthorized_record = self
                 stale_session.save
               end
-              @my_sessions = nil
             end
             
             def tried_to_set_password?

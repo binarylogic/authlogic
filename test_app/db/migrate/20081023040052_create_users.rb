@@ -10,6 +10,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :last_name
       t.integer :login_count, :null => false, :default => 0
       t.datetime :last_request_at
+      t.integer :profile_views, :null => false, :default => 0
     end
   end
 

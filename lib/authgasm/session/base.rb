@@ -54,7 +54,7 @@ module Authgasm
             if session.send("valid_#{find_method}?")
               if session.record.class.column_names.include?("last_request_at")
                 session.record.last_request_at = Time.now
-                session.record.save_from_session(false)
+                session.record.save_without_session_maintenance(false)
               end
               return session
             end
@@ -250,7 +250,7 @@ module Authgasm
             record.current_login_ip = controller.request.remote_ip
           end
           
-          record.save_from_session(false)
+          record.save_without_session_maintenance(false)
           
           self.new_session = false
           self

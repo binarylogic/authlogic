@@ -1,23 +1,29 @@
-<h1><%= @current_user.login %></h1>
+<h1><%= @user.login %></h1>
 
 <table>
   <tr>
     <td>Login:</td>
-    <td><%= @current_user.login %></td>
+    <td><%= @user.login %></td>
   </tr>
   <tr>
     <td>Login count:</td>
-    <td><%= @current_user.login_count %></td>
+    <td><%= @user.login_count %></td>
+  </tr>
+  <tr>
+    <td>Profile views:</td>
+    <td><%= @user.profile_views %></td>
   </tr>
   <tr>
     <td>First name:</td>
-    <td><%= @current_user.first_name %></td>
+    <td><%= @user.first_name %></td>
   </tr>
   <tr>
     <td>Last name:</td>
-    <td><%= @current_user.last_name %></td>
+    <td><%= @user.last_name %></td>
   </tr>
 </table>
 <br />
 
-<%= link_to "Edit", edit_account_path %><br />
+<% if @user == @current_user %>
+  <%= link_to "Edit", edit_account_path %><br />
+<% end %>
