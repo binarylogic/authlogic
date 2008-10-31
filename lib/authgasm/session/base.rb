@@ -93,12 +93,14 @@ module Authgasm
       #   UserSession.new
       #   UserSession.new(login, password)
       #   UserSession.new(:login => login, :password => password)
+      #   UserSession.new(User.first)
       #
       # If a user has more than one session you need to pass an id so that Authgasm knows how to differentiate the sessions. The id MUST be a Symbol.
       #
       #   UserSession.new(:my_id)
       #   UserSession.new(login, password, :my_id)
       #   UserSession.new({:login => loing, :password => password}, :my_id)
+      #   UserSession.new(User.first, :my_id)
       #
       # Ids are rarely used, but they can be useful. For example, what if users allow other users to login into their account via proxy? Now that user can "technically" be logged into 2 accounts at once.
       # To solve this just pass a id called :proxy, or whatever you want. Authgasm will separate everything out.
