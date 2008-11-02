@@ -1,5 +1,6 @@
 ben:
   id: 1
+  account_id: 1
   login: bjohnson
   password_salt: <%= salt = User.unique_token %>
   crypted_password: <%= Authgasm::Sha512CryptoProvider.encrypt("benrocks" + salt) %>
@@ -9,6 +10,7 @@ ben:
   
 zack:
   id: 2
+  account_id: 2
   login: zham
   password_salt: <%= salt = User.unique_token %>
   crypted_password: <%= Authgasm::Sha512CryptoProvider.encrypt("zackrocks" + salt) %>

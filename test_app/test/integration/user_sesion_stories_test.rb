@@ -14,7 +14,7 @@ class UserSessionStoriesTest < ActionController::IntegrationTest
     assert_template "users/new"
     
     # Register successfully
-    post account_url, {:user => {:login => "binarylogic", :password => "pass", :confirm_password => "pass", :first_name => "Ben", :last_name => "Johnson"}}
+    post account_url, {:user => {:account_id => 1, :login => "binarylogic", :password => "pass", :confirm_password => "pass", :first_name => "Ben", :last_name => "Johnson"}}
     assert_redirected_to account_url
     assert flash.key?(:notice)
         

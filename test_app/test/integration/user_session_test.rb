@@ -156,6 +156,6 @@ class UserSessionTest < ActionController::IntegrationTest
   end
   
   def test_save
-    # tested thoroughly in stories
+    # tested thoroughly in stories and in create above
   end
 end

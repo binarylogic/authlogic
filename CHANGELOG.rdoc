@@ -1,3 +1,8 @@
+== 0.10.4 released 2008-10-31
+
+* Changed configuration to use inheritable attributes
+* Cleaned up requires to be in their proper files
+
 == 0.10.3 released 2008-10-31
 
 * Instead of raising an error when extra fields are passed in credentials=, just ignore them.

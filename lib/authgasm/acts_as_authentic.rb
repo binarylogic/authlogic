@@ -45,6 +45,7 @@ module Authgasm
       # * <tt>crypted_password_field:</tt> default: depends on which columns are present, checks: crypted_password, encrypted_password, password_hash, pw_hash, if none are present defaults to crypted_password. This is the name of column that your encrypted password is stored.
       # * <tt>password_salt_field:</tt> default: depends on which columns are present, checks: password_salt, pw_salt, salt, if none are present defaults to password_salt. This is the name of the field your salt is stored, only relevant for a hash crypto provider.
       # * <tt>remember_token_field:</tt> default: options[:session_class].remember_token_field, the name of the field your remember token is stored. What the cookie stores so the session can be "remembered"
+      # * <tt>scope:</tt> default: nil, if all of your users belong to an account you might want to scope everything to the account. Just pass :account_id
       # * <tt>logged_in_timeout:</tt> default: 10.minutes, this allows you to specify a time the determines if a user is logged in or out. Useful if you want to count how many users are currently logged in.
       # * <tt>session_ids:</tt> default: [nil], the sessions that we want to automatically reset when a user is created or updated so you don't have to worry about this. Set to [] to disable. Should be an array of ids. See Authgasm::Session::Base#initialize for information on ids. The order is important. The first id should be your main session, the session they need to log into first. This is generally nil, meaning so explicitly set id.
       def acts_as_authentic(options = {})
@@ -84,7 +85,7 @@ module Authgasm
           validates_format_of options[:login_field], :with => /\A\w[\w\.\-_@]+\z/, :message => "use only letters, numbers, and .-_@ please."
         end
         
-        validates_uniqueness_of options[:login_field]
+        validates_uniqueness_of options[:login_field], :scope => options[:scope]
         validates_uniqueness_of options[:remember_token_field]
         validate :validate_password
         validates_numericality_of :login_count, :only_integer => :true, :greater_than_or_equal_to => 0, :allow_nil => true if column_names.include?("login_count")

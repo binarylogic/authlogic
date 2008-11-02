@@ -1,3 +1,5 @@
+require "digest/sha2"
+
 module Authgasm
   # = Sha512 Crypto Provider
   #

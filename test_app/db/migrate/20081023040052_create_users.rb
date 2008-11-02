@@ -2,6 +2,7 @@ class CreateUsers < ActiveRecord::Migration
   def self.up
     create_table :users do |t|
       t.timestamps
+      t.integer :account_id, :null => false
       t.string :login, :null => false
       t.string :crypted_password
       t.string :password_salt

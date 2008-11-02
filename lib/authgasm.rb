@@ -1,6 +1,6 @@
-require "digest/sha2"
 require File.dirname(__FILE__) + "/authgasm/version"
 
+require File.dirname(__FILE__) + "/authgasm/controller_adapters/abstract_adapter"
 require File.dirname(__FILE__) + "/authgasm/controller_adapters/rails_adapter" if defined?(Rails)
 
 require File.dirname(__FILE__) + "/authgasm/sha512_crypto_provider"
