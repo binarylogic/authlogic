@@ -63,8 +63,8 @@ Authlogic makes this a reality. This is just the tip of the ice berg. Keep readi
 == Helpful links
 
 *	<b>Documentation:</b> http://authlogic.rubyforge.org
-*	<b>Authlogic setup tutorial:</b> coming soon...
-*	<b>Live example of the setup tutorial above (with source):</b> coming soon....
+*	<b>Authlogic setup tutorial:</b> http://www.binarylogic.com/2008/11/3/tutorial-authlogic-basic-setup
+*	<b>Live example of the setup tutorial above (with source):</b> http://authlogic_example.binarylogic.com
 * <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
 
 == Install and use
