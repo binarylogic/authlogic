@@ -79,7 +79,39 @@ Or as a plugin
 
   script/plugin install git://github.com/binarylogic/authlogic.git
 
-In an effort to keep this readme a reference instead of a step by step guide, I moved the setup tutorial to my blog. See "helpful links" above. If this is your first time using Authlogic checkout the tutorial.
+=== Create your session
+
+Lets assume you are setting up a session for your User model.
+
+Create your user_session.rb file:
+
+  # app/models/user_session.rb
+  class UserSession < Authgasm::Session::Base
+    # configuration here, just like ActiveRecord, or in an initializer
+    # See Authgasm::Session::Config::ClassMethods for more details
+  end
+
+=== Ensure proper database fields
+
+The user model needs to have the following columns. The names of these columns can be changed with configuration. Better yet, Authgasm tries to guess these names by checking for the existence of common names. See Authgasm::Session::Config::ClassMethods for more details, but chances are you won't have to specify any configuration for your field names, even if they aren't the same names as below.
+
+    t.string    :login, :null => false
+    t.string    :crypted_password, :null => false
+    t.string    :password_salt, :null => false # not needed if you are encrypting your pw instead of using a hash algorithm
+    t.string    :remember_token, :null => false
+    t.integer   :login_count # This is optional, it is a "magic" column, just like "created_at". See below for a list of all magic columns.
+
+=== Set up your model
+
+Make sure you have a model that you will be authenticating with. For this example let's say you have a User model:
+
+  class User < ActiveRecord::Base
+    acts_as_authentic # for options see documentation: Authgasm::ActsAsAuthentic::ClassMethods
+  end
+
+The options for acts_as_authentic are based on the UserSession configuration. So if you specified configuration for your UserSession model you should not have to specify any options for acts_as_authentic, unless you want them to be different.
+
+Done! Now go use it just like you would with any other ActiveRecord model. Either glance at the code at the beginning of this readme or check out the tutorial (see above in "helpful links") for a more detailed walk through.
 
 == Magic Columns
 
