@@ -1,13 +1,9 @@
-module Authgasm
-  module ActsAsAuthentic # :nodoc:
-    def self.included(base)
-      base.extend(ClassMethods)
-    end
-    
+module Authlogic
+  module ActiveRecord # :nodoc:
     # = Acts As Authentic
     # Provides and "acts_as" method to include in your models to help with authentication. See method below.
-    module ClassMethods
-      # Call this method in your model to add in basic authentication madness that your authgasm session expects.
+    module ActsAsAuthentic
+        # Call this method in your model to add in basic authentication madness that your authlogic session expects.
       #
       # <b>Please keep in mind</b> that based on your configuration the method names could change. For example, if you pass the option:
       #
@@ -37,17 +33,17 @@ module Authgasm
       #
       # === Options
       # * <tt>session_class:</tt> default: "#{name}Session", the related session class. Used so that you don't have to repeat yourself here. A lot of the configuration will be based off of the configuration values of this class.
-      # * <tt>crypto_provider:</tt> default: Authgasm::Sha256CryptoProvider, class that provides Sha256 encryption. What ultimately encrypts your password.
-      # * <tt>crypto_provider_type:</tt> default: options[:crypto_provider].respond_to?(:decrypt) ? :encryption : :hash. You can explicitly set this if you wish. Since encryptions and hashes are handled different this is the flag Authgasm uses.
+      # * <tt>crypto_provider:</tt> default: Authlogic::Sha512CryptoProvider, class that provides Sha512 encryption. What ultimately encrypts your password.
+      # * <tt>crypto_provider_type:</tt> default: options[:crypto_provider].respond_to?(:decrypt) ? :encryption : :hash. You can explicitly set this if you wish. Since encryptions and hashes are handled different this is the flag Authlogic uses.
       # * <tt>login_field:</tt> default: options[:session_class].login_field, the name of the field used for logging in
-      # * <tt>login_field_type:</tt> default: options[:login_field] == :email ? :email : :login, tells authgasm how to validation the field, what regex to use, etc.
+      # * <tt>login_field_type:</tt> default: options[:login_field] == :email ? :email : :login, tells authlogic how to validation the field, what regex to use, etc.
       # * <tt>password_field:</tt> default: options[:session_class].password_field, the name of the field to set the password, *NOT* the field the encrypted password is stored
       # * <tt>crypted_password_field:</tt> default: depends on which columns are present, checks: crypted_password, encrypted_password, password_hash, pw_hash, if none are present defaults to crypted_password. This is the name of column that your encrypted password is stored.
       # * <tt>password_salt_field:</tt> default: depends on which columns are present, checks: password_salt, pw_salt, salt, if none are present defaults to password_salt. This is the name of the field your salt is stored, only relevant for a hash crypto provider.
       # * <tt>remember_token_field:</tt> default: options[:session_class].remember_token_field, the name of the field your remember token is stored. What the cookie stores so the session can be "remembered"
       # * <tt>scope:</tt> default: nil, if all of your users belong to an account you might want to scope everything to the account. Just pass :account_id
       # * <tt>logged_in_timeout:</tt> default: 10.minutes, this allows you to specify a time the determines if a user is logged in or out. Useful if you want to count how many users are currently logged in.
-      # * <tt>session_ids:</tt> default: [nil], the sessions that we want to automatically reset when a user is created or updated so you don't have to worry about this. Set to [] to disable. Should be an array of ids. See Authgasm::Session::Base#initialize for information on ids. The order is important. The first id should be your main session, the session they need to log into first. This is generally nil, meaning so explicitly set id.
+      # * <tt>session_ids:</tt> default: [nil], the sessions that we want to automatically reset when a user is created or updated so you don't have to worry about this. Set to [] to disable. Should be an array of ids. See Authlogic::Session::Base#initialize for information on ids. The order is important. The first id should be your main session, the session they need to log into first. This is generally nil, meaning so explicitly set id.
       def acts_as_authentic(options = {})
         # Setup default options
         options[:session_class] ||= "#{name}Session".constantize
@@ -70,7 +66,7 @@ module Authgasm
         options[:remember_token_field] ||= options[:session_class].remember_token_field
         options[:logged_in_timeout] ||= 10.minutes
         options[:session_ids] ||= [nil]
-        
+      
         # Validations
         case options[:login_field_type]
         when :email
@@ -84,34 +80,34 @@ module Authgasm
           validates_length_of options[:login_field], :within => 2..100
           validates_format_of options[:login_field], :with => /\A\w[\w\.\-_@]+\z/, :message => "use only letters, numbers, and .-_@ please."
         end
-        
+      
         validates_uniqueness_of options[:login_field], :scope => options[:scope]
         validates_uniqueness_of options[:remember_token_field]
         validate :validate_password
         validates_numericality_of :login_count, :only_integer => :true, :greater_than_or_equal_to => 0, :allow_nil => true if column_names.include?("login_count")
-        
+      
         if column_names.include?("last_request_at")
           named_scope :logged_in, lambda { {:conditions => ["last_request_at > ?", options[:logged_in_timeout].ago]} }
           named_scope :logged_out, lambda { {:conditions => ["last_request_at <= ?", options[:logged_in_timeout].ago]} }
         end
-        
+      
         before_save :get_session_information, :if => :update_sessions?
         after_save :maintain_sessions!, :if => :update_sessions?
-        
+      
         # Attributes
         attr_writer "confirm_#{options[:password_field]}"
         attr_accessor "tried_to_set_#{options[:password_field]}"
-        
+      
         # Class methods
         class_eval <<-"end_eval", __FILE__, __LINE__
           def self.unique_token
             crypto_provider.encrypt(Time.now.to_s + (1..10).collect{ rand.to_s }.join)
           end
-          
+        
           def self.crypto_provider
             #{options[:crypto_provider]}
           end
-          
+        
           def self.forget_all!
             # Paginate these to save on memory
             records = nil
@@ -123,7 +119,7 @@ module Authgasm
             end while !records.blank?
           end
         end_eval
-        
+      
         # Instance methods
         if column_names.include?("last_request_at")
           class_eval <<-"end_eval", __FILE__, __LINE__
@@ -132,7 +128,7 @@ module Authgasm
             end
           end_eval
         end
-        
+      
         case options[:crypto_provider_type]
         when :hash
           class_eval <<-"end_eval", __FILE__, __LINE__
@@ -144,7 +140,7 @@ module Authgasm
               self.#{options[:password_salt_field]} = self.class.unique_token
               self.#{options[:crypted_password_field]} = crypto_provider.encrypt(@#{options[:password_field]} + #{options[:password_salt_field]})
             end
-            
+          
             def valid_#{options[:password_field]}?(attempted_password)
               return false if attempted_password.blank?
               attempted_password == #{options[:crypted_password_field]} || #{options[:crypted_password_field]} == crypto_provider.encrypt(attempted_password + #{options[:password_salt_field]})
@@ -159,27 +155,27 @@ module Authgasm
               self.#{options[:remember_token_field]} = self.class.unique_token
               self.#{options[:crypted_password_field]} = crypto_provider.encrypt(@#{options[:password_field]})
             end
-          
+        
             def valid_#{options[:password_field]}?(attemtped_password)
               return false if attempted_password.blank?
               attempted_password == #{options[:crypted_password_field]} || #{options[:crypted_password_field]} = crypto_provider.decrypt(attempted_password)
             end
           end_eval
         end
-        
+      
         class_eval <<-"end_eval", __FILE__, __LINE__
           def #{options[:password_field]}; end
           def confirm_#{options[:password_field]}; end
-          
+        
           def crypto_provider
             self.class.crypto_provider
           end
-          
+        
           def forget!
             self.#{options[:remember_token_field]} = self.class.unique_token
             save_without_session_maintenance(false)
           end
-          
+        
           def reset_#{options[:password_field]}!
             chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
             newpass = ""
@@ -189,24 +185,24 @@ module Authgasm
             save_without_session_maintenance(false)
           end
           alias_method :randomize_password!, :reset_password!
-          
+        
           def save_without_session_maintenance(*args)
             @skip_session_maintenance = true
             result = save(*args)
             @skip_session_maintenance = false
             result
           end
-          
+        
           protected
             def update_sessions?
               !@skip_session_maintenance && #{options[:session_class]}.activated? && !#{options[:session_ids].inspect}.blank? && #{options[:remember_token_field]}_changed?
             end
-            
+          
             def get_session_information
               # Need to determine if we are completely logged out, or logged in as another user
               @_sessions = []
               @_logged_out = true
-              
+            
               #{options[:session_ids].inspect}.each do |session_id|
                 session = #{options[:session_class]}.find(*[session_id].compact)
                 if session
@@ -217,7 +213,7 @@ module Authgasm
                 end
               end
             end
-            
+          
             def maintain_sessions!
               if @_logged_out
                 create_session!
@@ -225,20 +221,20 @@ module Authgasm
                 update_sessions!
               end
             end
-            
+          
             def create_session!
               # We only want to automatically login into the first session, since this is the main session. The other sessions are sessions
               # that need to be created after logging into the main session.
               session_id = #{options[:session_ids].inspect}.first
-              
+            
               # If we are already logged in, ignore this completely. All that we care about is updating ourself.
               next if #{options[:session_class]}.find(*[session_id].compact)
-                            
+                          
               # Log me in
               args = [self, session_id].compact
               #{options[:session_class]}.create(*args)
             end
-            
+          
             def update_sessions!
               # We found sessions above, let's update them with the new info
               @_sessions.each do |stale_session|
@@ -246,11 +242,11 @@ module Authgasm
                 stale_session.save
               end
             end
-            
+          
             def tried_to_set_password?
               tried_to_set_password == true
             end
-            
+          
             def validate_password
               if new_record? || tried_to_set_#{options[:password_field]}?
                 if @#{options[:password_field]}.blank?
@@ -266,4 +262,4 @@ module Authgasm
   end
 end
 
-ActiveRecord::Base.send(:include, Authgasm::ActsAsAuthentic)
+ActiveRecord::Base.extend Authlogic::ActiveRecord::ActsAsAuthentic

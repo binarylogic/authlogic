@@ -12,7 +12,7 @@ class UserSessionTest < ActionController::IntegrationTest
   def test_create
     assert !UserSession.create("unknown", "bad")
     assert UserSession.create("bjohnson", "benrocks")
-    assert_raise(Authgasm::Session::SessionInvalid) { assert !UserSession.create!("unknown", "bad") }
+    assert_raise(Authlogic::Session::SessionInvalid) { assert !UserSession.create!("unknown", "bad") }
     assert_nothing_raised { UserSession.create!("bjohnson", "benrocks") }
   end
   

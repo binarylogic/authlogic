@@ -1,4 +1,4 @@
-module Authgasm # :nodoc:
+module Authlogic # :nodoc:
   # = Version
   #
   # A class for describing the current version of a library. The version
@@ -44,7 +44,7 @@ module Authgasm # :nodoc:
 
     MAJOR = 0
     MINOR = 10
-    TINY  = 3
+    TINY  = 4
 
     # The current version as a Version instance
     CURRENT = new(MAJOR, MINOR, TINY)

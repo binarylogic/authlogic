@@ -1,1 +1,1 @@
-require "authgasm"
+require "authlogic"

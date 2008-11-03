@@ -31,7 +31,7 @@ Rails::Initializer.run do |config|
   # :all can be used as a placeholder for all plugins not explicitly named
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
   config.plugin_paths += ["#{RAILS_ROOT}/../.."]
-  config.plugins = [:authgasm]
+  config.plugins = [:authlogic]
 
   # Add additional load paths for your own custom dirs
   # config.load_paths += %W( #{RAILS_ROOT}/extras )

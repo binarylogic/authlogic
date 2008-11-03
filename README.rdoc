@@ -1,12 +1,12 @@
-= Authgasm
+= Authlogic
 
-Authgasm is "rails authentication done right"
+Authlogic is "rails authentication done right". Put simply, its the Chuck Norris of authentication solutions.
 
-The last thing we need is another authentication solution for rails, right? That's what I thought until I tried out some of the current solutions. None of them felt right. They were either too complicated, bloated, littered my application with tons of code, or were just confusing. This is not the simple / elegant rails we all fell in love with. We need a "rails like" authentication solution. Authgasm is my attempt to satisfy that need...
-
-What if you could have authentication up and running in minutes without having to run a generator? All because it's simple, like everything else in rails.
+The last thing we need is another authentication solution for rails, right? That's what I thought until I tried out some of the current solutions. None of them felt right. They were either too complicated, bloated, littered my application with tons of code, or were just confusing. This is not the simple / elegant rails we all fell in love with. We need a "rails like" authentication solution. Authlogic is my attempt to satisfy that need...
 
 Wouldn't it be nice to keep your app up to date with the latest and greatest security techniques with a simple update of a plugin?
+
+What if you could have authentication up and running in minutes without having to run a generator? All because it's simple, like everything else in rails.
 
 What if creating a user session could be as simple as...
 
@@ -58,64 +58,32 @@ Or how about persisting the session...
       end
   end
 
-Authgasm makes this a reality. This is just the tip of the ice berg. Keep reading to find out everything Authgasm can do.
+Authlogic makes this a reality. This is just the tip of the ice berg. Keep reading to find out everything Authlogic can do.
 
 == Helpful links
 
-*	<b>Documentation:</b> http://authgasm.rubyforge.org
-*	<b>Authgasm tutorial:</b> coming soon...
-*	<b>Live example of the tutorial above (with source):</b> coming soon....
-* <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authgasm
+*	<b>Documentation:</b> http://authlogic.rubyforge.org
+*	<b>Authlogic setup tutorial:</b> coming soon...
+*	<b>Live example of the setup tutorial above (with source):</b> coming soon....
+* <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
 
 == Install and use
 
-=== Install the gem / plugin
+Install the gem / plugin
 
-  $ sudo gem install authgasm
+  $ sudo gem install authlogic
   $ cd vendor/plugins
-  $ sudo gem unpack authgasm
+  $ sudo gem unpack authlogic
 
 Or as a plugin
 
-  script/plugin install git://github.com/binarylogic/authgasm.git
+  script/plugin install git://github.com/binarylogic/authlogic.git
 
-=== Create your session
-
-For this walk through lets assume you are setting up a session for your User model.
-
-Create your user_session.rb file:
-
-  # app/models/user_session.rb
-  class UserSession < Authgasm::Session::Base
-    # configuration here, just like ActiveRecord, or in an initializer
-    # See Authgasm::Session::Config::ClassMethods for more details
-  end
-
-It is important to set your configuration for your session before you set the configuration for your model. This will save you some time. Your model will try to guess its own configuration based on what you set in the session. These are completely separate, making Authgasm as flexible as it needs to be, but the majority of the time they will be the same and no one likes to repeat their self.
-
-=== Ensure proper database fields
-
-The user model needs to have the following columns. The names of these columns can be changed with configuration. Better yet, Authgasm tries to guess these names by checking for the existence of common names. See Authgasm::Session::Config::ClassMethods for more details, but chances are you won't have to specify any configuration for your field names, even if they aren't the same names as below.
-
-    t.string    :login, :null => false
-    t.string    :crypted_password, :null => false
-    t.string    :password_salt, :null => false # not needed if you are encrypting your pw instead of using a hash algorithm
-    t.string    :remember_token, :null => false
-    t.integer   :login_count # This is optional, it is a "magic" column, just like "created_at". See below for a list of all magic columns.
-
-=== Set up your model
-
-Make sure you have a model that you will be authenticating with. For this example let's say you have a User model:
-
-  class User < ActiveRecord::Base
-    acts_as_authentic # for options see documentation: Authgasm::ActsAsAuthentic::ClassMethods
-  end
-
-Done! Now go use it just like you would with any other ActiveRecord model (see above).
+In an effort to keep this readme a reference instead of a step by step guide, I moved the setup tutorial to my blog. See "helpful links" above. If this is your first time using Authlogic checkout the tutorial.
 
 == Magic Columns
 
-Just like ActiveRecord has "magic" columns, such as: created_at and updated_at. Authgasm has its own "magic" columns too:
+Just like ActiveRecord has "magic" columns, such as: created_at and updated_at. Authlogic has its own "magic" columns too:
 
   Column name           Description
   login_count           Increased every time an explicit login is made. This will *NOT* increase if logging in by a session, cookie, or basic http auth
@@ -127,7 +95,7 @@ Just like ActiveRecord has "magic" columns, such as: created_at and updated_at. 
   
 == Magic States
 
-Authgasm tries to check the state of the record before creating the session. If your record responds to the following methods and any of them return false, validation will fail:
+Authlogic tries to check the state of the record before creating the session. If your record responds to the following methods and any of them return false, validation will fail:
 
   Method name           Description
   active?               Is the record marked as active?
@@ -136,7 +104,7 @@ Authgasm tries to check the state of the record before creating the session. If 
   
 What's neat about this is that these are checked upon any type of login. When logging in explicitly, by cookie, session, or basic http auth. So if you mark a user inactive in the middle of their session they wont be logged back in next time they refresh the page. Giving you complete control.
 
-Need Authgasm to check your own "state"? No problem, check out the hooks section below. Add in a before_validation or after_validation to do your own checking.
+Need Authlogic to check your own "state"? No problem, check out the hooks section below. Add in a before_validation or after_validation to do your own checking.
 
 == Hooks / Callbacks
 
@@ -152,10 +120,96 @@ Just like ActiveRecord you can create your own hooks / callbacks so that you can
   after_update
   before_validation
   after_validation
+  
+== Multiple Sessions / Session Identifiers
+
+You're asking: "why would I want multiple sessions?". Take this example:
+
+You have an app where users login and then need to re-login to view / change their billing information. Similar to how Apple's me.com works. What you could do is have the user login with their normal session, then have an entirely new session that represents their "secure" session. But wait, this is 2 users sessions. No problem:
+
+  # regular user session
+  @user_session = UserSession.new
+  @user_session.id
+  # => nil
+
+  # secure user session
+  @secure_user_session = UserSession.new(:secure)
+  @secure_user_session.id
+  # => :secure
+
+This will keep everything separate. The :secure session will store its info in a separate cookie, separate session, etc. Just set the id and you are good to go. Need to retrieve the session?
+
+  @user_session = UserSession.find
+  @secure_user_session = UserSession.find(:secure)
+
+For more information on ids checkout Authlogic::Session::Base#initialize
+
+== Scoping
+
+Scoping with authentication is a little tricky because it can come in many different flavors:
+
+1. Accounts have many users, meaning users can only belong to one account at a time.
+2. Accounts have and belong to many users, meaning a user can belong to more than one account.
+3. Users access their accounts via subdomains.
+4. Users access their accounts by selecting their account and storing their selection, *NOT* using subdomains. Maybe you store their selection in a session, cookie, or the database. It doesn't matter.
+
+Now mix and match the above, it can get pretty hairy. Fear not, because Authlogic is designed in a manner where it doesn't care how you do it, all that you have to do is break it down. When scoping a session there are 3 parts you might want to scope:
+
+1. The model (the validations, etc)
+2. The session (finding the record)
+3. The cookies (the names of the session key and cookie)
+
+I will describe each below, in order.
+
+=== Scoping your model
+
+This scopes your login field validation, so that users are allowed to have the same login, just not in the same account.
+
+  # app/models/user.rb
+  class User < ActiveRecord::Base
+    acts_as_authentic :scope => :account_id
+  end
+
+=== Scoping your session
+
+When you session tries to validate it searches for a record. You want to scope that search. No problem...
+
+The goal of Authlogic was to not try and introduce anything new. As a result I came up with:
+
+  @account.user_sessions.find
+  @account.user_sessions.create
+  @account.user_sessions.build
+  # ... etc
+
+This works just like ActiveRecord, so it should come natural. Here is how you get this functionality:
+
+  class Account < ActiveRecord::Base
+    authenticates_many :user_sessions
+  end
+
+=== Scoping cookies
+
+What's neat about cookies is that if you use sub domains they automatically scope their self. Meaning if you create a cookie in whatever.yourdomain.com it will not exist in another.yourdomain.com. So if you have the example used above, where you can access accounts via a sub domain, you don't have to do anything.
+
+But what if you don't want to separate your cookies by subdomains? You can accomplish this by doing:
+
+  ActionController::Base.session_options[:session_domain] = ‘.mydomain.com’
+
+If for some reason the above doesn't work for you, do some simple Google searches. There are a million blog posts on this.
+
+Now let's look at this from the other angle. What if you are *NOT* using subdomains, but still want to separate cookies for each account. Simple, set the :scope_cookies option for authenticate_many:
+
+  class Account < ActiveRecord::Base
+    authenticates_many :user_sessions, :scope_cookies => true
+  end
+
+Done, Authlogic will give each cookie a unique name depending on the account.
+
+With the above information you should be able to scope your sessions any way you want. Just mix and match the tools above to accomplish what you want. Also check out the documentation on Authlogic::ActiveRecord::AuthenticatesMany.
 
 == Errors
 
-The errors in Authgasm work JUST LIKE ActiveRecord. In fact, it uses the exact same ActiveRecord errors class. Use it the same way:
+The errors in Authlogic work JUST LIKE ActiveRecord. In fact, it uses the exact same ActiveRecord errors class. Use it the same way:
 
   class UserSession
     before_validation :check_if_awesome
@@ -171,11 +225,11 @@ The errors in Authgasm work JUST LIKE ActiveRecord. In fact, it uses the exact s
 
 This is one of my favorite features that I think is pretty cool. It's things like this that make a library great and let you know you are on the right track.
 
-Just to clear up any confusion, Authgasm does not store the plain id in the session. It stores a token. This token changes with the password, this way stale sessions can not be persisted.
+Just to clear up any confusion, Authlogic does not store the plain id in the session. It stores a token. This token changes with the password, this way stale sessions can not be persisted.
 
 That being said...What if a user changes their password? You have to re-log them in with the new password, recreate the session, etc, pain in the ass. Or what if a user creates a new user account? You have to do the same thing. Here's an even better one: what if a user is in the admin area and changes his own password? There might even be another place passwords can change. It shouldn't matter, your code should be written in a way where you don't have to remember to do this.
 
-Instead of updating sessions all over the place, doesn't it make sense to do this at a lower level? Like the User model? You're saying "but Ben, models can't mess around with sessions and cookies". True...but Authgasm can, and you can access Authgasm just like a model. I know in most situations it's not good practice to do this but I view this in the same class as sweepers, and feel like it actually is good practice here. User sessions are directly tied to users, they should be connected on the model level.
+Instead of updating sessions all over the place, doesn't it make sense to do this at a lower level? Like the User model? You're saying "but Ben, models can't mess around with sessions and cookies". True...but Authlogic can, and you can access Authlogic just like a model. I know in most situations it's not good practice to do this but I view this in the same class as sweepers, and feel like it actually is good practice here. User sessions are directly tied to users, they should be connected on the model level.
 
 Fear not, because the acts_as_authentic method you call in your model takes care of this for you, by adding an after_save callback to automatically keep the session up to date. You don't have to worry about it anymore. Don't even think about it. Let your UsersController deal with users, not users *AND* sessions. *ANYTIME* the user changes his password in *ANY* way, his session will be updated.
 
@@ -196,36 +250,13 @@ Obviously there is a little more to it than this, but hopefully this clarifies a
 
 When things come together like this I think its a sign that you are doing something right. Put that in your pipe and smoke it!
 
-== Multiple Sessions / Session Identifiers
-
-You're asking: "why would I want multiple sessions?". Take this example:
-
-You have an app where users login and then need to re-login to view / change their billing information. Similar to how Apple's me.com works. What you could do is have the user login with their normal session, then have an entirely new session that represents their "secure" session. But wait, this is 2 users sessions. No problem:
-
-  # regular user session
-  @user_session = UserSession.new
-  @user_session.id
-  # => nil
-  
-  # secure user session
-  @secure_user_session = UserSession.new(:secure)
-  @secure_user_session.id
-  # => :secure
-
-This will keep everything separate. The :secure session will store its info in a separate cookie, separate session, etc. Just set the id and you are good to go. Need to retrieve the session?
-
-  @user_session = UserSession.find
-  @secure_user_session = UserSession.find(:secure)
-
-For more information on ids checkout Authgasm::Session::Base#initialize
-
 == What about [insert framework here]?
 
-As of now, authgasm supports rails right out of the box. But I designed authgasm to be framework agnostic. The only thing stopping Authgasm from being implemented in merb, or any other framework, is a simple adapter. I have not had the opportunity to use Authgasm in anything other than rails. If you want to use this in merb or any other framework take a look at authgasm/controller/rails_adapter.rb. 
+As of now, authlogic supports rails right out of the box. But I designed authlogic to be framework agnostic. The only thing stopping Authlogic from being implemented in merb, or any other framework, is a simple adapter. I have not had the opportunity to use Authlogic in anything other than rails. If you want to use this in merb or any other framework take a look at authlogic/controller/rails_adapter.rb. 
 
 == How it works
 
-Interested in how all of this all works? Basically a before_filter is automatically set in your controller which lets Authgasm know about the current controller object. This "activates" Authgasm and allows Authgasm to set sessions, cookies, login via basic http auth, etc. If you are using rails in a multiple thread environment, don't worry. I kept that in mind and made this thread safe.
+Interested in how all of this all works? Basically a before_filter is automatically set in your controller which lets Authlogic know about the current controller object. This "activates" Authlogic and allows Authlogic to set sessions, cookies, login via basic http auth, etc. If you are using rails in a multiple thread environment, don't worry. I kept that in mind and made this thread safe.
 
 From there it is pretty simple. When you try to create a new session the record is authenticated and then all of the session / cookie magic is done for you. The sky is the limit.
 
@@ -233,7 +264,7 @@ From there it is pretty simple. When you try to create a new session the record 
 
 You probably don't care, but I think releasing the millionth authentication solution for a framework that has been around for over 4 years requires a little explanation.
 
-I don't necessarily think the current solutions are "wrong", nor am I saying Authgasm is the answer to your prayers. But, to me, the current solutions were lacking something. Here's what I came up with...
+I don't necessarily think the current solutions are "wrong", nor am I saying Authlogic is the answer to your prayers. But, to me, the current solutions were lacking something. Here's what I came up with...
 
 === Generators are messy
 
@@ -241,13 +272,13 @@ Generators have their place, and it is not to add authentication to a rails app.
 
 Authentication is a one time set up process for your app. It's the same thing over and over and the pattern never really changes. The only time it changes is to conform with newer / stricter security techniques. This is exactly why generators should not be an authentication solution. Generators add code to your application, once code crosses that line, you are responsible for maintaining it. You get to make sure it stays up with the latest and greatest security techniques. And when the plugin you used releases some major update, you can't just re-run the generator, you get to sift through the code to see what changed. You don't really have a choice either, because you can't ignore security updates.
 
-Using a library that hundreds of other people use has it advantages. Probably one of the biggest advantages if that you get to benefit from other people using the same code. When Bob in California figures out a new awesome security technique and adds it into Authgasm, you get to benefit from that with a single update. The catch is that this benefit is limited to code that is not "generated" or added into your app. As I said above, once code is "generated" and added into your app, it's your responsibility.
+Using a library that hundreds of other people use has it advantages. Probably one of the biggest advantages if that you get to benefit from other people using the same code. When Bob in California figures out a new awesome security technique and adds it into Authlogic, you get to benefit from that with a single update. The catch is that this benefit is limited to code that is not "generated" or added into your app. As I said above, once code is "generated" and added into your app, it's your responsibility.
 
 Lastly, there is a pattern here, why clutter up all of your applications with the same code over and over?
 
 === Limited to a single authentication
 
-I recently had an app where you could log in as a user and also log in as an employee. I won't go into the specifics of the app, but it made the most sense to do it this way. So I had two sessions in one app. None of the current solutions I found easily supported this. They all assumed a single session. One session was messy enough, adding another just put me over the edge and eventually forced me to write Authgasm. Authgasm can support 100 different sessions easily and in a clean format. Just like an app can support 100 different models and 100 different records of each model.
+I recently had an app where you could log in as a user and also log in as an employee. I won't go into the specifics of the app, but it made the most sense to do it this way. So I had two sessions in one app. None of the current solutions I found easily supported this. They all assumed a single session. One session was messy enough, adding another just put me over the edge and eventually forced me to write Authlogic. Authlogic can support 100 different sessions easily and in a clean format. Just like an app can support 100 different models and 100 different records of each model.
 
 === Too presumptuous
 
@@ -255,7 +286,7 @@ A lot of them forced me to name my password column as "this", or the key of my c
 
 === Disclaimer
 
-I am not trying to  "bash" any other authentication solutions. These are just my opinions, formulate your own opinion. I released Authgasm because it has made my life easier and I enjoy using it, hopefully it does the same for you.
+I am not trying to  "bash" any other authentication solutions. These are just my opinions, formulate your own opinion. I released Authlogic because it has made my life easier and I enjoy using it, hopefully it does the same for you.
 
 
 Copyright (c) 2008 Ben Johnson of [Binary Logic](http://www.binarylogic.com), released under the MIT license

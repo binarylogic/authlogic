@@ -1,8 +1,8 @@
-module Authgasm
+module Authlogic
   module Session
     # = Callbacks
     #
-    # Just like in ActiveRecord you have before_save, before_validation, etc. You have similar callbacks with Authgasm, see all callbacks below.
+    # Just like in ActiveRecord you have before_save, before_validation, etc. You have similar callbacks with Authlogic, see all callbacks below.
     module Callbacks
       CALLBACKS = %w(before_create after_create before_destroy after_destroy before_save after_save before_update after_update before_validation after_validation)
 

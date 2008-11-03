@@ -1,3 +1,3 @@
-class UserSession < Authgasm::Session::Base
+class UserSession < Authlogic::Session::Base
   remember_me true
 end

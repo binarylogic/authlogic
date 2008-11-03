@@ -1,7 +1,7 @@
-module Authgasm
+module Authlogic
   module ControllerAdapters
     # = Rails Adapter
-    # Adapts authgasm to work with rails. The point is to close the gap between what authgasm expects and what the rails controller object
+    # Adapts authlogic to work with rails. The point is to close the gap between what authlogic expects and what the rails controller object
     # provides. Similar to how ActiveRecord has an adapter for MySQL, PostgreSQL, SQLite, etc.
     class RailsAdapter < AbstractAdapter
       def authenticate_with_http_basic(*args, &block)
@@ -22,7 +22,7 @@ module Authgasm
     end
     
     # = Rails Implementation
-    # Lets Authgasm know about the controller object, AKA "activates" authgasm.
+    # Lets Authlogic know about the controller object, AKA "activates" authlogic.
     module RailsImplementation
       def self.included(klass) # :nodoc:
         klass.prepend_before_filter :set_controller
@@ -30,10 +30,10 @@ module Authgasm
 
       private
         def set_controller
-          Authgasm::Session::Base.controller = RailsAdapter.new(self)
+          Authlogic::Session::Base.controller = RailsAdapter.new(self)
         end
     end
   end
 end
 
-ActionController::Base.send(:include, Authgasm::ControllerAdapters::RailsImplementation)
+ActionController::Base.send(:include, Authlogic::ControllerAdapters::RailsImplementation)

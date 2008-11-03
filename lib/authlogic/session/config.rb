@@ -1,4 +1,4 @@
-module Authgasm
+module Authlogic
   module Session
     module Config # :nodoc:
       def self.included(klass)
@@ -17,7 +17,7 @@ module Authgasm
       #
       # or you can set your configuration in the session class directly:
       #
-      #   class UserSession < Authgasm::Session::Base
+      #   class UserSession < Authlogic::Session::Base
       #     authenticate_with User
       #     # ... more configuration
       #   end
@@ -56,7 +56,7 @@ module Authgasm
         end
         alias_method :cookie_key=, :cookie_key
         
-        # The name of the method used to find the record by the login. What's nifty about this is that you can do anything in your method, Authgasm will just pass you the login.
+        # The name of the method used to find the record by the login. What's nifty about this is that you can do anything in your method, Authlogic will just pass you the login.
         #
         # Let's say you allow users to login by username or email. Set this to "find_login", or whatever method you want. Then in your model create a class method like:
         #
@@ -89,7 +89,7 @@ module Authgasm
         end
         alias_method :find_with=, :find_with
         
-        # The name of the method you want Authgasm to create for storing the login / username. Keep in mind this is just for your Authgasm::Session, if you want it can be something completely different
+        # The name of the method you want Authlogic to create for storing the login / username. Keep in mind this is just for your Authlogic::Session, if you want it can be something completely different
         # than the field in your model. So if you wanted people to login with a field called "login" and then find users by email this is compeltely doable. See the find_by_login_method configuration option for
         # more details.
         #
@@ -194,12 +194,16 @@ module Authgasm
       
       module InstanceMethods # :nodoc:
         def cookie_key
-          key_parts = [id, self.class.cookie_key].compact
+          key_parts = [id, scope[:id], self.class.cookie_key].compact
           key_parts.join("_")
         end
         
         def find_by_login_method
           self.class.find_by_login_method
+        end
+        
+        def find_with
+          self.class.find_with
         end
       
         def login_field
@@ -220,7 +224,7 @@ module Authgasm
         end
         
         def session_key
-          key_parts = [id, self.class.session_key].compact
+          key_parts = [id, scope[:id], self.class.session_key].compact
           key_parts.join("_")
         end
       

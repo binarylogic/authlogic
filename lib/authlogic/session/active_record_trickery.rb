@@ -1,9 +1,9 @@
-module Authgasm
+module Authlogic
   module Session
     # = ActiveRecord Trickery
     #
-    # Authgasm looks like ActiveRecord, sounds like ActiveRecord, but its not ActiveRecord. That's the goal here. This is useful for the various rails helper methods such as form_for, error_messages_for, etc.
-    # These helpers exptect various methods to be present. This adds in those methods into Authgasm.
+    # Authlogic looks like ActiveRecord, sounds like ActiveRecord, but its not ActiveRecord. That's the goal here. This is useful for the various rails helper methods such as form_for, error_messages_for, etc.
+    # These helpers exptect various methods to be present. This adds in those methods into Authlogic.
     module ActiveRecordTrickery
       def self.included(klass) # :nodoc:
         klass.extend ClassMethods

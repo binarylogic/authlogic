@@ -4,14 +4,14 @@ class UsersController < ApplicationController
   before_filter :load_user, :except => [:new, :create]
   
   def new
-    @user = User.new
+    @user = @user_owner.new
   end
   
   def create
-    @user = User.new(params[:user])
+    @user = @user_owner.new(params[:user])
     if @user.save
       flash[:notice] = "Account registered!"
-      redirect_to account_path
+      redirect_to scoped_url("account_path")
     else
       render :action => :new
     end
@@ -22,7 +22,7 @@ class UsersController < ApplicationController
       @user.update_attribute(:profile_views, @user.profile_views + 1) if @user && params[:id]
     else
       flash[:notice] = "We're sorry, but no user was found"
-      redirect_to new_user_session_url
+      redirect_to scoped_url("new_user_session_url")
     end
   end
   
@@ -34,7 +34,7 @@ class UsersController < ApplicationController
       @user.save
     else
       flash[:notice] = "We're sorry, but no user was found"
-      redirect_to new_user_session_url
+      redirect_to scoped_url("new_user_session_url")
     end
   end
   
@@ -43,7 +43,7 @@ class UsersController < ApplicationController
     @user.attributes = params[:user]
     if @user.save
       flash[:notice] = "Account updated!"
-      redirect_to account_path
+      redirect_to scoped_url("account_path")
     else
       render :action => :edit
     end
@@ -52,7 +52,7 @@ class UsersController < ApplicationController
   private
     def load_user
       if params[:id]
-        @user = User.find_by_id(params[:id])
+        @user = @user_owner.find_by_id(params[:id])
         @user.update_attribute(:profile_views, @user.profile_views + 1) if @user
       else
         @user = @current_user

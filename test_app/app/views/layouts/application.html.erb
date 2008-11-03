@@ -8,13 +8,15 @@
   <%= stylesheet_link_tag 'scaffold' %>
 </head>
 <body>
-  
+
+<% if @company %><h1><%= @company.name %></h1><% end %>
+
 <% if !@current_user %>
-  <%= link_to "Register", new_account_path %> |
-  <%= link_to "Log In", new_user_session_path %>
+  <%= link_to "Register", scoped_url("new_account_path") %> |
+  <%= link_to "Log In", scoped_url("new_user_session_path") %>
 <% else %>
-  <%= link_to "My Account", account_path %> |
-  <%= link_to "Logout", user_session_path, :method => :delete, :confirm => "Are you sure you want to logout?" %>
+  <%= link_to "My Account", scoped_url("account_path") %> |
+  <%= link_to "Logout", scoped_url("user_session_path"), :method => :delete, :confirm => "Are you sure you want to logout?" %>
 <% end %>
 
 <p style="color: green"><%= flash[:notice] %></p>

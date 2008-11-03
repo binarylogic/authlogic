@@ -2,7 +2,7 @@
 
 <%= error_messages_for "user_session", :header_message => nil %>
 
-<% form_for @user_session, :url => user_session_path do |f| %>
+<% form_for @user_session, :url => scoped_url("user_session_path") do |f| %>
   <%= f.label :login %><br />
   <%= f.text_field :login %><br />
   <br />

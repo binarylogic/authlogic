@@ -28,7 +28,7 @@ class UserTest < ActiveSupport::TestCase
   end
   
   def test_crypto_provider
-    assert_equal Authgasm::Sha512CryptoProvider, User.crypto_provider
+    assert_equal Authlogic::Sha512CryptoProvider, User.crypto_provider
   end
   
   def test_forget_all

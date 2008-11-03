@@ -25,5 +25,5 @@
 <br />
 
 <% if @user == @current_user %>
-  <%= link_to "Edit", edit_account_path %><br />
+  <%= link_to "Edit", scoped_url("edit_account_path") %><br />
 <% end %>

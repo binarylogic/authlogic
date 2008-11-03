@@ -2,6 +2,7 @@
 
 * Changed configuration to use inheritable attributes
 * Cleaned up requires to be in their proper files
+* Added in scope support.
 
 == 0.10.3 released 2008-10-31
 

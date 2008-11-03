@@ -1,15 +1,15 @@
-module Authgasm
+module Authlogic
   module Session # :nodoc:
     # = Base
     #
-    # This is the muscle behind Authgasm. For detailed information on how to use this please refer to the README. For detailed method explanations see below.
+    # This is the muscle behind Authlogic. For detailed information on how to use this please refer to the README. For detailed method explanations see below.
     class Base
       include Config
       
       class << self
         # Returns true if a controller have been set and can be used properly. This MUST be set before anything can be done. Similar to how ActiveRecord won't allow you to do anything
-        # without establishing a DB connection. By default this is done for you automatically, but if you are using Authgasm in a unique way outside of rails, you need to assign a controller
-        # object to Authgasm via Authgasm::Session::Base.controller = obj.
+        # without establishing a DB connection. By default this is done for you automatically, but if you are using Authlogic in a unique way outside of rails, you need to assign a controller
+        # object to Authlogic via Authlogic::Session::Base.controller = obj.
         def activated?
           !controller.blank?
         end
@@ -37,7 +37,7 @@ module Authgasm
           session.save!
         end
         
-        # Finds your session by session, then cookie, and finally basic http auth. Perfect for that global before_filter to find your logged in user:
+        # A convenience method for session.find_record. Finds your session by session, then cookie, and finally basic http auth. Perfect for that global before_filter to find your logged in user:
         #
         #   before_filter :load_user
         #
@@ -50,15 +50,7 @@ module Authgasm
         def find(id = nil)
           args = [id].compact
           session = new(*args)
-          find_with.each do |find_method|
-            if session.send("valid_#{find_method}?")
-              if session.record.class.column_names.include?("last_request_at")
-                session.record.last_request_at = Time.now
-                session.record.save_without_session_maintenance(false)
-              end
-              return session
-            end
-          end
+          return session if session.find_record
           nil
         end
         
@@ -78,15 +70,77 @@ module Authgasm
             end
         end
         
+        # The current scope set, should be used in the block passed to with_scope.
+        def scope
+          scopes[Thread.current]
+        end
+        
+        # Authentication can be scoped, but scoping authentication can get a little tricky. Checkout the section "Scoping" in the readme for more details.
+        #
+        # What with_scopes focuses on is scoping the query when finding the object and the name of the cookies.
+        #
+        # with_scope accepts a hash with any of the following options:
+        #
+        # * <tt>find_options:</tt> any options you can pass into ActiveRecord::Base.find. This is used when trying to find the record.
+        # * <tt>id:</tt> see the id method above
+        #
+        # So you use it just like an ActiveRecord scope, essentially:
+        #
+        #   UserSession.with_scope(:find_options => {:conditions => "account_id = 2"}, :id => "account_2") do
+        #     UserSession.find
+        #   end
+        #
+        # Eseentially what the above does is scope the searching of the object with the sql you provided. So instead of:
+        #
+        #   User.find(:first, :conditions => "login = 'ben'")
+        #
+        # it would be:
+        #
+        #   User.find(:first, :conditions => "login = 'ben' and account_id = 2")
+        #
+        # You will also notice the :id option. This works just like the id method. It scopes your cookies. So the name of your cookie will be:
+        #
+        #   account_2_user_credentials
+        #
+        # instead of:
+        #
+        #   user_credentials
+        #
+        # What is also nifty about scoping with an :id is that it merges your id's. So if you do:
+        #
+        #   UserSession.with_scope(:find_options => {:conditions => "account_id = 2"}, :id => "account_2") do
+        #     session = UserSession.new
+        #     session.id = :secure
+        #   end
+        #
+        # The name of your cookies will be:
+        #
+        #   secure_account_2_user_credentials
+        def with_scope(options = {}, &block)
+          raise ArgumentError.new("You must provide a block") unless block_given?
+          self.scope = options
+          result = yield
+          self.scope = nil
+          result
+        end
+        
         private
           def controllers
             @@controllers ||= {}
+          end
+          
+          def scope=(value)
+            scopes[Thread.current] = value
+          end
+          
+          def scopes
+            @scopes ||= {}
           end
       end
     
       attr_accessor :login_with, :new_session
       attr_reader :record, :unauthorized_record
-      attr_writer :id
+      attr_writer :id, :scope
     
       # You can initialize a session by doing any of the following:
       #
@@ -95,7 +149,7 @@ module Authgasm
       #   UserSession.new(:login => login, :password => password)
       #   UserSession.new(User.first)
       #
-      # If a user has more than one session you need to pass an id so that Authgasm knows how to differentiate the sessions. The id MUST be a Symbol.
+      # If a user has more than one session you need to pass an id so that Authlogic knows how to differentiate the sessions. The id MUST be a Symbol.
       #
       #   UserSession.new(:my_id)
       #   UserSession.new(login, password, :my_id)
@@ -103,12 +157,13 @@ module Authgasm
       #   UserSession.new(User.first, :my_id)
       #
       # Ids are rarely used, but they can be useful. For example, what if users allow other users to login into their account via proxy? Now that user can "technically" be logged into 2 accounts at once.
-      # To solve this just pass a id called :proxy, or whatever you want. Authgasm will separate everything out.
+      # To solve this just pass a id called :proxy, or whatever you want. Authlogic will separate everything out.
       def initialize(*args)
         raise NotActivated.new(self) unless self.class.activated?
         
         create_configurable_methods!
         
+        self.scope = self.class.scope
         self.id = args.pop if args.last.is_a?(Symbol)
         
         case args.size
@@ -152,7 +207,7 @@ module Authgasm
         true
       end
       
-      # The errors in Authgasm work JUST LIKE ActiveRecord. In fact, it uses the exact same ActiveRecord errors class. Use it the same way:
+      # The errors in Authlogic work JUST LIKE ActiveRecord. In fact, it uses the exact same ActiveRecord errors class. Use it the same way:
       #
       # === Example
       #
@@ -167,6 +222,21 @@ module Authgasm
       #  end
       def errors
         @errors ||= Errors.new(self)
+      end
+      
+      # Attempts to find the record by session, then cookie, and finally basic http auth. See the class level find method if you are wanting to use this in a before_filter to persist your session.
+      def find_record
+        return record if record
+        find_with.each do |find_method|
+          if send("valid_#{find_method}?")
+            if record.class.column_names.include?("last_request_at")
+              record.last_request_at = Time.now
+              record.save_without_session_maintenance(false)
+            end
+            return record
+          end
+        end
+        nil
       end
       
       # Allows you to set a unique identifier for your session, so that you can have more than 1 session at a time. A good example when this might be needed is when you want to have a normal user session
@@ -224,6 +294,11 @@ module Authgasm
         remember_me_for.from_now
       end
       
+      # See the class level with_scope method on information on scopes. with_scope essentialls sets this scope with the options passed and unsets it after the block executes.
+      def scope
+        @scope ||= {}
+      end
+      
       # Creates / updates a new user session for you. It does all of the magic:
       #
       # 1. validates
@@ -271,6 +346,8 @@ module Authgasm
         @unauthorized_record = value
       end
       
+      # Returns if the session is valid or not. Basically it means that a record could or could not be found. If the session is valid you will have a result when calling the "record" method. If it was unsuccessful
+      # you will not have a record.
       def valid?
         errors.clear
         temp_record = validate_credentials
@@ -281,6 +358,7 @@ module Authgasm
         false
       end
       
+      # Tries to validate the session from information from a basic http auth, if it was provided.
       def valid_http_auth?
         controller.authenticate_with_http_basic do |login, password|
           if !login.blank? && !password.blank?
@@ -297,9 +375,10 @@ module Authgasm
         false
       end
       
+      # Tries to validate the session from information in the cookie
       def valid_cookie?
         if cookie_credentials
-          self.unauthorized_record = klass.send("find_by_#{remember_token_field}", cookie_credentials)
+          self.unauthorized_record = search_for_record("find_by_#{remember_token_field}", cookie_credentials)
           result = valid?
           if result
             update_session!
@@ -311,9 +390,10 @@ module Authgasm
         false
       end
       
+      # Tries to validate the session from information in the session
       def valid_session?
         if session_credentials
-          self.unauthorized_record = klass.send("find_by_#{remember_token_field}", cookie_credentials)
+          self.unauthorized_record = search_for_record("find_by_#{remember_token_field}", session_credentials)
           result = valid?
           if result
             self.new_session = false
@@ -359,6 +439,12 @@ module Authgasm
           end_eval
         end
         
+        def search_for_record(method, value)
+          klass.send(:with_scope, :find => (scope[:find_options] || {})) do
+            klass.send(method, value)
+          end
+        end
+        
         def klass
           self.class.klass
         end
@@ -384,7 +470,7 @@ module Authgasm
             errors.add(password_field, "can not be blank") if send("protected_#{password_field}").blank?
             return if errors.count > 0
 
-            temp_record = klass.send(find_by_login_method, send(login_field))
+            temp_record = search_for_record(find_by_login_method, send(login_field))
 
             if temp_record.blank?
               errors.add(login_field, "was not found")
