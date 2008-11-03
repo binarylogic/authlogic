@@ -45,6 +45,13 @@ module Authlogic
       # * <tt>logged_in_timeout:</tt> default: 10.minutes, this allows you to specify a time the determines if a user is logged in or out. Useful if you want to count how many users are currently logged in.
       # * <tt>session_ids:</tt> default: [nil], the sessions that we want to automatically reset when a user is created or updated so you don't have to worry about this. Set to [] to disable. Should be an array of ids. See Authlogic::Session::Base#initialize for information on ids. The order is important. The first id should be your main session, the session they need to log into first. This is generally nil, meaning so explicitly set id.
       def acts_as_authentic(options = {})
+        # If we don't have a database, skip all of this
+        begin
+          column_names
+        rescue Exception
+          return
+        end
+        
         # Setup default options
         options[:session_class] ||= "#{name}Session".constantize
         options[:crypto_provider] ||= Sha512CryptoProvider

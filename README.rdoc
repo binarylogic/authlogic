@@ -136,7 +136,7 @@ Authlogic tries to check the state of the record before creating the session. If
   
 What's neat about this is that these are checked upon any type of login. When logging in explicitly, by cookie, session, or basic http auth. So if you mark a user inactive in the middle of their session they wont be logged back in next time they refresh the page. Giving you complete control.
 
-Need Authlogic to check your own "state"? No problem, check out the hooks section below. Add in a before_validation or after_validation to do your own checking.
+Need Authlogic to check your own "state"? No problem, check out the hooks section below. Add in a before_validation to do your own checking. The sky is the limit.
 
 == Hooks / Callbacks
 
@@ -204,7 +204,7 @@ This scopes your login field validation, so that users are allowed to have the s
 
 === Scoping your session
 
-When you session tries to validate it searches for a record. You want to scope that search. No problem...
+When the session tries to validate it searches for a record. You want to scope that search. No problem...
 
 The goal of Authlogic was to not try and introduce anything new. As a result I came up with:
 
@@ -221,9 +221,9 @@ This works just like ActiveRecord, so it should come natural. Here is how you ge
 
 === Scoping cookies
 
-What's neat about cookies is that if you use sub domains they automatically scope their self. Meaning if you create a cookie in whatever.yourdomain.com it will not exist in another.yourdomain.com. So if you have the example used above, where you can access accounts via a sub domain, you don't have to do anything.
+What's neat about cookies is that if you use sub domains they automatically scope their self. Meaning if you create a cookie in whatever.yourdomain.com it will not exist in another.yourdomain.com. So if you are using subdomains to scope your users, you don't have to do anything.
 
-But what if you don't want to separate your cookies by subdomains? You can accomplish this by doing:
+But what if you *don't* want to separate your cookies by subdomains? You can accomplish this by doing:
 
   ActionController::Base.session_options[:session_domain] = ‘.mydomain.com’
 
@@ -237,7 +237,7 @@ Now let's look at this from the other angle. What if you are *NOT* using subdoma
 
 Done, Authlogic will give each cookie a unique name depending on the account.
 
-With the above information you should be able to scope your sessions any way you want. Just mix and match the tools above to accomplish what you want. Also check out the documentation on Authlogic::ActiveRecord::AuthenticatesMany.
+With the above information you should be able to scope your sessions any way you want. Just mix and match the tools above to accomplish this. Also check out the documentation on Authlogic::ActiveRecord::AuthenticatesMany.
 
 == Errors
 

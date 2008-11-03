@@ -313,7 +313,7 @@ module Authlogic
             :expires => remember_me_until
           }
           
-          record.login_count = record.login_count + 1 if record.respond_to?(:login_count)
+          record.login_count = (record.login_count.blank? ? 1 : record.login_count + 1) if record.respond_to?(:login_count)
           
           if record.respond_to?(:current_login_at)
             record.last_login_at = record.current_login_at if record.respond_to?(:last_login_at)
