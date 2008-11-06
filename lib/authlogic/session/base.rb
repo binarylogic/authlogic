@@ -22,6 +22,10 @@ module Authlogic
           controllers[Thread.current]
         end
         
+        def reset_controllers!
+          @@controllers = {}
+        end
+        
         # A convenince method. The same as:
         #
         #   session = UserSession.new
@@ -70,77 +74,15 @@ module Authlogic
             end
         end
         
-        # The current scope set, should be used in the block passed to with_scope.
-        def scope
-          scopes[Thread.current]
-        end
-        
-        # Authentication can be scoped, but scoping authentication can get a little tricky. Checkout the section "Scoping" in the readme for more details.
-        #
-        # What with_scopes focuses on is scoping the query when finding the object and the name of the cookies.
-        #
-        # with_scope accepts a hash with any of the following options:
-        #
-        # * <tt>find_options:</tt> any options you can pass into ActiveRecord::Base.find. This is used when trying to find the record.
-        # * <tt>id:</tt> see the id method above
-        #
-        # So you use it just like an ActiveRecord scope, essentially:
-        #
-        #   UserSession.with_scope(:find_options => {:conditions => "account_id = 2"}, :id => "account_2") do
-        #     UserSession.find
-        #   end
-        #
-        # Eseentially what the above does is scope the searching of the object with the sql you provided. So instead of:
-        #
-        #   User.find(:first, :conditions => "login = 'ben'")
-        #
-        # it would be:
-        #
-        #   User.find(:first, :conditions => "login = 'ben' and account_id = 2")
-        #
-        # You will also notice the :id option. This works just like the id method. It scopes your cookies. So the name of your cookie will be:
-        #
-        #   account_2_user_credentials
-        #
-        # instead of:
-        #
-        #   user_credentials
-        #
-        # What is also nifty about scoping with an :id is that it merges your id's. So if you do:
-        #
-        #   UserSession.with_scope(:find_options => {:conditions => "account_id = 2"}, :id => "account_2") do
-        #     session = UserSession.new
-        #     session.id = :secure
-        #   end
-        #
-        # The name of your cookies will be:
-        #
-        #   secure_account_2_user_credentials
-        def with_scope(options = {}, &block)
-          raise ArgumentError.new("You must provide a block") unless block_given?
-          self.scope = options
-          result = yield
-          self.scope = nil
-          result
-        end
-        
         private
           def controllers
             @@controllers ||= {}
-          end
-          
-          def scope=(value)
-            scopes[Thread.current] = value
-          end
-          
-          def scopes
-            @scopes ||= {}
           end
       end
     
       attr_accessor :login_with, :new_session
       attr_reader :record, :unauthorized_record
-      attr_writer :id, :scope
+      attr_writer :id
     
       # You can initialize a session by doing any of the following:
       #
@@ -163,22 +105,18 @@ module Authlogic
         
         create_configurable_methods!
         
-        self.scope = self.class.scope
         self.id = args.pop if args.last.is_a?(Symbol)
         
-        case args.size
-        when 1
-          credentials_or_record = args.first
-          case credentials_or_record
-          when Hash
-            self.credentials = credentials_or_record
-          else
-            self.unauthorized_record = credentials_or_record
-          end
-        else
+        case args.first
+        when Hash
+          self.credentials = args.first
+        when String
           send("#{login_field}=", args[0]) if args.size > 0
           send("#{password_field}=", args[1]) if args.size > 1
           self.remember_me = args[2] if args.size > 2
+        else
+          self.unauthorized_record = args.first
+          self.remember_me = args[1] if args.size > 1
         end
       end
       
@@ -294,11 +232,6 @@ module Authlogic
         remember_me_for.from_now
       end
       
-      # See the class level with_scope method on information on scopes. with_scope essentialls sets this scope with the options passed and unsets it after the block executes.
-      def scope
-        @scope ||= {}
-      end
-      
       # Creates / updates a new user session for you. It does all of the magic:
       #
       # 1. validates
@@ -350,11 +283,12 @@ module Authlogic
       # you will not have a record.
       def valid?
         errors.clear
-        temp_record = validate_credentials
-        if errors.empty?
-          @record = temp_record
-          return true
+        if valid_credentials?
+          validate
+          return true if errors.empty?
         end
+        
+        self.record = nil
         false
       end
       
@@ -362,11 +296,12 @@ module Authlogic
       def valid_http_auth?
         controller.authenticate_with_http_basic do |login, password|
           if !login.blank? && !password.blank?
-            send("#{login_method}=", login)
-            send("#{password_method}=", password)
+            send("#{login_field}=", login)
+            send("#{password_field}=", password)
             result = valid?
             if result
               update_session!
+              self.new_session = false
               return result
             end
           end
@@ -404,6 +339,10 @@ module Authlogic
         false
       end
       
+      # Overwite this method to add your own validation, or use callbacks: before_validation, after_validation
+      def validate
+      end
+      
       private
         def controller
           self.class.controller
@@ -439,18 +378,24 @@ module Authlogic
           end_eval
         end
         
-        def search_for_record(method, value)
-          klass.send(:with_scope, :find => (scope[:find_options] || {})) do
-            klass.send(method, value)
-          end
-        end
-        
         def klass
           self.class.klass
         end
       
         def klass_name
           self.class.klass_name
+        end
+        
+        def record=(value)
+          @record = value
+        end
+        
+        def search_for_record(method, value)
+          begin
+            klass.send(method, value)
+          rescue Exception
+            raise method.inspect + "     " + value.inspect
+          end
         end
         
         def session_credentials
@@ -461,49 +406,52 @@ module Authlogic
           controller.session[session_key] = record && record.send(remember_token_field)
         end
         
-        def validate_credentials
-          temp_record = unauthorized_record
-
+        def valid_credentials?
+          unchecked_record = nil
+          
           case login_with
           when :credentials
             errors.add(login_field, "can not be blank") if send(login_field).blank?
             errors.add(password_field, "can not be blank") if send("protected_#{password_field}").blank?
-            return if errors.count > 0
-
-            temp_record = search_for_record(find_by_login_method, send(login_field))
-
-            if temp_record.blank?
+            return false if errors.count > 0
+            
+            unchecked_record = search_for_record(find_by_login_method, send(login_field))
+            
+            if unchecked_record.blank?
               errors.add(login_field, "was not found")
-              return
+              return false
             end
-
-            unless temp_record.send(verify_password_method, send("protected_#{password_field}"))
+            
+            unless unchecked_record.send(verify_password_method, send("protected_#{password_field}"))
               errors.add(password_field, "is invalid")
-              return
+              return false
             end
           when :unauthorized_record
-            if temp_record.blank?
-              errors.add_to_base("You can not log in with a blank record.")
-              return
+            unchecked_record = unauthorized_record
+            
+            if unchecked_record.blank?
+              errors.add_to_base("The record could not be found and did not match the requirements.")
+              return false
             end
-
-            if temp_record.new_record?
-              errors.add_to_base("You can not login with a new record.") if temp_record.new_record?
-              return
+            
+            if unchecked_record.new_record?
+              errors.add_to_base("You can not login with a new record.")
+              return false
             end
           else
             errors.add_to_base("You must provide some form of credentials before logging in.")
-            return
+            return false
           end
-
+          
           [:active, :approved, :confirmed].each do |required_status|
-            if temp_record.respond_to?("#{required_status}?") && !temp_record.send("#{required_status}?") 
+            if unchecked_record.respond_to?("#{required_status}?") && !unchecked_record.send("#{required_status}?") 
               errors.add_to_base("Your account has not been marked as #{required_status}")       
-              return
+              return false
             end
           end
           
-          temp_record
+          self.record = unchecked_record
+          true
         end
     end
   end

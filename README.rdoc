@@ -1,12 +1,12 @@
 = Authlogic
 
-Authlogic is "rails authentication done right". Put simply, its the Chuck Norris of authentication solutions.
+Authlogic is a framework agnostic object based authentication solution that handles all of the non sense for you. It's as easy as ActiveRecord is with a database. Put simply, its the Chuck Norris of authentication solutions for rails, merb, etc.
 
-The last thing we need is another authentication solution for rails, right? That's what I thought until I tried out some of the current solutions. None of them felt right. They were either too complicated, bloated, littered my application with tons of code, or were just confusing. This is not the simple / elegant rails we all fell in love with. We need a "rails like" authentication solution. Authlogic is my attempt to satisfy that need...
+The last thing we need is another authentication solution, right? That's what I thought until I tried out some of the current solutions in both rails and merb. None of them felt right. They were either too complicated, bloated, littered my application with tons of code, or were just confusing. This is not the simple / elegant ruby we all fell in love with. We need a "ruby like" authentication solution. Authlogic is my attempt to satisfy that need...
 
-Wouldn't it be nice to keep your app up to date with the latest and greatest security techniques with a simple update of a plugin?
+Let's take a rails application, wouldn't it be nice to keep your app up to date with the latest and greatest security techniques with a simple update of a plugin?
 
-What if you could have authentication up and running in minutes without having to run a generator? All because it's simple, like everything else in rails.
+What if you could have authentication up and running in minutes without having to run a generator? All because it's simple, like everything else.
 
 What if creating a user session could be as simple as...
 
@@ -35,8 +35,8 @@ What if your user sessions controller could look just like your other controller
 
 Look familiar? If you didn't know any better, you would think UserSession was an ActiveRecord model. I think that's pretty cool, because it fits nicely into the RESTful development pattern, a style we all know and love. What about the view...
 
-  <%= error_messages_for "user_session" %>
   <% form_for @user_session do |f| %>
+    <%= f.error_messages %>
     <%= f.label :login %><br />
     <%= f.text_field :login %><br />
     <br />
@@ -282,13 +282,17 @@ Obviously there is a little more to it than this, but hopefully this clarifies a
 
 When things come together like this I think its a sign that you are doing something right. Put that in your pipe and smoke it!
 
-== What about [insert framework here]?
+== Framework agnostic (Rails, Merb, etc.)
 
-As of now, authlogic supports rails right out of the box. But I designed authlogic to be framework agnostic. The only thing stopping Authlogic from being implemented in merb, or any other framework, is a simple adapter. I have not had the opportunity to use Authlogic in anything other than rails. If you want to use this in merb or any other framework take a look at authlogic/controller/rails_adapter.rb. 
+I designed Authlogic to be framework agnostic, meaning it doesn't care what framework you use it in. Right out of the box it supports rails and merb. I have not had the opportunity to use other frameworks, but the only thing stopping Authlogic from being used in other frameworks is a simple adapter. Check out controller_adapters/rails_adapter, or controller_adapters/merb_adapter.
+
+Since pretty much all of the frameworks in ruby follow the Rack conventions, the code should be very similar across adapters. You're saying "but Ben, why not just hook into Rack and avoid the need for controller adapters all together?". It's not that simple, because rails doesn't inherit from the Rack::Request class, plus there are small differences between how rack is implemented in each framework. Authlogic has to hook into your controller with a before_filter anyways, so it can "activate" itself. Why not just use the controller object?
+
+The point in all of this rambling is that implementing Authlogic is as simple as creating an adapter. I created both the rails and merb adapters in under 10 minutes. If you have an adapter you created and would like to add please let me know and I will add it into the source.
 
 == How it works
 
-Interested in how all of this all works? Basically a before_filter is automatically set in your controller which lets Authlogic know about the current controller object. This "activates" Authlogic and allows Authlogic to set sessions, cookies, login via basic http auth, etc. If you are using rails in a multiple thread environment, don't worry. I kept that in mind and made this thread safe.
+Interested in how all of this all works? Basically a before_filter is automatically set in your controller which lets Authlogic know about the current controller object. This "activates" Authlogic and allows Authlogic to set sessions, cookies, login via basic http auth, etc. If you are using your framework in a multiple thread environment, don't worry. I kept that in mind and made this thread safe.
 
 From there it is pretty simple. When you try to create a new session the record is authenticated and then all of the session / cookie magic is done for you. The sky is the limit.
 
@@ -300,7 +304,7 @@ I don't necessarily think the current solutions are "wrong", nor am I saying Aut
 
 === Generators are messy
 
-Generators have their place, and it is not to add authentication to a rails app. It doesn't make sense. Generators are meant to be a starting point for repetitive tasks that have no sustainable pattern. Take controllers, the set up is the same thing over and over, but they eventually evolve to a point where there is no clear cut pattern. Trying to extract a pattern out into a library would be extremely hard, messy, and overly complicated. As a result, generators make sense here.
+Generators have their place, and it is not to add authentication to an app. It doesn't make sense. Generators are meant to be a starting point for repetitive tasks that have no sustainable pattern. Take controllers, the set up is the same thing over and over, but they eventually evolve to a point where there is no clear cut pattern. Trying to extract a pattern out into a library would be extremely hard, messy, and overly complicated. As a result, generators make sense here.
 
 Authentication is a one time set up process for your app. It's the same thing over and over and the pattern never really changes. The only time it changes is to conform with newer / stricter security techniques. This is exactly why generators should not be an authentication solution. Generators add code to your application, once code crosses that line, you are responsible for maintaining it. You get to make sure it stays up with the latest and greatest security techniques. And when the plugin you used releases some major update, you can't just re-run the generator, you get to sift through the code to see what changed. You don't really have a choice either, because you can't ignore security updates.
 

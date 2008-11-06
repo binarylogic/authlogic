@@ -22,6 +22,10 @@ module Authlogic
       #     # ... more configuration
       #   end
       #
+      # You can also access the values in the same fashion:
+      #
+      #   UserSession.authenticate_with
+      #
       # See the methods belows for all configuration options.
       module ClassMethods
         # Lets you change which model to use for authentication.
@@ -84,7 +88,7 @@ module Authlogic
             read_inheritable_attribute(:find_with) || find_with(:session, :cookie, :http_auth)
           else
             values.flatten!
-            write_inheritable_array(:find_with, values)
+            write_inheritable_attribute(:find_with, values)
           end
         end
         alias_method :find_with=, :find_with

@@ -1,7 +1,13 @@
-== 0.10.5 released 2008-10-31
+== 1.0.0 released 2008-11-05
 
 * Checked for blank login counts, if a default wasnt set in the migrations.
 * Added check for database table in acts_as_authentic to avoid errors in initial setup.
+* Completely rewrote tests to be more conventional and thorough tests, removed test_app.
+* Modified how validations work so that a validate method was added as well as callbacks for that method.
+* Extracted scope support into its own module to help organize code better.
+* Added in salt for encryption, just like hashes and removed :crypto_provider_type option for acts_as_authentic.
+* Added merb adapters.
+* Improved documentation throughout.
 
 == 0.10.4 released 2008-10-31
 

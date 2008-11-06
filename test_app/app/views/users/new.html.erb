@@ -1,8 +1,0 @@
-<h1>Register</h1>
-
-<%= error_messages_for "user" %>
-
-<% form_for @user, :url => scoped_url("account_path") do |f| %>
-  <%= render :partial => "form", :object => f %>
-  <%= f.submit "Register" %>
-<% end %>

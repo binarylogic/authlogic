@@ -1,15 +1,9 @@
 module Authlogic
   module ActiveRecord # :nodoc:
     # = Acts As Authentic
-    # Provides and "acts_as" method to include in your models to help with authentication. See method below.
+    # Provides the acts_as_authentic method to include in your models to help with authentication. See method below.
     module ActsAsAuthentic
-        # Call this method in your model to add in basic authentication madness that your authlogic session expects.
-      #
-      # <b>Please keep in mind</b> that based on your configuration the method names could change. For example, if you pass the option:
-      #
-      #   :password_field => :pass
-      #
-      # The method will not be password=, it will be pass=. Same with valid_password?, it will be valid_pass?, etc.
+      # Call this method in your model to add in basic authentication madness that your authlogic session expects.
       #
       # === Methods
       # For example purposes lets assume you have a User model.
@@ -32,20 +26,58 @@ module Authlogic
       #   user.forget!                Changes their remember token, making their cookie and session invalid. A way to log the user out withouth changing their password.
       #
       # === Options
-      # * <tt>session_class:</tt> default: "#{name}Session", the related session class. Used so that you don't have to repeat yourself here. A lot of the configuration will be based off of the configuration values of this class.
-      # * <tt>crypto_provider:</tt> default: Authlogic::Sha512CryptoProvider, class that provides Sha512 encryption. What ultimately encrypts your password.
-      # * <tt>crypto_provider_type:</tt> default: options[:crypto_provider].respond_to?(:decrypt) ? :encryption : :hash. You can explicitly set this if you wish. Since encryptions and hashes are handled different this is the flag Authlogic uses.
-      # * <tt>login_field:</tt> default: options[:session_class].login_field, the name of the field used for logging in
-      # * <tt>login_field_type:</tt> default: options[:login_field] == :email ? :email : :login, tells authlogic how to validation the field, what regex to use, etc.
-      # * <tt>password_field:</tt> default: options[:session_class].password_field, the name of the field to set the password, *NOT* the field the encrypted password is stored
-      # * <tt>crypted_password_field:</tt> default: depends on which columns are present, checks: crypted_password, encrypted_password, password_hash, pw_hash, if none are present defaults to crypted_password. This is the name of column that your encrypted password is stored.
-      # * <tt>password_salt_field:</tt> default: depends on which columns are present, checks: password_salt, pw_salt, salt, if none are present defaults to password_salt. This is the name of the field your salt is stored, only relevant for a hash crypto provider.
-      # * <tt>remember_token_field:</tt> default: options[:session_class].remember_token_field, the name of the field your remember token is stored. What the cookie stores so the session can be "remembered"
-      # * <tt>scope:</tt> default: nil, if all of your users belong to an account you might want to scope everything to the account. Just pass :account_id
-      # * <tt>logged_in_timeout:</tt> default: 10.minutes, this allows you to specify a time the determines if a user is logged in or out. Useful if you want to count how many users are currently logged in.
-      # * <tt>session_ids:</tt> default: [nil], the sessions that we want to automatically reset when a user is created or updated so you don't have to worry about this. Set to [] to disable. Should be an array of ids. See Authlogic::Session::Base#initialize for information on ids. The order is important. The first id should be your main session, the session they need to log into first. This is generally nil, meaning so explicitly set id.
+      #
+      # * <tt>session_class:</tt> default: "#{name}Session",
+      #   This is the related session class. A lot of the configuration will be based off of the configuration values of this class.
+      #   
+      # * <tt>crypto_provider:</tt> default: Authlogic::Sha512CryptoProvider,
+      #   This is the class that provides your encryption. By default Authlogic provides its own crypto provider that uses Sha512 encrypton.
+      #   
+      # * <tt>login_field:</tt> default: options[:session_class].login_field,
+      #   The name of the field used for logging in, this is guess based on what columns are in your db. Only specify if you aren't using:
+      #   login, username, or email
+      #   
+      # * <tt>login_field_type:</tt> default: options[:login_field] == :email ? :email : :login,
+      #   Tells authlogic how to validation the field, what regex to use, etc. If the field name is email it will automatically use email,
+      #   otherwise it uses login.
+      #   
+      # * <tt>login_field_regex:</tt> default: if email then typical email regex, otherwise typical login regex.
+      #   This is used in validates_format_of for the login_field.
+      #   
+      # * <tt>login_field_regex_message:</tt> the message to use when the validates_format_of for the login field fails.
+      #   
+      # * <tt>password_field:</tt> default: options[:session_class].password_field,
+      #   This is the name of the field to set the password, *NOT* the field the encrypted password is stored.
+      #   
+      # * <tt>crypted_password_field:</tt> default: depends on which columns are present,
+      #   The name of the database field where your encrypted password is stored. If the name of the field is different from any of the following
+      #   you need to specify it with this option: crypted_password, encrypted_password, password_hash, pw_hash
+      #   
+      # * <tt>password_salt_field:</tt> default: depends on which columns are present,
+      #   This is the name of the field in your database that stores your password salt. If the name of the field is different from any of the
+      #   following then you need to specify it with this option: password_salt, pw_salt, salt
+      #   
+      # * <tt>remember_token_field:</tt> default: options[:session_class].remember_token_field,
+      #   This is the name of the field your remember_token is stored. The remember token is a unique token that is stored in the users cookie and
+      #   session. This way you have complete control of when session expire and you don't have to change passwords to expire sessions. This also
+      #   ensures that stale sessions can not be persisted. By stale, I mean sessions that are logged in using an outdated password. If the name
+      #   of the field is anything other than the following you need to specify it with this option: remember_token, remember_key, cookie_token,
+      #   cookie_key
+      #   
+      # * <tt>scope:</tt> default: nil,
+      #   This scopes validations. If all of your users belong to an account you might want to scope everything to the account. Just pass :account_id
+      #   
+      # * <tt>logged_in_timeout:</tt> default: 10.minutes,
+      #   This is really just a nifty feature to tell if a user is logged in or not. It's based on activity. So if the user in inactive longer than
+      #   the value you pass here they are assumed "logged out".
+      #
+      # * <tt>session_ids:</tt> default: [nil],
+      #   The sessions that we want to automatically reset when a user is created or updated so you don't have to worry about this. Set to [] to disable.
+      #   Should be an array of ids. See the Authlogic::Session documentation for information on ids. The order is important.
+      #   The first id should be your main session, the session they need to log into first. This is generally nil. When you don't specify an id
+      #   in your session you are really just inexplicitly saying you want to use the id of nil.
       def acts_as_authentic(options = {})
-        # If we don't have a database, skip all of this
+        # If we don't have a database, skip all of this, solves initial setup errors
         begin
           column_names
         rescue Exception
@@ -53,7 +85,12 @@ module Authlogic
         end
         
         # Setup default options
-        options[:session_class] ||= "#{name}Session".constantize
+        begin
+          options[:session_class] ||= "#{name}Session".constantize
+        rescue NameError
+          raise NameError.new("You must create a #{name}Session class before a model can act_as_authentic. If that is not the name of the class pass the class constant via the :session_class option.")
+        end
+        
         options[:crypto_provider] ||= Sha512CryptoProvider
         options[:crypto_provider_type] ||= options[:crypto_provider].respond_to?(:decrypt) ? :encryption : :hash
         options[:login_field] ||= options[:session_class].login_field
@@ -81,11 +118,14 @@ module Authlogic
           email_name_regex  = '[\w\.%\+\-]+'
           domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
           domain_tld_regex  = '(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|jobs|museum)'
-          email_regex       = /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
-          validates_format_of options[:login_field], :with => email_regex, :message => "should look like an email address."
+          options[:login_field_regex] ||= /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
+          options[:login_field_regex_message] ||= "should look like an email address."
+          validates_format_of options[:login_field], :with => options[:login_field_regex], :message => options[:login_field_regex_message]
         else
           validates_length_of options[:login_field], :within => 2..100
-          validates_format_of options[:login_field], :with => /\A\w[\w\.\-_@]+\z/, :message => "use only letters, numbers, and .-_@ please."
+          options[:login_field_regex] ||= /\A\w[\w\.\-_@ ]+\z/
+          options[:login_field_regex_message] ||= "use only letters, numbers, spaces, and .-_@ please."
+          validates_format_of options[:login_field], :with => options[:login_field_regex], :message => options[:login_field_regex_message]
         end
       
         validates_uniqueness_of options[:login_field], :scope => options[:scope]
@@ -95,7 +135,7 @@ module Authlogic
       
         if column_names.include?("last_request_at")
           named_scope :logged_in, lambda { {:conditions => ["last_request_at > ?", options[:logged_in_timeout].ago]} }
-          named_scope :logged_out, lambda { {:conditions => ["last_request_at <= ?", options[:logged_in_timeout].ago]} }
+          named_scope :logged_out, lambda { {:conditions => ["last_request_at is NULL or last_request_at <= ?", options[:logged_in_timeout].ago]} }
         end
       
         before_save :get_session_information, :if => :update_sessions?
@@ -108,7 +148,8 @@ module Authlogic
         # Class methods
         class_eval <<-"end_eval", __FILE__, __LINE__
           def self.unique_token
-            crypto_provider.encrypt(Time.now.to_s + (1..10).collect{ rand.to_s }.join)
+            # Force using the Sha512 because all that we are doing is creating a unique token, a hash is perfect for this
+            Authlogic::Sha512CryptoProvider.encrypt(Time.now.to_s + (1..10).collect{ rand.to_s }.join)
           end
         
           def self.crypto_provider
@@ -136,39 +177,23 @@ module Authlogic
           end_eval
         end
       
-        case options[:crypto_provider_type]
-        when :hash
-          class_eval <<-"end_eval", __FILE__, __LINE__
-            def #{options[:password_field]}=(pass)
-              return if pass.blank?
-              self.tried_to_set_#{options[:password_field]} = true
-              @#{options[:password_field]} = pass
-              self.#{options[:remember_token_field]} = self.class.unique_token
-              self.#{options[:password_salt_field]} = self.class.unique_token
-              self.#{options[:crypted_password_field]} = crypto_provider.encrypt(@#{options[:password_field]} + #{options[:password_salt_field]})
-            end
-          
-            def valid_#{options[:password_field]}?(attempted_password)
-              return false if attempted_password.blank?
-              attempted_password == #{options[:crypted_password_field]} || #{options[:crypted_password_field]} == crypto_provider.encrypt(attempted_password + #{options[:password_salt_field]})
-            end
-          end_eval
-        when :encryption
-          class_eval <<-"end_eval", __FILE__, __LINE__
-            def #{options[:password_field]}=(pass)
-              return if pass.blank?
-              self.tried_to_set_#{options[:password_field]} = true
-              @#{options[:password_field]} = pass
-              self.#{options[:remember_token_field]} = self.class.unique_token
-              self.#{options[:crypted_password_field]} = crypto_provider.encrypt(@#{options[:password_field]})
-            end
+        class_eval <<-"end_eval", __FILE__, __LINE__
+          def #{options[:password_field]}=(pass)
+            return if pass.blank?
+            self.tried_to_set_#{options[:password_field]} = true
+            @#{options[:password_field]} = pass
+            self.#{options[:remember_token_field]} = self.class.unique_token
+            self.#{options[:password_salt_field]} = self.class.unique_token
+            self.#{options[:crypted_password_field]} = crypto_provider.encrypt(@#{options[:password_field]} + #{options[:password_salt_field]})
+          end
         
-            def valid_#{options[:password_field]}?(attemtped_password)
-              return false if attempted_password.blank?
-              attempted_password == #{options[:crypted_password_field]} || #{options[:crypted_password_field]} = crypto_provider.decrypt(attempted_password)
-            end
-          end_eval
-        end
+          def valid_#{options[:password_field]}?(attempted_password)
+            return false if attempted_password.blank? || #{options[:crypted_password_field]}.blank? || #{options[:password_salt_field]}.blank?
+            attempted_password == #{options[:crypted_password_field]} ||
+              (crypto_provider.respond_to?(:decrypt) && crypto_provider.decrypt(#{options[:crypted_password_field]}) == attempted_password + #{options[:password_salt_field]}) ||
+              (!crypto_provider.respond_to?(:decrypt) && crypto_provider.encrypt(attempted_password + #{options[:password_salt_field]}) == #{options[:crypted_password_field]})
+          end
+        end_eval
       
         class_eval <<-"end_eval", __FILE__, __LINE__
           def #{options[:password_field]}; end

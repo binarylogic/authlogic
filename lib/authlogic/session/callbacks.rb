@@ -7,7 +7,7 @@ module Authlogic
       CALLBACKS = %w(before_create after_create before_destroy after_destroy before_save after_save before_update after_update before_validation after_validation)
 
       def self.included(base) #:nodoc:
-        [:destroy, :save, :valid?, :validate_credentials].each do |method|
+        [:destroy, :save, :validate].each do |method|
           base.send :alias_method_chain, method, :callbacks
         end
 
@@ -15,41 +15,57 @@ module Authlogic
         base.define_callbacks *CALLBACKS
       end
       
-      def destroy_with_callbacks # :nodoc:
+      # Run the following callbacks:
+      #
+      #   before_destroy
+      #   destroy
+      #   after_destroy # only if destroy is successful
+      def destroy_with_callbacks
         run_callbacks(:before_destroy)
         result = destroy_without_callbacks
         run_callbacks(:after_destroy) if result
         result
       end
       
-      def save_with_callbacks # :nodoc:
+      # Runs the following callbacks:
+      #
+      #   before_save
+      #   before_create # only if new_session? == true
+      #   before_update # only if new_session? == false
+      #   save
+      #   # the following are only run is save is successful
+      #   after_save
+      #   before_update # only if new_session? == false
+      #   before_create # only if new_session? == true
+      def save_with_callbacks
+        run_callbacks(:before_save)
         if new_session?
           run_callbacks(:before_create)
         else
           run_callbacks(:before_update)
         end
-        run_callbacks(:before_save)
         result = save_without_callbacks
         if result
+          run_callbacks(:after_save)
+          
           if new_session?
             run_callbacks(:after_create)
           else
             run_callbacks(:after_update)
           end
-          run_callbacks(:after_save)
         end
         result
       end
       
-      def valid_with_callbacks?
-        result = valid_without_callbacks?
-        run_callbacks(:after_validation) if result
-        result
-      end
-      
-      def validate_credentials_with_callbacks # :nodoc:
+      # Runs the following callbacks:
+      #
+      #   before_validation
+      #   validate
+      #   after_validation # only if errors.empty?
+      def validate_with_callbacks
         run_callbacks(:before_validation)
-        validate_credentials_without_callbacks
+        validate_without_callbacks
+        run_callbacks(:after_validation) if errors.empty?
       end
     end
   end

@@ -1,7 +1,10 @@
+require "active_support"
+
 require File.dirname(__FILE__) + "/authlogic/version"
 
 require File.dirname(__FILE__) + "/authlogic/controller_adapters/abstract_adapter"
 require File.dirname(__FILE__) + "/authlogic/controller_adapters/rails_adapter" if defined?(Rails)
+require File.dirname(__FILE__) + "/authlogic/controller_adapters/merb_adapter" if defined?(Merb)
 
 require File.dirname(__FILE__) + "/authlogic/sha512_crypto_provider"
 
@@ -13,6 +16,7 @@ require File.dirname(__FILE__) + "/authlogic/session/active_record_trickery"
 require File.dirname(__FILE__) + "/authlogic/session/callbacks"
 require File.dirname(__FILE__) + "/authlogic/session/config"
 require File.dirname(__FILE__) + "/authlogic/session/errors"
+require File.dirname(__FILE__) + "/authlogic/session/scopes"
 require File.dirname(__FILE__) + "/authlogic/session/base"
 
 module Authlogic
@@ -20,6 +24,7 @@ module Authlogic
     class Base
       include ActiveRecordTrickery
       include Callbacks
+      include Scopes
     end
   end
 end
