@@ -1,3 +1,7 @@
+== 1.0.1 released 2008-11-05
+
+* Moved Rack standards into abstract_adapter for the controllers.
+
 == 1.0.0 released 2008-11-05
 
 * Checked for blank login counts, if a default wasnt set in the migrations.

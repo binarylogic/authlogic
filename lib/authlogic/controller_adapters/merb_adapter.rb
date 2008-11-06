@@ -4,33 +4,6 @@ module Authlogic
     # Adapts authlogic to work with merb. The point is to close the gap between what authlogic expects and what the merb controller object
     # provides. Similar to how ActiveRecord has an adapter for MySQL, PostgreSQL, SQLite, etc.
     class MerbAdapter < AbstractAdapter
-      attr_accessor :controller
-      
-      def initialize(controller)
-        self.controller = controller
-      end
-      
-      def authenticate_with_http_basic(&block)
-        @auth = Rack::Auth::Basic::Request.new(controller.request.env)
-        if @auth.provided? and @auth.basic?
-          black.call(*@auth.credentials)
-        else
-          false
-        end
-      end
-      
-      def cookies
-        controller.cookies
-      end
-      
-      def request
-        controller.request
-      end
-      
-      def session
-        controller.session
-      end
-      
       # = Merb Implementation
       # Lets Authlogic know about the controller object, AKA "activates" authlogic.
       module MerbImplementation
