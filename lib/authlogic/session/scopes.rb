@@ -1,0 +1,101 @@
+module Authlogic
+  module Session
+    # = Scopes
+    #
+    # Authentication can be scoped, but scoping authentication can get a little tricky. Checkout the section "Scoping" in the readme for more details.
+    #
+    # What with_scopes focuses on is scoping the query when finding the object and the name of the cookie / session. It works very similar to
+    # ActiveRecord::Base#with_scopes. It accepts a hash with any of the following options:
+    #
+    # * <tt>find_options:</tt> any options you can pass into ActiveRecord::Base.find. This is used when trying to find the record.
+    # * <tt>id:</tt> The id of the session, this gets merged with the real id. For information ids see the id method.
+    #
+    # Here is how you use it:
+    #
+    #   UserSession.with_scope(:find_options => {:conditions => "account_id = 2"}, :id => "account_2") do
+    #     UserSession.find
+    #   end
+    #
+    # Eseentially what the above does is scope the searching of the object with the sql you provided. So instead of:
+    #
+    #   User.find(:first, :conditions => "login = 'ben'")
+    #
+    # it would be:
+    #
+    #   User.find(:first, :conditions => "login = 'ben' and account_id = 2")
+    #
+    # You will also notice the :id option. This works just like the id method. It scopes your cookies. So the name of your cookie will be:
+    #
+    #   account_2_user_credentials
+    #
+    # instead of:
+    #
+    #   user_credentials
+    #
+    # What is also nifty about scoping with an :id is that it merges your id's. So if you do:
+    #
+    #   UserSession.with_scope(:find_options => {:conditions => "account_id = 2"}, :id => "account_2") do
+    #     session = UserSession.new
+    #     session.id = :secure
+    #   end
+    #
+    # The name of your cookies will be:
+    #
+    #   secure_account_2_user_credentials
+    module Scopes # :nodoc:
+      def self.included(klass)
+        klass.extend(ClassMethods)
+        klass.send(:include, InstanceMethods)
+        klass.class_eval do
+          attr_writer :scope
+          alias_method_chain :initialize, :scopes
+          alias_method_chain :search_for_record, :scopes
+        end
+      end
+      
+      # = Scopes
+      module ClassMethods
+        # The current scope set, should be used in the block passed to with_scope.
+        def scope
+          scopes[Thread.current]
+        end
+        
+        # See the documentation for this class for more information on how to use this method.
+        def with_scope(options = {}, &block)
+          raise ArgumentError.new("You must provide a block") unless block_given?
+          self.scope = options
+          result = yield
+          self.scope = nil
+          result
+        end
+        
+        private
+          def scope=(value)
+            scopes[Thread.current] = value
+          end
+          
+          def scopes
+            @scopes ||= {}
+          end
+      end
+      
+      module InstanceMethods
+        def initialize_with_scopes(*args) # :nodoc:
+          self.scope = self.class.scope
+          initialize_without_scopes(*args)
+        end
+        
+        # See the documentation for this class for more information on how to use this method.
+        def scope
+          @scope ||= {}
+        end
+        
+        def search_for_record_with_scopes(*args) # :nodoc:
+          klass.send(:with_scope, :find => (scope[:find_options] || {})) do
+            search_for_record_without_scopes(*args)
+          end
+        end
+      end
+    end
+  end
+end
