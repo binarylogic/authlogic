@@ -1,6 +1,8 @@
 == 1.0.1 released 2008-11-05
 
 * Moved Rack standards into abstract_adapter for the controllers.
+* Added logging_in_with_credentials?, logging_in_with_unauthorized_record?
+* Fixed typo in abstract_adapter, black to block
 
 == 1.0.0 released 2008-11-05
 

@@ -8,7 +8,7 @@ Echoe.new 'authlogic' do |p|
   p.author = "Ben Johnson of Binary Logic"
   p.email  = 'bjohnson@binarylogic.com'
   p.project = 'authlogic'
-  p.summary = "Framework agnostic object based authentication solution that handles all of the non sense for you. It's as easy as ActiveRecord is with a database."
+  p.summary = "A simple framework agnostic object based authentication solution that handles all of the nonsense for you."
   p.url = "http://github.com/binarylogic/authlogic"
   p.dependencies = %w(activesupport activerecord)
   p.include_rakefile = true

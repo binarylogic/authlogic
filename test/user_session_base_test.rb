@@ -17,7 +17,7 @@ class UserSessionBaseTest < ActiveSupport::TestCase
     end
     thread1.join
     assert_equal 1, Authlogic::Session::Base.send(:controllers).size
-    assert_equal nil, Authlogic::Session::Base.controller
+    assert_nil Authlogic::Session::Base.controller
     thread2 = Thread.new do
       controller = MockController.new
       Authlogic::Session::Base.controller = controller
@@ -25,7 +25,7 @@ class UserSessionBaseTest < ActiveSupport::TestCase
     end
     thread2.join
     assert_equal 2, Authlogic::Session::Base.send(:controllers).size
-    assert_equal nil, Authlogic::Session::Base.controller
+    assert_nil Authlogic::Session::Base.controller
   end
   
   def test_create
@@ -72,7 +72,7 @@ class UserSessionBaseTest < ActiveSupport::TestCase
       assert_equal ben.remember_token, @controller.cookies["another_id_some_id_user_credentials"]
     end
     
-    assert_equal nil, UserSession.scope
+    assert_nil UserSession.scope
   end
   
   def test_with_scope_method # test_with_scope is reserved
@@ -98,23 +98,23 @@ class UserSessionBaseTest < ActiveSupport::TestCase
     
     session = UserSession.new("login", "pass", true, :my_id)
     assert_equal "login", session.login
-    assert_equal nil, session.password
+    assert_nil session.password
     assert_equal "pass", session.send(:protected_password)
     assert_equal true, session.remember_me
     assert_equal :my_id, session.id
     
     session = UserSession.new({:login => "login", :password => "pass", :remember_me => true}, :my_id)
     assert_equal "login", session.login
-    assert_equal nil, session.password
+    assert_nil session.password
     assert_equal "pass", session.send(:protected_password)
     assert_equal true, session.remember_me
     assert_equal :my_id, session.id
     
     session = UserSession.new(users(:ben), :my_id)
-    assert_equal nil, session.login
-    assert_equal nil, session.password
-    assert_equal nil, session.send(:protected_password)
-    assert_equal nil, session.remember_me
+    assert_nil session.login
+    assert_nil session.password
+    assert_nil session.send(:protected_password)
+    assert_nil session.remember_me
     assert_equal :my_id, session.id
     assert_equal users(:ben), session.unauthorized_record
   end
@@ -123,7 +123,7 @@ class UserSessionBaseTest < ActiveSupport::TestCase
     session = UserSession.new
     session.credentials = {:login => "login", :password => "pass", :remember_me => true}
     assert_equal "login", session.login
-    assert_equal nil, session.password
+    assert_nil session.password
     assert_equal "pass", session.send(:protected_password)
     assert_equal true, session.remember_me
     assert_equal({:password => "<Protected>", :login => "login"}, session.credentials)
@@ -136,8 +136,8 @@ class UserSessionBaseTest < ActiveSupport::TestCase
     assert_equal ben.remember_token, @controller.session["user_credentials"]
     assert_equal ben.remember_token, @controller.cookies["user_credentials"]
     session.destroy
-    assert_equal nil, @controller.session["user_credentials"]
-    assert_equal nil, @controller.cookies["user_credentials"]
+    assert_nil @controller.session["user_credentials"]
+    assert_nil @controller.cookies["user_credentials"]
   end
   
   def test_errors
@@ -177,7 +177,7 @@ class UserSessionBaseTest < ActiveSupport::TestCase
   
   def test_remember_me
     session = UserSession.new
-    assert_equal nil, session.remember_me
+    assert_nil session.remember_me
     assert !session.remember_me?
     
     session.remember_me = false
@@ -189,7 +189,7 @@ class UserSessionBaseTest < ActiveSupport::TestCase
     assert session.remember_me?
     
     session.remember_me = nil
-    assert_equal nil, session.remember_me
+    assert_nil session.remember_me
     assert !session.remember_me?
     
     session.remember_me = "1"
@@ -203,7 +203,7 @@ class UserSessionBaseTest < ActiveSupport::TestCase
   
   def test_remember_me_until
     session = UserSession.new
-    assert_equal nil, session.remember_me_until
+    assert_nil session.remember_me_until
     
     session.remember_me = true
     assert 3.months.from_now <= session.remember_me_until
@@ -260,7 +260,7 @@ class UserSessionBaseTest < ActiveSupport::TestCase
   def test_valid
     session = UserSession.new
     assert !session.valid?
-    assert_equal nil, session.record
+    assert_nil session.record
     assert session.errors.count > 0
     
     ben = users(:ben)

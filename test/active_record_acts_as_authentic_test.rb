@@ -109,14 +109,14 @@ class ActiveRecordActsAsAuthenticTest < ActiveSupport::TestCase
     assert user.password_salt
     assert user.remember_token
     assert_equal true, user.tried_to_set_password
-    assert_equal nil, user.password
+    assert_nil user.password
     
     employee = Employee.new
     employee.password = "awesome"
     assert employee.crypted_password
     assert employee.remember_token
     assert_equal true, employee.tried_to_set_password
-    assert_equal nil, employee.password
+    assert_nil employee.password
   end
   
   def test_valid_password

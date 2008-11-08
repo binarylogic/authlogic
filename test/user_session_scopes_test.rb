@@ -5,7 +5,7 @@ class UserSessionBaseTest < ActiveSupport::TestCase
     UserSession.with_scope(:find_options => {:conditions => "awesome = 1"}, :id => "some_id") do
       assert_equal({:find_options => {:conditions => "awesome = 1"}, :id => "some_id"}, UserSession.scope)
     end
-    assert_equal nil, UserSession.scope
+    assert_nil UserSession.scope
   end
   
   def test_with_scope

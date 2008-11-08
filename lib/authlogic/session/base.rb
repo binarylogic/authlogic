@@ -205,6 +205,17 @@ module Authlogic
         "#<#{self.class.name} #{details.inspect}>"
       end
       
+      # Returns true if logging in with credentials. Credentials mean username and password.
+      def logging_in_with_credentials?
+        login_with == :credentials
+      end
+      
+      # Returns true if logging in with an unauthorized record
+      def logging_in_with_unauthorized_record?
+        login_with == :unauthorized_record
+      end
+      alias_method :logging_in_with_record?, :logging_in_with_unauthorized_record?
+      
       # Similar to ActiveRecord's new_record? Returns true if the session has not been saved yet.
       def new_session?
         new_session != false

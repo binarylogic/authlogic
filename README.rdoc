@@ -1,6 +1,6 @@
 = Authlogic
 
-Authlogic is a framework agnostic object based authentication solution that handles all of the non sense for you. It's as easy as ActiveRecord is with a database. Put simply, its the Chuck Norris of authentication solutions for rails, merb, etc.
+Authlogic is a simple framework agnostic object based authentication solution that handles all of the non sense for you. Put simply, its the Chuck Norris of authentication solutions for rails, merb, etc.
 
 The last thing we need is another authentication solution, right? That's what I thought until I tried out some of the current solutions in both rails and merb. None of them felt right. They were either too complicated, bloated, littered my application with tons of code, or were just confusing. This is not the simple / elegant ruby we all fell in love with. We need a "ruby like" authentication solution. Authlogic is my attempt to satisfy that need...
 
@@ -269,7 +269,6 @@ Here is basically how this is done....
 
   class User < ActiveRecord::Base
     after_save :maintain_sessions!
-    after_update :update_sessions!
     
     private
       def maintain_sessions!
@@ -286,7 +285,7 @@ When things come together like this I think its a sign that you are doing someth
 
 I designed Authlogic to be framework agnostic, meaning it doesn't care what framework you use it in. Right out of the box it supports rails and merb. I have not had the opportunity to use other frameworks, but the only thing stopping Authlogic from being used in other frameworks is a simple adapter. Check out controller_adapters/rails_adapter, or controller_adapters/merb_adapter.
 
-Since pretty much all of the frameworks in ruby follow the Rack conventions, the code should be very similar across adapters. You're saying "but Ben, why not just hook into Rack and avoid the need for controller adapters all together?". It's not that simple, because rails doesn't inherit from the Rack::Request class, plus there are small differences between how rack is implemented in each framework. Authlogic has to hook into your controller with a before_filter anyways, so it can "activate" itself. Why not just use the controller object?
+Since pretty much all of the frameworks in ruby follow the Rack conventions, the code should be very similar across adapters. In fact that abstract adapter assumes you are using Rack. If you are using it properly there really isn't any code you should have to write. Check out the merb_adapter to see for yourself. You're saying "but Ben, why not just hook into Rack and avoid the need for controller adapters all together?". It's not that simple, because rails doesn't inherit from the Rack::Request class, plus there are small differences between how rack is implemented in each framework. Authlogic has to hook into your controller with a before_filter anyways, so it can "activate" itself. Why not just use the controller object?
 
 The point in all of this rambling is that implementing Authlogic is as simple as creating an adapter. I created both the rails and merb adapters in under 10 minutes. If you have an adapter you created and would like to add please let me know and I will add it into the source.
 
