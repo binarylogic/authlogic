@@ -8,10 +8,12 @@ require File.dirname(__FILE__) + "/authlogic/controller_adapters/merb_adapter" i
 
 require File.dirname(__FILE__) + "/authlogic/sha512_crypto_provider"
 
-require File.dirname(__FILE__) + "/authlogic/active_record/acts_as_authentic"
-require File.dirname(__FILE__) + "/authlogic/active_record/authenticates_many"
-require File.dirname(__FILE__) + "/authlogic/active_record/scoped_session"
+if defined?(ActiveRecord)
+  require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic" 
+  require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/authenticates_many"
+end
 
+require File.dirname(__FILE__) + "/authlogic/session/scoped"
 require File.dirname(__FILE__) + "/authlogic/session/active_record_trickery"
 require File.dirname(__FILE__) + "/authlogic/session/callbacks"
 require File.dirname(__FILE__) + "/authlogic/session/config"
