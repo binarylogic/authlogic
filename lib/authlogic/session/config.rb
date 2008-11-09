@@ -6,9 +6,11 @@ module Authlogic
         klass.send(:include, InstanceMethods)
       end
       
-      # = Config
+      # = Session Config
       #
-      # Configuration is simple. The configuration options are just class methods. Just put this in your config/initializers directory
+      # This deals with configuration for your session. If you are wanting to configure your model please look at Authlogic::ORMAdapters::ActiveRecord::ActsAsAuthentic
+      #
+      # Configuration for your session is simple. The configuration options are just class methods. Just put this in your config/initializers directory
       #
       #   UserSession.configure do |config|
       #     config.authenticate_with = User
@@ -46,6 +48,9 @@ module Authlogic
         # The name of the cookie or the key in the cookies hash. Be sure and use a unique name. If you have multiple sessions and they use the same cookie it will cause problems.
         # Also, if a id is set it will be inserted into the beginning of the string. Exmaple:
         #
+        #   session = UserSession.new
+        #   session.cookie_key => "user_credentials"
+        #   
         #   session = UserSession.new(:super_high_secret)
         #   session.cookie_key => "super_high_secret_user_credentials"
         #
@@ -60,12 +65,17 @@ module Authlogic
         end
         alias_method :cookie_key=, :cookie_key
         
-        # The name of the method used to find the record by the login. What's nifty about this is that you can do anything in your method, Authlogic will just pass you the login.
+        # Authlogic tries to validate the credentials passed to it. One part of validation is actually finding the user and making sure it exists. What method it uses the do this is up to you.
         #
-        # Let's say you allow users to login by username or email. Set this to "find_login", or whatever method you want. Then in your model create a class method like:
+        # Let's say you have a UserSession that is authenticating a User. By default UserSession will call User.find_by_login(login). You can change what method UserSession calls by specifying it here. Then
+        # in your User model you can make that method do anything you want, giving you complete control of how users are found by the UserSession.
         #
-        #   def self.find_login(login)
-        #     find_by_login(login) || find_by_email(login)
+        # Let's take an example: You want to allow users to login by username or email. Set this to the name of the class method that does this in the User model. Let's call it "find_by_username_or_email"
+        #
+        #   class User < ActiveRecord::Base
+        #     def self.find_by_username_or_email(login)
+        #       find_by_username(login) || find_by_email(login)
+        #     end
         #   end
         #
         # * <tt>Default:</tt> "find_by_#{login_field}"
@@ -101,7 +111,7 @@ module Authlogic
         # * <tt>Accepts:</tt> Symbol or String
         def login_field(value = nil)
           if value.nil?
-            read_inheritable_attribute(:login_field) || login_field((klass.column_names.include?("login") && :login) || (klass.column_names.include?("username") && :username) || (klass.column_names.include?("email") && :email) || :login)
+            read_inheritable_attribute(:login_field) || login_field(klass.login_field)
           else
             write_inheritable_attribute(:login_field, value)
           end
@@ -114,7 +124,7 @@ module Authlogic
         # * <tt>Accepts:</tt> Symbol or String
         def password_field(value = nil)
           if value.nil?
-            read_inheritable_attribute(:password_field) || password_field((klass.column_names.include?("password") && :password) || (klass.column_names.include?("pass") && :pass) || :password)
+            read_inheritable_attribute(:password_field) || password_field(klass.password_field)
           else
             write_inheritable_attribute(:password_field, value)
           end
@@ -155,14 +165,7 @@ module Authlogic
         # * <tt>Accepts:</tt> Symbol or String
         def remember_token_field(value = nil)
           if value.nil?
-            read_inheritable_attribute(:remember_token_field) ||
-            remember_token_field(
-              (klass.column_names.include?("remember_token") && :remember_token) ||
-              (klass.column_names.include?("remember_key") && :remember_key) ||
-              (klass.column_names.include?("cookie_token") && :cookie_token) ||
-              (klass.column_names.include?("cookie_key") && :cookie_key) ||
-              :remember_token
-            )
+            read_inheritable_attribute(:remember_token_field) || remember_token_field(klass.remember_token_field)
           else
             write_inheritable_attribute(:remember_token_field, value)
           end

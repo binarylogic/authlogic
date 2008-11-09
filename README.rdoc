@@ -4,7 +4,9 @@ Authlogic is a clean and simple ruby authentication solution. Put simply, its th
 
 The last thing we need is another authentication solution, right? That's what I thought until I tried out some of the current solutions in both rails and merb. None of them felt right. They were either too complicated, bloated, littered my application with tons of code, or were just confusing. This is not the simple / elegant ruby we all fell in love with. We need a "ruby like" authentication solution. Authlogic is my attempt to satisfy that need...
 
-Let's take a rails application, wouldn't it be nice to keep your app up to date with the latest and greatest security techniques with a simple update of a plugin?
+Let's take a rails application...
+
+Wouldn't it be nice to keep your app up to date with the latest and greatest security techniques with a simple update of a plugin?
 
 What if you could have authentication up and running in minutes without having to run a generator? All because it's simple, like everything else.
 

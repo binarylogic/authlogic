@@ -9,7 +9,11 @@ require File.dirname(__FILE__) + "/authlogic/controller_adapters/merb_adapter" i
 require File.dirname(__FILE__) + "/authlogic/sha512_crypto_provider"
 
 if defined?(ActiveRecord)
-  require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic" 
+  require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic"
+  require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/credentials"
+  require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/logged_in"
+  require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/persistence"
+  require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/session_maintenance"
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/authenticates_many"
 end
 

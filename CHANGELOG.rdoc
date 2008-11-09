@@ -2,7 +2,11 @@
 
 * Moved Rack standards into abstract_adapter for the controllers.
 * Added logging_in_with_credentials?, logging_in_with_unauthorized_record?
-* Fixed typo in abstract_adapter, black to block
+* Fixed typo in abstract_adapter, black to block.
+* Cleaned up / reorganized tests.
+* Moved ActiveRecord additions to ORM Adapters name space to make way for Data Mapper.
+* Reorganized and modified acts_as_authentic to be free standing and not get info from the related session.
+* The session now gets its configuration from the model, since determining which fields are present is ORM specific.
 
 == 1.0.0 released 2008-11-05
 
