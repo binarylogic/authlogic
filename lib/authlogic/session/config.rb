@@ -89,6 +89,20 @@ module Authlogic
         end
         alias_method :find_by_login_method=, :find_by_login_method
         
+        # Once the user confirms their openid Authlogic tries to find the record with that openod. This is the method it called on the record's
+        # class to find the record by the openid.
+        #
+        # * <tt>Default:</tt> "find_by_#{openid_field}"
+        # * <tt>Accepts:</tt> Symbol or String
+        def find_by_openid_method(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:find_by_openid_method) || find_by_openid_method("find_by_#{openid_field}")
+          else
+            write_inheritable_attribute(:find_by_openid_method, value)
+          end
+        end
+        alias_method :find_by_openid_method=, :find_by_openid_method
+        
         # Calling UserSession.find tries to find the user session by session, then cookie, then basic http auth. This option allows you to change the order or remove any of these.
         #
         # * <tt>Default:</tt> [:session, :cookie, :http_auth]
@@ -103,9 +117,25 @@ module Authlogic
         end
         alias_method :find_with=, :find_with
         
-        # The name of the method you want Authlogic to create for storing the login / username. Keep in mind this is just for your Authlogic::Session, if you want it can be something completely different
-        # than the field in your model. So if you wanted people to login with a field called "login" and then find users by email this is compeltely doable. See the find_by_login_method configuration option for
-        # more details.
+        # Every time a session is found the last_request_at field for that record is updatd with the current time, if that field exists. If you want to limit how frequent that field is updated specify the threshold
+        # here. For example, if your user is making a request every 5 seconds, and you feel this is too frequent, and feel a minute is a good threashold. Set this to 1.minute. Once a minute has passed in between
+        # requests the field will be updated.
+        #
+        # * <tt>Default:</tt> 0
+        # * <tt>Accepts:</tt> integer representing time in seconds
+        def last_request_at_threshold(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:last_request_at_threshold) || last_request_at_threshold(0)
+          else
+            write_inheritable_attribute(:last_request_at_threshold, value)
+          end
+        end
+        alias_method :last_request_at_threshold=, :last_request_at_threshold
+        
+        # The name of the method you want Authlogic to create for storing the login / username. Keep in mind this is just for your
+        # Authlogic::Session, if you want it can be something completely different than the field in your model. So if you wanted people to
+        # login with a field called "login" and then find users by email this is compeltely doable. See the find_by_login_method configuration
+        # option for more details.
         #
         # * <tt>Default:</tt> Guesses based on the model columns, tries login, username, and email. If none are present it defaults to login
         # * <tt>Accepts:</tt> Symbol or String
@@ -117,6 +147,38 @@ module Authlogic
           end
         end
         alias_method :login_field=, :login_field
+        
+        # The name of the method you want Authlogic to create for storing the openid url. Keep in mind this is just for your Authlogic::Session,
+        # if you want it can be something completely different than the field in your model. So if you wanted people to login with a field called
+        # "openid_url" and then find users by openid this is compeltely doable. See the find_by_openid_method configuration option for
+        # more details.
+        #
+        # * <tt>Default:</tt> Guesses based on the model columns, tries openid, openid_url, identity_url.
+        # * <tt>Accepts:</tt> Symbol or String
+        def openid_field(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:openid_field) || openid_field((klass.column_names.include?("openid") && :openid) || (klass.column_names.include?("openid_url") && :openid_url) || (klass.column_names.include?("identity_url") && :identity_url))
+          else
+            write_inheritable_attribute(:openid_field, value)
+          end
+        end
+        alias_method :openid_field=, :openid_field
+        
+        # The name of the method you want Authlogic to create for storing the openid url. Keep in mind this is just for your Authlogic::Session,
+        # if you want it can be something completely different than the field in your model. So if you wanted people to login with a field called
+        # "openid_url" and then find users by openid this is compeltely doable. See the find_by_openid_method configuration option for
+        # more details.
+        #
+        # * <tt>Default:</tt> Guesses based on the model columns, tries openid, openid_url, identity_url.
+        # * <tt>Accepts:</tt> Symbol or String
+        def openid_file_store_path(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:openid_file_store_path) || openid_file_store_path((defined?(RAILS_ROOT) && RAILS_ROOT + "/tmp/openids") || (defined?(Merb) && Merb.root + "/tmp/openids"))
+          else
+            write_inheritable_attribute(:openid_file_store_path, value)
+          end
+        end
+        alias_method :openid_file_store_path=, :openid_file_store_path
         
         # Works exactly like login_field, but for the password instead.
         #
@@ -211,6 +273,10 @@ module Authlogic
         
         def find_with
           self.class.find_with
+        end
+        
+        def last_request_at_threshold
+          self.class.last_request_at_threshold
         end
       
         def login_field

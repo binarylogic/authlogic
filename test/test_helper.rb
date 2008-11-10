@@ -4,10 +4,10 @@ require "ruby-debug"
 require "active_record"
 require 'active_record/fixtures'
 require File.dirname(__FILE__) + '/../lib/authlogic' unless defined?(Authlogic)
-require File.dirname(__FILE__) + '/../test_libs/aes128_crypto_provider'
-require File.dirname(__FILE__) + '/../test_libs/mock_request'
-require File.dirname(__FILE__) + '/../test_libs/mock_cookie_jar'
-require File.dirname(__FILE__) + '/../test_libs/mock_controller'
+require File.dirname(__FILE__) + '/libs/aes128_crypto_provider'
+require File.dirname(__FILE__) + '/libs/mock_request'
+require File.dirname(__FILE__) + '/libs/mock_cookie_jar'
+require File.dirname(__FILE__) + '/libs/mock_controller'
 
 ActiveRecord::Schema.verbose = false
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :dbfile => ":memory:")

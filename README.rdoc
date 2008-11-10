@@ -1,6 +1,6 @@
 = Authlogic
 
-Authlogic is a clean and simple ruby authentication solution. Put simply, its the Chuck Norris of authentication solutions for rails, merb, etc.
+Authlogic is a clean, simple, and unobtrusive ruby authentication solution. Put simply, its the Chuck Norris of authentication solutions for rails, merb, etc.
 
 The last thing we need is another authentication solution, right? That's what I thought until I tried out some of the current solutions in both rails and merb. None of them felt right. They were either too complicated, bloated, littered my application with tons of code, or were just confusing. This is not the simple / elegant ruby we all fell in love with. We need a "ruby like" authentication solution. Authlogic is my attempt to satisfy that need...
 
@@ -75,6 +75,7 @@ Install the gem / plugin (recommended)
 
   $ sudo gem install authlogic
 
+
   # config/environment.rb
   config.gem :authlogic
 
@@ -89,14 +90,14 @@ Lets assume you are setting up a session for your User model.
 Create your user_session.rb file:
 
   # app/models/user_session.rb
-  class UserSession < Authgasm::Session::Base
+  class UserSession < Authlogic::Session::Base
     # configuration here, just like ActiveRecord, or in an initializer
-    # See Authgasm::Session::Config::ClassMethods for more details
+    # See Authlogic::Session::Config::ClassMethods for more details
   end
 
 === Ensure proper database fields
 
-The user model needs to have the following columns. The names of these columns can be changed with configuration. Better yet, Authgasm tries to guess these names by checking for the existence of common names. See Authgasm::Session::Config::ClassMethods for more details, but chances are you won't have to specify any configuration for your field names, even if they aren't the same names as below.
+The user model needs to have the following columns. The names of these columns can be changed with configuration. Better yet, Authlogic tries to guess these names by checking for the existence of common names. See Authlogic::Session::Config::ClassMethods for more details, but chances are you won't have to specify any configuration for your field names, even if they aren't the same names as below.
 
     t.string    :login, :null => false
     t.string    :crypted_password, :null => false
@@ -109,7 +110,7 @@ The user model needs to have the following columns. The names of these columns c
 Make sure you have a model that you will be authenticating with. For this example let's say you have a User model:
 
   class User < ActiveRecord::Base
-    acts_as_authentic # for options see documentation: Authgasm::ActsAsAuthentic::ClassMethods
+    acts_as_authentic # for options see documentation: Authlogic::ActsAsAuthentic::ClassMethods
   end
 
 Done! Now go use it just like you would with any other ActiveRecord model. Either glance at the code at the beginning of this readme or check out the tutorial (see above in "helpful links") for a more detailed walk through.

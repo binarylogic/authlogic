@@ -22,6 +22,10 @@ module Authlogic
         controller.cookies
       end
       
+      def params
+        controller.params
+      end
+      
       def request
         controller.request
       end
