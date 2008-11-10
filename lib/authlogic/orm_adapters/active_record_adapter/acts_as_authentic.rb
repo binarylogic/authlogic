@@ -31,7 +31,7 @@ module Authlogic
         # * <tt>session_class:</tt> default: "#{name}Session",
         #   This is the related session class. A lot of the configuration will be based off of the configuration values of this class.
         #   
-        # * <tt>crypto_provider:</tt> default: Authlogic::Sha512CryptoProvider,
+        # * <tt>crypto_provider:</tt> default: Authlogic::CryptoProviders::Sha512,
         #   This is the class that provides your encryption. By default Authlogic provides its own crypto provider that uses Sha512 encrypton.
         #   
         # * <tt>login_field:</tt> default: options[:session_class].login_field,

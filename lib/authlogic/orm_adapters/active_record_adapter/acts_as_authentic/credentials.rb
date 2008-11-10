@@ -39,7 +39,7 @@ module Authlogic
             end
           end_eval
           
-          options[:crypto_provider] ||= Sha512CryptoProvider
+          options[:crypto_provider] ||= CryptoProviders::Sha512
           options[:login_field_type] ||= login_field == :email ? :email : :login
           
           # Validations

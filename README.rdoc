@@ -71,13 +71,14 @@ Authlogic makes this a reality. This is just the tip of the ice berg. Keep readi
 
 == Install and use
 
-Install the gem / plugin
+Install the gem / plugin (recommended)
 
   $ sudo gem install authlogic
-  $ cd vendor/plugins
-  $ sudo gem unpack authlogic
 
-Or as a plugin
+  # config/environment.rb
+  config.gem :authlogic
+
+Or as a plugin (for older versions of rails)
 
   script/plugin install git://github.com/binarylogic/authlogic.git
 
@@ -110,8 +111,6 @@ Make sure you have a model that you will be authenticating with. For this exampl
   class User < ActiveRecord::Base
     acts_as_authentic # for options see documentation: Authgasm::ActsAsAuthentic::ClassMethods
   end
-
-The options for acts_as_authentic are based on the UserSession configuration. So if you specified configuration for your UserSession model you should not have to specify any options for acts_as_authentic, unless you want them to be different.
 
 Done! Now go use it just like you would with any other ActiveRecord model. Either glance at the code at the beginning of this readme or check out the tutorial (see above in "helpful links") for a more detailed walk through.
 

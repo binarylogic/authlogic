@@ -69,8 +69,8 @@ module SessionTests
         session.id = :another_id
         session.unauthorized_record = ben
         assert session.save
-        assert_equal ben.remember_token, @controller.session["another_id_some_id_user_credentials"]
-        assert_equal ben.remember_token, @controller.cookies["another_id_some_id_user_credentials"]
+        assert_equal "another_id_some_id_user_credentials", session.cookie_key
+        assert_equal "another_id_some_id_user_credentials", session.session_key
       end
     
       assert_nil UserSession.scope
@@ -132,13 +132,16 @@ module SessionTests
   
     def test_destroy
       ben = users(:ben)
-      session = UserSession.create(ben)
-      assert session
-      assert_equal ben.remember_token, @controller.session["user_credentials"]
-      assert_equal ben.remember_token, @controller.cookies["user_credentials"]
-      session.destroy
-      assert_nil @controller.session["user_credentials"]
-      assert_nil @controller.cookies["user_credentials"]
+      session = UserSession.new
+      assert !session.valid?
+      assert !session.errors.empty?
+      assert session.destroy
+      assert session.errors.empty?
+      session.unauthorized_record = ben
+      assert session.save
+      assert session.record
+      assert session.destroy
+      assert !session.record
     end
   
     def test_errors
@@ -154,9 +157,8 @@ module SessionTests
       ben = users(:ben)
       session = UserSession.new(ben, :my_id)
       assert_equal :my_id, session.id
-      assert session.save
-      assert_equal ben.remember_token, @controller.session["my_id_user_credentials"]
-      assert_equal ben.remember_token, @controller.cookies["my_id_user_credentials"]
+      assert_equal "my_id_user_credentials", session.cookie_key
+      assert_equal "my_id_user_credentials", session.session_key
     end
   
     def test_inspect
@@ -279,26 +281,13 @@ module SessionTests
     
       http_basic_auth_for(ben) do
         assert session.valid_http_auth?
+        assert session.find_record
         assert_equal ben, session.record
         assert_equal ben.remember_token, @controller.session["user_credentials"]
         assert_equal ben.login, session.login
         assert_equal ben.crypted_password, session.send(:protected_password)
         assert !session.new_session?
       end
-    end
-  
-    def test_valid_cookie
-      ben = users(:ben)
-      session = UserSession.new
-    
-      assert !session.valid_cookie?
-    
-      set_cookie_for(ben)
-      assert session.valid_cookie?
-      assert_equal ben, session.record
-      assert_equal ben.remember_token, @controller.session["user_credentials"]
-      assert_equal ben, session.unauthorized_record
-      assert !session.new_session?
     end
   
     def test_valid_session
@@ -309,6 +298,7 @@ module SessionTests
     
       set_session_for(ben)
       assert session.valid_session?
+      assert session.find_record
       assert_equal ben, session.record
       assert_equal ben.remember_token, @controller.session["user_credentials"]
       assert_equal ben, session.unauthorized_record

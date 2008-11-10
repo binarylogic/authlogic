@@ -83,7 +83,7 @@ module ORMAdaptersTests
       end
   
       def test_crypto_provider
-        assert_equal Authlogic::Sha512CryptoProvider, User.crypto_provider
+        assert_equal Authlogic::CryptoProviders::Sha512, User.crypto_provider
         assert_equal AES128CryptoProvider, Employee.crypto_provider
       end
   

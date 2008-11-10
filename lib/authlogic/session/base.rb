@@ -140,8 +140,6 @@ module Authlogic
       def destroy
         errors.clear
         @record = nil
-        controller.cookies.delete cookie_key
-        controller.session[session_key] = nil
         true
       end
       
@@ -164,13 +162,20 @@ module Authlogic
       
       # Attempts to find the record by session, then cookie, and finally basic http auth. See the class level find method if you are wanting to use this in a before_filter to persist your session.
       def find_record
-        return record if record
+        if record
+          self.new_session = false
+          return record
+        end
+        
         find_with.each do |find_method|
           if send("valid_#{find_method}?")
+            self.new_session = false
+            
             if record.class.column_names.include?("last_request_at")
               record.last_request_at = Time.now
               record.save_without_session_maintenance(false)
             end
+            
             return record
           end
         end
@@ -251,12 +256,6 @@ module Authlogic
       # 4. updates magic fields
       def save
         if valid?
-          update_session!
-          controller.cookies[cookie_key] = {
-            :value => record.send(remember_token_field),
-            :expires => remember_me_until
-          }
-          
           record.login_count = (record.login_count.blank? ? 1 : record.login_count + 1) if record.respond_to?(:login_count)
           
           if record.respond_to?(:current_login_at)
@@ -309,41 +308,7 @@ module Authlogic
           if !login.blank? && !password.blank?
             send("#{login_field}=", login)
             send("#{password_field}=", password)
-            result = valid?
-            if result
-              update_session!
-              self.new_session = false
-              return result
-            end
-          end
-        end
-        
-        false
-      end
-      
-      # Tries to validate the session from information in the cookie
-      def valid_cookie?
-        if cookie_credentials
-          self.unauthorized_record = search_for_record("find_by_#{remember_token_field}", cookie_credentials)
-          result = valid?
-          if result
-            update_session!
-            self.new_session = false
-            return result
-          end
-        end
-        
-        false
-      end
-      
-      # Tries to validate the session from information in the session
-      def valid_session?
-        if session_credentials
-          self.unauthorized_record = search_for_record("find_by_#{remember_token_field}", session_credentials)
-          result = valid?
-          if result
-            self.new_session = false
-            return result
+            return valid?
           end
         end
         
@@ -357,10 +322,6 @@ module Authlogic
       private
         def controller
           self.class.controller
-        end
-        
-        def cookie_credentials
-          controller.cookies[cookie_key]
         end
         
         def create_configurable_methods!
@@ -407,14 +368,6 @@ module Authlogic
           rescue Exception
             raise method.inspect + "     " + value.inspect
           end
-        end
-        
-        def session_credentials
-          controller.session[session_key]
-        end
-        
-        def update_session!
-          controller.session[session_key] = record && record.send(remember_token_field)
         end
         
         def valid_credentials?

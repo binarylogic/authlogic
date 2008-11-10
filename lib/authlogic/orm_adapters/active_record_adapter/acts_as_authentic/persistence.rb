@@ -19,8 +19,10 @@ module Authlogic
           validates_uniqueness_of remember_token_field
           
           def unique_token
-            # Force using the Sha512 because all that we are doing is creating a unique token, a hash is perfect for this
-            Authlogic::Sha512CryptoProvider.encrypt(Time.now.to_s + (1..10).collect{ rand.to_s }.join)
+            # The remember token should be a unique string that is not reversible, which is what a hash is all about
+            # if you using encryption this defaults to Sha512.
+            token_class = crypto_provider.respond_to?(:decrypt) ? Authlogic::CryptoProviders::Sha512 : crypto_provider
+            token_class.encrypt(Time.now.to_s + (1..10).collect{ rand.to_s }.join)
           end
           
           def forget_all!

@@ -7,6 +7,9 @@
 * Moved ActiveRecord additions to ORM Adapters name space to make way for Data Mapper.
 * Reorganized and modified acts_as_authentic to be free standing and not get info from the related session.
 * The session now gets its configuration from the model, since determining which fields are present is ORM specific.
+* Extracted session and cookie logic into their own modules.
+* Moved crypto providers into their own module and added a Sha1 provider to help with the restful_authentication transition.
+* Allow the unique_token method to use the alternate crypto_provider if it is a hash algorithm, otherwise default to Sha512
 
 == 1.0.0 released 2008-11-05
 
