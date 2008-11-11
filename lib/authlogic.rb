@@ -18,7 +18,7 @@ if defined?(ActiveRecord)
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/authenticates_many"
 end
 
-require File.dirname(__FILE__) + "/authlogic/session/scoped"
+require File.dirname(__FILE__) + "/authlogic/session/authenticates_many_association"
 require File.dirname(__FILE__) + "/authlogic/session/active_record_trickery"
 require File.dirname(__FILE__) + "/authlogic/session/callbacks"
 require File.dirname(__FILE__) + "/authlogic/session/config"
@@ -27,6 +27,8 @@ require File.dirname(__FILE__) + "/authlogic/session/errors"
 require File.dirname(__FILE__) + "/authlogic/session/session"
 require File.dirname(__FILE__) + "/authlogic/session/scopes"
 require File.dirname(__FILE__) + "/authlogic/session/base"
+
+require File.dirname(__FILE__) + "/authlogic/testing/shoulda_macros"
 
 module Authlogic
   module Session

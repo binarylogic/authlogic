@@ -46,7 +46,7 @@ module Authlogic
             def #{name}
               find_options = #{options[:find_options].inspect} || #{options[:relationship_name]}.scope(:find)
               find_options.delete_if { |key, value| ![:conditions, :include, :joins].include?(key.to_sym) || value.nil? }
-              @#{name} ||= Authlogic::Session::Scoped.new(#{options[:session_class]}, find_options, #{options[:scope_cookies] ? "self.class.model_name.underscore + '_' + self.send(self.class.primary_key).to_s" : "nil"})
+              @#{name} ||= Authlogic::Session::AuthenticatesManyAssociation.new(#{options[:session_class]}, find_options, #{options[:scope_cookies] ? "self.class.model_name.underscore + '_' + self.send(self.class.primary_key).to_s" : "nil"})
             end
           end_eval
         end

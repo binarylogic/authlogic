@@ -1,6 +1,6 @@
 = Authlogic
 
-Authlogic is a clean, simple, and unobtrusive ruby authentication solution. Put simply, its the Chuck Norris of authentication solutions for rails, merb, etc.
+Authlogic is a clean, simple, and unobtrusive ruby authentication solution. Put simply, its the Chuck Norris of authentication solutions for your framework of choice.
 
 The last thing we need is another authentication solution, right? That's what I thought until I tried out some of the current solutions in both rails and merb. None of them felt right. They were either too complicated, bloated, littered my application with tons of code, or were just confusing. This is not the simple / elegant ruby we all fell in love with. We need a "ruby like" authentication solution. Authlogic is my attempt to satisfy that need...
 
@@ -75,11 +75,12 @@ Install the gem / plugin (recommended)
 
   $ sudo gem install authlogic
 
+Now add the gem dependency in your config:
 
   # config/environment.rb
   config.gem :authlogic
 
-Or as a plugin (for older versions of rails)
+Or you install this as a plugin (for older versions of rails)
 
   script/plugin install git://github.com/binarylogic/authlogic.git
 

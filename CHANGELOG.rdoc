@@ -11,6 +11,8 @@
 * Moved crypto providers into their own module and added a Sha1 provider to help with the restful_authentication transition.
 * Allow the unique_token method to use the alternate crypto_provider if it is a hash algorithm, otherwise default to Sha512.
 * Added last_request_at_threshold configuration option.
+* Changed Scoped class to AuthenticatesManyAssociation, like AR has HasManyAssociation, etc.
+* Added should_be_authentic shoulda macro.
 
 == 1.0.0 released 2008-11-05
 
