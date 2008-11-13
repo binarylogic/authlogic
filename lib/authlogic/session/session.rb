@@ -1,5 +1,8 @@
 module Authlogic
   module Session
+    # = Session
+    #
+    # Handles all parts of authentication that deal with sessions. Such as persisting a session and saving / destroy a session.
     module Session
       def self.included(klass)
         klass.after_save :update_session!

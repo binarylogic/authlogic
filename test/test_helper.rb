@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string    :login
     t.string    :crypted_password
     t.string    :password_salt
+    t.string    :openid
     t.string    :remember_token
     t.string    :first_name
     t.string    :last_name
@@ -130,6 +131,14 @@ class Test::Unit::TestCase
     
     def unset_cookie
       @controller.cookies["user_credentials"] = nil
+    end
+    
+    def set_params_for(user, id = nil)
+      @controller.params["user_credentials"] = user.remember_token
+    end
+    
+    def unset_params
+      @controller.params["user_credentials"] = nil
     end
     
     def set_session_for(user, id = nil)

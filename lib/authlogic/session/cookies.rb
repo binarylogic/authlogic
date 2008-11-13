@@ -1,5 +1,8 @@
 module Authlogic
   module Session
+    # = Cookies
+    #
+    # Handles all authentication that deals with cookies, such as persisting a session and saving / destroying a session.
     module Cookies
       def self.included(klass)
         klass.after_save :save_cookie

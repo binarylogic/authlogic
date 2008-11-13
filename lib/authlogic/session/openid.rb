@@ -2,9 +2,25 @@ module Authlogic
   module Session
     module OpenID
       def self.included(klass)
-        klass.alias_method_chain :create_configurable_methods!, :openid
-        klass.before_validation :valid_openid?
-        klass.attr_accessor :openid_response
+        klass.class_eval do
+          alias_method_chain :initialize, :openid
+          alias_method_chain :credentials=, :openid
+          alias_method_chain :create_configurable_methods!, :openid
+          before_validation :valid_openid?
+          attr_accessor :openid_response
+        end
+      end
+      
+      def initialize_with_openid(*args)
+        initialize_without_openid(*args)
+        self.login_with = :openid if openid_verification_complete?
+      end
+      
+      def credentials_with_openid=(values)
+        result = self.credentials_without_openid = values
+        return result if openid_field.blank? || values.blank? || !values.is_a?(Hash) || values[:openid].blank?
+        self.openid = values[:openid]
+        result
       end
       
       # Returns true if logging in with openid. Credentials mean username and password.
@@ -12,28 +28,14 @@ module Authlogic
         login_with == :openid
       end
       
+      def openid_verification_complete?
+        controller.params[:openid_complete] == "1"
+      end
+      
       def valid_openid?
-        if controller.params[:openid_complete].blank?
-          if send(openid_field).blank?
-            errors.add(openid_field, "can not be blank")
-            return false
-          end
-          
-          begin
-            self.openid_response = openid_consumer.begin(send(openid_field))
-          rescue OpenID::OpenIDError => e
-            errors.add("The OpenID identifier #{send(openid_field)} could not be found: #{e}")
-            return false
-          end
-          
-          sregreq = OpenID::SReg::Request.new
-          # required fields
-          #sregreq.request_fields(['email','nickname'], true)
-          # optional fields
-          #sregreq.request_fields(['dob', 'fullname'], false)
-          oidreq.add_extension(sregreq)
-          oidreq.return_to_args["openid_complete"] = 1
-        else
+        return false if openid_field.blank?
+        
+        if openid_verification_complete?
           case openid_response.status
           when OpenID::Consumer::SUCCESS
             
@@ -44,6 +46,33 @@ module Authlogic
           when OpenID::Consumer::SETUP_NEEDED
             errors.add_to_Base("OpenID authentication needs setup.")
           end
+        else
+          if logging_in_with_openid?
+            if send(openid_field).blank?
+              errors.add(openid_field, "can not be blank")
+              return false
+            end
+            
+            unless search_for_record(find_by_openid_method, send(openid_field))
+              errors.add(openid_field, "did not match any records in our database")
+              return false
+            end
+          
+            begin
+              self.openid_response = openid_consumer.begin(send(openid_field))
+            rescue OpenID::OpenIDError => e
+              errors.add("The OpenID identifier #{send(openid_field)} could not be found: #{e}")
+              return false
+            end
+          
+            sregreq = OpenID::SReg::Request.new
+            # required fields
+            #sregreq.request_fields(['email','nickname'], true)
+            # optional fields
+            #sregreq.request_fields(['dob', 'fullname'], false)
+            oidreq.add_extension(sregreq)
+            oidreq.return_to_args["openid_complete"] = 1
+          end
         end
       end
       
@@ -51,7 +80,7 @@ module Authlogic
         def create_configurable_methods_with_openid!
           create_configurable_methods_without_openid!
           
-          return if respond_to?(openid_field)
+          return if openid_field.blank? || respond_to?(openid_field)
           
           if openid_field
             self.class.class_eval <<-"end_eval", __FILE__, __LINE__

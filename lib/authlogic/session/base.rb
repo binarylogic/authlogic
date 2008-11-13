@@ -80,26 +80,28 @@ module Authlogic
           end
       end
     
-      attr_accessor :login_with, :new_session
+      attr_accessor :new_session
       attr_reader :record, :unauthorized_record
-      attr_writer :id
+      attr_writer :id, :login_with
     
       # You can initialize a session by doing any of the following:
       #
       #   UserSession.new
-      #   UserSession.new(login, password)
-      #   UserSession.new(:login => login, :password => password)
-      #   UserSession.new(User.first)
+      #   UserSession.new(:login => "login", :password => "password", :remember_me => true)
+      #   UserSession.new(:openid => "identity url", :remember_me => true)
+      #   UserSession.new(User.first, true)
       #
       # If a user has more than one session you need to pass an id so that Authlogic knows how to differentiate the sessions. The id MUST be a Symbol.
       #
       #   UserSession.new(:my_id)
-      #   UserSession.new(login, password, :my_id)
-      #   UserSession.new({:login => loing, :password => password}, :my_id)
-      #   UserSession.new(User.first, :my_id)
+      #   UserSession.new({:login => "login", :password => "password", :remember_me => true}, :my_id)
+      #   UserSession.new({:openid => "identity url", :remember_me => true}, :my_id)
+      #   UserSession.new(User.first, true, :my_id)
       #
       # Ids are rarely used, but they can be useful. For example, what if users allow other users to login into their account via proxy? Now that user can "technically" be logged into 2 accounts at once.
       # To solve this just pass a id called :proxy, or whatever you want. Authlogic will separate everything out.
+      #
+      # The reason the id is separate from the first parameter hash is becuase this should be controlled by you, not by what the user passes. A usr could inject their own id and things would not work as expected.
       def initialize(*args)
         raise NotActivated.new(self) unless self.class.activated?
         
@@ -107,14 +109,9 @@ module Authlogic
         
         self.id = args.pop if args.last.is_a?(Symbol)
         
-        case args.first
-        when Hash
+        if args.first.is_a?(Hash)
           self.credentials = args.first
-        when String
-          send("#{login_field}=", args[0]) if args.size > 0
-          send("#{password_field}=", args[1]) if args.size > 1
-          self.remember_me = args[2] if args.size > 2
-        else
+        elsif !args.first.blank? && args.first.class < ::ActiveRecord::Base
           self.unauthorized_record = args.first
           self.remember_me = args[1] if args.size > 1
         end
@@ -131,7 +128,7 @@ module Authlogic
         return if values.blank? || !values.is_a?(Hash)
         values.symbolize_keys!
         [login_field.to_sym, password_field.to_sym, :remember_me].each do |field|
-          next if !values.key?(field)
+          next if values[field].blank?
           send("#{field}=", values[field])
         end
       end
@@ -208,6 +205,17 @@ module Authlogic
           details[password_field.to_sym] = "<protected>"
         end
         "#<#{self.class.name} #{details.inspect}>"
+      end
+      
+      # A flag for how the user is logging in. Possible values:
+      #
+      # * :credentials - username and password
+      # * :unauthorized_record - an actual ActiveRecord object
+      # * :openid - OpenID
+      #
+      # By default this is :credentials
+      def login_with
+        @login_with ||= :credentials
       end
       
       # Returns true if logging in with credentials. Credentials mean username and password.
@@ -364,11 +372,7 @@ module Authlogic
         end
         
         def search_for_record(method, value)
-          begin
-            klass.send(method, value)
-          rescue Exception
-            raise method.inspect + "     " + value.inspect
-          end
+          klass.send(method, value)
         end
         
         def valid_credentials?
@@ -403,9 +407,6 @@ module Authlogic
               errors.add_to_base("You can not login with a new record.")
               return false
             end
-          else
-            errors.add_to_base("You must provide some form of credentials before logging in.")
-            return false
           end
           
           self.record = unchecked_record

@@ -2,7 +2,7 @@ module Authlogic
   module Session
     # = Authenticates Many Association
     #
-    # This object is used as a proxy for the authenticates_many relationship. It basically allows you to "save" scope details and call them on an object, which allows you to do the following:
+    # An object of this class is used as a proxy for the authenticates_many relationship. It basically allows you to "save" scope details and call them on an object, which allows you to do the following:
     #
     #   @account.user_sessions.new
     #   @account.user_sessions.find

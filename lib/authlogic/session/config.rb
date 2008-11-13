@@ -103,13 +103,14 @@ module Authlogic
         end
         alias_method :find_by_openid_method=, :find_by_openid_method
         
-        # Calling UserSession.find tries to find the user session by session, then cookie, then basic http auth. This option allows you to change the order or remove any of these.
+        # Calling UserSession.find tries to find the user session by session, then cookie, then params, and finally by basic http auth.
+        # This option allows you to change the order or remove any of these.
         #
-        # * <tt>Default:</tt> [:session, :cookie, :http_auth]
+        # * <tt>Default:</tt> [:session, :cookie, :params, :http_auth]
         # * <tt>Accepts:</tt> Array, and can only use any of the 3 options above
         def find_with(*values)
           if values.blank?
-            read_inheritable_attribute(:find_with) || find_with(:session, :cookie, :http_auth)
+            read_inheritable_attribute(:find_with) || find_with(:session, :cookie, :params, :http_auth)
           else
             values.flatten!
             write_inheritable_attribute(:find_with, values)
@@ -179,6 +180,24 @@ module Authlogic
           end
         end
         alias_method :openid_file_store_path=, :openid_file_store_path
+        
+        # Works exactly like cookie_key, but for params. So a user can login via params just like a cookie or a session. Your URK would look like:
+        #
+        #   http://www.domain.com?user_credentials=fdsfdfd32jfksdjfdksl
+        #
+        # You can change the "user_credentials" key above with this configuration option. Keep in mind, just like cookie_key, if you supply an id
+        # the id will be appended to the front.
+        #
+        # * <tt>Default:</tt> cookie_key
+        # * <tt>Accepts:</tt> String
+        def params_key(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:params_key) || params_key(cookie_key)
+          else
+            write_inheritable_attribute(:params_key, value)
+          end
+        end
+        alias_method :params_key=, :params_key
         
         # Works exactly like login_field, but for the password instead.
         #
@@ -263,12 +282,15 @@ module Authlogic
       
       module InstanceMethods # :nodoc:
         def cookie_key
-          key_parts = [id, scope[:id], self.class.cookie_key].compact
-          key_parts.join("_")
+          build_key(self.class.cookie_key)
         end
         
         def find_by_login_method
           self.class.find_by_login_method
+        end
+        
+        def find_by_openid_method
+          self.class.find_by_openid_method
         end
         
         def find_with
@@ -281,6 +303,14 @@ module Authlogic
       
         def login_field
           self.class.login_field
+        end
+        
+        def openid_field
+          self.class.openid_field
+        end
+        
+        def params_key
+          build_key(self.class.params_key)
         end
       
         def password_field
@@ -297,13 +327,18 @@ module Authlogic
         end
         
         def session_key
-          key_parts = [id, scope[:id], self.class.session_key].compact
-          key_parts.join("_")
+          build_key(self.class.session_key)
         end
       
         def verify_password_method
           self.class.verify_password_method
         end
+        
+        private
+          def build_key(last_part)
+            key_parts = [id, scope[:id], last_part].compact
+            key_parts.join("_")
+          end
       end
     end
   end

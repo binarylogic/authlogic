@@ -22,7 +22,8 @@ module Authlogic
         #   user.password=              Method name based on the :password_field option. This is used to set the password. Pass the *raw* password to this.
         #   user.confirm_password=      Confirms the password, needed to change the password.
         #   user.valid_password?(pass)  Determines if the password passed is valid. The password could be encrypted or raw.
-        #   user.reset_password!        Basically resets the password to a random password using only letters and numbers.
+        #   user.reset_password         Resets the password to a random password using only letters and numbers.
+        #   user.reset_password!        The same as reset_password but saves the record.
         #   user.logged_in?             Based on the :logged_in_timeout option. Tells you if the user is logged in or not.
         #   user.forget!                Changes their remember token, making their cookie and session invalid. A way to log the user out withouth changing their password.
         #

@@ -13,14 +13,14 @@ module SessionTests
       assert_equal ben, session.unauthorized_record
     end
     
-    def test_after_save_save_cookie
+    def test_save
       ben = users(:ben)
       session = UserSession.new(ben)
       assert session.save
       assert_equal ben.remember_token, @controller.cookies["user_credentials"]
     end
     
-    def test_after_destroy_destroy_cookie
+    def test_destroy
       ben = users(:ben)
       set_cookie_for(ben)
       session = UserSession.find

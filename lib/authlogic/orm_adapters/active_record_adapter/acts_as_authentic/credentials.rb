@@ -5,6 +5,7 @@ module Authlogic
         def acts_as_authentic_with_credentials(options = {})
           acts_as_authentic_without_credentials(options)
           
+          # The following helps extract configuration into their specific ORM adapter and allows the Session configuration to set itself based on these values
           class_eval <<-"end_eval", __FILE__, __LINE__
             def self.login_field
               @login_field ||= #{options[:login_field].inspect} ||
@@ -39,6 +40,13 @@ module Authlogic
             end
           end_eval
           
+          # The following methods allow other focused modules to alter validation behavior, such as openid as an alternate login
+          unless respond_to?(:allow_blank_for_login_validations?)
+            def self.allow_blank_for_login_validations?
+              false
+            end
+          end
+          
           options[:crypto_provider] ||= CryptoProviders::Sha512
           options[:login_field_type] ||= login_field == :email ? :email : :login
           
@@ -53,7 +61,7 @@ module Authlogic
             options[:login_field_regex_message] ||= "should look like an email address."
             validates_format_of login_field, :with => options[:login_field_regex], :message => options[:login_field_regex_message]
           else
-            validates_length_of login_field, :within => 2..100
+            validates_length_of login_field, :within => 2..100, :allow_blank => true
             options[:login_field_regex] ||= /\A\w[\w\.\-_@ ]+\z/
             options[:login_field_regex_message] ||= "use only letters, numbers, spaces, and .-_@ please."
             validates_format_of login_field, :with => options[:login_field_regex], :message => options[:login_field_regex_message]
@@ -81,23 +89,28 @@ module Authlogic
               self.#{password_salt_field} = self.class.unique_token
               self.#{crypted_password_field} = crypto_provider.encrypt(@#{password_field} + #{password_salt_field})
             end
-        
+            
             def valid_#{password_field}?(attempted_password)
               return false if attempted_password.blank? || #{crypted_password_field}.blank? || #{password_salt_field}.blank?
               attempted_password == #{crypted_password_field} ||
                 (crypto_provider.respond_to?(:decrypt) && crypto_provider.decrypt(#{crypted_password_field}) == attempted_password + #{password_salt_field}) ||
                 (!crypto_provider.respond_to?(:decrypt) && crypto_provider.encrypt(attempted_password + #{password_salt_field}) == #{crypted_password_field})
             end
-      
+            
             def #{password_field}; end
             def confirm_#{password_field}; end
             
-            def reset_#{password_field}!
+            def reset_#{password_field}
               chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
               newpass = ""
               1.upto(10) { |i| newpass << chars[rand(chars.size-1)] }
               self.#{password_field} = newpass
               self.confirm_#{password_field} = newpass
+            end
+            alias_method :randomize_password, :reset_password
+            
+            def reset_#{password_field}!
+              reset_#{password_field}
               save_without_session_maintenance(false)
             end
             alias_method :randomize_password!, :reset_password!
@@ -106,7 +119,7 @@ module Authlogic
               def tried_to_set_password?
                 tried_to_set_password == true
               end
-        
+              
               def validate_password
                 if new_record? || tried_to_set_#{password_field}?
                   if @#{password_field}.blank?

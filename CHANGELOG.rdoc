@@ -1,4 +1,4 @@
-== 1.0.1 released 2008-11-05
+== 1.1.0 released 2008-11-05
 
 * Moved Rack standards into abstract_adapter for the controllers.
 * Added logging_in_with_credentials?, logging_in_with_unauthorized_record?
@@ -13,6 +13,8 @@
 * Added last_request_at_threshold configuration option.
 * Changed Scoped class to AuthenticatesManyAssociation, like AR has HasManyAssociation, etc.
 * Added should_be_authentic shoulda macro.
+* Removed some magic from how sessions are initialized. See the initialize documentation, this method is a little more structured now, which was require for adding in openid.
+* Added in logging via a params token, which is friendly for feed URLs. Works just like cookies and sessions when persisting the session.
 
 == 1.0.0 released 2008-11-05
 

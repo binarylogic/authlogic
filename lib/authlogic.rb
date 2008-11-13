@@ -24,6 +24,8 @@ require File.dirname(__FILE__) + "/authlogic/session/callbacks"
 require File.dirname(__FILE__) + "/authlogic/session/config"
 require File.dirname(__FILE__) + "/authlogic/session/cookies"
 require File.dirname(__FILE__) + "/authlogic/session/errors"
+require File.dirname(__FILE__) + "/authlogic/session/openid"
+require File.dirname(__FILE__) + "/authlogic/session/params"
 require File.dirname(__FILE__) + "/authlogic/session/session"
 require File.dirname(__FILE__) + "/authlogic/session/scopes"
 require File.dirname(__FILE__) + "/authlogic/session/base"
@@ -36,6 +38,8 @@ module Authlogic
       include ActiveRecordTrickery
       include Callbacks
       include Cookies
+      #include OpenID
+      include Params
       include Session
       include Scopes
     end
