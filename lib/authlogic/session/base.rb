@@ -47,7 +47,7 @@ module Authlogic
         #
         #   def load_user
         #     @user_session = UserSession.find
-        #     @current_user = @user_session && @user_session.record
+        #     @current_user = @user_session && @user_session.user
         #   end
         #
         # Accepts a single parameter as the id. See initialize for more information on ids. Lastly, how it finds the session can be modified via configuration.
@@ -82,7 +82,7 @@ module Authlogic
     
       attr_accessor :new_session
       attr_reader :record, :unauthorized_record
-      attr_writer :id, :login_with
+      attr_writer :authenticating_with, :id
     
       # You can initialize a session by doing any of the following:
       #
@@ -116,6 +116,28 @@ module Authlogic
           self.remember_me = args[1] if args.size > 1
         end
       end
+      
+      # A flag for how the user is logging in. Possible values:
+      #
+      # * :password - username and password
+      # * :unauthorized_record - an actual ActiveRecord object
+      # * :openid - OpenID
+      #
+      # By default this is :password
+      def authenticating_with
+        @authenticating_with ||= :password
+      end
+      
+      # Returns true if logging in with credentials. Credentials mean username and password.
+      def authenticating_with_password?
+        authenticating_with == :password
+      end
+      
+      # Returns true if logging in with an unauthorized record
+      def authenticating_with_unauthorized_record?
+        authenticating_with == :unauthorized_record
+      end
+      alias_method :authenticating_with_record?, :authenticating_with_unauthorized_record?
       
       # Your login credentials in hash format. Usually {:login => "my login", :password => "<protected>"} depending on your configuration.
       # Password is protected as a security measure. The raw password should never be publicly accessible.
@@ -197,7 +219,7 @@ module Authlogic
       
       def inspect # :nodoc:
         details = {}
-        case login_with
+        case authenticating_with
         when :unauthorized_record
           details[:unauthorized_record] = "<protected>"
         else
@@ -206,28 +228,6 @@ module Authlogic
         end
         "#<#{self.class.name} #{details.inspect}>"
       end
-      
-      # A flag for how the user is logging in. Possible values:
-      #
-      # * :credentials - username and password
-      # * :unauthorized_record - an actual ActiveRecord object
-      # * :openid - OpenID
-      #
-      # By default this is :credentials
-      def login_with
-        @login_with ||= :credentials
-      end
-      
-      # Returns true if logging in with credentials. Credentials mean username and password.
-      def logging_in_with_credentials?
-        login_with == :credentials
-      end
-      
-      # Returns true if logging in with an unauthorized record
-      def logging_in_with_unauthorized_record?
-        login_with == :unauthorized_record
-      end
-      alias_method :logging_in_with_record?, :logging_in_with_unauthorized_record?
       
       # Similar to ActiveRecord's new_record? Returns true if the session has not been saved yet.
       def new_session?
@@ -293,7 +293,7 @@ module Authlogic
       # Sometimes you don't want to create a session via credentials (login and password). Maybe you already have the record. Just set this record to this and it will be authenticated when you try to validate
       # the session. Basically this is another form of credentials, you are just skipping username and password validation.
       def unauthorized_record=(value)
-        self.login_with = :unauthorized_record
+        self.authenticating_with = :unauthorized_record
         @unauthorized_record = value
       end
       
@@ -337,15 +337,17 @@ module Authlogic
           return if respond_to?(login_field) # already created these methods
           
           self.class.class_eval <<-"end_eval", __FILE__, __LINE__
+            alias_method :#{klass_name.underscore}, :record
+            
             attr_reader :#{login_field}
             
             def #{login_field}=(value)
-              self.login_with = :credentials
+              self.authenticating_with = :password
               @#{login_field} = value
             end
             
             def #{password_field}=(value)
-              self.login_with = :credentials
+              self.authenticating_with = :password
               @#{password_field} = value
             end
 
@@ -378,8 +380,8 @@ module Authlogic
         def valid_credentials?
           unchecked_record = nil
           
-          case login_with
-          when :credentials
+          case authenticating_with
+          when :password
             errors.add(login_field, "can not be blank") if send(login_field).blank?
             errors.add(password_field, "can not be blank") if send("protected_#{password_field}").blank?
             return false if errors.count > 0

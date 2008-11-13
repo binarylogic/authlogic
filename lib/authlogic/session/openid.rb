@@ -13,7 +13,7 @@ module Authlogic
       
       def initialize_with_openid(*args)
         initialize_without_openid(*args)
-        self.login_with = :openid if openid_verification_complete?
+        self.authenticating_with = :openid if openid_verification_complete?
       end
       
       def credentials_with_openid=(values)
@@ -24,11 +24,15 @@ module Authlogic
       end
       
       # Returns true if logging in with openid. Credentials mean username and password.
-      def logging_in_with_openid?
-        login_with == :openid
+      def authenticating_with_openid?
+        authenticating_with == :openid
       end
       
-      def openid_verification_complete?
+      def verify_openid?
+        authenticating_with_openid? && controller.params[:openid_complete] != "1"
+      end
+      
+      def openid_verified?
         controller.params[:openid_complete] == "1"
       end
       
@@ -47,7 +51,7 @@ module Authlogic
             errors.add_to_Base("OpenID authentication needs setup.")
           end
         else
-          if logging_in_with_openid?
+          if authenticating_with_openid?
             if send(openid_field).blank?
               errors.add(openid_field, "can not be blank")
               return false
@@ -87,7 +91,7 @@ module Authlogic
               attr_reader :#{openid_field}
               
               def #{openid_field}=(value)
-                self.login_with = :openid
+                self.authenticating_with = :openid
                 @#{openid_field} = value
               end
             end_eval

@@ -58,6 +58,14 @@ module SessionTests
       assert_equal "User", UserSession.klass_name
     end
     
+    def test_record_method
+      ben = users(:ben)
+      set_session_for(ben)
+      session = UserSession.find
+      assert_equal ben, session.record
+      assert_equal ben, session.user
+    end
+    
     def test_init
       UserSession.reset_controllers!
       assert_raise(Authlogic::Session::NotActivated) { UserSession.new }
@@ -223,7 +231,7 @@ module SessionTests
       ben = users(:ben)
       session.unauthorized_record = ben
       assert_equal ben, session.unauthorized_record
-      assert_equal :unauthorized_record, session.login_with
+      assert_equal :unauthorized_record, session.authenticating_with
     end
     
     def test_valid
