@@ -30,6 +30,10 @@ module Authlogic
         controller.request
       end
       
+      def request_content_type
+        request.content_type
+      end
+      
       def session
         controller.session
       end

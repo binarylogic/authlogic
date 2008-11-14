@@ -1,5 +1,6 @@
 class MockController < Authlogic::ControllerAdapters::AbstractAdapter
   attr_accessor :http_user, :http_password
+  attr_writer :request_content_type
   
   def initialize
   end
@@ -18,6 +19,10 @@ class MockController < Authlogic::ControllerAdapters::AbstractAdapter
   
   def request
     @request ||= MockRequest.new
+  end
+  
+  def request_content_type
+    @request_content_type ||= "text/html"
   end
   
   def session

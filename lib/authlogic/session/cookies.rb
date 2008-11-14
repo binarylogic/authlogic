@@ -5,8 +5,8 @@ module Authlogic
     # Handles all authentication that deals with cookies, such as persisting a session and saving / destroying a session.
     module Cookies
       def self.included(klass)
-        klass.after_save :save_cookie
-        klass.after_destroy :destroy_cookie
+        klass.after_save :save_cookie, :if => :persisting?
+        klass.after_destroy :destroy_cookie, :if => :persisting?
       end
       
       # Tries to validate the session from information in the cookie

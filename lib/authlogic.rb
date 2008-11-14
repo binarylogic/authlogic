@@ -15,6 +15,8 @@ if defined?(ActiveRecord)
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/logged_in"
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/persistence"
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/session_maintenance"
+  require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/single_access"
+  require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/config" # call this last so the configuration options are passed down the chain
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/authenticates_many"
 end
 
@@ -24,13 +26,10 @@ require File.dirname(__FILE__) + "/authlogic/session/callbacks"
 require File.dirname(__FILE__) + "/authlogic/session/config"
 require File.dirname(__FILE__) + "/authlogic/session/cookies"
 require File.dirname(__FILE__) + "/authlogic/session/errors"
-#require File.dirname(__FILE__) + "/authlogic/session/openid"
 require File.dirname(__FILE__) + "/authlogic/session/params"
 require File.dirname(__FILE__) + "/authlogic/session/session"
 require File.dirname(__FILE__) + "/authlogic/session/scopes"
 require File.dirname(__FILE__) + "/authlogic/session/base"
-
-require File.dirname(__FILE__) + "/authlogic/testing/shoulda_macros"
 
 module Authlogic
   module Session
@@ -38,7 +37,6 @@ module Authlogic
       include ActiveRecordTrickery
       include Callbacks
       include Cookies
-      #include OpenID
       include Params
       include Session
       include Scopes

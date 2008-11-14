@@ -1,0 +1,36 @@
+require File.dirname(__FILE__) + '/../../../test_helper.rb'
+
+module ORMAdaptersTests
+  module ActiveRecordAdapterTests
+    module ActsAsAuthenticTests
+      class ConfigTest < ActiveSupport::TestCase
+        def test_first_column_to_exist
+          assert_equal :login, User.first_column_to_exist(:login, :crypted_password)
+          assert_equal nil, User.first_column_to_exist(nil, :unknown)
+          assert_equal :login, User.first_column_to_exist(:unknown, :login)
+        end
+        
+        def test_acts_as_authentic_config
+          default_config = {
+            :confirm_password_did_not_match_message => "did not match",
+            :single_access_token_field => :single_access_token,
+            :login_field_regex => /\A\w[\w\.\-_@ ]+\z/,
+            :session_ids => [nil],
+            :login_field_regex_failed_message => "use only letters, numbers, spaces, and .-_@ please.",
+            :remember_token_field => :remember_token,
+            :password_field => :password,
+            :logged_in_timeout => 600,
+            :password_salt_field => :password_salt,
+            :login_field_type => :login,
+            :crypto_provider => Authlogic::CryptoProviders::Sha512,
+            :password_blank_message => "can not be blank",
+            :crypted_password_field => :crypted_password,
+            :session_class => "UserSession",
+            :login_field => :login
+          }
+          assert_equal default_config, User.acts_as_authentic_config
+        end
+      end
+    end
+  end
+end

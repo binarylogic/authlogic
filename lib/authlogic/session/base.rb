@@ -82,20 +82,18 @@ module Authlogic
     
       attr_accessor :new_session
       attr_reader :record, :unauthorized_record
-      attr_writer :authenticating_with, :id
+      attr_writer :authenticating_with, :id, :persisting
     
       # You can initialize a session by doing any of the following:
       #
       #   UserSession.new
       #   UserSession.new(:login => "login", :password => "password", :remember_me => true)
-      #   UserSession.new(:openid => "identity url", :remember_me => true)
       #   UserSession.new(User.first, true)
       #
       # If a user has more than one session you need to pass an id so that Authlogic knows how to differentiate the sessions. The id MUST be a Symbol.
       #
       #   UserSession.new(:my_id)
       #   UserSession.new({:login => "login", :password => "password", :remember_me => true}, :my_id)
-      #   UserSession.new({:openid => "identity url", :remember_me => true}, :my_id)
       #   UserSession.new(User.first, true, :my_id)
       #
       # Ids are rarely used, but they can be useful. For example, what if users allow other users to login into their account via proxy? Now that user can "technically" be logged into 2 accounts at once.
@@ -121,7 +119,6 @@ module Authlogic
       #
       # * :password - username and password
       # * :unauthorized_record - an actual ActiveRecord object
-      # * :openid - OpenID
       #
       # By default this is :password
       def authenticating_with
@@ -234,14 +231,24 @@ module Authlogic
         new_session != false
       end
       
+      def persisting # :nodoc:
+        return @persisting if defined?(@persisting)
+        @persisting = true
+      end
+      
+      # Returns true if the session is being persisted. This is set to false if the session was found by the single_access_token, since logging in via a single access token should not remember the user in the
+      # session or the cookie.
+      def persisting?
+        persisting == true
+      end
+      
       def remember_me # :nodoc:
-        return @remember_me if @set_remember_me
-        @remember_me ||= self.class.remember_me
+        return @remember_me if defined?(@remember_me)
+        @remember_me = self.class.remember_me
       end
       
       # Accepts a boolean as a flag to remember the session or not. Basically to expire the cookie at the end of the session or keep it for "remember_me_until".
       def remember_me=(value)
-        @set_remember_me = true
         @remember_me = value
       end
       
@@ -290,8 +297,12 @@ module Authlogic
         result
       end
       
-      # Sometimes you don't want to create a session via credentials (login and password). Maybe you already have the record. Just set this record to this and it will be authenticated when you try to validate
-      # the session. Basically this is another form of credentials, you are just skipping username and password validation.
+      # This lets you create a session by passing a single object of whatever you are authenticating. Let's say User. By passing a user object you are vouching for this user and saying you can guarantee
+      # this user is who he says he is, create a session for him.
+      #
+      # This is how persistence works in Authlogic. Authlogic grabs your cookie credentials, finds a user by those credentials, and then vouches for that user and creates a session. You can do this for just about
+      # anything, which comes in handy for those unique authentication methods. Do what you need to do to authenticate the user, guarantee he is who he says he is, then pass the object here. Authlogic will do its
+      # magic: create a session and cookie. Now when the user refreshes their session will be persisted by their session and cookie.
       def unauthorized_record=(value)
         self.authenticating_with = :unauthorized_record
         @unauthorized_record = value

@@ -12,6 +12,10 @@ module Authlogic
         controller.send(:cookies)
       end
       
+      def request_content_type
+        request.format.to_s
+      end
+      
       # = Rails Implementation
       # Lets Authlogic know about the controller object, AKA "activates" authlogic.
       module RailsImplementation

@@ -38,8 +38,8 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string    :login
     t.string    :crypted_password
     t.string    :password_salt
-    t.string    :openid
     t.string    :remember_token
+    t.string    :single_access_token
     t.string    :first_name
     t.string    :last_name
     t.integer   :login_count
@@ -134,11 +134,19 @@ class Test::Unit::TestCase
     end
     
     def set_params_for(user, id = nil)
-      @controller.params["user_credentials"] = user.remember_token
+      @controller.params["user_credentials"] = user.single_access_token
     end
     
     def unset_params
       @controller.params["user_credentials"] = nil
+    end
+    
+    def set_request_content_type(type)
+      @controller.request_content_type = type
+    end
+    
+    def unset_request_content_type
+      @controller.request_content_type = nil
     end
     
     def set_session_for(user, id = nil)

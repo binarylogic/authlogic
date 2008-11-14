@@ -5,9 +5,9 @@ module Authlogic
     # Handles all parts of authentication that deal with sessions. Such as persisting a session and saving / destroy a session.
     module Session
       def self.included(klass)
-        klass.after_save :update_session!
-        klass.after_destroy :update_session!
-        klass.after_find :update_session!
+        klass.after_save :update_session!, :if => :persisting?
+        klass.after_destroy :update_session!, :if => :persisting?
+        klass.after_find :update_session!, :if => :persisting?
       end
       
       # Tries to validate the session from information in the session

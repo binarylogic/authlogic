@@ -31,7 +31,7 @@ What if your user sessions controller could look just like your other controller
     end
     
     def destroy
-      @user_session.destroy
+      current_user_session.destroy
     end
   end
 
@@ -51,12 +51,17 @@ Look familiar? If you didn't know any better, you would think UserSession was an
 Or how about persisting the session...
 
   class ApplicationController
-    before_filter :load_user
+    helper_method :current_user_session, :current_user
     
     protected
-      def load_user
-        @user_session = UserSession.find
-        @current_user = @user_session && @user_session.user
+      def current_user_session
+        return @current_user_session if defined?(@current_user_session)
+        @current_user_session = UserSession.find
+      end
+      
+      end current_user
+        return @current_user if defined?(@current_user)
+        @current_user = current_user_session && current_user_session.user
       end
   end
 
@@ -78,7 +83,7 @@ Install the gem / plugin (recommended)
 Now add the gem dependency in your config:
 
   # config/environment.rb
-  config.gem :authlogic
+  config.gem "authlogic"
 
 Or you install this as a plugin (for older versions of rails)
 
@@ -111,7 +116,7 @@ The user model needs to have the following columns. The names of these columns c
 Make sure you have a model that you will be authenticating with. For this example let's say you have a User model:
 
   class User < ActiveRecord::Base
-    acts_as_authentic # for options see documentation: Authlogic::ActsAsAuthentic::ClassMethods
+    acts_as_authentic # for options see documentation: Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::Config
   end
 
 Done! Now go use it just like you would with any other ActiveRecord model. Either glance at the code at the beginning of this readme or check out the tutorial (see above in "helpful links") for a more detailed walk through.
@@ -178,6 +183,26 @@ This will keep everything separate. The :secure session will store its info in a
   @secure_user_session = UserSession.find(:secure)
 
 For more information on ids checkout Authlogic::Session::Base#initialize
+
+== Single Access / Private Feeds Access
+
+Need to provide a single / one time access to an account where the session does NOT get persisted? Take a private feed for example, if everyone followed standards basic http auth should work just fine, but since we live in a world where following standards is a hard concept (*cough* Microsoft *cough*), the feed url needs to have some sort of "credentials" to log the user in and get their user specific feed items. This is easy, Authlogic has a nifty little feature for doing just this. All that you need to do is add the following field in your table:
+
+  t.string :single_access_token, :null => false # or call it feeds_token or feed_token
+
+Authlogic will notice you have this and adjust accordingly. You have the follow configuration options for your session (Authlogic::Session::Config) to customize how this works:
+
+1. <tt>params_key:</tt> params_key is the key Authlogic will look for when trying to find your session. It works just like your cookie and session key, except this is for params. Take a UserSession: http://www.mydomin.com?user_credentials=single_access_token
+2. <tt>single_access_allowed_request_types:</tt> Single access needs to be handled with care, after all, it gives the user access to their account. But maybe you don't want to allow this for your entire application. Maybe you only want to allow this for certain request types, such as application/rss+xml or application/atom+xml. By default single access is only allowed for these requests types.
+3. <tt>single_access_token_field:</tt> This works just like remember_token_field. It basically allows you to name the column that the single_access_token is stored in.
+4. change_single_access_token_with_password
+
+You also have the following options when calling acts_as_authentic (Authlogic::ORMAdapters::ActiveRecordAdapter::Config):
+
+1. <tt>single_access_token_field:</tt> Works the same as remember_token field.
+2. <tt>change_single_access_token_with_password:</tt> If the user changes their password do you want to change the single access token as well? This will require that they re-add the feed with the new token, as their old URL will not longer work. It's really up to you if you want to do this. The other alternative is to provide an option when they are changing their password to change their "feed token" as well. You can call user.reset_single_access_token to do this yourself.
+
+Please use this with care and make sure you warn your users that the URL you provide them is to remain private. Even if Billy 13 year old gets this URL and tries to log in, the only way he can login is through a GET or POST parameter with an rss or atom request. Billy can't create a cookie with this token and Billy wont have access to anything else on the site, unless you change the above configuration.
 
 == Scoping
 

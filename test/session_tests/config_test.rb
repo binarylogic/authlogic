@@ -54,22 +54,15 @@ module SessionTests
     end
     
     def test_last_request_at_threshold
-      ben = users(:ben)
-      set_session_for(ben)
-      UserSession.last_request_at_threshold = 2.seconds
-      assert_equal 2.seconds, UserSession.last_request_at_threshold
-      
-      assert UserSession.find
-      last_request_at = ben.reload.last_request_at
-      sleep(1)
-      assert UserSession.find
-      assert_equal last_request_at, ben.reload.last_request_at
-      sleep(1)
-      assert UserSession.find
-      assert_not_equal last_request_at, ben.reload.last_request_at
-      
+      UserSession.last_request_at_threshold = 2.minutes
+      assert_equal 2.minutes, UserSession.last_request_at_threshold
+      session = UserSession.new
+      assert_equal 2.minutes, session.last_request_at_threshold
+    
       UserSession.last_request_at_threshold 0
       assert_equal 0, UserSession.last_request_at_threshold
+      session = UserSession.new
+      assert_equal 0, session.last_request_at_threshold
     end
   
     def test_login_field
@@ -84,6 +77,18 @@ module SessionTests
       session = UserSession.new
       assert_equal :login, session.login_field
       assert session.respond_to?(:login)
+    end
+    
+    def test_params_key
+      UserSession.params_key = "my_params_key"
+      assert_equal "my_params_key", UserSession.params_key
+      session = UserSession.new
+      assert_equal "my_params_key", session.params_key
+    
+      UserSession.params_key "user_credentials"
+      assert_equal "user_credentials", UserSession.params_key
+      session = UserSession.new
+      assert_equal "user_credentials", session.params_key
     end
   
     def test_password_field
@@ -148,6 +153,18 @@ module SessionTests
       assert_equal "user_credentials", UserSession.session_key
       session = UserSession.new
       assert_equal "user_credentials", session.session_key
+    end
+    
+    def test_single_access_allowed_request_types
+      UserSession.single_access_allowed_request_types = "my request type"
+      assert_equal ["my request type"], UserSession.single_access_allowed_request_types
+      session = UserSession.new
+      assert_equal ["my request type"], session.single_access_allowed_request_types
+    
+      UserSession.single_access_allowed_request_types "application/rss+xml", "application/atom+xml"
+      assert_equal ["application/rss+xml", "application/atom+xml"], UserSession.single_access_allowed_request_types
+      session = UserSession.new
+      assert_equal ["application/rss+xml", "application/atom+xml"], session.single_access_allowed_request_types
     end
   
     def test_verify_password_method

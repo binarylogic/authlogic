@@ -8,7 +8,7 @@ module Authlogic
       
       # = Session Config
       #
-      # This deals with configuration for your session. If you are wanting to configure your model please look at Authlogic::ORMAdapters::ActiveRecord::ActsAsAuthentic
+      # This deals with configuration for your session. If you are wanting to configure your model please look at Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::Config
       #
       # Configuration for your session is simple. The configuration options are just class methods. Just put this in your config/initializers directory
       #
@@ -89,20 +89,6 @@ module Authlogic
         end
         alias_method :find_by_login_method=, :find_by_login_method
         
-        # Once the user confirms their openid Authlogic tries to find the record with that openod. This is the method it called on the record's
-        # class to find the record by the openid.
-        #
-        # * <tt>Default:</tt> "find_by_#{openid_field}"
-        # * <tt>Accepts:</tt> Symbol or String
-        def find_by_openid_method(value = nil)
-          if value.nil?
-            read_inheritable_attribute(:find_by_openid_method) || find_by_openid_method("find_by_#{openid_field}")
-          else
-            write_inheritable_attribute(:find_by_openid_method, value)
-          end
-        end
-        alias_method :find_by_openid_method=, :find_by_openid_method
-        
         # Calling UserSession.find tries to find the user session by session, then cookie, then params, and finally by basic http auth.
         # This option allows you to change the order or remove any of these.
         #
@@ -110,7 +96,7 @@ module Authlogic
         # * <tt>Accepts:</tt> Array, and can only use any of the 3 options above
         def find_with(*values)
           if values.blank?
-            read_inheritable_attribute(:find_with) || find_with(:session, :cookie, :params, :http_auth)
+            read_inheritable_attribute(:find_with) || find_with(:params, :session, :cookie, :http_auth)
           else
             values.flatten!
             write_inheritable_attribute(:find_with, values)
@@ -138,55 +124,23 @@ module Authlogic
         # login with a field called "login" and then find users by email this is compeltely doable. See the find_by_login_method configuration
         # option for more details.
         #
-        # * <tt>Default:</tt> Guesses based on the model columns, tries login, username, and email. If none are present it defaults to login
+        # * <tt>Default:</tt> Uses the configuration option in your model: User.acts_as_authentic_config[:login_field]
         # * <tt>Accepts:</tt> Symbol or String
         def login_field(value = nil)
           if value.nil?
-            read_inheritable_attribute(:login_field) || login_field(klass.login_field)
+            read_inheritable_attribute(:login_field) || login_field(klass.acts_as_authentic_config[:login_field])
           else
             write_inheritable_attribute(:login_field, value)
           end
         end
         alias_method :login_field=, :login_field
         
-        # The name of the method you want Authlogic to create for storing the openid url. Keep in mind this is just for your Authlogic::Session,
-        # if you want it can be something completely different than the field in your model. So if you wanted people to login with a field called
-        # "openid_url" and then find users by openid this is compeltely doable. See the find_by_openid_method configuration option for
-        # more details.
+        # Works exactly like cookie_key, but for params. So a user can login via params just like a cookie or a session. Your URL would look like:
         #
-        # * <tt>Default:</tt> Guesses based on the model columns, tries openid, openid_url, identity_url.
-        # * <tt>Accepts:</tt> Symbol or String
-        def openid_field(value = nil)
-          if value.nil?
-            read_inheritable_attribute(:openid_field) || openid_field((klass.column_names.include?("openid") && :openid) || (klass.column_names.include?("openid_url") && :openid_url) || (klass.column_names.include?("identity_url") && :identity_url))
-          else
-            write_inheritable_attribute(:openid_field, value)
-          end
-        end
-        alias_method :openid_field=, :openid_field
-        
-        # The name of the method you want Authlogic to create for storing the openid url. Keep in mind this is just for your Authlogic::Session,
-        # if you want it can be something completely different than the field in your model. So if you wanted people to login with a field called
-        # "openid_url" and then find users by openid this is compeltely doable. See the find_by_openid_method configuration option for
-        # more details.
-        #
-        # * <tt>Default:</tt> Guesses based on the model columns, tries openid, openid_url, identity_url.
-        # * <tt>Accepts:</tt> Symbol or String
-        def openid_file_store_path(value = nil)
-          if value.nil?
-            read_inheritable_attribute(:openid_file_store_path) || openid_file_store_path((defined?(RAILS_ROOT) && RAILS_ROOT + "/tmp/openids") || (defined?(Merb) && Merb.root + "/tmp/openids"))
-          else
-            write_inheritable_attribute(:openid_file_store_path, value)
-          end
-        end
-        alias_method :openid_file_store_path=, :openid_file_store_path
-        
-        # Works exactly like cookie_key, but for params. So a user can login via params just like a cookie or a session. Your URK would look like:
-        #
-        #   http://www.domain.com?user_credentials=fdsfdfd32jfksdjfdksl
+        #   http://www.domain.com?user_credentials=my_single_access_key
         #
         # You can change the "user_credentials" key above with this configuration option. Keep in mind, just like cookie_key, if you supply an id
-        # the id will be appended to the front.
+        # the id will be appended to the front. Check out cookie_key for more details. Also checkout the "Single Access / Private Feeds Access" section in the README.
         #
         # * <tt>Default:</tt> cookie_key
         # * <tt>Accepts:</tt> String
@@ -199,13 +153,14 @@ module Authlogic
         end
         alias_method :params_key=, :params_key
         
+        
         # Works exactly like login_field, but for the password instead.
         #
-        # * <tt>Default:</tt> Guesses based on the model columns, tries password and pass. If none are present it defaults to password
+        # * <tt>Default:</tt> :password
         # * <tt>Accepts:</tt> Symbol or String
         def password_field(value = nil)
           if value.nil?
-            read_inheritable_attribute(:password_field) || password_field(klass.password_field)
+            read_inheritable_attribute(:password_field) || password_field(:password)
           else
             write_inheritable_attribute(:password_field, value)
           end
@@ -242,11 +197,11 @@ module Authlogic
         # long. Well they already have a cookie set to expire in 6 months. Without a token you would have to reset their password, which obviously isn't feasible. So instead of messing with their password
         # just reset their remember token. Next time they access the site and try to login via a cookie it will be rejected and they will have to relogin.
         #
-        # * <tt>Default:</tt> Guesses based on the model columns, tries remember_token, remember_key, cookie_token, and cookie_key. If none are present it defaults to remember_token
+        # * <tt>Default:</tt> Uses the configuration option in your model: User.acts_as_authentic_config[:remember_token_field]
         # * <tt>Accepts:</tt> Symbol or String
         def remember_token_field(value = nil)
           if value.nil?
-            read_inheritable_attribute(:remember_token_field) || remember_token_field(klass.remember_token_field)
+            read_inheritable_attribute(:remember_token_field) || remember_token_field(klass.acts_as_authentic_config[:remember_token_field])
           else
             write_inheritable_attribute(:remember_token_field, value)
           end
@@ -266,6 +221,34 @@ module Authlogic
         end
         alias_method :session_key=, :session_key
         
+        # Authentication is allowed via a single access token, but maybe this is something you don't want for your application as a whole. Maybe this is something you only want for specific request types.
+        # Specify a list of allowed request types and single access authentication will only be allowed for the ones you specify. Checkout the "Single Access / Private Feeds Access" section in the README.
+        #
+        # * <tt>Default:</tt> "application/rss+xml", "application/atom+xml"
+        # * <tt>Accepts:</tt> String, or :all to allow single access authentication for any and all request types
+        def single_access_allowed_request_types(*values)
+          if values.blank?
+            read_inheritable_attribute(:single_access_allowed_request_types) || single_access_allowed_request_types("application/rss+xml", "application/atom+xml")
+          else
+            write_inheritable_attribute(:single_access_allowed_request_types, values)
+          end
+        end
+        alias_method :single_access_allowed_request_types=, :single_access_allowed_request_types
+        
+        # This is a separate token for logging with single access. It works just the the remember_token but it does NOT persist. Meaning if a record is found with the single_access_token it will not set
+        # the session or the cookie and "remember" the user. Checkout the "Single Access / Private Feeds Access" section in the README.
+        #
+        # * <tt>Default:</tt> Uses the configuration option in your model: User.acts_as_authentic_config[:single_access_token]
+        # * <tt>Accepts:</tt> Symbol or String
+        def single_access_token_field(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:single_access_token_field) || single_access_token_field(klass.acts_as_authentic_config[:single_access_token_field])
+          else
+            write_inheritable_attribute(:single_access_token_field, value)
+          end
+        end
+        alias_method :single_access_token_field=, :single_access_token_field
+        
         # The name of the method in your model used to verify the password. This should be an instance method. It should also be prepared to accept a raw password and a crytped password.
         #
         # * <tt>Default:</tt> "valid_#{password_field}?"
@@ -281,16 +264,16 @@ module Authlogic
       end
       
       module InstanceMethods # :nodoc:
+        def change_single_access_token_with_password?
+          self.class.change_single_access_token_with_password == true
+        end
+        
         def cookie_key
           build_key(self.class.cookie_key)
         end
         
         def find_by_login_method
           self.class.find_by_login_method
-        end
-        
-        def find_by_openid_method
-          self.class.find_by_openid_method
         end
         
         def find_with
@@ -305,8 +288,8 @@ module Authlogic
           self.class.login_field
         end
         
-        def openid_field
-          self.class.openid_field
+        def params_allowed_request_types
+          build_key(self.class.params_allowed_request_types)
         end
         
         def params_key
@@ -328,6 +311,14 @@ module Authlogic
         
         def session_key
           build_key(self.class.session_key)
+        end
+        
+        def single_access_token_field
+          self.class.single_access_token_field
+        end
+        
+        def single_access_allowed_request_types
+          self.class.single_access_allowed_request_types
         end
       
         def verify_password_method

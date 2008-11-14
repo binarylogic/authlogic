@@ -10,6 +10,6 @@ Echoe.new 'authlogic' do |p|
   p.project = 'authlogic'
   p.summary = "A clean, simple, and unobtrusive ruby authentication solution."
   p.url = "http://github.com/binarylogic/authlogic"
-  p.dependencies = %w(activesupport activerecord)
+  p.dependencies = %w(activesupport)
   p.include_rakefile = true
 end
