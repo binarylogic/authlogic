@@ -82,6 +82,13 @@ module Authlogic
           end
         
           def acts_as_authentic_with_config(options = {})
+            # Stop all configuration if the DB is not set up
+            begin
+              column_names
+            rescue Exception
+              return
+            end
+            
             options[:session_class] ||= "#{name}Session"
             options[:crypto_provider] ||= CryptoProviders::Sha512
             options[:login_field] ||= first_column_to_exist(:login, :username, :email)
