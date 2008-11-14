@@ -154,6 +154,8 @@ Just like ActiveRecord you can create your own hooks / callbacks so that you can
   after_create
   before_destroy
   after_destroy
+  before_find
+  after_find
   before_save
   after_save
   before_update
@@ -182,13 +184,14 @@ This will keep everything separate. The :secure session will store its info in a
   @user_session = UserSession.find
   @secure_user_session = UserSession.find(:secure)
 
-For more information on ids checkout Authlogic::Session::Base#initialize
+For more information on ids checkout Authlogic::Session::Base#id
 
 == Single Access / Private Feeds Access
 
-Need to provide a single / one time access to an account where the session does NOT get persisted? Take a private feed for example, if everyone followed standards basic http auth should work just fine, but since we live in a world where following standards is a hard concept (*cough* Microsoft *cough*), the feed url needs to have some sort of "credentials" to log the user in and get their user specific feed items. This is easy, Authlogic has a nifty little feature for doing just this. All that you need to do is add the following field in your table:
+Need to provide a single / one time access to an account where the session does NOT get persisted? Take a private feed for example, if everyone followed standards, basic http auth should work just fine, but since we live in a world where following standards is not a standard (\*cough\* Microsoft \*cough\*), the feed url needs to have some sort of "credentials" to log the user in and get their user specific feed items. This is easy, Authlogic has a nifty little feature for doing just this. All that you need to do is add the following field in your table:
 
-  t.string :single_access_token, :null => false # or call it feeds_token or feed_token
+  t.string :single_access_token, :null => false
+  # or call it feeds_token, feed_token, or whatever you want with configuration
 
 Authlogic will notice you have this and adjust accordingly. You have the follow configuration options for your session (Authlogic::Session::Config) to customize how this works:
 
@@ -253,7 +256,7 @@ What's neat about cookies is that if you use sub domains they automatically scop
 
 But what if you *don't* want to separate your cookies by subdomains? You can accomplish this by doing:
 
-  ActionController::Base.session_options[:session_domain] = ‘.mydomain.com’
+  ActionController::Base.session_options[:session_domain] = '.mydomain.com'
 
 If for some reason the above doesn't work for you, do some simple Google searches. There are a million blog posts on this.
 
@@ -300,8 +303,9 @@ Here is basically how this is done....
     
     private
       def maintain_sessions!
-        # If we aren't logged in at all and the password was changed, go ahead and log the user in
-        # If we are logged in and the password has change, update the sessions
+        # If we aren't logged in and a user is create log them in as that user
+        # If we aren't logged in and a user's password changes, log them in as that user
+        # If we are logged in and they change their password, update the session so they remain logged in
       end
   end
 
@@ -338,6 +342,10 @@ Authentication is a one time set up process for your app. It's the same thing ov
 Using a library that hundreds of other people use has it advantages. Probably one of the biggest advantages if that you get to benefit from other people using the same code. When Bob in California figures out a new awesome security technique and adds it into Authlogic, you get to benefit from that with a single update. The catch is that this benefit is limited to code that is not "generated" or added into your app. As I said above, once code is "generated" and added into your app, it's your responsibility.
 
 Lastly, there is a pattern here, why clutter up all of your applications with the same code over and over?
+
+=== Why test the same code over and over
+
+I've noticed my apps get cluttered with authentication tests, and they are the same exact tests! This irritates me. When you have identical tests across your apps thats a red flag that code can be extracted into a library. What's great about Authlogic is that I tested it for you. You don't write tests that test the internals of ActiveRecord do you? The same applies for Authlogic. Only test code that you've written. Essentially testing authentication is similar to testing any another RESTful controller. This makes your tests focused and easier to understand.
 
 === Limited to a single authentication
 
