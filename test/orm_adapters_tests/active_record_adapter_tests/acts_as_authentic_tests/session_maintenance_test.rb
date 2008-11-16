@@ -5,7 +5,7 @@ module ORMAdaptersTests
     module ActsAsAuthenticTests
       class SessionMaintenanceTest < ActiveSupport::TestCase
         def test_login_after_create
-          assert User.create(:login => "awesome", :password => "saweet", :confirm_password => "saweet")
+          assert User.create(:login => "awesome", :password => "saweet", :confirm_password => "saweet", :email => "awesome@awesome.com")
           assert UserSession.find
         end
 

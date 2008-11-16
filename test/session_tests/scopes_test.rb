@@ -3,24 +3,25 @@ require File.dirname(__FILE__) + '/../test_helper.rb'
 module SessionTests
   class ScopesTest < ActiveSupport::TestCase
     def test_scope_method
-      assert_equal 0, Authlogic::Session::Base.send(:scopes).size 
+      assert_nil Authlogic::Session::Base.scope
+      
       thread1 = Thread.new do
         scope = {:id => :scope1}
         Authlogic::Session::Base.send(:scope=, scope)
         assert_equal scope, Authlogic::Session::Base.scope
       end
       thread1.join
-      assert_equal 1, Authlogic::Session::Base.send(:scopes).size
+      
       assert_nil Authlogic::Session::Base.scope
+      
       thread2 = Thread.new do
         scope = {:id => :scope2}
         Authlogic::Session::Base.send(:scope=, scope)
         assert_equal scope, Authlogic::Session::Base.scope
       end
       thread2.join
-      assert_equal 2, Authlogic::Session::Base.send(:scopes).size
+
       assert_nil Authlogic::Session::Base.scope
-      Authlogic::Session::Base.send(:scopes).clear
     end
   
     def test_with_scope_method

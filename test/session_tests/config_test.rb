@@ -65,6 +65,30 @@ module SessionTests
       assert_equal 0, session.last_request_at_threshold
     end
   
+    def test_login_blank_message
+      UserSession.login_blank_message = "message"
+      assert_equal "message", UserSession.login_blank_message
+      session = UserSession.new
+      assert_equal "message", session.login_blank_message
+    
+      UserSession.login_blank_message "can not be blank"
+      assert_equal "can not be blank", UserSession.login_blank_message
+      session = UserSession.new
+      assert_equal "can not be blank", session.login_blank_message
+    end
+    
+    def test_login_not_found_message
+      UserSession.login_not_found_message = "message"
+      assert_equal "message", UserSession.login_not_found_message
+      session = UserSession.new
+      assert_equal "message", session.login_not_found_message
+    
+      UserSession.login_not_found_message "does not exist"
+      assert_equal "does not exist", UserSession.login_not_found_message
+      session = UserSession.new
+      assert_equal "does not exist", session.login_not_found_message
+    end
+    
     def test_login_field
       UserSession.login_field = :saweet
       assert_equal :saweet, UserSession.login_field
@@ -79,6 +103,42 @@ module SessionTests
       assert session.respond_to?(:login)
     end
     
+    def test_not_active_message
+      UserSession.not_active_message = "message"
+      assert_equal "message", UserSession.not_active_message
+      session = UserSession.new
+      assert_equal "message", session.not_active_message
+    
+      UserSession.not_active_message "Your account is not active"
+      assert_equal "Your account is not active", UserSession.not_active_message
+      session = UserSession.new
+      assert_equal "Your account is not active", session.not_active_message
+    end
+    
+    def test_not_approved_message
+      UserSession.not_approved_message = "message"
+      assert_equal "message", UserSession.not_approved_message
+      session = UserSession.new
+      assert_equal "message", session.not_approved_message
+    
+      UserSession.not_approved_message "Your account is not approved"
+      assert_equal "Your account is not approved", UserSession.not_approved_message
+      session = UserSession.new
+      assert_equal "Your account is not approved", session.not_approved_message
+    end
+    
+    def test_not_confirmed_message
+      UserSession.not_confirmed_message = "message"
+      assert_equal "message", UserSession.not_confirmed_message
+      session = UserSession.new
+      assert_equal "message", session.not_confirmed_message
+    
+      UserSession.not_confirmed_message "Your account is not confirmed"
+      assert_equal "Your account is not confirmed", UserSession.not_confirmed_message
+      session = UserSession.new
+      assert_equal "Your account is not confirmed", session.not_confirmed_message
+    end
+    
     def test_params_key
       UserSession.params_key = "my_params_key"
       assert_equal "my_params_key", UserSession.params_key
@@ -89,6 +149,18 @@ module SessionTests
       assert_equal "user_credentials", UserSession.params_key
       session = UserSession.new
       assert_equal "user_credentials", session.params_key
+    end
+    
+    def test_password_blank_message
+      UserSession.password_blank_message = "message"
+      assert_equal "message", UserSession.password_blank_message
+      session = UserSession.new
+      assert_equal "message", session.password_blank_message
+    
+      UserSession.password_blank_message "can not be blank"
+      assert_equal "can not be blank", UserSession.password_blank_message
+      session = UserSession.new
+      assert_equal "can not be blank", session.password_blank_message
     end
   
     def test_password_field
@@ -103,6 +175,18 @@ module SessionTests
       session = UserSession.new
       assert_equal :password, session.password_field
       assert session.respond_to?(:password)
+    end
+    
+    def test_password_invalid_message
+      UserSession.password_invalid_message = "message"
+      assert_equal "message", UserSession.password_invalid_message
+      session = UserSession.new
+      assert_equal "message", session.password_invalid_message
+    
+      UserSession.password_invalid_message "is invalid"
+      assert_equal "is invalid", UserSession.password_invalid_message
+      session = UserSession.new
+      assert_equal "is invalid", session.password_invalid_message
     end
   
     def test_remember_me
@@ -129,18 +213,6 @@ module SessionTests
       session = UserSession.new
       session.remember_me = true
       assert_equal 3.months, session.remember_me_for
-    end
-  
-    def test_remember_token_field
-      UserSession.remember_token_field = :saweet
-      assert_equal :saweet, UserSession.remember_token_field
-      session = UserSession.new
-      assert_equal :saweet, session.remember_token_field
-    
-      UserSession.remember_token_field :remember_token
-      assert_equal :remember_token, UserSession.remember_token_field
-      session = UserSession.new
-      assert_equal :remember_token, session.remember_token_field
     end
   
     def test_session_key

@@ -53,7 +53,7 @@ Or how about persisting the session...
   class ApplicationController
     helper_method :current_user_session, :current_user
     
-    protected
+    private
       def current_user_session
         return @current_user_session if defined?(@current_user_session)
         @current_user_session = UserSession.find
@@ -71,6 +71,7 @@ Authlogic makes this a reality. This is just the tip of the ice berg. Keep readi
 
 *	<b>Documentation:</b> http://authlogic.rubyforge.org
 *	<b>Authlogic setup tutorial:</b> http://www.binarylogic.com/2008/11/3/tutorial-authlogic-basic-setup
+*	<b>Authlogic reset passwords tutorial:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
 *	<b>Live example of the setup tutorial above (with source):</b> http://authlogic_example.binarylogic.com
 * <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
 
@@ -105,11 +106,13 @@ Create your user_session.rb file:
 
 The user model needs to have the following columns. The names of these columns can be changed with configuration. Better yet, Authlogic tries to guess these names by checking for the existence of common names. See Authlogic::Session::Config::ClassMethods for more details, but chances are you won't have to specify any configuration for your field names, even if they aren't the same names as below.
 
-    t.string    :login, :null => false
-    t.string    :crypted_password, :null => false
-    t.string    :password_salt, :null => false # not needed if you are encrypting your pw instead of using a hash algorithm
-    t.string    :remember_token, :null => false
-    t.integer   :login_count # This is optional, it is a "magic" column, just like "created_at". See below for a list of all magic columns.
+    t.string    :login,                 :null => false
+    t.string    :crypted_password,      :null => false
+    t.string    :password_salt,         :null => false # not needed if you are encrypting your pw instead of using a hash algorithm.
+    t.string    :remember_token,        :null => false
+    t.string    :single_access_token,   :null => false # optional, see the single access section below.
+    t.string    :password_reset_token,  :null => false # optional, see the password reset section below.
+    t.integer   :login_count                           # optional, this is a "magic" column, see the magic columns section below
 
 === Set up your model
 
@@ -119,7 +122,7 @@ Make sure you have a model that you will be authenticating with. For this exampl
     acts_as_authentic # for options see documentation: Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::Config
   end
 
-Done! Now go use it just like you would with any other ActiveRecord model. Either glance at the code at the beginning of this readme or check out the tutorial (see above in "helpful links") for a more detailed walk through.
+Done! Now go use it just like you would with any other ActiveRecord model. Either glance at the code at the beginning of this README or check out the tutorials (see above in "helpful links") for a more detailed walk through.
 
 == Magic Columns
 
@@ -148,7 +151,7 @@ Need Authlogic to check your own "state"? No problem, check out the hooks sectio
 
 == Hooks / Callbacks
 
-Just like ActiveRecord you can create your own hooks / callbacks so that you can do whatever you want when certain actions are performed. Here they are:
+Just like ActiveRecord you can create your own hooks / callbacks so that you can do whatever you want when certain actions are performed. Such as before_save, after_save, etc.
 
   before_create
   after_create
@@ -162,7 +165,9 @@ Just like ActiveRecord you can create your own hooks / callbacks so that you can
   after_update
   before_validation
   after_validation
-  
+
+See Authlogic::Session::Callbacks for more information
+
 == Multiple Sessions / Session Identifiers
 
 You're asking: "why would I want multiple sessions?". Take this example:
@@ -173,7 +178,7 @@ You have an app where users login and then need to re-login to view / change the
   @user_session = UserSession.new
   @user_session.id
   # => nil
-
+  
   # secure user session
   @secure_user_session = UserSession.new(:secure)
   @secure_user_session.id
@@ -186,6 +191,16 @@ This will keep everything separate. The :secure session will store its info in a
 
 For more information on ids checkout Authlogic::Session::Base#id
 
+== Resetting passwords
+
+You may have noticed in the helpful links section is a tutorial on resetting password with Authlogic. I'm not going to repeat myself here, but I will touch on the basics, if you want more information please see the tutorial.
+
+Just add the following field to your database:
+
+t.string :password_reset_token, :null => false
+
+Authlogic will notice this field and take care of maintaining it for you. You should use the value of this field to verify your user before they reset their password. There is a finder method you can use to find users with this token, I highly recommend using this method, as it adds in extra security checks to verify the user. See Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::PasswordReset for more information.
+
 == Single Access / Private Feeds Access
 
 Need to provide a single / one time access to an account where the session does NOT get persisted? Take a private feed for example, if everyone followed standards, basic http auth should work just fine, but since we live in a world where following standards is not a standard (\*cough\* Microsoft \*cough\*), the feed url needs to have some sort of "credentials" to log the user in and get their user specific feed items. This is easy, Authlogic has a nifty little feature for doing just this. All that you need to do is add the following field in your table:
@@ -193,17 +208,20 @@ Need to provide a single / one time access to an account where the session does 
   t.string :single_access_token, :null => false
   # or call it feeds_token, feed_token, or whatever you want with configuration
 
-Authlogic will notice you have this and adjust accordingly. You have the follow configuration options for your session (Authlogic::Session::Config) to customize how this works:
+Authlogic will notice you have this and adjust accordingly. By default single_access_tokens can only be used to login for rss and atom request types.
 
-1. <tt>params_key:</tt> params_key is the key Authlogic will look for when trying to find your session. It works just like your cookie and session key, except this is for params. Take a UserSession: http://www.mydomin.com?user_credentials=single_access_token
-2. <tt>single_access_allowed_request_types:</tt> Single access needs to be handled with care, after all, it gives the user access to their account. But maybe you don't want to allow this for your entire application. Maybe you only want to allow this for certain request types, such as application/rss+xml or application/atom+xml. By default single access is only allowed for these requests types.
-3. <tt>single_access_token_field:</tt> This works just like remember_token_field. It basically allows you to name the column that the single_access_token is stored in.
-4. change_single_access_token_with_password
+To tailor how this works, you have the following configuration options:
 
-You also have the following options when calling acts_as_authentic (Authlogic::ORMAdapters::ActiveRecordAdapter::Config):
+Session configuration (Authlogic::Session::Config)
 
-1. <tt>single_access_token_field:</tt> Works the same as remember_token field.
-2. <tt>change_single_access_token_with_password:</tt> If the user changes their password do you want to change the single access token as well? This will require that they re-add the feed with the new token, as their old URL will not longer work. It's really up to you if you want to do this. The other alternative is to provide an option when they are changing their password to change their "feed token" as well. You can call user.reset_single_access_token to do this yourself.
+1. params_key
+2. single_access_allowed_request_types
+3. single_access_token_field
+
+Model configuration (Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::Config)
+
+1. single_access_token_field:
+2. change_single_access_token_with_password
 
 Please use this with care and make sure you warn your users that the URL you provide them is to remain private. Even if Billy 13 year old gets this URL and tries to log in, the only way he can login is through a GET or POST parameter with an rss or atom request. Billy can't create a cookie with this token and Billy wont have access to anything else on the site, unless you change the above configuration.
 
@@ -343,7 +361,7 @@ Using a library that hundreds of other people use has it advantages. Probably on
 
 Lastly, there is a pattern here, why clutter up all of your applications with the same code over and over?
 
-=== Why test the same code over and over
+=== Why test the same code over and over?
 
 I've noticed my apps get cluttered with authentication tests, and they are the same exact tests! This irritates me. When you have identical tests across your apps thats a red flag that code can be extracted into a library. What's great about Authlogic is that I tested it for you. You don't write tests that test the internals of ActiveRecord do you? The same applies for Authlogic. Only test code that you've written. Essentially testing authentication is similar to testing any another RESTful controller. This makes your tests focused and easier to understand.
 

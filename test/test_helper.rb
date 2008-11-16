@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string    :password_salt
     t.string    :remember_token
     t.string    :single_access_token
+    t.string    :password_reset_token
+    t.string    :email
     t.string    :first_name
     t.string    :last_name
     t.integer   :login_count
@@ -104,22 +106,26 @@ class Test::Unit::TestCase
   self.pre_loaded_fixtures = true
   fixtures :all
   setup :activate_authlogic
-  teardown :deactivate_authlogic
   
   private
     def activate_authlogic
       @controller = MockController.new
       Authlogic::Session::Base.controller = @controller
     end
-
-    def deactivate_authlogic
-      Authlogic::Session::Base.reset_controllers!
-    end
     
     def http_basic_auth_for(user = nil, &block)
       unless user.blank?
         @controller.http_user = user.login
-        @controller.http_password = user.crypted_password
+        
+        password = nil
+        case user
+        when users(:ben)
+          password = "benrocks"
+        when users(:zack)
+          password = "zackrocks"
+        end
+        
+        @controller.http_password = password
       end
       yield
       @controller.http_user = @controller.http_password = nil

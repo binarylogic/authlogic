@@ -13,7 +13,7 @@ module Authlogic
         # === Instance Methods
         #
         # * <tt>{options[:password_field]}=(value)</tt> - encrypts a raw password and sets it to your crypted_password_field. Also sets the password_salt to a random token.
-        # * <tt>valid_{options[:password_field]}?(password_to_check)</tt> - checks is the password is valid. The password passed can be the raw password or the encrypted password.
+        # * <tt>valid_{options[:password_field]}?(password_to_check)</tt> - checks is the password is valid. The password passed must be the raw password, not encrypted.
         # * <tt>reset_{options[:password_field]}</tt> - resets the password using the friendly_unique_token class method
         # * <tt>reset_{options[:password_field]}!</tt> - calls reset_password and then saves the record
         module Credentials
@@ -28,6 +28,12 @@ module Authlogic
             else
               validates_length_of options[:login_field], :within => 2..100, :allow_blank => true
               validates_format_of options[:login_field], :with => options[:login_field_regex], :message => options[:login_field_regex_failed_message]
+            end
+            
+            if options[:email_field]
+              validates_length_of options[:email_field], :within => 6..100
+              validates_format_of options[:email_field], :with => options[:email_field_regex], :message => options[:email_field_regex_failed_message]
+              validates_uniqueness_of options[:email_field], :scope => options[:scope]
             end
           
             validates_uniqueness_of options[:login_field], :scope => options[:scope]
@@ -54,8 +60,7 @@ module Authlogic
             
               def valid_#{options[:password_field]}?(attempted_password)
                 return false if attempted_password.blank? || #{options[:crypted_password_field]}.blank? || #{options[:password_salt_field]}.blank?
-                attempted_password == #{options[:crypted_password_field]} ||
-                  (#{options[:crypto_provider]}.respond_to?(:decrypt) && #{options[:crypto_provider]}.decrypt(#{options[:crypted_password_field]}) == attempted_password + #{options[:password_salt_field]}) ||
+                (#{options[:crypto_provider]}.respond_to?(:decrypt) && #{options[:crypto_provider]}.decrypt(#{options[:crypted_password_field]}) == attempted_password + #{options[:password_salt_field]}) ||
                   (!#{options[:crypto_provider]}.respond_to?(:decrypt) && #{options[:crypto_provider]}.encrypt(attempted_password + #{options[:password_salt_field]}) == #{options[:crypted_password_field]})
               end
             

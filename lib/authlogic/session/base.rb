@@ -8,22 +8,18 @@ module Authlogic
       
       class << self
         # Returns true if a controller have been set and can be used properly. This MUST be set before anything can be done. Similar to how ActiveRecord won't allow you to do anything
-        # without establishing a DB connection. By default this is done for you automatically, but if you are using Authlogic in a unique way outside of rails, you need to assign a controller
+        # without establishing a DB connection. In your framework environment this is done for you, but if you are using Authlogic outside of your frameword, you need to assign a controller
         # object to Authlogic via Authlogic::Session::Base.controller = obj.
         def activated?
           !controller.blank?
         end
         
         def controller=(value) # :nodoc:
-          controllers[Thread.current] = value
+          Thread.current[:authlogic_controller] = value
         end
         
         def controller # :nodoc:
-          controllers[Thread.current]
-        end
-        
-        def reset_controllers!
-          @@controllers = {}
+          Thread.current[:authlogic_controller]
         end
         
         # A convenince method. The same as:
@@ -41,16 +37,26 @@ module Authlogic
           session.save!
         end
         
-        # A convenience method for session.find_record. Finds your session by session, then cookie, and finally basic http auth. Perfect for that global before_filter to find your logged in user:
+        # A convenience method for session.find_record. Finds your session by parameters, then session, then cookie, and finally by basic http auth.
+        # This is perfect for persisting your session:
         #
-        #   before_filter :load_user
+        #   helper_method :current_user_session, :current_user
         #
-        #   def load_user
-        #     @user_session = UserSession.find
-        #     @current_user = @user_session && @user_session.user
+        #   def current_user_session
+        #     return @current_user_session if defined?(@current_user_session)
+        #     @current_user_session = UserSession.find
         #   end
         #
-        # Accepts a single parameter as the id. See initialize for more information on ids. Lastly, how it finds the session can be modified via configuration.
+        #   def current_user
+        #     return @current_user if defined?(@current_user)
+        #     @current_user = current_user_session && current_user_session.user
+        #   end
+        #
+        # Accepts a single parameter as the id, to find session that you marked with an id:
+        #
+        #   UserSession.find(:secure)
+        #
+        # See the id method for more information on ids.
         def find(id = nil)
           args = [id].compact
           session = new(*args)
@@ -58,7 +64,9 @@ module Authlogic
           nil
         end
         
-        def klass # :nodoc:
+        # The name of the class that this session is authenticating with. For example, the UserSession class will authenticate with the User class
+        # unless you specify otherwise in your configuration.
+        def klass
           @klass ||=
             if klass_name
               klass_name.constantize
@@ -67,17 +75,13 @@ module Authlogic
             end
         end
         
-        def klass_name # :nodoc:
+        # Same as klass, just returns a string instead of the actual constant.
+        def klass_name
           @klass_name ||= 
             if guessed_name = name.scan(/(.*)Session/)[0]
               @klass_name = guessed_name[0]
             end
         end
-        
-        private
-          def controllers
-            @@controllers ||= {}
-          end
       end
     
       attr_accessor :new_session
@@ -96,10 +100,10 @@ module Authlogic
       #   UserSession.new({:login => "login", :password => "password", :remember_me => true}, :my_id)
       #   UserSession.new(User.first, true, :my_id)
       #
-      # Ids are rarely used, but they can be useful. For example, what if users allow other users to login into their account via proxy? Now that user can "technically" be logged into 2 accounts at once.
-      # To solve this just pass a id called :proxy, or whatever you want. Authlogic will separate everything out.
+      # For more information on ids see the id method.
       #
-      # The reason the id is separate from the first parameter hash is becuase this should be controlled by you, not by what the user passes. A usr could inject their own id and things would not work as expected.
+      # Lastly, the reason the id is separate from the first parameter hash is becuase this should be controlled by you, not by what the user passes.
+      # A user could inject their own id and things would not work as expected.
       def initialize(*args)
         raise NotActivated.new(self) unless self.class.activated?
         
@@ -117,8 +121,8 @@ module Authlogic
       
       # A flag for how the user is logging in. Possible values:
       #
-      # * :password - username and password
-      # * :unauthorized_record - an actual ActiveRecord object
+      # * <tt>:password</tt> - username and password
+      # * <tt>:unauthorized_record</tt> - an actual ActiveRecord object
       #
       # By default this is :password
       def authenticating_with
@@ -176,7 +180,7 @@ module Authlogic
         @errors ||= Errors.new(self)
       end
       
-      # Attempts to find the record by session, then cookie, and finally basic http auth. See the class level find method if you are wanting to use this in a before_filter to persist your session.
+      # Attempts to find the record by params, then session, then cookie, and finally basic http auth. See the class level find method if you are wanting to use this to persist your session.
       def find_record
         if record
           self.new_session = false
@@ -202,14 +206,13 @@ module Authlogic
       # and a "secure" user session. The secure user session would be created only when they want to modify their billing information, or other sensative information. Similar to me.com. This requires 2
       # user sessions. Just use an id for the "secure" session and you should be good.
       #
-      # You can set the id a number of ways:
+      # You can set the id during initialization (see initialize for more information), or as an attribute:
       #
-      #   session = Session.new(:secure)
-      #   session = Session.new("username", "password", :secure)
-      #   session = Session.new({:username => "username", :password => "password"}, :secure)
-      #   session.id = :secure
+      #   session.id = :my_id
       #
-      # Just be sure and set your id before you validate / create / update your session.
+      # Just be sure and set your id before you save your session.
+      #
+      # Lastly, to retrieve your session with the id check out the find class method.
       def id
         @id
       end
@@ -393,26 +396,26 @@ module Authlogic
           
           case authenticating_with
           when :password
-            errors.add(login_field, "can not be blank") if send(login_field).blank?
-            errors.add(password_field, "can not be blank") if send("protected_#{password_field}").blank?
+            errors.add(login_field, login_blank_message) if send(login_field).blank?
+            errors.add(password_field, password_blank_message) if send("protected_#{password_field}").blank?
             return false if errors.count > 0
             
             unchecked_record = search_for_record(find_by_login_method, send(login_field))
             
             if unchecked_record.blank?
-              errors.add(login_field, "was not found")
+              errors.add(login_field, login_not_found_message)
               return false
             end
             
             unless unchecked_record.send(verify_password_method, send("protected_#{password_field}"))
-              errors.add(password_field, "is invalid")
+              errors.add(password_field, password_invalid_message)
               return false
             end
           when :unauthorized_record
             unchecked_record = unauthorized_record
             
             if unchecked_record.blank?
-              errors.add_to_base("The record could not be found and did not match the requirements.")
+              errors.add_to_base("You can not login with a blank record.")
               return false
             end
             
@@ -429,7 +432,7 @@ module Authlogic
         def valid_record?
           [:active, :approved, :confirmed].each do |required_status|
             if record.respond_to?("#{required_status}?") && !record.send("#{required_status}?")
-              errors.add_to_base("Your account has not been marked as #{required_status}")
+              errors.add_to_base(send("not_#{required_status}_message"))
               return false
             end
           end

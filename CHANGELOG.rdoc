@@ -1,7 +1,13 @@
-== 1.1.2 released 2008-11-13
+== 1.2.0 released 2008-11-16
 
 * Added check for database set up in acts_as_authentic to prevent errors during migrations.
 * Forced logged_in and logged_out named scopes to use seconds.
+* Hardened valid_password? method to only allow raw passwords.
+* controllers and scopes are no longer stored in class variables but in the Thread.current hash so their instances die out with the thread, which frees up memory.
+* Removed single_access_token_field and remember_token_field from Sesson::Config, they are not needed there.
+* Added password_reset_token to assist in resetting passwords.
+* Added email_field, email_field_regex, email_field_regex_failed_message configuration options to acts_as_authentic. So that you can validate emails as well as a login, instead of the either-or approach.
+* Added configuration for all validation messages for the session so that you can modify them and provide I18n support.
 
 == 1.1.1 released 2008-11-13
 

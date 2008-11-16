@@ -4,28 +4,29 @@ module SessionTests
   class BaseTest < ActiveSupport::TestCase
     def test_activated
       assert UserSession.activated?
-      Authlogic::Session::Base.reset_controllers!
+      Authlogic::Session::Base.controller = nil
       assert !UserSession.activated?
     end
     
-    def test_controllers
-      Authlogic::Session::Base.reset_controllers!
-      assert_equal 0, Authlogic::Session::Base.send(:controllers).size 
+    def test_controller
+      Authlogic::Session::Base.controller = nil
+      assert_nil Authlogic::Session::Base.controller
       thread1 = Thread.new do
         controller = MockController.new
         Authlogic::Session::Base.controller = controller
         assert_equal controller, Authlogic::Session::Base.controller
       end
       thread1.join
-      assert_equal 1, Authlogic::Session::Base.send(:controllers).size
+
       assert_nil Authlogic::Session::Base.controller
+      
       thread2 = Thread.new do
         controller = MockController.new
         Authlogic::Session::Base.controller = controller
         assert_equal controller, Authlogic::Session::Base.controller
       end
       thread2.join
-      assert_equal 2, Authlogic::Session::Base.send(:controllers).size
+      
       assert_nil Authlogic::Session::Base.controller
     end
     
@@ -82,7 +83,7 @@ module SessionTests
     end
     
     def test_init
-      UserSession.reset_controllers!
+      UserSession.controller = nil
       assert_raise(Authlogic::Session::NotActivated) { UserSession.new }
       UserSession.controller = @controller
       
@@ -272,7 +273,7 @@ module SessionTests
         assert session.valid_http_auth?
         assert_equal ben, session.record
         assert_equal ben.login, session.login
-        assert_equal ben.crypted_password, session.send(:protected_password)
+        assert_equal "benrocks", session.send(:protected_password)
       end
     end
   end

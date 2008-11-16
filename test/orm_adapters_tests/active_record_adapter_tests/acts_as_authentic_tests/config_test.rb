@@ -21,12 +21,17 @@ module ORMAdaptersTests
             :password_field => :password,
             :logged_in_timeout => 600,
             :password_salt_field => :password_salt,
+            :password_reset_token_valid_for => 600,
+            :password_reset_token_field => :password_reset_token,
             :login_field_type => :login,
             :crypto_provider => Authlogic::CryptoProviders::Sha512,
             :password_blank_message => "can not be blank",
             :crypted_password_field => :crypted_password,
             :session_class => "UserSession",
-            :login_field => :login
+            :login_field => :login,
+            :email_field => :email,
+            :email_field_regex => /\A[\w\.%\+\-]+@(?:[A-Z0-9\-]+\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|jobs|museum)\z/i,
+            :email_field_regex_failed_message=>"should look like an email address."
           }
           assert_equal default_config, User.acts_as_authentic_config
         end

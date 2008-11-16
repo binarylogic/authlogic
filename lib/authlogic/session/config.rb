@@ -92,7 +92,7 @@ module Authlogic
         # Calling UserSession.find tries to find the user session by session, then cookie, then params, and finally by basic http auth.
         # This option allows you to change the order or remove any of these.
         #
-        # * <tt>Default:</tt> [:session, :cookie, :params, :http_auth]
+        # * <tt>Default:</tt> [:params, :session, :cookie, :http_auth]
         # * <tt>Accepts:</tt> Array, and can only use any of the 3 options above
         def find_with(*values)
           if values.blank?
@@ -119,6 +119,32 @@ module Authlogic
         end
         alias_method :last_request_at_threshold=, :last_request_at_threshold
         
+        # The error message used when the login is left blank.
+        #
+        # * <tt>Default:</tt> "can not be blank"
+        # * <tt>Accepts:</tt> String
+        def login_blank_message(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:login_blank_message) || login_blank_message("can not be blank")
+          else
+            write_inheritable_attribute(:login_blank_message, value)
+          end
+        end
+        alias_method :login_blank_message=, :login_blank_message
+        
+        # The error message used when the login could not be found in the database.
+        #
+        # * <tt>Default:</tt> "does not exist"
+        # * <tt>Accepts:</tt> String
+        def login_not_found_message(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:login_not_found_message) || login_not_found_message("does not exist")
+          else
+            write_inheritable_attribute(:login_not_found_message, value)
+          end
+        end
+        alias_method :login_not_found_message=, :login_not_found_message
+        
         # The name of the method you want Authlogic to create for storing the login / username. Keep in mind this is just for your
         # Authlogic::Session, if you want it can be something completely different than the field in your model. So if you wanted people to
         # login with a field called "login" and then find users by email this is compeltely doable. See the find_by_login_method configuration
@@ -134,6 +160,45 @@ module Authlogic
           end
         end
         alias_method :login_field=, :login_field
+        
+        # The error message used when the record returns false to active?
+        #
+        # * <tt>Default:</tt> "Your account is not active"
+        # * <tt>Accepts:</tt> String
+        def not_active_message(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:not_active_message) || not_active_message("Your account is not active")
+          else
+            write_inheritable_attribute(:not_active_message, value)
+          end
+        end
+        alias_method :not_active_message=, :not_active_message
+        
+        # The error message used when the record returns false to approved?
+        #
+        # * <tt>Default:</tt> "Your account is not approved"
+        # * <tt>Accepts:</tt> String
+        def not_approved_message(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:not_approved_message) || not_active_message("Your account is not approved")
+          else
+            write_inheritable_attribute(:not_approved_message, value)
+          end
+        end
+        alias_method :not_approved_message=, :not_approved_message
+        
+        # The error message used when the record returns false to confirmed?
+        #
+        # * <tt>Default:</tt> "Your account is not confirmed"
+        # * <tt>Accepts:</tt> String
+        def not_confirmed_message(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:not_confirmed_message) || not_active_message("Your account is not confirmed")
+          else
+            write_inheritable_attribute(:not_confirmed_message, value)
+          end
+        end
+        alias_method :not_confirmed_message=, :not_confirmed_message
         
         # Works exactly like cookie_key, but for params. So a user can login via params just like a cookie or a session. Your URL would look like:
         #
@@ -153,6 +218,18 @@ module Authlogic
         end
         alias_method :params_key=, :params_key
         
+        # The error message used when the password is left blank.
+        #
+        # * <tt>Default:</tt> "can not be blank"
+        # * <tt>Accepts:</tt> String
+        def password_blank_message(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:password_blank_message) || password_blank_message("can not be blank")
+          else
+            write_inheritable_attribute(:password_blank_message, value)
+          end
+        end
+        alias_method :password_blank_message=, :password_blank_message
         
         # Works exactly like login_field, but for the password instead.
         #
@@ -166,6 +243,19 @@ module Authlogic
           end
         end
         alias_method :password_field=, :password_field
+        
+        # The error message used when the password is invalid.
+        #
+        # * <tt>Default:</tt> "is invalid"
+        # * <tt>Accepts:</tt> String
+        def password_invalid_message(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:password_invalid_message) || login_not_found_message("is invalid")
+          else
+            write_inheritable_attribute(:password_invalid_message, value)
+          end
+        end
+        alias_method :password_invalid_message=, :password_invalid_message
         
         # If sessions should be remembered by default or not.
         #
@@ -193,21 +283,6 @@ module Authlogic
         end
         alias_method :remember_me_for=, :remember_me_for
         
-        # The name of the field that the remember token is stored. This is for cookies. Let's say you set up your app and want all users to be remembered for 6 months. Then you realize that might be a little too
-        # long. Well they already have a cookie set to expire in 6 months. Without a token you would have to reset their password, which obviously isn't feasible. So instead of messing with their password
-        # just reset their remember token. Next time they access the site and try to login via a cookie it will be rejected and they will have to relogin.
-        #
-        # * <tt>Default:</tt> Uses the configuration option in your model: User.acts_as_authentic_config[:remember_token_field]
-        # * <tt>Accepts:</tt> Symbol or String
-        def remember_token_field(value = nil)
-          if value.nil?
-            read_inheritable_attribute(:remember_token_field) || remember_token_field(klass.acts_as_authentic_config[:remember_token_field])
-          else
-            write_inheritable_attribute(:remember_token_field, value)
-          end
-        end
-        alias_method :remember_token_field=, :remember_token_field
-        
         # Works exactly like cookie_key, but for sessions. See cookie_key for more info.
         #
         # * <tt>Default:</tt> cookie_key
@@ -234,20 +309,6 @@ module Authlogic
           end
         end
         alias_method :single_access_allowed_request_types=, :single_access_allowed_request_types
-        
-        # This is a separate token for logging with single access. It works just the the remember_token but it does NOT persist. Meaning if a record is found with the single_access_token it will not set
-        # the session or the cookie and "remember" the user. Checkout the "Single Access / Private Feeds Access" section in the README.
-        #
-        # * <tt>Default:</tt> Uses the configuration option in your model: User.acts_as_authentic_config[:single_access_token]
-        # * <tt>Accepts:</tt> Symbol or String
-        def single_access_token_field(value = nil)
-          if value.nil?
-            read_inheritable_attribute(:single_access_token_field) || single_access_token_field(klass.acts_as_authentic_config[:single_access_token_field])
-          else
-            write_inheritable_attribute(:single_access_token_field, value)
-          end
-        end
-        alias_method :single_access_token_field=, :single_access_token_field
         
         # The name of the method in your model used to verify the password. This should be an instance method. It should also be prepared to accept a raw password and a crytped password.
         #
@@ -283,9 +344,29 @@ module Authlogic
         def last_request_at_threshold
           self.class.last_request_at_threshold
         end
+        
+        def login_blank_message
+          self.class.login_blank_message
+        end
+        
+        def login_not_found_message
+          self.class.login_not_found_message
+        end
       
         def login_field
           self.class.login_field
+        end
+        
+        def not_active_message
+          self.class.not_active_message
+        end
+        
+        def not_approved_message
+          self.class.not_approved_message
+        end
+        
+        def not_confirmed_message
+          self.class.not_confirmed_message
         end
         
         def params_allowed_request_types
@@ -295,9 +376,21 @@ module Authlogic
         def params_key
           build_key(self.class.params_key)
         end
+        
+        def password_blank_message
+          self.class.password_blank_message
+        end
       
         def password_field
           self.class.password_field
+        end
+        
+        def password_invalid_message
+          self.class.password_invalid_message
+        end
+        
+        def password_reset_token_field
+          klass.acts_as_authentic_config[:password_reset_token_field]
         end
         
         def remember_me_for
@@ -306,7 +399,7 @@ module Authlogic
         end
         
         def remember_token_field
-          self.class.remember_token_field
+          klass.acts_as_authentic_config[:remember_token_field]
         end
         
         def session_key
@@ -314,7 +407,7 @@ module Authlogic
         end
         
         def single_access_token_field
-          self.class.single_access_token_field
+          klass.acts_as_authentic_config[:single_access_token_field]
         end
         
         def single_access_allowed_request_types

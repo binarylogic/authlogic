@@ -9,26 +9,31 @@ module ORMAdaptersTests
           assert !user.valid?
           assert user.errors.on(:login)
           assert user.errors.on(:password)
+          assert user.errors.on(:email)
 
           user.login = "a"
           assert !user.valid?
           assert user.errors.on(:login)
           assert user.errors.on(:password)
+          assert user.errors.on(:email)
 
           user.login = "%ben*"
           assert !user.valid?
           assert user.errors.on(:login)
           assert user.errors.on(:password)
+          assert user.errors.on(:email)
 
           user.login = "bjohnson"
           assert !user.valid?
           assert user.errors.on(:login)
           assert user.errors.on(:password)
+          assert user.errors.on(:email)
 
           user.login = "my login"
           assert !user.valid?
           assert !user.errors.on(:login)
           assert user.errors.on(:password)
+          assert user.errors.on(:email)
 
           user.password = "my pass"
           assert !user.valid?
@@ -39,8 +44,17 @@ module ORMAdaptersTests
           assert !user.valid?
           assert !user.errors.on(:password)
           assert user.errors.on(:confirm_password)
+          assert user.errors.on(:email)
 
           user.confirm_password = "my pass"
+          assert !user.valid?
+          assert user.errors.on(:email)
+          
+          user.email = "some email"
+          assert !user.valid?
+          assert user.errors.on(:email)
+          
+          user.email = "a@a.com"
           assert user.valid?
         end
         
@@ -95,11 +109,11 @@ module ORMAdaptersTests
         def test_valid_password
           ben = users(:ben)
           assert ben.valid_password?("benrocks")
-          assert ben.valid_password?(ben.crypted_password)
+          assert !ben.valid_password?(ben.crypted_password)
 
           drew = employees(:drew)
           assert drew.valid_password?("drewrocks")
-          assert drew.valid_password?(drew.crypted_password)
+          assert !drew.valid_password?(drew.crypted_password)
         end
         
         def test_reset_password

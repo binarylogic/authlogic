@@ -8,6 +8,7 @@ lib/authlogic/crypto_providers/sha512.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/config.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/credentials.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/logged_in.rb
+lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/password_reset.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/persistence.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/session_maintenance.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/single_access.rb
@@ -21,6 +22,7 @@ lib/authlogic/session/config.rb
 lib/authlogic/session/cookies.rb
 lib/authlogic/session/errors.rb
 lib/authlogic/session/params.rb
+lib/authlogic/session/password_reset.rb
 lib/authlogic/session/scopes.rb
 lib/authlogic/session/session.rb
 lib/authlogic/version.rb
@@ -42,6 +44,7 @@ test/libs/ordered_hash.rb
 test/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/config_test.rb
 test/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/credentials_test.rb
 test/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/logged_in_test.rb
+test/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/password_reset_test.rb
 test/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/persistence_test.rb
 test/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/session_maintenance_test.rb
 test/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/single_access_test.rb
@@ -52,6 +55,7 @@ test/session_tests/base_test.rb
 test/session_tests/config_test.rb
 test/session_tests/cookies_test.rb
 test/session_tests/params_test.rb
+test/session_tests/password_reset_test.rb
 test/session_tests/scopes_test.rb
 test/session_tests/session_test.rb
 test/test_helper.rb

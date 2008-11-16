@@ -34,20 +34,27 @@ module Authlogic
         #   
         # * <tt>login_field_regex_failed_message</tt> - the message to use when the validates_format_of for the login field fails. This depends on if you are
         #   performing :email or :login regex.
+        #
+        # * <tt>email_field</tt> - default: :email, depending on if it is present, if :email is not present defaults to nil
+        #   The name of the field used to store the email address. Only specify this if you arent using this as your :login_field.
+        #   
+        # * <tt>email_field_regex</tt> - default: type email regex
+        #   This is used in validates_format_of for the :email_field.
+        #   
+        # * <tt>email_field_regex_failed_message</tt> - the message to use when the validates_format_of for the email field fails.
         #   
         # * <tt>change_single_access_token_with_password</tt> - default: false,
         #   When a user changes their password do you want the single access token to change as well? That's what this configuration option is all about.
         #
-        # * <tt>single_access_token_field</tt> - default: :single_access_token, :feed_token, or :feeds_token, depending on which column is present,
+        # * <tt>single_access_token_field</tt> - default: :single_access_token, :feed_token, or :feeds_token, depending on which column is present, if none are present defaults to nil
         #   This is the name of the field to login with single access, mainly used for private feed access. Only specify if the name of the field is different
         #   then the defaults. See the "Single Access" section in the README for more details on how single access works.
         #
         # * <tt>password_field</tt> - default: :password,
         #   This is the name of the field to set the password, *NOT* the field the encrypted password is stored. Defaults the what the configuration
         #   
-        # * <tt>crypted_password_field</tt> - default: depends on which columns are present,
-        #   The name of the database field where your encrypted password is stored. If the name of the field is different from any of the following
-        #   you need to specify it with this option: crypted_password, encrypted_password, password_hash, pw_hash
+        # * <tt>crypted_password_field</tt> - default: :crypted_password, :encrypted_password, :password_hash, :pw_hash, depends on which columns are present, if none are present defaults to nil
+        #   The name of the database field where your encrypted password is stored.
         #
         # * <tt>password_blank_message</tt> - default: "can not be blank",
         #   The error message used when the password is left blank.
@@ -57,6 +64,15 @@ module Authlogic
         #   
         # * <tt>password_salt_field</tt> - default: :password_salt, :pw_salt, or :salt, depending on which column is present, defaults to :password_salt if none are present,
         #   This is the name of the field in your database that stores your password salt.
+        #
+        # * <tt>password_reset_token_field</tt> - default: :password_reset_token, :pw_reset_token, :reset_password_token, or :reset_pw_token, depending on which column is present, if none are present defaults to nil
+        #   This is the name of the field in your database that stores your password reset token. The token you should use to verify your users before you allow a password reset. Authlogic takes care
+        #   of maintaining this for you and making sure it changes when needed.
+        #
+        # * <tt>password_reset_token_valid_for</tt> - default: 10.minutes,
+        #   Authlogic gives you a sepcial method for finding records by the password reset token (see Authlogic::ORMAdapters::ActiveRecordAdapter::ActcsAsAuthentic::PasswordReset). In this method
+        #   it checks for the age of the token. If the token is old than whatever you specify here, a user will NOT be returned. This way the tokens are perishable, thus making this system much
+        #   more secure.
         #   
         # * <tt>remember_token_field</tt> - default: :remember_token, :remember_key, :cookie_tokien, or :cookie_key, depending on which column is present, defaults to :remember_token if none are present,
         #   This is the name of the field your remember_token is stored. The remember token is a unique token that is stored in the users cookie and
@@ -93,14 +109,19 @@ module Authlogic
             options[:crypto_provider] ||= CryptoProviders::Sha512
             options[:login_field] ||= first_column_to_exist(:login, :username, :email)
             options[:login_field_type] ||= options[:login_field] == :email ? :email : :login
-          
+            options[:email_field] = first_column_to_exist(nil, :email) unless options.key?(:email_field)
+            options[:email_field] = nil if options[:email_field] == options[:login_field]
+            
+            email_name_regex  = '[\w\.%\+\-]+'
+            domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
+            domain_tld_regex  = '(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|jobs|museum)'
+            options[:email_field_regex] ||= /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
+            options[:email_field_regex_failed_message] ||= "should look like an email address."
+            
             case options[:login_field_type]
             when :email
-              email_name_regex  = '[\w\.%\+\-]+'
-              domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
-              domain_tld_regex  = '(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|jobs|museum)'
-              options[:login_field_regex] ||= /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
-              options[:login_field_regex_failed_message] ||= "should look like an email address."
+              options[:login_field_regex] ||= options[:email_field_regex]
+              options[:login_field_regex_failed_message] ||= options[:email_field_regex_failed_message]
             else
               options[:login_field_regex] ||= /\A\w[\w\.\-_@ ]+\z/
               options[:login_field_regex_failed_message] ||= "use only letters, numbers, spaces, and .-_@ please."
@@ -113,6 +134,9 @@ module Authlogic
             options[:password_salt_field] ||= first_column_to_exist(:password_salt, :pw_salt, :salt)
             options[:remember_token_field] ||= first_column_to_exist(:remember_token, :remember_key, :cookie_token, :cookiey_key)
             options[:single_access_token_field] ||= first_column_to_exist(nil, :single_access_token, :feed_token, :feeds_token)
+            options[:password_reset_token_field] ||= first_column_to_exist(nil, :password_reset_token, :pw_reset_token, :reset_password_token, :reset_pw_token)
+            options[:password_reset_token_valid_for] ||= 10.minutes
+            options[:password_reset_token_valid_for] = options[:password_reset_token_valid_for].to_i
             options[:logged_in_timeout] ||= 10.minutes
             options[:logged_in_timeout] = options[:logged_in_timeout].to_i
             options[:session_ids] ||= [nil]

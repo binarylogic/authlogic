@@ -57,7 +57,7 @@ module Authlogic
       module ClassMethods
         # The current scope set, should be used in the block passed to with_scope.
         def scope
-          scopes[Thread.current]
+          Thread.current[:authlogic_scope]
         end
         
         # See the documentation for this class for more information on how to use this method.
@@ -71,11 +71,7 @@ module Authlogic
         
         private
           def scope=(value)
-            scopes[Thread.current] = value
-          end
-          
-          def scopes
-            @scopes ||= {}
+            Thread.current[:authlogic_scope] = value
           end
       end
       
