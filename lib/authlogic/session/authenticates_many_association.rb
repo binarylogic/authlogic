@@ -27,6 +27,7 @@ module Authlogic
           end
         end_eval
       end
+      alias_method :build, :new
     
       private
         def scope_options

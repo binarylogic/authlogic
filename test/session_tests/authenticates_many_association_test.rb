@@ -16,5 +16,13 @@ module SessionTests
       assert_equal ben, session.unauthorized_record
       assert_equal({:find_options => {:conditions => ["1 = ?", 1]}, :id => :some_id}, session.scope)
     end
+    
+    def test_build
+      binary_logic = companies(:binary_logic)
+      ben = users(:ben)
+      session = binary_logic.user_sessions.build(ben)
+      assert_equal ben, session.unauthorized_record
+      assert_equal({:find_options => {:conditions => "\"users\".company_id = #{binary_logic.id}"}, :id => nil}, session.scope)
+    end
   end
 end

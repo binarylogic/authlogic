@@ -1,3 +1,7 @@
+== 1.2.1 released 2008-11-16
+
+* Added build method to authenticates_many association.
+
 == 1.2.0 released 2008-11-16
 
 * Added check for database set up in acts_as_authentic to prevent errors during migrations.

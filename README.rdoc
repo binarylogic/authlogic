@@ -197,7 +197,7 @@ You may have noticed in the helpful links section is a tutorial on resetting pas
 
 Just add the following field to your database:
 
-t.string :password_reset_token, :null => false
+  t.string :password_reset_token, :null => false
 
 Authlogic will notice this field and take care of maintaining it for you. You should use the value of this field to verify your user before they reset their password. There is a finder method you can use to find users with this token, I highly recommend using this method, as it adds in extra security checks to verify the user. See Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::PasswordReset for more information.
 
