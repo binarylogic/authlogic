@@ -21,13 +21,19 @@ module Authlogic
         #   
         # * <tt>crypto_provider</tt> - default: Authlogic::CryptoProviders::Sha512,
         #   This is the class that provides your encryption. By default Authlogic provides its own crypto provider that uses Sha512 encrypton.
-        #   
+        #
+        # * <tt>validate_fields</tt> - default: true,
+        #   Tells Authlogic if it should validate ANY of the fields: login_field, email_field, and password_field. If set to false, no validations will be set for any of these fields.
+        #
         # * <tt>login_field</tt> - default: :login, :username, or :email, depending on which column is present, if none are present defaults to :login
         #   The name of the field used for logging in. Only specify if you aren't using any of the defaults.
         #   
         # * <tt>login_field_type</tt> - default: options[:login_field] == :email ? :email : :login,
         #   Tells authlogic how to validation the field, what regex to use, etc. If the field name is email it will automatically use :email,
         #   otherwise it uses :login.
+        #
+        # * <tt>validate_login_field</tt> - default: true,
+        #   Tells authlogic if it should validate the :login_field. If set to false, no validations will be set for this field at all.
         #   
         # * <tt>login_field_regex</tt> - default: if :login_field_type is :email then typical email regex, otherwise typical login regex.
         #   This is used in validates_format_of for the :login_field.
@@ -38,6 +44,9 @@ module Authlogic
         # * <tt>email_field</tt> - default: :email, depending on if it is present, if :email is not present defaults to nil
         #   The name of the field used to store the email address. Only specify this if you arent using this as your :login_field.
         #   
+        # * <tt>validate_email_field</tt> - default: true,
+        #   Tells Authlogic if it should validate the email field. If set to false, no validations will be set for this field at all.
+        #
         # * <tt>email_field_regex</tt> - default: type email regex
         #   This is used in validates_format_of for the :email_field.
         #   
@@ -52,16 +61,19 @@ module Authlogic
         #
         # * <tt>password_field</tt> - default: :password,
         #   This is the name of the field to set the password, *NOT* the field the encrypted password is stored. Defaults the what the configuration
-        #   
-        # * <tt>crypted_password_field</tt> - default: :crypted_password, :encrypted_password, :password_hash, :pw_hash, depends on which columns are present, if none are present defaults to nil
-        #   The name of the database field where your encrypted password is stored.
+        #
+        # * <tt>validate_password_field</tt> - default: :password,
+        #   Tells authlogic if it should validate the :password_field. If set to false, no validations will be set for this field at all.
         #
         # * <tt>password_blank_message</tt> - default: "can not be blank",
         #   The error message used when the password is left blank.
         #
         # * <tt>confirm_password_did_not_match_message</tt> - default: "did not match",
         #   The error message used when the confirm password does not match the password
-        #   
+        #
+        # * <tt>crypted_password_field</tt> - default: :crypted_password, :encrypted_password, :password_hash, :pw_hash, depends on which columns are present, if none are present defaults to nil
+        #   The name of the database field where your encrypted password is stored.
+        #
         # * <tt>password_salt_field</tt> - default: :password_salt, :pw_salt, or :salt, depending on which column is present, defaults to :password_salt if none are present,
         #   This is the name of the field in your database that stores your password salt.
         #
@@ -107,10 +119,13 @@ module Authlogic
             
             options[:session_class] ||= "#{name}Session"
             options[:crypto_provider] ||= CryptoProviders::Sha512
+            options[:validate_fields] = true unless options.key?(:validate_fields)
             options[:login_field] ||= first_column_to_exist(:login, :username, :email)
             options[:login_field_type] ||= options[:login_field] == :email ? :email : :login
+            options[:validate_login_field] = true unless options.key?(:validate_login_field)
             options[:email_field] = first_column_to_exist(nil, :email) unless options.key?(:email_field)
             options[:email_field] = nil if options[:email_field] == options[:login_field]
+            options[:validate_email_field] = true unless options.key?(:validate_email_field)
             
             email_name_regex  = '[\w\.%\+\-]+'
             domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
@@ -128,6 +143,8 @@ module Authlogic
             end
           
             options[:password_field] ||= :password
+            options[:validate_password_field] = true unless options.key?(:validate_password_field)
+            
             options[:password_blank_message] ||= "can not be blank"
             options[:confirm_password_did_not_match_message] ||= "did not match"
             options[:crypted_password_field] ||= first_column_to_exist(:crypted_password, :encrypted_password, :password_hash, :pw_hash)

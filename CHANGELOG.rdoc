@@ -1,6 +1,7 @@
 == 1.2.1 released 2008-11-16
 
 * Added build method to authenticates_many association.
+* Added validation boolean configuration options for acts_as_authentic: validate_field, validate_login_field, validate_password_field, validate_email_field
 
 == 1.2.0 released 2008-11-16
 

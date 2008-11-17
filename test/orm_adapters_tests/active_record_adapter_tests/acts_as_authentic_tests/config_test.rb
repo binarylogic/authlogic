@@ -31,7 +31,11 @@ module ORMAdaptersTests
             :login_field => :login,
             :email_field => :email,
             :email_field_regex => /\A[\w\.%\+\-]+@(?:[A-Z0-9\-]+\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|jobs|museum)\z/i,
-            :email_field_regex_failed_message=>"should look like an email address."
+            :email_field_regex_failed_message=>"should look like an email address.",
+            :validate_fields => true,
+            :validate_login_field => true,
+            :validate_email_field => true,
+            :validate_password_field => true
           }
           assert_equal default_config, User.acts_as_authentic_config
         end

@@ -19,25 +19,29 @@ module Authlogic
         module Credentials
           def acts_as_authentic_with_credentials(options = {})
             acts_as_authentic_without_credentials(options)
-          
-            # Validations
-            case options[:login_field_type]
-            when :email
-              validates_length_of options[:login_field], :within => 6..100
-              validates_format_of options[:login_field], :with => options[:login_field_regex], :message => options[:login_field_regex_failed_message]
-            else
-              validates_length_of options[:login_field], :within => 2..100, :allow_blank => true
-              validates_format_of options[:login_field], :with => options[:login_field_regex], :message => options[:login_field_regex_failed_message]
-            end
             
-            if options[:email_field]
-              validates_length_of options[:email_field], :within => 6..100
-              validates_format_of options[:email_field], :with => options[:email_field_regex], :message => options[:email_field_regex_failed_message]
-              validates_uniqueness_of options[:email_field], :scope => options[:scope]
-            end
+            if options[:validate_fields]
+              if options[:validate_login_field]
+                case options[:login_field_type]
+                when :email
+                  validates_length_of options[:login_field], :within => 6..100
+                  validates_format_of options[:login_field], :with => options[:login_field_regex], :message => options[:login_field_regex_failed_message]
+                else
+                  validates_length_of options[:login_field], :within => 2..100, :allow_blank => true
+                  validates_format_of options[:login_field], :with => options[:login_field_regex], :message => options[:login_field_regex_failed_message]
+                end
+              
+                validates_uniqueness_of options[:login_field], :scope => options[:scope]
+              end
+            
+              if options[:validate_email_field] && options[:email_field]
+                validates_length_of options[:email_field], :within => 6..100
+                validates_format_of options[:email_field], :with => options[:email_field_regex], :message => options[:email_field_regex_failed_message]
+                validates_uniqueness_of options[:email_field], :scope => options[:scope]
+              end
           
-            validates_uniqueness_of options[:login_field], :scope => options[:scope]
-            validate :validate_password
+              validate :validate_password if options[:validate_password_field]
+            end
           
             attr_writer "confirm_#{options[:password_field]}"
             attr_accessor "tried_to_set_#{options[:password_field]}"
