@@ -12,7 +12,7 @@ module Authlogic
       # Tries to validate the session from information in the cookie
       def valid_cookie?
         if cookie_credentials
-          self.unauthorized_record = search_for_record("find_by_#{remember_token_field}", cookie_credentials)
+          self.unauthorized_record = search_for_record("find_by_#{persistence_token_field}", cookie_credentials)
           return valid?
         end
         
@@ -26,7 +26,7 @@ module Authlogic
         
         def save_cookie
           controller.cookies[cookie_key] = {
-            :value => record.send(remember_token_field),
+            :value => record.send(persistence_token_field),
             :expires => remember_me_until
           }
         end

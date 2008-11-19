@@ -30,7 +30,7 @@ module Authlogic
             
               protected
                 def update_sessions?
-                  !@skip_session_maintenance && #{options[:session_class]}.activated? && !#{options[:session_ids].inspect}.blank? && #{options[:remember_token_field]}_changed?
+                  !@skip_session_maintenance && #{options[:session_class]}.activated? && !#{options[:session_ids].inspect}.blank? && #{options[:persistence_token_field]}_changed?
                 end
             
                 def get_session_information

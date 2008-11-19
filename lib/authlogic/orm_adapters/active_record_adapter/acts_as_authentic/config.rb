@@ -77,17 +77,18 @@ module Authlogic
         # * <tt>password_salt_field</tt> - default: :password_salt, :pw_salt, or :salt, depending on which column is present, defaults to :password_salt if none are present,
         #   This is the name of the field in your database that stores your password salt.
         #
-        # * <tt>password_reset_token_field</tt> - default: :password_reset_token, :pw_reset_token, :reset_password_token, or :reset_pw_token, depending on which column is present, if none are present defaults to nil
-        #   This is the name of the field in your database that stores your password reset token. The token you should use to verify your users before you allow a password reset. Authlogic takes care
-        #   of maintaining this for you and making sure it changes when needed.
+        # * <tt>perishable_token_field</tt> - default: :perishable_token, :password_reset_token, :pw_reset_token, :reset_password_token, or :reset_pw_token, depending on which column is present, if none are present defaults to nil
+        #   This is the name of the field in your database that stores your perishable token. The token you should use to confirm your users or allow a password reset. Authlogic takes care
+        #   of maintaining this for you and making sure it changes when needed. Use this token for whatever you want, but keep in mind it is temporary, hence the term "perishable".
         #
-        # * <tt>password_reset_token_valid_for</tt> - default: 10.minutes,
-        #   Authlogic gives you a sepcial method for finding records by the password reset token (see Authlogic::ORMAdapters::ActiveRecordAdapter::ActcsAsAuthentic::PasswordReset). In this method
-        #   it checks for the age of the token. If the token is old than whatever you specify here, a user will NOT be returned. This way the tokens are perishable, thus making this system much
+        # * <tt>perishable_token_valid_for</tt> - default: 10.minutes,
+        #   Authlogic gives you a sepcial method for finding records by the perishable token (see Authlogic::ORMAdapters::ActiveRecordAdapter::ActcsAsAuthentic::Perishability). In this method
+        #   it checks for the age of the token. If the token is older than whatever you specify here, a record will NOT be returned. This way the tokens are perishable, thus making this system much
         #   more secure.
         #   
-        # * <tt>remember_token_field</tt> - default: :remember_token, :remember_key, :cookie_tokien, or :cookie_key, depending on which column is present, defaults to :remember_token if none are present,
-        #   This is the name of the field your remember_token is stored. The remember token is a unique token that is stored in the users cookie and
+        # * <tt>persistence_field</tt> - default: :persistence_token, :remember_token, or :cookie_tokien, depending on which column is present,
+        #   defaults to :persistence_token if none are present,
+        #   This is the name of the field your persistence token is stored. The persistence token is a unique token that is stored in the users cookie and
         #   session. This way you have complete control of when sessions expire and you don't have to change passwords to expire sessions. This also
         #   ensures that stale sessions can not be persisted. By stale, I mean sessions that are logged in using an outdated password.
         #   
@@ -149,11 +150,11 @@ module Authlogic
             options[:confirm_password_did_not_match_message] ||= "did not match"
             options[:crypted_password_field] ||= first_column_to_exist(:crypted_password, :encrypted_password, :password_hash, :pw_hash)
             options[:password_salt_field] ||= first_column_to_exist(:password_salt, :pw_salt, :salt)
-            options[:remember_token_field] ||= first_column_to_exist(:remember_token, :remember_key, :cookie_token, :cookiey_key)
+            options[:persistence_token_field] ||= options[:remember_token_field] || first_column_to_exist(:persistence_token, :remember_token, :cookie_token)
             options[:single_access_token_field] ||= first_column_to_exist(nil, :single_access_token, :feed_token, :feeds_token)
-            options[:password_reset_token_field] ||= first_column_to_exist(nil, :password_reset_token, :pw_reset_token, :reset_password_token, :reset_pw_token)
-            options[:password_reset_token_valid_for] ||= 10.minutes
-            options[:password_reset_token_valid_for] = options[:password_reset_token_valid_for].to_i
+            options[:perishable_token_field] ||= options[:password_reset_token_field] || first_column_to_exist(nil, :perishable_token, :password_reset_token, :pw_reset_token, :reset_password_token, :reset_pw_token, :activation_token)
+            options[:perishable_token_valid_for] ||= 10.minutes
+            options[:perishable_token_valid_for] = options[:perishable_token_valid_for].to_i
             options[:logged_in_timeout] ||= 10.minutes
             options[:logged_in_timeout] = options[:logged_in_timeout].to_i
             options[:session_ids] ||= [nil]

@@ -1,7 +1,9 @@
-== 1.2.1 released 2008-11-16
+== 1.2.1 released 2008-11-19
 
-* Added build method to authenticates_many association.
-* Added validation boolean configuration options for acts_as_authentic: validate_field, validate_login_field, validate_password_field, validate_email_field
+* Added build method to authenticates_many association to act like AR association collections.
+* Added validation boolean configuration options for acts_as_authentic: validate_field, validate_login_field, validate_password_field, validate_email_field. This turns on and off validations for their respective fields.
+* Renamed all password_reset_token terms to perishable_token, including configuration, etc. I still allow for the old configurations so this will not break compatibility, but perishable token is a better name and can be used for account confirmation as well as a password reset token, or anything else you want.
+* Renamed all remember_token instances to persistence_token, the term "remember token" doesn't really make sense. I still allow for the old configuration, so this will not break backwards compatibility: persistence_token fits better and makes more sense.
 
 == 1.2.0 released 2008-11-16
 

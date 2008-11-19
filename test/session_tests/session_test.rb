@@ -12,7 +12,7 @@ module SessionTests
       assert session.valid_session?
       assert session.find_record
       assert_equal ben, session.record
-      assert_equal ben.remember_token, @controller.session["user_credentials"]
+      assert_equal ben.persistence_token, @controller.session["user_credentials"]
       assert_equal ben, session.unauthorized_record
       assert !session.new_session?
     end
@@ -22,13 +22,13 @@ module SessionTests
       session = UserSession.new(ben)
       assert @controller.session["user_credentials"].blank?
       assert session.save
-      assert_equal ben.remember_token, @controller.session["user_credentials"]
+      assert_equal ben.persistence_token, @controller.session["user_credentials"]
     end
     
     def test_destroy
       ben = users(:ben)
       set_session_for(ben)
-      assert_equal ben.remember_token, @controller.session["user_credentials"]
+      assert_equal ben.persistence_token, @controller.session["user_credentials"]
       session = UserSession.find
       assert session.destroy
       assert @controller.session["user_credentials"].blank?
@@ -39,7 +39,7 @@ module SessionTests
       set_cookie_for(ben)
       assert @controller.session["user_credentials"].blank?
       assert UserSession.find
-      assert_equal ben.remember_token, @controller.session["user_credentials"]
+      assert_equal ben.persistence_token, @controller.session["user_credentials"]
     end
   end
 end

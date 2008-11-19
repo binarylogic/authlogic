@@ -4,8 +4,8 @@ module Authlogic
       module ActsAsAuthentic
         # = Single Access
         #
-        # Instead of repeating myself here, checkout the README. There is a "Single Access" section in there that goes over this. Keep in mind none of this will be applied if there
-        # is not a single_access_token field supplied in the database.
+        # Instead of repeating myself here, checkout the README. There is a "Tokens" section in there that goes over the single access token.
+        # Keep in mind none of this will be applied if there is not a single_access_token field supplied in the database.
         #
         # === Instance Methods
         #

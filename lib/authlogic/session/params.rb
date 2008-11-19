@@ -7,8 +7,8 @@ module Authlogic
     #
     #   https://www.domain.com?user_credentials=[insert single access token here]
     #
-    # Wait, what is a single access token? It is all explained in the README. Checkout the "Single Access" section in the README. For security reasons, this type of authentication
-    # is ONLY available via single access tokens, you can NOT pass your remember token.
+    # Wait, what is a single access token? It is all explained in the README. Checkout the "Tokens" section in the README, there is section about
+    # single access tokens. For security reasons, this type of authentication is ONLY available via single access tokens, you can NOT pass your persistence token.
     module Params
       # Tries to validate the session from information in the params token
       def valid_params?

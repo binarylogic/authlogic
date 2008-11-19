@@ -38,9 +38,9 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string    :login
     t.string    :crypted_password
     t.string    :password_salt
-    t.string    :remember_token
+    t.string    :persistence_token
     t.string    :single_access_token
-    t.string    :password_reset_token
+    t.string    :perishable_token
     t.string    :email
     t.string    :first_name
     t.string    :last_name
@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string    :email
     t.string    :crypted_password
     t.string    :password_salt
-    t.string    :remember_token
+    t.string    :persistence_token
     t.string    :first_name
     t.string    :last_name
     t.integer   :login_count
@@ -132,7 +132,7 @@ class Test::Unit::TestCase
     end
     
     def set_cookie_for(user, id = nil)
-      @controller.cookies["user_credentials"] = {:value => user.remember_token, :expires => nil}
+      @controller.cookies["user_credentials"] = {:value => user.persistence_token, :expires => nil}
     end
     
     def unset_cookie
@@ -156,7 +156,7 @@ class Test::Unit::TestCase
     end
     
     def set_session_for(user, id = nil)
-      @controller.session["user_credentials"] = user.remember_token
+      @controller.session["user_credentials"] = user.persistence_token
     end
     
     def unset_session

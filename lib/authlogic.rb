@@ -13,7 +13,7 @@ if defined?(ActiveRecord)
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic"
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/credentials"
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/logged_in"
-  require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/password_reset"
+  require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/perishability"
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/persistence"
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/session_maintenance"
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/single_access"
@@ -28,7 +28,7 @@ require File.dirname(__FILE__) + "/authlogic/session/config"
 require File.dirname(__FILE__) + "/authlogic/session/cookies"
 require File.dirname(__FILE__) + "/authlogic/session/errors"
 require File.dirname(__FILE__) + "/authlogic/session/params"
-require File.dirname(__FILE__) + "/authlogic/session/password_reset"
+require File.dirname(__FILE__) + "/authlogic/session/perishability"
 require File.dirname(__FILE__) + "/authlogic/session/session"
 require File.dirname(__FILE__) + "/authlogic/session/scopes"
 require File.dirname(__FILE__) + "/authlogic/session/base"
@@ -40,7 +40,7 @@ module Authlogic
       include Callbacks
       include Cookies
       include Params
-      include PasswordReset
+      include Perishability
       include Session
       include Scopes
     end

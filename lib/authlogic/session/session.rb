@@ -13,7 +13,7 @@ module Authlogic
       # Tries to validate the session from information in the session
       def valid_session?
         if session_credentials
-          self.unauthorized_record = search_for_record("find_by_#{remember_token_field}", session_credentials)
+          self.unauthorized_record = search_for_record("find_by_#{persistence_token_field}", session_credentials)
           return valid?
         end
         
@@ -26,7 +26,7 @@ module Authlogic
         end
         
         def update_session!
-          controller.session[session_key] = record && record.send(remember_token_field)
+          controller.session[session_key] = record && record.send(persistence_token_field)
         end
     end
   end

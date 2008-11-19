@@ -55,10 +55,10 @@ module SessionTests
       
       assert UserSession.find
       last_request_at = ben.reload.last_request_at
-      sleep(1)
+      sleep(1.1)
       assert UserSession.find
       assert_equal last_request_at, ben.reload.last_request_at
-      sleep(1)
+      sleep(1.1)
       assert UserSession.find
       assert_not_equal last_request_at, ben.reload.last_request_at
       
@@ -157,10 +157,10 @@ module SessionTests
     
     def test_inspect
       session = UserSession.new
-      assert_equal "#<UserSession {:login=>nil, :password=>\"<protected>\"}>", session.inspect
+      assert_equal "#<UserSession #{{:login=>nil, :password=>"<protected>"}.inspect}>", session.inspect
       session.login = "login"
       session.password = "pass"
-      assert "#<UserSession {:login=>\"login\", :password=>\"<protected>\"}>" == session.inspect || "#<UserSession {:password=>\"<protected>\", :login=>\"login\"}>" == session.inspect
+      assert "#<UserSession #{{:login=>"login", :password=>"<protected>"}.inspect}>" == session.inspect
     end
     
     def test_new_session

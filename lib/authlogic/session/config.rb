@@ -389,8 +389,8 @@ module Authlogic
           self.class.password_invalid_message
         end
         
-        def password_reset_token_field
-          klass.acts_as_authentic_config[:password_reset_token_field]
+        def perishable_token_field
+          klass.acts_as_authentic_config[:perishable_token_field]
         end
         
         def remember_me_for
@@ -398,8 +398,8 @@ module Authlogic
           self.class.remember_me_for
         end
         
-        def remember_token_field
-          klass.acts_as_authentic_config[:remember_token_field]
+        def persistence_token_field
+          klass.acts_as_authentic_config[:persistence_token_field]
         end
         
         def session_key

@@ -32,6 +32,7 @@ What if your user sessions controller could look just like your other controller
     
     def destroy
       current_user_session.destroy
+      redirect_to new_user_session_url
     end
   end
 
@@ -109,9 +110,9 @@ The user model needs to have the following columns. The names of these columns c
     t.string    :login,                 :null => false
     t.string    :crypted_password,      :null => false
     t.string    :password_salt,         :null => false # not needed if you are encrypting your pw instead of using a hash algorithm.
-    t.string    :remember_token,        :null => false
-    t.string    :single_access_token,   :null => false # optional, see the single access section below.
-    t.string    :password_reset_token,  :null => false # optional, see the password reset section below.
+    t.string    :persistence_token,     :null => false
+    t.string    :single_access_token,   :null => false # optional, see the tokens section below.
+    t.string    :perishable_token,      :null => false # optional, see the tokens section below.
     t.integer   :login_count                           # optional, this is a "magic" column, see the magic columns section below
 
 === Set up your model
@@ -191,39 +192,67 @@ This will keep everything separate. The :secure session will store its info in a
 
 For more information on ids checkout Authlogic::Session::Base#id
 
-== Resetting passwords
+== Tokens (persistence, resetting passwords, private feed access, etc.)
 
-You may have noticed in the helpful links section is a tutorial on resetting password with Authlogic. I'm not going to repeat myself here, but I will touch on the basics, if you want more information please see the tutorial.
+To start, let me define tokens as Authlogic sees it. A token is a form of credentials that grants some type of access to their account. Depending on the type of access, a different type of token may be needed. Put simply, it's a way for the user to say "I am this person, let me proceed". What types of different access you ask? Here are just a few:
 
-Just add the following field to your database:
+1. Regular account access
+2. Access to reset their password
+3. Access to a private feed
+4. Access to confirm their account
 
-  t.string :password_reset_token, :null => false
+There could be many more depending on your application. What's great about Authlogic is that it doesn't care what you do or how you want to grant access to accounts. That's up to you and your application. Authlogic just cares about the type of tokens you need. Instead of giving you a token for each specific task, it gives you all of the necessary *types* of tokens, and you get to use them how you wish. It maintains the tokens and gives you all of the tools you need to use them. Just add the fields to your database and you are good to go.
 
-Authlogic will notice this field and take care of maintaining it for you. You should use the value of this field to verify your user before they reset their password. There is a finder method you can use to find users with this token, I highly recommend using this method, as it adds in extra security checks to verify the user. See Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::PasswordReset for more information.
+Here are the 3 tokens in more detail:
 
-== Single Access / Private Feeds Access
+=== Persistence token
 
-Need to provide a single / one time access to an account where the session does NOT get persisted? Take a private feed for example, if everyone followed standards, basic http auth should work just fine, but since we live in a world where following standards is not a standard (\*cough\* Microsoft \*cough\*), the feed url needs to have some sort of "credentials" to log the user in and get their user specific feed items. This is easy, Authlogic has a nifty little feature for doing just this. All that you need to do is add the following field in your table:
+This token is used to persist the user's session. This is the token that is stored in the session and the cookie, so that during each request the user stays logged in. What's unique about this token is that the first time it is used the value is stored in the session, thus persisting the session. This field is required and must be in your database.
+
+=== Single access token
+
+This token is used for single access only, it is not persisted. Meaning the user provides it, Authlogic grants them access, and that's it. If they want access again they need to provide the token again. Authlogic will *NEVER* store this value in the session or a cookie. Also, for added security, by default this token is *ONLY* allowed for RSS and ATOM requests. Lastly, this token does *NOT* change with the password. Meaning if the user changes their password, this token will remain the same. You can change all of this with configuration (see Authlogic::Session::config), so if you don't like how this works by default, just set some simple configuration in your session.
+
+This field is optional, if you want to use it just add the field to your database:
 
   t.string :single_access_token, :null => false
   # or call it feeds_token, feed_token, or whatever you want with configuration
 
-Authlogic will notice you have this and adjust accordingly. By default single_access_tokens can only be used to login for rss and atom request types.
+This is great for private feed access. So your URL to that user's private feed could look something like:
 
-To tailor how this works, you have the following configuration options:
+  http://www.mydomain.com/account/feed.rss?single_access_token=4LiXF7FiGUppIPubBPey
 
-Session configuration (Authlogic::Session::Config)
+The single_access_token parameter name is configurable (see Authlogic::Session::Config), but if that parameter exists Authlogic will automatically use it to try and grant that user access. You don't have to do a thing: UserSession.find will take care of it just like it does for everything else.
 
-1. params_key
-2. single_access_allowed_request_types
-3. single_access_token_field
+For more information see: Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::SingleAccess
 
-Model configuration (Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::Config)
+=== Perishable token
 
-1. single_access_token_field:
-2. change_single_access_token_with_password
+This token is used for temporary account access, hence the term "perishable". This token is constantly changing, it changes...
 
-Please use this with care and make sure you warn your users that the URL you provide them is to remain private. Even if Billy 13 year old gets this URL and tries to log in, the only way he can login is through a GET or POST parameter with an rss or atom request. Billy can't create a cookie with this token and Billy wont have access to anything else on the site, unless you change the above configuration.
+1. In a before_validation in your model, so basically every time the record is saved
+2. Any time a new session is successfully saved (aka logged in)
+
+This is perfect for <b>resetting passwords</b> or <b>confirming accounts</b>. You email them a url with this token in it, and then use this token to find the record and perform your action.
+
+This field is optional, if you want to use it just add the field to your database:
+
+  t.string :perishable_token, :null => false
+  # or call it password_reset_token, pw_reset_token, activation_token, or whatever you want with configuration
+
+Finding the record with this token couldn't be easier, Authlogic provides a special finder method that you can use. I highly recommend using it as it adds extra security:
+
+  User.find_using_perishable_token(token)
+  User.find_using_perishable_token(token, 20.minutes)
+
+That's all you need to do to locate the record. Here is what it does for extra security:
+
+1. Ignores blank tokens all together. If a blank token is passed nil will be returned.
+2. It checks the age of the token, by default the threshold is 10 minutes, meaning if the token is older than 10 minutes, it is not valid and no record will be returned. You can change the default or just override it by passing the threshold as the second parameter. If you don't want a threshold at all, pass 0.
+
+For a detailed tutorial on how to reset password using this token see the helpful links section above.
+
+For more information see: Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::Perishability
 
 == Scoping
 

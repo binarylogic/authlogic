@@ -94,14 +94,14 @@ module ORMAdaptersTests
           user.password = "sillywilly"
           assert user.crypted_password
           assert user.password_salt
-          assert user.remember_token
+          assert user.persistence_token
           assert_equal true, user.tried_to_set_password
           assert_nil user.password
 
           employee = Employee.new
           employee.password = "awesome"
           assert employee.crypted_password
-          assert employee.remember_token
+          assert employee.persistence_token
           assert_equal true, employee.tried_to_set_password
           assert_nil employee.password
         end
@@ -123,18 +123,18 @@ module ORMAdaptersTests
           
           old_password = ben.crypted_password
           old_salt = ben.password_salt
-          old_remember_token = ben.remember_token
+          old_persistence_token = ben.persistence_token
           ben.reset_password
           assert_not_equal old_password, ben.crypted_password
           assert_not_equal old_salt, ben.password_salt
-          assert_not_equal old_remember_token, ben.remember_token
+          assert_not_equal old_persistence_token, ben.persistence_token
           assert UserSession.find
           
           ben.reset_password!
           ben.reload
           assert_not_equal old_password, ben.crypted_password
           assert_not_equal old_salt, ben.password_salt
-          assert_not_equal old_remember_token, ben.remember_token
+          assert_not_equal old_persistence_token, ben.persistence_token
           assert !UserSession.find
         end
       end
