@@ -71,8 +71,8 @@ Authlogic makes this a reality. This is just the tip of the ice berg. Keep readi
 == Helpful links
 
 *	<b>Documentation:</b> http://authlogic.rubyforge.org
-*	<b>Authlogic setup tutorial:</b> http://www.binarylogic.com/2008/11/3/tutorial-authlogic-basic-setup
-*	<b>Authlogic reset passwords tutorial:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
+*	<b>Tutorial: Authlogic basic setup:</b> http://www.binarylogic.com/2008/11/3/tutorial-authlogic-basic-setup
+*	<b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
 *	<b>Live example of the setup tutorial above (with source):</b> http://authlogic_example.binarylogic.com
 * <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
 
@@ -211,7 +211,7 @@ This token is used to persist the user's session. This is the token that is stor
 
 === Single access token
 
-This token is used for single access only, it is not persisted. Meaning the user provides it, Authlogic grants them access, and that's it. If they want access again they need to provide the token again. Authlogic will *NEVER* store this value in the session or a cookie. Also, for added security, by default this token is *ONLY* allowed for RSS and ATOM requests. Lastly, this token does *NOT* change with the password. Meaning if the user changes their password, this token will remain the same. You can change all of this with configuration (see Authlogic::Session::config), so if you don't like how this works by default, just set some simple configuration in your session.
+This token is used for single access only, it is not persisted. Meaning the user provides it, Authlogic grants them access, and that's it. If they want access again they need to provide the token again. Authlogic will *NEVER* store this value in the session or a cookie. For added security, by default this token is *ONLY* allowed for RSS and ATOM requests. Also, this token does *NOT* change with the password. Meaning if the user changes their password, this token will remain the same. Lastly, this token uses a "friendly" toke (see the URL example below) so that it is easier to email / copy and paste. You can change all of this with configuration (see Authlogic::Session::config), so if you don't like how this works by default, just set some simple configuration in your session.
 
 This field is optional, if you want to use it just add the field to your database:
 
@@ -249,6 +249,8 @@ That's all you need to do to locate the record. Here is what it does for extra s
 
 1. Ignores blank tokens all together. If a blank token is passed nil will be returned.
 2. It checks the age of the token, by default the threshold is 10 minutes, meaning if the token is older than 10 minutes, it is not valid and no record will be returned. You can change the default or just override it by passing the threshold as the second parameter. If you don't want a threshold at all, pass 0.
+
+Just like the single access token this uses a friendly token, so it is easier to email / copy and paste.
 
 For a detailed tutorial on how to reset password using this token see the helpful links section above.
 
