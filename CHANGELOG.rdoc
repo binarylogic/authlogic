@@ -4,6 +4,8 @@
 * In the session Authlogic now also stores the record id. We use this id to find the record and then check the token against the record, thus allowing for quicker database lookups, while getting the same security.
 * Skip validation for reset_perishable_token!
 * Added checks for uniqueness validations to only perform if the values have changed, this cuts down on DB queries
+* Abstract controller adapter now uses ruby's simple delegator class
+* Allow to save with a block: user_session.save { |result| }, result will either be false or self, this is useful when implementing OpenID and other methods
 
 == 1.2.1 released 2008-11-19
 

@@ -26,9 +26,9 @@ module Authlogic
         #
         #   session = UserSession.new
         #   session.create
-        def create(*args)
+        def create(*args, &block)
           session = new(*args)
-          session.save
+          session.save(&block)
         end
         
         # Same as create but calls create!, which raises an exception when authentication fails
@@ -150,9 +150,9 @@ module Authlogic
       def credentials=(values)
         return if values.blank? || !values.is_a?(Hash)
         values.symbolize_keys!
-        [login_field.to_sym, password_field.to_sym, :remember_me].each do |field|
-          next if values[field].blank?
-          send("#{field}=", values[field])
+        values.each do |field, value|
+          next if value.blank?
+          send("#{field}=", value)
         end
       end
       
@@ -272,7 +272,8 @@ module Authlogic
       # 2. sets session
       # 3. sets cookie
       # 4. updates magic fields
-      def save
+      def save(&block)
+        result = nil
         if valid?
           record.login_count = (record.login_count.blank? ? 1 : record.login_count + 1) if record.respond_to?(:login_count)
           
@@ -289,8 +290,13 @@ module Authlogic
           record.save_without_session_maintenance(false)
           
           self.new_session = false
-          self
+          result = self
+        else
+          result = false
         end
+        
+        yield result if block_given?
+        result
       end
       
       # Same as save but raises an exception when authentication fails
@@ -411,6 +417,8 @@ module Authlogic
               errors.add(password_field, password_invalid_message)
               return false
             end
+            
+            self.record = unchecked_record
           when :unauthorized_record
             unchecked_record = unauthorized_record
             
@@ -423,9 +431,10 @@ module Authlogic
               errors.add_to_base("You can not login with a new record.")
               return false
             end
+            
+            self.record = unchecked_record
           end
           
-          self.record = unchecked_record
           true
         end
         

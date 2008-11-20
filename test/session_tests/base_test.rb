@@ -55,10 +55,10 @@ module SessionTests
       
       assert UserSession.find
       last_request_at = ben.reload.last_request_at
-      sleep(1.5)
+      sleep(0.5)
       assert UserSession.find
       assert_equal last_request_at, ben.reload.last_request_at
-      sleep(1)
+      sleep(2)
       assert UserSession.find
       assert_not_equal last_request_at, ben.reload.last_request_at
       
@@ -212,7 +212,7 @@ module SessionTests
       assert session.new_session?
     end
     
-    def test_save_with_record
+    def test_save_with_credentials
       ben = users(:ben)
       session = UserSession.new(:login => ben.login, :password => "benrocks")
       assert session.save
@@ -220,14 +220,25 @@ module SessionTests
       assert_equal 1, session.record.login_count
       assert Time.now >= session.record.current_login_at
       assert_equal "1.1.1.1", session.record.current_login_ip
-      unset_cookie
-      unset_session
     end
     
-    def test_save_with_credentials
+    def test_save_with_record
       ben = users(:ben)
       session = UserSession.new(ben)
       assert session.save
+      assert !session.new_session?
+      assert_equal 1, session.record.login_count
+      assert Time.now >= session.record.current_login_at
+      assert_equal "1.1.1.1", session.record.current_login_ip
+    end
+    
+    def test_save_with_block
+      ben = users(:ben)
+      session = UserSession.new(:login => ben.login, :password => "benrocks")
+      block_result = session.save do |result|
+        assert result
+      end
+      assert_equal session, block_result
       assert !session.new_session?
       assert_equal 1, session.record.login_count
       assert Time.now >= session.record.current_login_at

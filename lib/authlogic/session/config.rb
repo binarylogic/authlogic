@@ -45,6 +45,19 @@ module Authlogic
           yield self
         end
         
+        # This works just like ActiveRecord's attr_accessible, except by default this ONLY allows the login, password, and remember me option.
+        #
+        # * <tt>Default:</tt> {:login_field}, {:password_field}, :remember_me, set to nil to disable
+        # * <tt>Accepts:</tt> String
+        def attr_accessible(*values)
+          if values.blank?
+            read_inheritable_attribute(:attr_accessible) || attr_accessible(login_field, password_field, :remember_me)
+          else
+            write_inheritable_attribute(:attr_accessible, value)
+          end
+        end
+        alias_method :attr_accessible=, :attr_accessible
+        
         # The name of the cookie or the key in the cookies hash. Be sure and use a unique name. If you have multiple sessions and they use the same cookie it will cause problems.
         # Also, if a id is set it will be inserted into the beginning of the string. Exmaple:
         #

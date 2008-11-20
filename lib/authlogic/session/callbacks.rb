@@ -49,14 +49,14 @@ module Authlogic
       #   after_save
       #   before_update # only if new_session? == false
       #   before_create # only if new_session? == true
-      def save_with_callbacks
+      def save_with_callbacks(&block)
         run_callbacks(:before_save)
         if new_session?
           run_callbacks(:before_create)
         else
           run_callbacks(:before_update)
         end
-        result = save_without_callbacks
+        result = save_without_callbacks(&block)
         if result
           run_callbacks(:after_save)
           

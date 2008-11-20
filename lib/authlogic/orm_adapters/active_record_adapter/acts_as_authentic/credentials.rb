@@ -27,7 +27,7 @@ module Authlogic
                   validates_length_of options[:login_field], :within => 6..100, :allow_blank => options[:allow_blank_login_and_password_fields]
                   validates_format_of options[:login_field], :with => options[:login_field_regex], :message => options[:login_field_regex_failed_message], :allow_blank => options[:allow_blank_login_and_password_fields]
                 else
-                  validates_length_of options[:login_field], :within => 2..100, :allow_blank => options[:allow_blank_login_and_password_field]
+                  validates_length_of options[:login_field], :within => 2..100, :allow_blank => options[:allow_blank_login_and_password_fields]
                   validates_format_of options[:login_field], :with => options[:login_field_regex], :message => options[:login_field_regex_failed_message], :allow_blank => options[:allow_blank_login_and_password_fields]
                 end
                 
