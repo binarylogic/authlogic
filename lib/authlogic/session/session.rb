@@ -12,8 +12,19 @@ module Authlogic
       
       # Tries to validate the session from information in the session
       def valid_session?
-        if session_credentials
-          self.unauthorized_record = search_for_record("find_by_#{persistence_token_field}", session_credentials)
+        if !(credentials = session_credentials).blank?
+          persistence_token, record_id = credentials
+          if record_id
+            record = search_for_record("find_by_id", record_id)
+            self.unauthorized_record = record if record && record.send(persistence_token_field) == persistence_token
+          else
+            # For backwards compatibility, will eventually be removed, just need to let the sessions update theirself
+            record = search_for_record("find_by_#{persistence_token_field}", persistence_token)
+            if record
+              controller.session["#{session_key}_id"] = record.send(record.class.primary_key)
+              self.unauthorized_record = record
+            end
+          end
           return valid?
         end
         
@@ -22,11 +33,12 @@ module Authlogic
       
       private
         def session_credentials
-          controller.session[session_key]
+          [controller.session[session_key], controller.session["#{session_key}_id"]].compact
         end
         
         def update_session!
           controller.session[session_key] = record && record.send(persistence_token_field)
+          controller.session["#{session_key}_id"] = record && record.send(record.class.primary_key)
         end
     end
   end

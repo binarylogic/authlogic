@@ -24,28 +24,28 @@ module Authlogic
               if options[:validate_login_field]
                 case options[:login_field_type]
                 when :email
-                  validates_length_of options[:login_field], :within => 6..100
-                  validates_format_of options[:login_field], :with => options[:login_field_regex], :message => options[:login_field_regex_failed_message]
+                  validates_length_of options[:login_field], :within => 6..100, :allow_blank => options[:allow_blank_login_and_password_fields]
+                  validates_format_of options[:login_field], :with => options[:login_field_regex], :message => options[:login_field_regex_failed_message], :allow_blank => options[:allow_blank_login_and_password_fields]
                 else
-                  validates_length_of options[:login_field], :within => 2..100, :allow_blank => true
-                  validates_format_of options[:login_field], :with => options[:login_field_regex], :message => options[:login_field_regex_failed_message]
+                  validates_length_of options[:login_field], :within => 2..100, :allow_blank => options[:allow_blank_login_and_password_field]
+                  validates_format_of options[:login_field], :with => options[:login_field_regex], :message => options[:login_field_regex_failed_message], :allow_blank => options[:allow_blank_login_and_password_fields]
                 end
+                
+                validates_uniqueness_of options[:login_field], :scope => options[:scope], :allow_blank => options[:allow_blank_login_and_password_fields]
+              end
               
-                validates_uniqueness_of options[:login_field], :scope => options[:scope]
-              end
-            
               if options[:validate_email_field] && options[:email_field]
-                validates_length_of options[:email_field], :within => 6..100
-                validates_format_of options[:email_field], :with => options[:email_field_regex], :message => options[:email_field_regex_failed_message]
-                validates_uniqueness_of options[:email_field], :scope => options[:scope]
+                validates_length_of options[:email_field], :within => 6..100, :allow_blank => options[:allow_blank_email_field]
+                validates_format_of options[:email_field], :with => options[:email_field_regex], :message => options[:email_field_regex_failed_message], :allow_blank => options[:allow_blank_email_field]
+                validates_uniqueness_of options[:email_field], :scope => options[:scope], :allow_blank => options[:allow_blank_email_field]
               end
-          
+              
               validate :validate_password if options[:validate_password_field]
             end
-          
+            
             attr_writer "confirm_#{options[:password_field]}"
             attr_accessor "tried_to_set_#{options[:password_field]}"
-          
+            
             class_eval <<-"end_eval", __FILE__, __LINE__
               def self.friendly_unique_token
                 chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
@@ -53,7 +53,7 @@ module Authlogic
                 1.upto(20) { |i| newpass << chars[rand(chars.size-1)] }
                 newpass
               end
-            
+              
               def #{options[:password_field]}=(pass)
                 return if pass.blank?
                 self.tried_to_set_#{options[:password_field]} = true
@@ -61,35 +61,37 @@ module Authlogic
                 self.#{options[:password_salt_field]} = self.class.unique_token
                 self.#{options[:crypted_password_field]} = #{options[:crypto_provider]}.encrypt(@#{options[:password_field]} + #{options[:password_salt_field]})
               end
-            
+              
               def valid_#{options[:password_field]}?(attempted_password)
                 return false if attempted_password.blank? || #{options[:crypted_password_field]}.blank? || #{options[:password_salt_field]}.blank?
                 (#{options[:crypto_provider]}.respond_to?(:decrypt) && #{options[:crypto_provider]}.decrypt(#{options[:crypted_password_field]}) == attempted_password + #{options[:password_salt_field]}) ||
                   (!#{options[:crypto_provider]}.respond_to?(:decrypt) && #{options[:crypto_provider]}.encrypt(attempted_password + #{options[:password_salt_field]}) == #{options[:crypted_password_field]})
               end
-            
+              
               def #{options[:password_field]}; end
               def confirm_#{options[:password_field]}; end
-            
+              
               def reset_#{options[:password_field]}
                 friendly_token = self.class.friendly_unique_token
                 self.#{options[:password_field]} = friendly_token
                 self.confirm_#{options[:password_field]} = friendly_token
               end
               alias_method :randomize_password, :reset_password
-            
+              
               def reset_#{options[:password_field]}!
                 reset_#{options[:password_field]}
                 save_without_session_maintenance(false)
               end
               alias_method :randomize_password!, :reset_password!
-            
+                
               protected
                 def tried_to_set_password?
                   tried_to_set_password == true
                 end
-              
+                
                 def validate_password
+                  return if #{options[:allow_blank_login_and_password_fields].inspect} && @#{options[:password_field]}.blank? && @confirm_#{options[:password_field]}.blank?
+                  
                   if new_record? || tried_to_set_#{options[:password_field]}?
                     if @#{options[:password_field]}.blank?
                       errors.add(:#{options[:password_field]}, #{options[:password_blank_message].inspect})

@@ -41,6 +41,9 @@ module Authlogic
         # * <tt>login_field_regex_failed_message</tt> - the message to use when the validates_format_of for the login field fails. This depends on if you are
         #   performing :email or :login regex.
         #
+        # * <tt>allow_blank_login_and_password_fields</tt> - default: false,
+        #   Tells authlogic if it should allow blank values for the login and password. This is useful is you provide alternate authentication methods, such as OpenID.
+        #
         # * <tt>email_field</tt> - default: :email, depending on if it is present, if :email is not present defaults to nil
         #   The name of the field used to store the email address. Only specify this if you arent using this as your :login_field.
         #   
@@ -51,6 +54,9 @@ module Authlogic
         #   This is used in validates_format_of for the :email_field.
         #   
         # * <tt>email_field_regex_failed_message</tt> - the message to use when the validates_format_of for the email field fails.
+        #
+        # * <tt>allow_blank_email_field</tt> - default: false,
+        #   Tells Authlogic if it should allow blank values for the email address.
         #   
         # * <tt>change_single_access_token_with_password</tt> - default: false,
         #   When a user changes their password do you want the single access token to change as well? That's what this configuration option is all about.
@@ -127,6 +133,7 @@ module Authlogic
             options[:email_field] = first_column_to_exist(nil, :email) unless options.key?(:email_field)
             options[:email_field] = nil if options[:email_field] == options[:login_field]
             options[:validate_email_field] = true unless options.key?(:validate_email_field)
+            options[:allow_blank_login_and_password]
             
             email_name_regex  = '[\w\.%\+\-]+'
             domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
@@ -140,7 +147,7 @@ module Authlogic
               options[:login_field_regex_failed_message] ||= options[:email_field_regex_failed_message]
             else
               options[:login_field_regex] ||= /\A\w[\w\.\-_@ ]+\z/
-              options[:login_field_regex_failed_message] ||= "use only letters, numbers, spaces, and .-_@ please."
+              options[:login_field_regex_failed_message] ||= "should use only letters, numbers, spaces, and .-_@ please."
             end
           
             options[:password_field] ||= :password

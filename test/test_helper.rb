@@ -157,9 +157,10 @@ class Test::Unit::TestCase
     
     def set_session_for(user, id = nil)
       @controller.session["user_credentials"] = user.persistence_token
+      @controller.session["user_credentials_id"] = user.id
     end
     
     def unset_session
-      @controller.session["user_credentials"] = nil
+      @controller.session["user_credentials"] = @controller.session["user_credentials_id"] = nil
     end
 end

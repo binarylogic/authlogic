@@ -16,7 +16,7 @@ module ORMAdaptersTests
             :single_access_token_field => :single_access_token,
             :login_field_regex => /\A\w[\w\.\-_@ ]+\z/,
             :session_ids => [nil],
-            :login_field_regex_failed_message => "use only letters, numbers, spaces, and .-_@ please.",
+            :login_field_regex_failed_message => "should use only letters, numbers, spaces, and .-_@ please.",
             :persistence_token_field => :persistence_token,
             :password_field => :password,
             :logged_in_timeout => 600,
