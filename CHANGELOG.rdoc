@@ -1,4 +1,4 @@
-== 1.2.2 released 2008-11-19
+== 1.2.2 released 2008-11-20
 
 * Added allow_blank_login_and_password_field and allow_blank_email_field options to acts_as_authentic, which allows you to have alternative logins, such as OpenID
 * In the session Authlogic now also stores the record id. We use this id to find the record and then check the token against the record, thus allowing for quicker database lookups, while getting the same security.

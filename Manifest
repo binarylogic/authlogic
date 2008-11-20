@@ -21,6 +21,7 @@ lib/authlogic/session/callbacks.rb
 lib/authlogic/session/config.rb
 lib/authlogic/session/cookies.rb
 lib/authlogic/session/errors.rb
+lib/authlogic/session/openid.rb
 lib/authlogic/session/params.rb
 lib/authlogic/session/perishability.rb
 lib/authlogic/session/scopes.rb
