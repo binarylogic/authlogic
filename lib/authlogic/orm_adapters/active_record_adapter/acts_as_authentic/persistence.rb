@@ -22,7 +22,7 @@ module Authlogic
           def acts_as_authentic_with_persistence(options = {})
             acts_as_authentic_without_persistence(options)
           
-            validates_uniqueness_of options[:persistence_token_field]
+            validates_uniqueness_of options[:persistence_token_field], :if => Proc.new { |record| record.respond_to?("#{options[:persistence_token_field]}_changed?") && record.send("#{options[:persistence_token_field]}_changed?") }
           
             def forget_all!
               # Paginate these to save on memory

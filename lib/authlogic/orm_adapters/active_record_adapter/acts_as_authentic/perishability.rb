@@ -24,7 +24,7 @@ module Authlogic
             return if options[:perishable_token_field].blank?
             
             class_eval <<-"end_eval", __FILE__, __LINE__
-              validates_uniqueness_of :#{options[:perishable_token_field]}
+              validates_uniqueness_of :#{options[:perishable_token_field]}, :if => Proc.new { |record| record.respond_to?("#{options[:perishable_token_field]}_changed?") && record.send("#{options[:perishable_token_field]}_changed?") }
               
               before_validation :reset_#{options[:perishable_token_field]}
               

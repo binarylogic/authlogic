@@ -31,13 +31,13 @@ module Authlogic
                   validates_format_of options[:login_field], :with => options[:login_field_regex], :message => options[:login_field_regex_failed_message], :allow_blank => options[:allow_blank_login_and_password_fields]
                 end
                 
-                validates_uniqueness_of options[:login_field], :scope => options[:scope], :allow_blank => options[:allow_blank_login_and_password_fields]
+                validates_uniqueness_of options[:login_field], :scope => options[:scope], :allow_blank => options[:allow_blank_login_and_password_fields], :if => Proc.new { |record| record.respond_to?("#{options[:login_field]}_changed?") && record.send("#{options[:login_field]}_changed?") }
               end
               
               if options[:validate_email_field] && options[:email_field]
                 validates_length_of options[:email_field], :within => 6..100, :allow_blank => options[:allow_blank_email_field]
                 validates_format_of options[:email_field], :with => options[:email_field_regex], :message => options[:email_field_regex_failed_message], :allow_blank => options[:allow_blank_email_field]
-                validates_uniqueness_of options[:email_field], :scope => options[:scope], :allow_blank => options[:allow_blank_email_field]
+                validates_uniqueness_of options[:email_field], :scope => options[:scope], :allow_blank => options[:allow_blank_email_field], :if => Proc.new { |record| record.respond_to?("#{options[:email_field]}_changed?") && record.send("#{options[:email_field]}_changed?") }
               end
               
               validate :validate_password if options[:validate_password_field]

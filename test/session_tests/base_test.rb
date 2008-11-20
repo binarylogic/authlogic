@@ -55,10 +55,10 @@ module SessionTests
       
       assert UserSession.find
       last_request_at = ben.reload.last_request_at
-      sleep(1.1)
+      sleep(1.5)
       assert UserSession.find
       assert_equal last_request_at, ben.reload.last_request_at
-      sleep(1.1)
+      sleep(1)
       assert UserSession.find
       assert_not_equal last_request_at, ben.reload.last_request_at
       
