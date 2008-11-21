@@ -73,6 +73,7 @@ Authlogic makes this a reality. This is just the tip of the ice berg. Keep readi
 *	<b>Documentation:</b> http://authlogic.rubyforge.org
 *	<b>Tutorial: Authlogic basic setup:</b> http://www.binarylogic.com/2008/11/3/tutorial-authlogic-basic-setup
 *	<b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
+*	<b>Tutorial: Using OpenID with Authlogic:</b> http://www.binarylogic.com/2008/11/21/tutorial-using-openid-with-authlogic
 *	<b>Live example of the setup tutorial above (with source):</b> http://authlogic_example.binarylogic.com
 * <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
 
