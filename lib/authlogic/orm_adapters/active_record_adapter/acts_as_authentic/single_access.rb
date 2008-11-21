@@ -22,7 +22,7 @@ module Authlogic
             return if options[:single_access_token_field].blank?
             
             class_eval <<-"end_eval", __FILE__, __LINE__
-              validates_uniqueness_of :#{options[:single_access_token_field]}, :if => Proc.new { |record| (record.respond_to?("#{options[:single_access_token_field]}_changed?") && record.send("#{options[:single_access_token_field]}_changed?")) || !record.respond_to?("#{options[:single_access_token_field]}_changed?") }
+              validates_uniqueness_of :#{options[:single_access_token_field]}, :if => :#{options[:single_access_token_field]}_changed?
             
               before_validation :set_#{options[:single_access_token_field]}_field
             

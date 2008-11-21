@@ -38,15 +38,14 @@ module ORMAdaptersTests
           user.password = "my pass"
           assert !user.valid?
           assert !user.errors.on(:password)
-          assert user.errors.on(:confirm_password)
+          assert user.errors.on(:password_confirmation)
 
-          user.confirm_password = "my pizass"
+          user.password_confirmation = "my pizass"
           assert !user.valid?
-          assert !user.errors.on(:password)
-          assert user.errors.on(:confirm_password)
+          assert user.errors.on(:password)
           assert user.errors.on(:email)
 
-          user.confirm_password = "my pass"
+          user.password_confirmation = "my pass"
           assert !user.valid?
           assert user.errors.on(:email)
           
@@ -61,7 +60,7 @@ module ORMAdaptersTests
         def test_employee_validations
           employee = Employee.new
           employee.password = "pass"
-          employee.confirm_password = "pass"
+          employee.password_confirmation = "pass"
 
           assert !employee.valid?
           assert employee.errors.on(:email)
@@ -95,15 +94,13 @@ module ORMAdaptersTests
           assert user.crypted_password
           assert user.password_salt
           assert user.persistence_token
-          assert_equal true, user.tried_to_set_password
-          assert_nil user.password
+          assert_equal "sillywilly", user.password
 
           employee = Employee.new
           employee.password = "awesome"
           assert employee.crypted_password
           assert employee.persistence_token
-          assert_equal true, employee.tried_to_set_password
-          assert_nil employee.password
+          assert_equal "awesome", employee.password
         end
 
         def test_valid_password

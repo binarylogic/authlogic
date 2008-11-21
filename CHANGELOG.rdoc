@@ -1,3 +1,10 @@
+== 1.3.0 released 2008-11-20
+
+* BREAKS BACKWARDS COMPATIBILITY: changed the confirm_password field to password_confirmation for acts_as_authentic, since the rails validates_confirmation_of handles creating this attribute.
+* BREAKS BACKWARDS COMPATIBILITY: Cleaned up all of the validation configuration for acts_as_authentic, as well as the documentation that goes with it, you can accomplish the same things as before, but this is much more flexible and much more organized.
+* Got rid of simple delegator for the abstract controller, apparently this has performance issues.
+* Cleaned up validations to assume ActiveRecord dirty attributes are present, I think this is a safe assumption.
+
 == 1.2.2 released 2008-11-20
 
 * Added allow_blank_login_and_password_field and allow_blank_email_field options to acts_as_authentic, which allows you to have alternative logins, such as OpenID
