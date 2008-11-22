@@ -1,11 +1,13 @@
-== 1.3.1 released 2008-11-20
+== 1.3.1 released 2008-11-22
 
-* Fixed typo in acts_as_authentic config when passing the :scope option
+* Fixed typo in acts_as_authentic config when passing the :scope option.
+* Added :act_like_restful_authentication option for acts_as_authentic
+* Added a new crypto provider: BCrypt, this is for the hardcore paranoid, or for those storing the nuclear launch codes in their apps
 
-== 1.3.0 released 2008-11-20
+== 1.3.0 released 2008-11-21
 
-* BREAKS BACKWARDS COMPATIBILITY: changed the confirm_password field to password_confirmation for acts_as_authentic, since the rails validates_confirmation_of handles creating this attribute.
-* BREAKS BACKWARDS COMPATIBILITY: Cleaned up all of the validation configuration for acts_as_authentic, as well as the documentation that goes with it, you can accomplish the same things as before, but this is much more flexible and much more organized.
+* BREAKS BACKWARDS COMPATIBILITY: changed the confirm_password field to password_confirmation for acts_as_authentic, since the rails validates_confirmation_of handles creating this attribute and there is no option to change the name of this.
+* BREAKS BACKWARDS COMPATIBILITY: Cleaned up all of the validation configuration for acts_as_authentic, as well as the documentation that goes with it, you can accomplish the same things as before, but this is much more flexible and much more organized. This is mainly for those implementing i18n support. Instead of :whatever_message, its now :login_field_validates_length_of_options => {:message => "your i18n friendly message"}. As a side note, with the new i18n support in rails I would not be surprised if this is already done for you since Authlogic uses the ActiveRecord validation methods.
 * Got rid of simple delegator for the abstract controller, apparently this has performance issues.
 * Cleaned up validations to assume ActiveRecord dirty attributes are present, I think this is a safe assumption.
 

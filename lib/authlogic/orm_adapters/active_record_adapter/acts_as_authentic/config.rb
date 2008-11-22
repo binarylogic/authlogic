@@ -22,6 +22,12 @@ module Authlogic
         # * <tt>crypto_provider</tt> - default: Authlogic::CryptoProviders::Sha512,
         #   This is the class that provides your encryption. By default Authlogic provides its own crypto provider that uses Sha512 encrypton.
         #
+        # * <tt>act_like_restful_authentication</tt> - default: false,
+        #   If you are migrating from restful_authentication you will want to set this to true, this way your users will still be able to log in and it will seems as
+        #   if nothing has changed. If you don't do this none of your users will be able to log in. If you are starting a new project I do not recommend enabling this
+        #   as the password encryption algorithm used in restful_authentication (Sha1) is not as secure as the one used in authlogic (Sha512). IF you REALLY want to be secure
+        #   checkout Authlogic::CryptoProviders::BCrypt.
+        #
         # * <tt>login_field</tt> - default: :login, :username, or :email, depending on which column is present, if none are present defaults to :login
         #   The name of the field used for logging in. Only specify if you aren't using any of the defaults.
         #   
@@ -182,6 +188,10 @@ module Authlogic
             if options[:scope]
               options[:login_field_validates_uniqueness_of_options][:scope] ||= options[:scope]
               options[:email_field_validates_uniqueness_of_options][:scope] ||= options[:scope]
+            end
+            
+            if options[:act_like_restful_authentication]
+              options[:crypto_provider] = CryptoProviders::Sha1
             end
           
             class_eval <<-"end_eval", __FILE__, __LINE__

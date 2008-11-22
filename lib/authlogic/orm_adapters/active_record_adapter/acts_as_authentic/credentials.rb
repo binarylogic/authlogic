@@ -66,13 +66,13 @@ module Authlogic
                 return if pass.blank?
                 @#{options[:password_field]} = pass
                 self.#{options[:password_salt_field]} = self.class.unique_token
-                self.#{options[:crypted_password_field]} = #{options[:crypto_provider]}.encrypt(@#{options[:password_field]} + #{options[:password_salt_field]})
+                self.#{options[:crypted_password_field]} = #{options[:crypto_provider]}.encrypt(obfuscate_password(@#{options[:password_field]}))
               end
               
               def valid_#{options[:password_field]}?(attempted_password)
                 return false if attempted_password.blank? || #{options[:crypted_password_field]}.blank? || #{options[:password_salt_field]}.blank?
                 (#{options[:crypto_provider]}.respond_to?(:decrypt) && #{options[:crypto_provider]}.decrypt(#{options[:crypted_password_field]}) == attempted_password + #{options[:password_salt_field]}) ||
-                  (!#{options[:crypto_provider]}.respond_to?(:decrypt) && #{options[:crypto_provider]}.encrypt(attempted_password + #{options[:password_salt_field]}) == #{options[:crypted_password_field]})
+                  (!#{options[:crypto_provider]}.respond_to?(:decrypt) && #{options[:crypto_provider]}.encrypt(obfuscate_password(attempted_password)) == #{options[:crypted_password_field]})
               end
               
               def reset_#{options[:password_field]}
@@ -87,6 +87,15 @@ module Authlogic
                 save_without_session_maintenance(false)
               end
               alias_method :randomize_password!, :reset_password!
+              
+              private
+                def obfuscate_password(raw_password)
+                  if #{options[:act_like_restful_authentication].inspect}
+                    [REST_AUTH_SITE_KEY, raw_password, #{options[:password_salt_field]}, REST_AUTH_SITE_KEY].join("--")
+                  else
+                    raw_password + #{options[:password_salt_field]}
+                  end
+                end
             end_eval
           end
         end
