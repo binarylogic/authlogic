@@ -363,6 +363,19 @@ Obviously there is a little more to it than this, but hopefully this clarifies a
 
 When things come together like this I think its a sign that you are doing something right. Put that in your pipe and smoke it!
 
+== Migrating from restful_authentication
+
+Migrating from the restful_authentication plugin? I made an option especially for you. Just do the following and everything will be taken care of, your users won't even know anything changed:
+
+  # app/models/user.rb
+  class User < ActiveRecord::Base
+    acts_as_authentic :acts_like_restful_authentication => true
+  end
+
+**What's the difference?**
+
+restful\_authentication uses Sha1 with 10 stretches to encrypt the password. Authlogic uses Sha512 with 20 stretches. Sha512 is stronger and more secure.
+
 == Framework agnostic (Rails, Merb, etc.)
 
 I designed Authlogic to be framework agnostic, meaning it doesn't care what framework you use it in. Right out of the box it supports rails and merb. I have not had the opportunity to use other frameworks, but the only thing stopping Authlogic from being used in other frameworks is a simple adapter. Check out controller_adapters/rails_adapter, or controller_adapters/merb_adapter.

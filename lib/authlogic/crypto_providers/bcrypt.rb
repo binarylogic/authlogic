@@ -28,20 +28,28 @@ module Authlogic
     # Decided BCrypt is for you? Just insall the bcrypt gem:
     #
     #   gem install bcrypt-ruby
-    class Bcrypt
+    #
+    # Tell acts_as_authentic to use it:
+    #
+    #   acts_as_authentic :crypto_provider => Authlogic::CryptoProviders::BCrypt
+    #
+    # You are good to go!
+    class BCrypt
       class << self
+        # This is the :cost option for the BCrpyt library. The higher the cost the more secure it is and the longer is take the generate a hash. By default this is 10.
         def cost
           @cost ||= 10
         end
         attr_writer :cost
         
+        # Creates a BCrypt hash for the password passed.
         def encrypt(pass)
-          BCrypt::Password.create(pass, :cost => cost)
+          ::BCrypt::Password.create(pass, :cost => cost)
         end
         
         # This does not actually decrypt the password, BCrypt is *not* reversible. The way the bcrypt library is set up requires us to do it this way.
         def decrypt(crypted_pass)
-          BCrypt::Password.create(crypted_pass)
+          ::BCrypt::Password.new(crypted_pass)
         end
       end
     end

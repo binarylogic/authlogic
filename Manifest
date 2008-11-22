@@ -3,6 +3,7 @@ init.rb
 lib/authlogic/controller_adapters/abstract_adapter.rb
 lib/authlogic/controller_adapters/merb_adapter.rb
 lib/authlogic/controller_adapters/rails_adapter.rb
+lib/authlogic/crypto_providers/bcrypt.rb
 lib/authlogic/crypto_providers/sha1.rb
 lib/authlogic/crypto_providers/sha512.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/config.rb
