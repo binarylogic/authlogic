@@ -181,7 +181,7 @@ module Authlogic
             
             if options[:scope]
               options[:login_field_validates_uniqueness_of_options][:scope] ||= options[:scope]
-              options[:email_field_validation_uniqueness_of_options][:scope] ||= options[:scope]
+              options[:email_field_validates_uniqueness_of_options][:scope] ||= options[:scope]
             end
           
             class_eval <<-"end_eval", __FILE__, __LINE__

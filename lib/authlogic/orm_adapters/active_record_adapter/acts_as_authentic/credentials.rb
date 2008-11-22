@@ -41,8 +41,6 @@ module Authlogic
               
               if options[:validate_password_field]
                 validates_presence_of options[:password_field], {:on => :create}.merge(options[:password_field_validates_presence_of_options])
-                
-                
                 validates_confirmation_of options[:password_field], options[:password_field_validates_confirmation_of_options].merge(:if => "#{options[:crypted_password_field]}_changed?".to_sym)
                 validates_presence_of "#{options[:password_field]}_confirmation", :if => "#{options[:crypted_password_field]}_changed?"
               end

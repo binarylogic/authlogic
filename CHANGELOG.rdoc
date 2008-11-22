@@ -1,3 +1,7 @@
+== 1.3.1 released 2008-11-20
+
+* Fixed typo in acts_as_authentic config when passing the :scope option
+
 == 1.3.0 released 2008-11-20
 
 * BREAKS BACKWARDS COMPATIBILITY: changed the confirm_password field to password_confirmation for acts_as_authentic, since the rails validates_confirmation_of handles creating this attribute.
