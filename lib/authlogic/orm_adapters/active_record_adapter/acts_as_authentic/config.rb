@@ -28,6 +28,10 @@ module Authlogic
         #   as the password encryption algorithm used in restful_authentication (Sha1) is not as secure as the one used in authlogic (Sha512). IF you REALLY want to be secure
         #   checkout Authlogic::CryptoProviders::BCrypt.
         #
+        # * <tt>act_like_old_restful_authentication</tt> - default: false,
+        #   This is the same thing as :act_like_restful_authentication, but it is for the older versions. How can you tell if you are using an older version? The new version
+        #   requires that you supply a site wide key called REST_AUTH_SITE_KEY. If you do not have that in your project then you are using the older version.
+        #
         # * <tt>login_field</tt> - default: :login, :username, or :email, depending on which column is present, if none are present defaults to :login
         #   The name of the field used for logging in. Only specify if you aren't using any of the defaults.
         #   
@@ -190,8 +194,12 @@ module Authlogic
               options[:email_field_validates_uniqueness_of_options][:scope] ||= options[:scope]
             end
             
-            if options[:act_like_restful_authentication]
+            if options[:act_like_restful_authentication] || options[:act_like_old_restful_authentication]
               options[:crypto_provider] = CryptoProviders::Sha1
+              if options[:act_like_old_restful_authentication]
+                const_set("::REST_AUTH_SITE_KEY", nil) unless defined?(REST_AUTH_SITE_KEY)
+                options[:crypto_provider].stretches = 1
+              end
             end
           
             class_eval <<-"end_eval", __FILE__, __LINE__

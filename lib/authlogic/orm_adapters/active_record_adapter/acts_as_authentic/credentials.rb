@@ -90,8 +90,8 @@ module Authlogic
               
               private
                 def obfuscate_password(raw_password)
-                  if #{options[:act_like_restful_authentication].inspect}
-                    [REST_AUTH_SITE_KEY, raw_password, #{options[:password_salt_field]}, REST_AUTH_SITE_KEY].join("--")
+                  if #{options[:act_like_restful_authentication].inspect} || #{options[:act_like_old_restful_authentication].inspect}
+                    [REST_AUTH_SITE_KEY, raw_password, #{options[:password_salt_field]}, REST_AUTH_SITE_KEY].compact.join("--")
                   else
                     raw_password + #{options[:password_salt_field]}
                   end

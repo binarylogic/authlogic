@@ -7,7 +7,7 @@ module Authlogic
   module CryptoProviders
     # = Bcrypt
     #
-    # For most apps Sha512 is plenty secure, but if you are building an app that stores the nuclear launch codes you might want to consier BCrypt. This is an extremely
+    # For most apps Sha512 is plenty secure, but if you are building an app that stores nuclear launch codes you might want to consier BCrypt. This is an extremely
     # secure hashing algorithm, mainly because it is slow. A brute force attack on a BCrypt encrypted password would take much longer than a brute force attack on a
     # password encrypted with a Sha algorithm. Keep in mind you are sacrificing performance by using this, generating a password takes exponentially longer than any
     # of the Sha algorithms. I did some benchmarking to save you some time with your decision:
@@ -16,14 +16,20 @@ module Authlogic
     #   require "digest"
     #   require "benchmark"
     #
-    #   Benchmark.bm do |x|
-    #     x.report("BCrypt:") { BCrypt::Password.create("mypass") }
-    #     x.report("Sha512:") { Digest::SHA512.hexdigest("mypass") }
+    #   Benchmark.bm(18) do |x|
+    #     x.report("BCrypt (cost = 10:") { 100.times { BCrypt::Password.create("mypass", :cost => 10) } }
+    #     x.report("BCrypt (cost = 2:") { 100.times { BCrypt::Password.create("mypass", :cost => 2) } }
+    #     x.report("Sha512:") { 100.times { Digest::SHA512.hexdigest("mypass") } }
+    #     x.report("Sha1:") { 100.times { Digest::SHA1.hexdigest("mypass") } }
     #   end
+
+    #                           user     system      total        real
+    #   BCrypt (cost = 10): 10.780000   0.060000  10.840000 ( 11.100289)
+    #   BCrypt (cost = 2):  0.180000   0.000000   0.180000 (  0.181914)
+    #   Sha512:             0.000000   0.000000   0.000000 (  0.000829)
+    #   Sha1:               0.000000   0.000000   0.000000 (  0.000395)
     #
-    #             user     system      total        real
-    #   BCrypt:  0.110000   0.000000   0.110000 (  0.113493)
-    #   Sha512:  0.010000   0.000000   0.010000 (  0.000554)
+    # You can play around with the cost to get that perfect balance between performance and security.
     #
     # Decided BCrypt is for you? Just insall the bcrypt gem:
     #
@@ -37,6 +43,7 @@ module Authlogic
     class BCrypt
       class << self
         # This is the :cost option for the BCrpyt library. The higher the cost the more secure it is and the longer is take the generate a hash. By default this is 10.
+        # Set this to whatever you want, play around with it to get that perfect balance between security and performance.
         def cost
           @cost ||= 10
         end
@@ -47,7 +54,7 @@ module Authlogic
           ::BCrypt::Password.create(pass, :cost => cost)
         end
         
-        # This does not actually decrypt the password, BCrypt is *not* reversible. The way the bcrypt library is set up requires us to do it this way.
+        # This does not actually decrypt the password, BCrypt is *not* reversible. The way the bcrypt library is set up requires us to do it this way, which is actually pretty convenient.
         def decrypt(crypted_pass)
           ::BCrypt::Password.new(crypted_pass)
         end
