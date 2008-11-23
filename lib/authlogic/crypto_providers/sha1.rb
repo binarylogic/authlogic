@@ -4,10 +4,15 @@ module Authlogic
   module CryptoProviders
     # = Sha1
     #
-    # Uses the Sha1 hash algorithm to encrypt passwords. This class is useful if you are migrating from restful_authentication. This uses the
-    # exact same excryption algorithm with 10 stretches, just like restful_authentication.
+    # This class was made for the users transitioning from restful_authentication. I highly discourage using this crypto provider as it inferior to your other options.
+    # Please use the Sha512 crypto provider or the BCrypt provider.
     class Sha1
       class << self
+        def join_token
+          @join_token ||= "--"
+        end
+        attr_writer :join_token
+        
         # The number of times to loop through the encryption. This is ten because that is what restful_authentication defaults to.
         def stretches
           @stretches ||= 10
@@ -15,10 +20,15 @@ module Authlogic
         attr_writer :stretches
         
         # Turns your raw password into a Sha1 hash.
-        def encrypt(pass)
-          digest = pass
-          stretches.times { digest = Digest::SHA1.hexdigest(digest) }
-          digest
+        def encrypt(*tokens)
+          tokens = tokens.flatten
+          digest = tokens.shift
+          stretches.times { digest = Digest::SHA1.hexdigest([digest, *tokens].compact.join(join_token)) }
+        end
+        
+        # Does the crypted password match the tokens? Uses the same tokens that were used to encrypt.
+        def matches?(crypted, *tokens)
+          encrypt(*tokens) == crypted
         end
       end
     end

@@ -4,6 +4,9 @@ module ORMAdaptersTests
   module ActiveRecordAdapterTests
     module ActsAsAuthenticTests
       class ConfigTest < ActiveSupport::TestCase
+        setup :get_default_configuration
+        teardown :restore_default_configuration
+        
         def test_first_column_to_exist
           assert_equal :login, User.first_column_to_exist(:login, :crypted_password)
           assert_equal nil, User.first_column_to_exist(nil, :unknown)
@@ -45,6 +48,68 @@ module ORMAdaptersTests
            }
           assert_equal default_config, User.acts_as_authentic_config
         end
+        
+        def test_session_class
+          EmployeeSession.authenticate_with User
+          User.acts_as_authentic(:session_class => EmployeeSession)
+          assert_equal EmployeeSession, User.acts_as_authentic_config[:session_class]
+          
+          ben = users(:ben)
+          assert !EmployeeSession.find
+          ben.password = "benrocks"
+          ben.password_confirmation = "benrocks"
+          assert ben.save
+          assert EmployeeSession.find
+          EmployeeSession.authenticate_with Employee
+        end
+        
+        def test_crypto_provider
+          User.acts_as_authentic(:crypto_provider => Authlogic::CryptoProviders::BCrypt)
+          ben = users(:ben)
+          assert !ben.valid_password?("benrocks")
+          ben.password = "benrocks"
+          ben.password_confirmation = "benrocks"
+          assert ben.save
+          assert ben.valid_password?("benrocks")
+        end
+        
+        def test_transition_from_crypto_provider
+          ben = users(:ben)
+          convert_password_to(Authlogic::CryptoProviders::BCrypt, ben)
+        end
+        
+        def test_act_like_restful_authentication
+          ben = users(:ben)
+          convert_password_to(Authlogic::CryptoProviders::Sha1, ben)
+          User.acts_as_authentic(:act_like_restful_authentication => true)
+          set_session_for(ben)
+          assert UserSession.find
+        end
+        
+        def test_transition_from_restful_authentication
+          User.acts_as_authentic(:transition_from_restful_authentication => true)
+          assert_equal Authlogic::CryptoProviders::Sha512, User.acts_as_authentic_config[:crypto_provider]
+          assert_equal Authlogic::CryptoProviders::Sha1, User.acts_as_authentic_config[:transition_from_crypto_provider]
+        end
+        
+        private
+          def get_default_configuration
+            @default_configuration = User.acts_as_authentic_config
+          end
+          
+          def restore_default_configuration
+            User.acts_as_authentic @default_configuration
+          end
+          
+          def convert_password_to(crypto_provider, *records)
+            User.acts_as_authentic(:crypto_provider => crypto_provider, :transition_from_crypto_provider => Authlogic::CryptoProviders::Sha512)
+            records.each do |record|
+              old_hash = record.crypted_password
+              assert record.valid_password?(password_for(record))
+              assert_not_equal old_hash, record.crypted_password
+              assert record.valid_password?(password_for(record))
+            end
+          end
       end
     end
   end

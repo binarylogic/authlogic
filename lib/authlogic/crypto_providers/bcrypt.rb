@@ -22,7 +22,7 @@ module Authlogic
     #     x.report("Sha512:") { 100.times { Digest::SHA512.hexdigest("mypass") } }
     #     x.report("Sha1:") { 100.times { Digest::SHA1.hexdigest("mypass") } }
     #   end
-
+    #
     #                           user     system      total        real
     #   BCrypt (cost = 10): 10.780000   0.060000  10.840000 ( 11.100289)
     #   BCrypt (cost = 2):  0.180000   0.000000   0.180000 (  0.181914)
@@ -50,14 +50,39 @@ module Authlogic
         attr_writer :cost
         
         # Creates a BCrypt hash for the password passed.
-        def encrypt(pass)
-          ::BCrypt::Password.create(pass, :cost => cost)
+        def encrypt(*tokens)
+          ::BCrypt::Password.create(join_tokens(tokens), :cost => cost)
         end
         
-        # This does not actually decrypt the password, BCrypt is *not* reversible. The way the bcrypt library is set up requires us to do it this way, which is actually pretty convenient.
-        def decrypt(crypted_pass)
-          ::BCrypt::Password.new(crypted_pass)
+        # Does the hash match the tokens? Uses the same tokens that were used to encrypt.
+        def matches?(hash, *tokens)
+          hash = new_from_hash(hash)
+          return false if hash.blank?
+          hash == join_tokens(tokens)
         end
+        
+        # This method is used as a flag to tell Authlogic to "resave" the password upon a successful login, using the new cost
+        def cost_matches?(hash)
+          hash = new_from_hash(hash)
+          if hash.blank?
+            false
+          else
+            hash.cost == cost
+          end
+        end
+        
+        private
+          def join_tokens(tokens)
+            tokens.flatten.join
+          end
+          
+          def new_from_hash(hash)
+            begin
+              ::BCrypt::Password.new(hash)
+            rescue ::BCrypt::Errors::InvalidHash
+              return nil
+            end
+          end
       end
     end
   end

@@ -6,9 +6,9 @@ module CryptoProviderTests
       assert Authlogic::CryptoProviders::BCrypt.encrypt("mypass")
     end
     
-    def test_decrypt
+    def test_matches
       hash = Authlogic::CryptoProviders::BCrypt.encrypt("mypass")
-      assert Authlogic::CryptoProviders::BCrypt.decrypt(hash) == "mypass"
+      assert Authlogic::CryptoProviders::BCrypt.matches?(hash, "mypass")
     end
   end
 end

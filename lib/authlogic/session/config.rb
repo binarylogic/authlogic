@@ -45,19 +45,6 @@ module Authlogic
           yield self
         end
         
-        # This works just like ActiveRecord's attr_accessible, except by default this ONLY allows the login, password, and remember me option.
-        #
-        # * <tt>Default:</tt> {:login_field}, {:password_field}, :remember_me, set to nil to disable
-        # * <tt>Accepts:</tt> String
-        def attr_accessible(*values)
-          if values.blank?
-            read_inheritable_attribute(:attr_accessible) || attr_accessible(login_field, password_field, :remember_me)
-          else
-            write_inheritable_attribute(:attr_accessible, value)
-          end
-        end
-        alias_method :attr_accessible=, :attr_accessible
-        
         # The name of the cookie or the key in the cookies hash. Be sure and use a unique name. If you have multiple sessions and they use the same cookie it will cause problems.
         # Also, if a id is set it will be inserted into the beginning of the string. Exmaple:
         #
@@ -193,7 +180,7 @@ module Authlogic
         # * <tt>Accepts:</tt> String
         def not_approved_message(value = nil)
           if value.nil?
-            read_inheritable_attribute(:not_approved_message) || not_active_message("Your account is not approved")
+            read_inheritable_attribute(:not_approved_message) || not_approved_message("Your account is not approved")
           else
             write_inheritable_attribute(:not_approved_message, value)
           end
@@ -206,7 +193,7 @@ module Authlogic
         # * <tt>Accepts:</tt> String
         def not_confirmed_message(value = nil)
           if value.nil?
-            read_inheritable_attribute(:not_confirmed_message) || not_active_message("Your account is not confirmed")
+            read_inheritable_attribute(:not_confirmed_message) || not_confirmed_message("Your account is not confirmed")
           else
             write_inheritable_attribute(:not_confirmed_message, value)
           end
@@ -263,7 +250,7 @@ module Authlogic
         # * <tt>Accepts:</tt> String
         def password_invalid_message(value = nil)
           if value.nil?
-            read_inheritable_attribute(:password_invalid_message) || login_not_found_message("is invalid")
+            read_inheritable_attribute(:password_invalid_message) || password_invalid_message("is invalid")
           else
             write_inheritable_attribute(:password_invalid_message, value)
           end

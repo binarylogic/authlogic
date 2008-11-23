@@ -22,15 +22,20 @@ module Authlogic
         # * <tt>crypto_provider</tt> - default: Authlogic::CryptoProviders::Sha512,
         #   This is the class that provides your encryption. By default Authlogic provides its own crypto provider that uses Sha512 encrypton.
         #
+        # * <tt>transition_from_crypto_provider</tt> - default: nil,
+        #   This will transition your users to a new encryption algorithm. Let's say you are using Sha1 and you want to transition to Sha512. Just set the
+        #   :crypto_provider option to Authlogic::CryptoProviders::Sha512 and then set this option to Authlogic::CryptoProviders::Sha1. Every time a user
+        #   logs in their password will be resaved with the new algorithm and all new registrations will use the new algorithm as well.
+        #
         # * <tt>act_like_restful_authentication</tt> - default: false,
         #   If you are migrating from restful_authentication you will want to set this to true, this way your users will still be able to log in and it will seems as
         #   if nothing has changed. If you don't do this none of your users will be able to log in. If you are starting a new project I do not recommend enabling this
         #   as the password encryption algorithm used in restful_authentication (Sha1) is not as secure as the one used in authlogic (Sha512). IF you REALLY want to be secure
         #   checkout Authlogic::CryptoProviders::BCrypt.
         #
-        # * <tt>act_like_old_restful_authentication</tt> - default: false,
-        #   This is the same thing as :act_like_restful_authentication, but it is for the older versions. How can you tell if you are using an older version? The new version
-        #   requires that you supply a site wide key called REST_AUTH_SITE_KEY. If you do not have that in your project then you are using the older version.
+        # * <tt>transition_from_restful_authentication</tt> - default: false,
+        #   This works just like :transition_from_crypto_provider, but it makes some special exceptions so that your users will transition from restful_authentication, since
+        #   restful_authentication does things a little different than Authlogic.
         #
         # * <tt>login_field</tt> - default: :login, :username, or :email, depending on which column is present, if none are present defaults to :login
         #   The name of the field used for logging in. Only specify if you aren't using any of the defaults.
@@ -194,11 +199,12 @@ module Authlogic
               options[:email_field_validates_uniqueness_of_options][:scope] ||= options[:scope]
             end
             
-            if options[:act_like_restful_authentication] || options[:act_like_old_restful_authentication]
-              options[:crypto_provider] = CryptoProviders::Sha1
-              if options[:act_like_old_restful_authentication]
-                const_set("::REST_AUTH_SITE_KEY", nil) unless defined?(REST_AUTH_SITE_KEY)
-                options[:crypto_provider].stretches = 1
+            if options[:act_like_restful_authentication] || options[:transition_from_restful_authentication]
+              crypto_provider_key = options[:act_like_restful_authentication] ? :crypto_provider : :transition_from_crypto_provider
+              options[crypto_provider_key] = CryptoProviders::Sha1
+              if !defined?(REST_AUTH_SITE_KEY) || REST_AUTH_SITE_KEY.nil?
+                class_eval("::REST_AUTH_SITE_KEY = nil") unless defined?(REST_AUTH_SITE_KEY)
+                options[crypto_provider_key].stretches = 1
               end
             end
           

@@ -75,6 +75,8 @@ Authlogic makes this a reality. This is just the tip of the ice berg. Keep readi
 *	<b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
 *	<b>Tutorial: Using OpenID with Authlogic:</b> http://www.binarylogic.com/2008/11/21/tutorial-using-openid-with-authlogic
 *	<b>Live example of the tutorials above (with source):</b> http://authlogicexample.binarylogic.com
+*	<b>Tutorial: Easily migrate from restful_authentication:</b> http://www.binarylogic.com/2008/11/23/tutorial-easily-migrate-from-restful_authentication-to-authlogic
+*	<b>Tutorial: Upgrade passwords easily with Authlogic:</b> http://www.binarylogic.com/2008/11/23/tutorial-upgrade-passwords-easily-with-authlogic
 * <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
 
 == Install and use
@@ -197,11 +199,22 @@ For more information on ids checkout Authlogic::Session::Base#id
 
 == Encryption methods
 
-Authlogic is designed so you can use *any* encryption method you want. By default Authlogic uses salted Sha512 with 20 stretches. It also comes preloaded with some other common encryption algorithms so that you can choose. For example, if you wanted to use the BCrypt algorithm just do the following:
+Authlogic is designed so you can use *any* encryption method you want. It delegates this task to a class of your choice. By default Authlogic uses salted Sha512 with 20 stretches. It also comes preloaded with some other common encryption algorithms so that you can choose. For example, if you wanted to use the BCrypt algorithm just do the following:
 
   acts_as_authentic :crypto_provider => Authlogic::CryptoProviders::BCrypt
 
-Check out the Authlogic::CryptoProviders module and sublcasses to get an idea of how to write your own crypto provider. It's extremely easy, all that you have to do is make a class with a class level encrypt and optional decrypt method. That's it, the sky is the limit.
+For more information on BCrypt checkout my blog post on it: http://www.binarylogic.com/2008/11/22/storing-nuclear-launch-codes-in-your-app-enter-bcrypt-for-authlogic
+
+Also, check out the Authlogic::CryptoProviders module and sublcasses to get an idea of how to write your own crypto provider. It's extremely easy, all that you have to do is make a class with a class level encrypt and matches? method. That's it, the sky is the limit.
+
+== Switching to a new encryption method
+
+Switching to a new encryption method used to be a pain in the ass. Authlogic has an option that makes this dead simple. Let's say you want to migrate to the BCrypt encryption method from Sha512:
+
+  acts_as_authentic :crypto_provider => Authlogic::CryptoProviders::BCrypt,
+    :transition_from_crypto_provider => Authlogic::CryptoProviders::Sha512
+
+That's it. When a user successfully logs in and is using the old method their password will be updated with the new method and all new registrations will use the new method as well. Your users won't know anything changed.
 
 == Tokens (persistence, resetting passwords, private feed access, etc.)
 
@@ -382,9 +395,14 @@ Migrating from the restful_authentication plugin? I made an option especially fo
     acts_as_authentic :act_like_restful_authentication => true
   end
 
-**What's the difference?**
+Or you can transition your users to the Authlogic password system:
 
-restful\_authentication uses Sha1 with 10 stretches to encrypt the password. Authlogic uses Sha512 with 20 stretches. Sha512 is stronger and more secure.
+  # app/models/user.rb
+  class User < ActiveRecord::Base
+    acts_as_authentic :transition_from_restful_authentication => true
+  end
+
+For more information checkout my blog post on this: http://www.binarylogic.com/2008/11/23/tutorial-easily-migrate-from-restful_authentication-to-authlogic
 
 == Framework agnostic (Rails, Merb, etc.)
 

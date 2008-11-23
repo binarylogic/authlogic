@@ -4,22 +4,21 @@ module Authlogic
   # = Crypto Providers
   #
   # The acts_as_authentic method allows you to pass a :crypto_provider option. This allows you to use any type of encryption you like.
-  # Just create a class with a class level encrypt and decrypt method. The password will be passed as the single parameter to each of these
-  # methods so you can do your magic.
-  #
-  # If you are encrypting via a hash just don't include a decrypt method, since hashes can't be decrypted. Authlogic will notice this adjust accordingly.
+  # Just create a class with a class level encrypt and matches? method. See example below.
   #
   # === Example
   #
   #   class MyAwesomeEncryptionMethod
-  #     def self.encrypt(pass)
-  #       # encrypt the pass here
+  #     def self.encrypt(*tokens)
+  #       # the tokens passed wil be an array of objects, what type of object is irrelevant
+  #       # just do what you need to do with them and return a single encrypted string.
+  #       # for example, you will most likely join all of the objects into a single string and then encrypt that string
   #     end
   #
-  #     def self.decrypt(crypted_pass)
-  #       # decrypt the pass here, this is an optional method
-  #       # don't even include this method if you are using a hash algorithm
-  #       # this is irreverisble
+  #     def self.matches?(crypted, *tokens)
+  #       # return true if the crypted string matches the tokens.
+  #       # depending on your algorithm you might decrypt the string then compare it to the token, or you might
+  #       # encrypt the tokens and make sure it matches the crypted string, its up to you
   #     end
   #   end
   module CryptoProviders
@@ -28,6 +27,8 @@ module Authlogic
     # Uses the Sha512 hash algorithm to encrypt passwords.
     class Sha512
       class << self
+        attr_accessor :join_token
+        
         # The number of times to loop through the encryption. This is ten because that is what restful_authentication defaults to.
         def stretches
           @stretches ||= 20
@@ -35,10 +36,15 @@ module Authlogic
         attr_writer :stretches
         
         # Turns your raw password into a Sha512 hash.
-        def encrypt(pass)
-          digest = pass
+        def encrypt(*tokens)
+          digest = tokens.flatten.join(join_token)
           stretches.times { digest = Digest::SHA512.hexdigest(digest) }
           digest
+        end
+        
+        # Does the crypted password match the tokens? Uses the same tokens that were used to encrypt.
+        def matches?(crypted, *tokens)
+          encrypt(*tokens) == crypted
         end
       end
     end

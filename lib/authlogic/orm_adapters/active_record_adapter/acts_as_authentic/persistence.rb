@@ -37,10 +37,7 @@ module Authlogic
           
             class_eval <<-"end_eval", __FILE__, __LINE__
               def self.unique_token
-                # The persistence token should be a unique string that is not reversible, which is what a hash is all about
-                # if you using encryption this defaults to Sha512.
-                token_class = #{options[:crypto_provider].respond_to?(:decrypt) ? Authlogic::CryptoProviders::Sha512 : options[:crypto_provider]}
-                token_class.encrypt(Time.now.to_s + (1..10).collect{ rand.to_s }.join)
+                Authlogic::CryptoProviders::Sha512.encrypt(Time.now.to_s + (1..10).collect{ rand.to_s }.join)
               end
             
               def forget!

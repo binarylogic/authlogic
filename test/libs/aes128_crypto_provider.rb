@@ -2,12 +2,12 @@ require "ezcrypto"
 
 class AES128CryptoProvider
   class << self
-    def encrypt(term)
-      [key.encrypt(term)].pack("m").chomp
+    def encrypt(*tokens)
+      [key.encrypt(tokens.join)].pack("m").chomp
     end
     
-    def decrypt(term)
-      key.decrypt(term.unpack("m").first)
+    def matches?(crypted, *tokens)
+      key.decrypt(crypted.unpack("m").first) == tokens.join
     end
     
     def key

@@ -1,7 +1,13 @@
+== 1.3.3 released 2008-11-23
+
+* Updated :act_like_restful_authentication for those using the older version where no site wide key is preset (REST_AUTH_SITE_KEY), Authlogic will adjust automatically based on the presence of this constant.
+* Added :transition_from_crypto_provider option for acts_as_authentic to transition your user's passwords to a new algorithm.
+* Added :transition_from_restful_authentication for acts_as_authentic to transition your users from restful_authentication to the Authlogic password system. Now you can choose to keep your passwords the same by using :act_like_restful_authentication, which will *NOT* do any transitioning, or you can use :transition_from_crypto_provider which will update your users passwords as they login or new accounts are created, while still allowing users with the old password system to log in.
+* Modified the "interface" for the crypto providers to only provide a class level encrypt and matches? method, instead of a class level encrypt and decrypt method.
+
 == 1.3.2 released 2008-11-22
 
 * Updated code to work better with BCrypt, using root level class now.
-* Added :act_like_old_restful_authentication option for acts_as_authentic, for those using the older version where no site wide key is preset (REST_AUTH_SITE_KEY)
 
 == 1.3.1 released 2008-11-22
 

@@ -113,19 +113,19 @@ class Test::Unit::TestCase
       Authlogic::Session::Base.controller = @controller
     end
     
+    def password_for(user)
+      case user
+      when users(:ben)
+        "benrocks"
+      when users(:zack)
+        "zackrocks"
+      end
+    end
+    
     def http_basic_auth_for(user = nil, &block)
       unless user.blank?
         @controller.http_user = user.login
-        
-        password = nil
-        case user
-        when users(:ben)
-          password = "benrocks"
-        when users(:zack)
-          password = "zackrocks"
-        end
-        
-        @controller.http_password = password
+        @controller.http_password = password_for(user)
       end
       yield
       @controller.http_user = @controller.http_password = nil

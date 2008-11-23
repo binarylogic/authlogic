@@ -53,6 +53,7 @@ module Authlogic
             end
             
             attr_reader options[:password_field]
+            attr_accessor :crypto_provider
             
             class_eval <<-"end_eval", __FILE__, __LINE__
               def self.friendly_unique_token
@@ -66,13 +67,37 @@ module Authlogic
                 return if pass.blank?
                 @#{options[:password_field]} = pass
                 self.#{options[:password_salt_field]} = self.class.unique_token
-                self.#{options[:crypted_password_field]} = #{options[:crypto_provider]}.encrypt(obfuscate_password(@#{options[:password_field]}))
+                self.#{options[:crypted_password_field]} = #{options[:crypto_provider]}.encrypt(*encrypt_arguments(@#{options[:password_field]}, #{options[:act_like_restful_authentication].inspect} ? :restful_authentication : nil))
               end
+              alias_method :update_#{options[:password_field]}, :#{options[:password_field]}= # this is to avoids the method chain, so we are ONLY changing the password
               
               def valid_#{options[:password_field]}?(attempted_password)
                 return false if attempted_password.blank? || #{options[:crypted_password_field]}.blank? || #{options[:password_salt_field]}.blank?
-                (#{options[:crypto_provider]}.respond_to?(:decrypt) && #{options[:crypto_provider]}.decrypt(#{options[:crypted_password_field]}) == attempted_password + #{options[:password_salt_field]}) ||
-                  (!#{options[:crypto_provider]}.respond_to?(:decrypt) && #{options[:crypto_provider]}.encrypt(obfuscate_password(attempted_password)) == #{options[:crypted_password_field]})
+                
+                [#{options[:crypto_provider]}, #{options[:transition_from_crypto_provider].inspect}].compact.each do |encryptor|
+                  # The arguments_type of for the transitioning from restful_authentication
+                  arguments_type = nil
+                  case encryptor
+                  when #{options[:crypto_provider]}
+                    arguments_type = :restful_authentication if #{options[:act_like_restful_authentication].inspect}
+                  when #{options[:transition_from_crypto_provider].inspect}
+                    arguments_type = :restful_authentication if #{options[:transition_from_restful_authentication].inspect}
+                  end
+                  
+                  if encryptor.matches?(#{options[:crypted_password_field]}, *encrypt_arguments(attempted_password, arguments_type))
+                    # If we are transitioning from an older encryption algorithm and the password is still using the old algorithm
+                    # then let's reset the password using the new algorithm. If the algorithm has a cost (BCrypt) and the cost has changed, update the password with
+                    # the new cost.
+                    if encryptor == #{options[:transition_from_crypto_provider].inspect} || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(#{options[:crypted_password_field]}))
+                      update_#{options[:password_field]}(attempted_password)
+                      save(false)
+                    end
+                    
+                    return true
+                  end
+                end
+                
+                false
               end
               
               def reset_#{options[:password_field]}
@@ -82,6 +107,11 @@ module Authlogic
               end
               alias_method :randomize_password, :reset_password
               
+              def confirm_#{options[:password_field]}
+                raise "confirm_#{options[:password_field]} has been removed, please use #{options[:password_field]}_confirmation. " +
+                  "As this is the field that ActiveRecord automatically creates with validates_confirmation_of."
+              end
+              
               def reset_#{options[:password_field]}!
                 reset_#{options[:password_field]}
                 save_without_session_maintenance(false)
@@ -89,11 +119,12 @@ module Authlogic
               alias_method :randomize_password!, :reset_password!
               
               private
-                def obfuscate_password(raw_password)
-                  if #{options[:act_like_restful_authentication].inspect} || #{options[:act_like_old_restful_authentication].inspect}
-                    [REST_AUTH_SITE_KEY, raw_password, #{options[:password_salt_field]}, REST_AUTH_SITE_KEY].compact.join("--")
+                def encrypt_arguments(raw_password, arguments_type = nil)
+                  case arguments_type
+                  when :restful_authentication
+                    [REST_AUTH_SITE_KEY, raw_password, #{options[:password_salt_field]}, REST_AUTH_SITE_KEY]
                   else
-                    raw_password + #{options[:password_salt_field]}
+                    [raw_password, #{options[:password_salt_field]}]
                   end
                 end
             end_eval
