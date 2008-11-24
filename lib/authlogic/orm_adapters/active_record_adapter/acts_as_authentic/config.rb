@@ -207,7 +207,7 @@ module Authlogic
                 options[crypto_provider_key].stretches = 1
               end
             end
-          
+
             class_eval <<-"end_eval", __FILE__, __LINE__
               def self.acts_as_authentic_config
                 #{options.inspect}

@@ -53,7 +53,6 @@ module Authlogic
             end
             
             attr_reader options[:password_field]
-            attr_accessor :crypto_provider
             
             class_eval <<-"end_eval", __FILE__, __LINE__
               def self.friendly_unique_token

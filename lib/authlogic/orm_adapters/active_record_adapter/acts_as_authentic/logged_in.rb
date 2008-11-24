@@ -18,16 +18,14 @@ module Authlogic
         module LoggedIn
           def acts_as_authentic_with_logged_in(options = {})
             acts_as_authentic_without_logged_in(options)
-          
+            
             validates_numericality_of :login_count, :only_integer => :true, :greater_than_or_equal_to => 0, :allow_nil => true if column_names.include?("login_count")
-        
-            if column_names.include?("last_request_at")
-              named_scope :logged_in, lambda { {:conditions => ["last_request_at > ?", options[:logged_in_timeout].seconds.ago]} }
-              named_scope :logged_out, lambda { {:conditions => ["last_request_at is NULL or last_request_at <= ?", options[:logged_in_timeout].seconds.ago]} }
-            end
-        
+            
             if column_names.include?("last_request_at")
               class_eval <<-"end_eval", __FILE__, __LINE__
+                named_scope :logged_in, lambda { {:conditions => ["last_request_at > ?", #{options[:logged_in_timeout]}.seconds.ago]} }
+                named_scope :logged_out, lambda { {:conditions => ["last_request_at is NULL or last_request_at <= ?", #{options[:logged_in_timeout]}.seconds.ago]} }
+                
                 def logged_in?
                   !last_request_at.nil? && last_request_at > #{options[:logged_in_timeout]}.seconds.ago
                 end

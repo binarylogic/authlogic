@@ -199,13 +199,19 @@ For more information on ids checkout Authlogic::Session::Base#id
 
 == Encryption methods
 
-Authlogic is designed so you can use *any* encryption method you want. It delegates this task to a class of your choice. By default Authlogic uses salted Sha512 with 20 stretches. It also comes preloaded with some other common encryption algorithms so that you can choose. For example, if you wanted to use the BCrypt algorithm just do the following:
+Authlogic is designed so you can use *any* encryption method you want. It delegates this task to a class of your choice. Here are you choices:
+
+1. Authlogic::CryptoProviders::Sha1 (used mainly for migrating from restful_authentication)
+2. Authlogic::CryptoProviders::Sha512
+3. Authlogic::CryptoProviders::BCrypt
+
+By default Authlogic uses salted Sha512 with 20 stretches, but you can easily change this. For example, if you wanted to use the BCrypt algorithm just do the following:
 
   acts_as_authentic :crypto_provider => Authlogic::CryptoProviders::BCrypt
 
 For more information on BCrypt checkout my blog post on it: http://www.binarylogic.com/2008/11/22/storing-nuclear-launch-codes-in-your-app-enter-bcrypt-for-authlogic
 
-Also, check out the Authlogic::CryptoProviders module and sublcasses to get an idea of how to write your own crypto provider. It's extremely easy, all that you have to do is make a class with a class level encrypt and matches? method. That's it, the sky is the limit.
+Also, check out the Authlogic::CryptoProviders module and subclasses to get an idea of how to write your own crypto provider. You don't have to use the provided classes, you can easily write your own. All that you have to do is make a class with a class level encrypt and matches? method. That's it, the sky is the limit.
 
 == Switching to a new encryption method
 

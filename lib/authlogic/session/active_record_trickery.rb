@@ -11,8 +11,8 @@ module Authlogic
       end
       
       module ClassMethods # :nodoc:
-        def human_attribute_name(attribute_key_name, options = {})
-          attribute_key_name.humanize
+        def human_attribute_name(*args)
+          klass.human_attribute_name(*args)
         end
       end
       
