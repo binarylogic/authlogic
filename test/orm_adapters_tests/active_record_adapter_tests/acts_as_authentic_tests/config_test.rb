@@ -84,6 +84,14 @@ module ORMAdaptersTests
           User.acts_as_authentic(:act_like_restful_authentication => true)
           set_session_for(ben)
           assert UserSession.find
+          
+          # Let's try a brute force approach
+          salt = "7e3041ebc2fc05a40c60028e2c4901a81035d3cd"
+          digest = "00742970dc9e6319f8019fd54864d3ea740f04b1"
+          assert ben.class.connection.execute("update users set crypted_password = '#{digest}', password_salt = '#{salt}' where id = '#{ben.id}';")
+          ben.reload
+          assert_equal 1, Authlogic::CryptoProviders::Sha1.stretches
+          assert ben.valid_password?("test")
         end
         
         def test_transition_from_restful_authentication

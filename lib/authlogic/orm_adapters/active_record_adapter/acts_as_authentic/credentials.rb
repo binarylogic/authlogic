@@ -76,10 +76,11 @@ module Authlogic
                 [#{options[:crypto_provider]}, #{options[:transition_from_crypto_provider].inspect}].compact.each do |encryptor|
                   # The arguments_type of for the transitioning from restful_authentication
                   arguments_type = nil
-                  case encryptor
-                  when #{options[:crypto_provider]}
+                  
+                  case encryptor.name
+                  when "#{options[:crypto_provider]}"
                     arguments_type = :restful_authentication if #{options[:act_like_restful_authentication].inspect}
-                  when #{options[:transition_from_crypto_provider].inspect}
+                  when "#{options[:transition_from_crypto_provider].inspect}"
                     arguments_type = :restful_authentication if #{options[:transition_from_restful_authentication].inspect}
                   end
                   
