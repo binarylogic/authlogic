@@ -23,7 +23,8 @@ module Authlogic
         def encrypt(*tokens)
           tokens = tokens.flatten
           digest = tokens.shift
-          stretches.times { digest = Digest::SHA1.hexdigest([digest, *tokens].compact.join(join_token)) }
+          stretches.times { digest = Digest::SHA1.hexdigest([digest, *tokens].join(join_token)) }
+          digest
         end
         
         # Does the crypted password match the tokens? Uses the same tokens that were used to encrypt.

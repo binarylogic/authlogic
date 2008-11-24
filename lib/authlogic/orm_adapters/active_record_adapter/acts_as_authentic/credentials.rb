@@ -121,7 +121,7 @@ module Authlogic
                 def encrypt_arguments(raw_password, arguments_type = nil)
                   case arguments_type
                   when :restful_authentication
-                    [REST_AUTH_SITE_KEY, raw_password, #{options[:password_salt_field]}, REST_AUTH_SITE_KEY]
+                    [REST_AUTH_SITE_KEY, #{options[:password_salt_field]}, raw_password, REST_AUTH_SITE_KEY]
                   else
                     [raw_password, #{options[:password_salt_field]}]
                   end
