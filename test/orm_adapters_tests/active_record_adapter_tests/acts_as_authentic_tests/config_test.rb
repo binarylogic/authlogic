@@ -44,7 +44,8 @@ module ORMAdaptersTests
             :password_field_validates_confirmation_of_options => {},
             :validate_email_field => true,
             :validation_options => {},
-            :login_field_validation_options => {}
+            :login_field_validation_options => {},
+            :transition_from_crypto_provider => []
            }
           assert_equal default_config, User.acts_as_authentic_config
         end
@@ -97,7 +98,7 @@ module ORMAdaptersTests
         def test_transition_from_restful_authentication
           User.acts_as_authentic(:transition_from_restful_authentication => true)
           assert_equal Authlogic::CryptoProviders::Sha512, User.acts_as_authentic_config[:crypto_provider]
-          assert_equal Authlogic::CryptoProviders::Sha1, User.acts_as_authentic_config[:transition_from_crypto_provider]
+          assert_equal [Authlogic::CryptoProviders::Sha1], User.acts_as_authentic_config[:transition_from_crypto_provider]
         end
         
         private
@@ -111,6 +112,7 @@ module ORMAdaptersTests
           
           def convert_password_to(crypto_provider, *records)
             User.acts_as_authentic(:crypto_provider => crypto_provider, :transition_from_crypto_provider => Authlogic::CryptoProviders::Sha512)
+            assert_equal [Authlogic::CryptoProviders::Sha512], User.acts_as_authentic_config[:transition_from_crypto_provider]
             records.each do |record|
               old_hash = record.crypted_password
               assert record.valid_password?(password_for(record))

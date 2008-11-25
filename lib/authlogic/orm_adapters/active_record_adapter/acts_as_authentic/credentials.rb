@@ -73,22 +73,17 @@ module Authlogic
               def valid_#{options[:password_field]}?(attempted_password)
                 return false if attempted_password.blank? || #{options[:crypted_password_field]}.blank? || #{options[:password_salt_field]}.blank?
                 
-                [#{options[:crypto_provider]}, #{options[:transition_from_crypto_provider].inspect}].compact.each do |encryptor|
+                ([#{options[:crypto_provider]}] + #{options[:transition_from_crypto_provider].inspect}).each_with_index do |encryptor, index|
                   # The arguments_type of for the transitioning from restful_authentication
-                  arguments_type = nil
-                  
-                  case encryptor.name
-                  when "#{options[:crypto_provider]}"
-                    arguments_type = :restful_authentication if #{options[:act_like_restful_authentication].inspect}
-                  when "#{options[:transition_from_crypto_provider].inspect}"
-                    arguments_type = :restful_authentication if #{options[:transition_from_restful_authentication].inspect}
-                  end
+                  arguments_type = (#{options[:act_like_restful_authentication].inspect} && index == 0) ||
+                    (#{options[:transition_from_restful_authentication].inspect} && index > 0 && encryptor == Authlogic::CryptoProviders::Sha1) ?
+                    :restful_authentication : nil
                   
                   if encryptor.matches?(#{options[:crypted_password_field]}, *encrypt_arguments(attempted_password, arguments_type))
                     # If we are transitioning from an older encryption algorithm and the password is still using the old algorithm
                     # then let's reset the password using the new algorithm. If the algorithm has a cost (BCrypt) and the cost has changed, update the password with
                     # the new cost.
-                    if encryptor == #{options[:transition_from_crypto_provider].inspect} || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(#{options[:crypted_password_field]}))
+                    if index > 0 || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(#{options[:crypted_password_field]}))
                       update_#{options[:password_field]}(attempted_password)
                       save(false)
                     end

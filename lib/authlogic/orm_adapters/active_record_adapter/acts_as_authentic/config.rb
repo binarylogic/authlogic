@@ -207,6 +207,8 @@ module Authlogic
                 options[crypto_provider_key].stretches = 1
               end
             end
+            
+            options[:transition_from_crypto_provider] = [options[:transition_from_crypto_provider]].compact unless options[:transition_from_crypto_provider].is_a?(Array)
 
             class_eval <<-"end_eval", __FILE__, __LINE__
               def self.acts_as_authentic_config
