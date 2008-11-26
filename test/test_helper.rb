@@ -94,8 +94,10 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :projects
 end
 
+Authlogic::CryptoProviders::AES256.key = "myafdsfddddddddddddddddddddddddddddddddddddddddddddddd"
+
 class Employee < ActiveRecord::Base
-  acts_as_authentic :crypto_provider => AES128CryptoProvider
+  acts_as_authentic :crypto_provider => Authlogic::CryptoProviders::AES256
   belongs_to :company
 end
 

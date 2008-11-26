@@ -77,6 +77,8 @@ module ORMAdaptersTests
         def test_transition_from_crypto_provider
           ben = users(:ben)
           convert_password_to(Authlogic::CryptoProviders::BCrypt, ben)
+          convert_password_to(Authlogic::CryptoProviders::Sha1, ben, [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::BCrypt])
+          convert_password_to(Authlogic::CryptoProviders::Sha512, ben, [Authlogic::CryptoProviders::Sha1, Authlogic::CryptoProviders::BCrypt])
         end
         
         def test_act_like_restful_authentication
@@ -110,9 +112,9 @@ module ORMAdaptersTests
             User.acts_as_authentic @default_configuration
           end
           
-          def convert_password_to(crypto_provider, *records)
-            User.acts_as_authentic(:crypto_provider => crypto_provider, :transition_from_crypto_provider => Authlogic::CryptoProviders::Sha512)
-            assert_equal [Authlogic::CryptoProviders::Sha512], User.acts_as_authentic_config[:transition_from_crypto_provider]
+          def convert_password_to(crypto_provider, records, from_crypto_providers = Authlogic::CryptoProviders::Sha512)
+            records = [records] unless records.is_a?(Array)
+            User.acts_as_authentic(:crypto_provider => crypto_provider, :transition_from_crypto_provider => from_crypto_providers)
             records.each do |record|
               old_hash = record.crypted_password
               assert record.valid_password?(password_for(record))
