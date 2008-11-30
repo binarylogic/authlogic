@@ -7,6 +7,7 @@ require File.dirname(__FILE__) + '/../lib/authlogic' unless defined?(Authlogic)
 require File.dirname(__FILE__) + '/libs/mock_request'
 require File.dirname(__FILE__) + '/libs/mock_cookie_jar'
 require File.dirname(__FILE__) + '/libs/mock_controller'
+require File.dirname(__FILE__) + '/libs/user'
 
 ActiveRecord::Schema.verbose = false
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :dbfile => ":memory:")
@@ -85,12 +86,6 @@ class Company < ActiveRecord::Base
   authenticates_many :user_sessions
   has_many :employees, :dependent => :destroy
   has_many :users, :dependent => :destroy
-end
-
-class User < ActiveRecord::Base
-  acts_as_authentic
-  belongs_to :company
-  has_and_belongs_to_many :projects
 end
 
 Authlogic::CryptoProviders::AES256.key = "myafdsfddddddddddddddddddddddddddddddddddddddddddddddd"

@@ -3,6 +3,7 @@ init.rb
 lib/authlogic/controller_adapters/abstract_adapter.rb
 lib/authlogic/controller_adapters/merb_adapter.rb
 lib/authlogic/controller_adapters/rails_adapter.rb
+lib/authlogic/crypto_providers/aes256.rb
 lib/authlogic/crypto_providers/bcrypt.rb
 lib/authlogic/crypto_providers/sha1.rb
 lib/authlogic/crypto_providers/sha512.rb
@@ -33,11 +34,14 @@ MIT-LICENSE
 Rakefile
 README.rdoc
 shoulda_macros/authlogic.rb
+test/crypto_provider_tests/aes256_test.rb
+test/crypto_provider_tests/bcrypt_test.rb
+test/crypto_provider_tests/sha1_test.rb
+test/crypto_provider_tests/sha512_test.rb
 test/fixtures/companies.yml
 test/fixtures/employees.yml
 test/fixtures/projects.yml
 test/fixtures/users.yml
-test/libs/aes128_crypto_provider.rb
 test/libs/mock_controller.rb
 test/libs/mock_cookie_jar.rb
 test/libs/mock_request.rb

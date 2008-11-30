@@ -40,9 +40,9 @@ module Authlogic
               end
               
               if options[:validate_password_field]
-                validates_length_of options[:password_field], {:minimum => 4}.merge(options[:password_field_validates_length_of_options].merge(:if => "validate_#{options[:password_field]}?".to_sym))
-                validates_confirmation_of options[:password_field], options[:password_field_validates_confirmation_of_options].merge(:if => "validate_#{options[:password_field]}?".to_sym)
-                validates_presence_of "#{options[:password_field]}_confirmation", :if => "validate_#{options[:password_field]}?".to_sym
+                validates_length_of options[:password_field], {:minimum => 4, :if => "new_record?".to_sym}.merge(options[:password_field_validates_length_of_options])
+                validates_confirmation_of options[:password_field], options[:password_field_validates_confirmation_of_options].merge(:if => "#{options[:password_salt_field]}_changed?".to_sym)
+                validates_presence_of "#{options[:password_field]}_confirmation", :if => "#{options[:password_salt_field]}_changed?".to_sym
               end
               
               if options[:validate_email_field] && options[:email_field]
@@ -112,10 +112,6 @@ module Authlogic
                 save_without_session_maintenance(false)
               end
               alias_method :randomize_password!, :reset_password!
-              
-              def validate_#{options[:password_field]}?
-                new_record? || #{options[:crypted_password_field]}_changed?
-              end
               
               private
                 def encrypt_arguments(raw_password, arguments_type = nil)

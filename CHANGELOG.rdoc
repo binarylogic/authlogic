@@ -1,3 +1,7 @@
+== 1.3.6 released 2008-11-30
+
+* Modified validates_length_of for password so that changing the options and passing an :if can make it optional for OpenID auth.
+
 == 1.3.5 released 2008-11-30
 
 * :transition_from_crypto_provider for acts_as_authentic now accepts an array to transition from multiple providers. Which solves the problem of a double transition.

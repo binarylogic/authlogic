@@ -103,6 +103,14 @@ module ORMAdaptersTests
           assert_equal [Authlogic::CryptoProviders::Sha1], User.acts_as_authentic_config[:transition_from_crypto_provider]
         end
         
+        # Need to finish this when I can figure out the best way to implement "transactions" for ruby constants inbetween tests
+        def test_password_field_validation_options
+          #User.acts_as_authentic(:password_field_validates_length_of_options => {:if => Proc.new { |user| false }})
+          #user = User.new
+          #assert !user.save!
+          #assert !user.errors.on(:password)
+        end
+        
         private
           def get_default_configuration
             @default_configuration = User.acts_as_authentic_config

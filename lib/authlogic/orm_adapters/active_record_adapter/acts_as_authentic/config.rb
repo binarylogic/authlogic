@@ -146,6 +146,10 @@ module Authlogic
             columns_to_check.each { |column_name| return column_name.to_sym if column_names.include?(column_name.to_s) }
             columns_to_check.first ? columns_to_check.first.to_sym : nil
           end
+          
+          def meta_def(name, &block)
+            (class << self; self; end).instance_eval { define_method name, &block }
+          end
         
           def acts_as_authentic_with_config(options = {})
             # Stop all configuration if the DB is not set up
@@ -209,12 +213,10 @@ module Authlogic
             end
             
             options[:transition_from_crypto_provider] = [options[:transition_from_crypto_provider]].compact unless options[:transition_from_crypto_provider].is_a?(Array)
-
-            class_eval <<-"end_eval", __FILE__, __LINE__
-              def self.acts_as_authentic_config
-                #{options.inspect}
-              end
-            end_eval
+            
+            meta_def :acts_as_authentic_config do
+              options
+            end
           
             acts_as_authentic_without_config(options)
           end
