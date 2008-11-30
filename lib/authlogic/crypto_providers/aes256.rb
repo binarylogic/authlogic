@@ -30,6 +30,8 @@ module Authlogic
           aes.decrypt
           aes.key = @key
           (aes.update(crypted.unpack("m").first) + aes.final) == tokens.join
+        rescue OpenSSL::CipherError
+          false
         end
     
         private

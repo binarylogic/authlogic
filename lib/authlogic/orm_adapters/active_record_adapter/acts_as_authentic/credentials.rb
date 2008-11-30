@@ -30,7 +30,7 @@ module Authlogic
                 case options[:login_field_type]
                 when :email
                   validates_length_of options[:login_field], {:within => 6..100}.merge(options[:login_field_validates_length_of_options])
-                  validates_format_of options[:login_field], {:with => email_field_regex, :message => "should look like an email address."}.merge(options[:login_field_validates_length_of_options])
+                  validates_format_of options[:login_field], {:with => email_field_regex, :message => "should look like an email address."}.merge(options[:login_field_validates_format_of_options])
                 else
                   validates_length_of options[:login_field], {:within => 2..100}.merge(options[:login_field_validates_length_of_options])
                   validates_format_of options[:login_field], {:with => /\A\w[\w\.\-_@ ]+\z/, :message => "should use only letters, numbers, spaces, and .-_@ please."}.merge(options[:login_field_validates_format_of_options])
@@ -40,9 +40,9 @@ module Authlogic
               end
               
               if options[:validate_password_field]
-                validates_presence_of options[:password_field], {:on => :create}.merge(options[:password_field_validates_presence_of_options])
-                validates_confirmation_of options[:password_field], options[:password_field_validates_confirmation_of_options].merge(:if => "#{options[:crypted_password_field]}_changed?".to_sym)
-                validates_presence_of "#{options[:password_field]}_confirmation", :if => "#{options[:crypted_password_field]}_changed?"
+                validates_length_of options[:password_field], {:minimum => 4}.merge(options[:password_field_validates_length_of_options].merge(:if => "validate_#{options[:password_field]}?".to_sym))
+                validates_confirmation_of options[:password_field], options[:password_field_validates_confirmation_of_options].merge(:if => "validate_#{options[:password_field]}?".to_sym)
+                validates_presence_of "#{options[:password_field]}_confirmation", :if => "validate_#{options[:password_field]}?".to_sym
               end
               
               if options[:validate_email_field] && options[:email_field]
@@ -112,6 +112,10 @@ module Authlogic
                 save_without_session_maintenance(false)
               end
               alias_method :randomize_password!, :reset_password!
+              
+              def validate_#{options[:password_field]}?
+                new_record? || #{options[:crypted_password_field]}_changed?
+              end
               
               private
                 def encrypt_arguments(raw_password, arguments_type = nil)

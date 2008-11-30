@@ -124,8 +124,8 @@ module Authlogic
         # * <tt>password_field_validation_options</tt> - default: {},
         #   The same as :validation_options but these are only applied to validations that pertain to the :password_field
         #
-        # * <tt>password_field_validates_presence_of_options</tt> - default: {:on => :create},
-        #   These options are applied to the validates_presence_of call for the :password_field
+        # * <tt>password_field_validates_length_of_options</tt> - default: {:minimum => 4},
+        #   These options are applied to the validates_length_of call for the :password_field
         #
         # * <tt>login_field_validates_confirmation_of_options</tt> - default: {},
         #   These options are applied to the validates_confirmation_of call for the :password_field
@@ -187,7 +187,7 @@ module Authlogic
               field_key = "#{field_name}_field_validation_options".to_sym
               options[field_key] = options[:validation_options].merge(options[field_key] || {})
               
-              validation_types = field_name == :password ? [:presence, :confirmation] : [:length, :format, :uniqueness]
+              validation_types = field_name == :password ? [:length, :confirmation] : [:length, :format, :uniqueness]
               validation_types.each do |validation_type|
                 validation_key = "#{field_name}_field_validates_#{validation_type}_of_options".to_sym
                 options[validation_key] = options[field_key].merge(options[validation_key] || {})

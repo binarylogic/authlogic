@@ -203,7 +203,7 @@ module Authlogic
       end
       
       # Allows you to set a unique identifier for your session, so that you can have more than 1 session at a time. A good example when this might be needed is when you want to have a normal user session
-      # and a "secure" user session. The secure user session would be created only when they want to modify their billing information, or other sensative information. Similar to me.com. This requires 2
+      # and a "secure" user session. The secure user session would be created only when they want to modify their billing information, or other sensitive information. Similar to me.com. This requires 2
       # user sessions. Just use an id for the "secure" session and you should be good.
       #
       # You can set the id during initialization (see initialize for more information), or as an attribute:
@@ -357,7 +357,7 @@ module Authlogic
           return if respond_to?(login_field) # already created these methods
           
           self.class.class_eval <<-"end_eval", __FILE__, __LINE__
-            alias_method :#{klass_name.underscore}, :record
+            alias_method :#{klass_name.underscore.split("/").last}, :record
             
             attr_reader :#{login_field}
             

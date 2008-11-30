@@ -2,7 +2,7 @@
 
 Authlogic is a clean, simple, and unobtrusive ruby authentication solution. Put simply, its the Chuck Norris of authentication solutions for your framework of choice.
 
-So what is Authlogic, and why would I create a solution to a problem that already has plenty of solutions? Because none of the solutions felt right to me, RESTful development and authentication just didn't seem to go well together. It was like trying to fit a square peg in a round hole. All of the current solutions, for both rails and merb, just seemed to force that square peg in the round hole for me. Just because they did it for me doesn't make it right. They were either too complicated, bloated, littered my application with tons of code, or were just confusing. This is not the simple / elegant ruby we all fell in love with. We need a "ruby like" authentication solution. Authlogic is my attempt to satisfy that need...
+So what is Authlogic, and why would I create a solution to a problem that already has plenty of solutions? Because none of the solutions felt right to me, RESTful development and authentication just didn't seem to go well together. It was like trying to fit a square peg in a round hole. All of the current solutions, for both rails and merb, just seemed to force that square peg in the round hole for me. Just because they did it for me doesn't make it right. They were either too complicated, bloated, littered my application with tons of code, had no platform for reasonable updating, used an inferior encryption algorithm, or were just confusing. This is not the simple / elegant ruby we all fell in love with. We need a "ruby like" authentication solution. Authlogic is my attempt to satisfy that need...
 
 Let's take a rails application...
 
@@ -130,9 +130,7 @@ One thing to keep in mind here is that the default :crypto_provider for Authlogi
 
 You are all set, now go use it just like you would with any other ActiveRecord model. Either glance at the code at the beginning of this README or check out the tutorials (see above in "helpful links") for a more detailed walk through.
 
-== Migrating from restful_authentication
-
-This is for migrating an existing application from restful_authentication to Authlogic. If you are starting a new application, please ignore this section.
+== Migrating an existing app from restful_authentication and upgrading your encryption
 
 For those that are switching existing apps over, I made an option especially for you. Just do the following and everything will be taken care of, your users won't even know anything changed:
 
@@ -141,12 +139,24 @@ For those that are switching existing apps over, I made an option especially for
     acts_as_authentic :act_like_restful_authentication => true
   end
 
-Or you can transition your users to the Authlogic password system:
+The above will not change a thing, from your database's perspective it will be as if you are still using restful_authentication.
+
+Or you can upgrade from Sha1 and transition your users to a much more secure encryption algorithm:
 
   # app/models/user.rb
   class User < ActiveRecord::Base
     acts_as_authentic :transition_from_restful_authentication => true
   end
+
+By default this will switch your users to Authlogic's Sha512 implementation. You do *NOT* have to use this. Check out the encryption methods section below for a list of encryption methods Authlogic provides you. If you want to use something besides Sha512 just specify it by doing:
+
+  # app/models/user.rb
+  class User < ActiveRecord::Base
+    acts_as_authentic :transition_from_restful_authentication => true,
+      :crypto_provider => Authlogic::CryptoProviders::BCrypt
+  end
+
+Every time a user logs in their password will be upgraded and every time a new account is created it will use the new algorithm all while allowing users to login with the old algorithm.
 
 For more information checkout my blog post on this: http://www.binarylogic.com/2008/11/23/tutorial-easily-migrate-from-restful_authentication-to-authlogic
 
@@ -272,11 +282,11 @@ There could be many more depending on your application. What's great about Authl
 
 Here are the 3 tokens in more detail:
 
-=== 1. Persistence token
+=== 1. Persistence token (stored in cookie / session)
 
 This token is used to persist the user's session. This is the token that is stored in the session and the cookie, so that during each request the user stays logged in. What's unique about this token is that the first time it is used the value is stored in the session, thus persisting the session. This field is required and must be in your database.
 
-=== 2. Single access token
+=== 2. Single access token (private feed access, etc.)
 
 This token is used for single access only, it is not persisted. Meaning the user provides it, Authlogic grants them access, and that's it. If they want access again they need to provide the token again. Authlogic will *NEVER* store this value in the session or a cookie. For added security, by default this token is *ONLY* allowed for RSS and ATOM requests. Also, this token does *NOT* change with the password. Meaning if the user changes their password, this token will remain the same. Lastly, this token uses a "friendly" toke (see the URL example below) so that it is easier to email / copy and paste. You can change all of this with configuration (see Authlogic::Session::config), so if you don't like how this works by default, just set some simple configuration in your session.
 
@@ -293,7 +303,7 @@ The single_access_token parameter name is configurable (see Authlogic::Session::
 
 For more information see: Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::SingleAccess
 
-=== 3. Perishable token
+=== 3. Perishable token (resetting passwords, confirming accounts, etc)
 
 This token is used for temporary account access, hence the term "perishable". This token is constantly changing, it changes...
 
@@ -445,7 +455,7 @@ From there it is pretty simple. When you try to create a new session the record 
 
 == What's wrong with the current solutions?
 
-You probably don't care, but I think releasing the millionth authentication solution for a framework that has been around for over 4 years requires a little explanation.
+You probably don't care, but I think releasing the millionth ruby authentication solution requires a little explanation.
 
 I don't necessarily think the current solutions are "wrong", nor am I saying Authlogic is the answer to your prayers. But, to me, the current solutions were lacking something. Here's what I came up with...
 
@@ -458,6 +468,10 @@ Authentication is a one time set up process for your app. It's the same thing ov
 Using a library that hundreds of other people use has it advantages. Probably one of the biggest advantages if that you get to benefit from other people using the same code. When Bob in California figures out a new awesome security technique and adds it into Authlogic, you get to benefit from that with a single update. The catch is that this benefit is limited to code that is not "generated" or added into your app. As I said above, once code is "generated" and added into your app, it's your responsibility.
 
 Lastly, there is a pattern here, why clutter up all of your applications with the same code over and over?
+
+=== Security gets outdated
+
+Just as I stated in the above section, you can't stay up to date with your security since the code is generated and updating the plugin does nothing. If there is one thing you should stay up to date with, it's security. But it's not just the fact that there is no reasonable method for receiving updates. It's the fact that they tie you down to an encryption algorithm *AND* they use a bad one at that. Every single solution I've seen uses Sha1, which is joining the party with MD5. Sha1 is not as secure as it used to be. But that's the nature of algorithms, they eventually get phased out, which is fine. Everyone knows this, why not accommodate for this? Authlogic does this with the :transition_from_crypto_provider option. It takes care of transitioning all of your users to a new algorithm. Even better, it provides BCrypt as an option which should, in theory, never require you to switch since you can adjust the cost and make the encryption stronger. At the same time, still compatible with older passwords using the lower cost.
 
 === Why test the same code over and over?
 

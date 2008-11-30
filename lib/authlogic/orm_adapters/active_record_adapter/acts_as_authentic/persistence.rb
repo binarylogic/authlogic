@@ -22,7 +22,10 @@ module Authlogic
           def acts_as_authentic_with_persistence(options = {})
             acts_as_authentic_without_persistence(options)
           
+            validates_presence_of options[:persistence_token_field]
             validates_uniqueness_of options[:persistence_token_field], :if => "#{options[:persistence_token_field]}_changed?".to_sym
+            
+            before_validation "reset_#{options[:persistence_token_field]}".to_sym, :if => "reset_#{options[:persistence_token_field]}?".to_sym
           
             def forget_all!
               # Paginate these to save on memory
@@ -46,10 +49,23 @@ module Authlogic
               end
             
               def #{options[:password_field]}_with_persistence=(value)
-                self.#{options[:persistence_token_field]} = self.class.unique_token
+                reset_#{options[:persistence_token_field]}
                 self.#{options[:password_field]}_without_persistence = value
               end
               alias_method_chain :#{options[:password_field]}=, :persistence
+              
+              def reset_#{options[:persistence_token_field]}
+                self.#{options[:persistence_token_field]} = self.class.unique_token
+              end
+              
+              def reset_#{options[:persistence_token_field]}!
+                reset_#{options[:persistence_token_field]}
+                save_without_session_maintenance(false)
+              end
+              
+              def reset_#{options[:persistence_token_field]}?
+                #{options[:persistence_token_field]}.blank?
+              end
             end_eval
           end
         end

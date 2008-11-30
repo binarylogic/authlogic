@@ -36,7 +36,7 @@ module ORMAdaptersTests
             :validate_fields => true,
             :login_field => :login,
             :perishable_token_valid_for => 600,
-            :password_field_validates_presence_of_options => {},
+            :password_field_validates_length_of_options => {},
             :password_field => :password,
             :validate_login_field => true,
             :email_field => :email,
