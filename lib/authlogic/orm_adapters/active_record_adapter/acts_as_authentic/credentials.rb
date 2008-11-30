@@ -118,7 +118,7 @@ module Authlogic
                 when String
                   return false unless eval('#{options[:password_field_validates_length_of_options][:if]}')
                 when Symbol
-                  return false unless send(:#{options[:password_field_validates_length_of_options][:if]})
+                  return false unless send(#{options[:password_field_validates_length_of_options][:if].inspect})
                 end
                 
                 self.#{options[:crypted_password_field]}.blank?
