@@ -121,7 +121,7 @@ module Authlogic
                   return false unless send(#{options[:password_field_validates_length_of_options][:if].inspect})
                 end
                 
-                self.#{options[:crypted_password_field]}.blank?
+                #{options[:crypted_password_field]}.blank?
               end
               
               private

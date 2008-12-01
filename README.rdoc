@@ -439,6 +439,23 @@ Obviously there is a little more to it than this, but hopefully this clarifies a
 
 When things come together like this I think its a sign that you are doing something right. Put that in your pipe and smoke it!
 
+== Testing
+
+Testing with authlogic is easy, there is a helper file that will add some convenient test helpers for you. In your test_helper.rb file do the following:
+
+  # test/test_helper.rb
+  require 'authlogic/testing/test_unit_helpers'
+
+You get the following methods:
+
+  set_session_for(record_object)
+  set_cookie_for(record_object)
+  set_http_auth_for(username, password)
+
+In your test, before you execute a request, just call one of those methods and it will set the proper values so that it will seems as if that record is logged in.
+
+You can also checkout the authlogic_example application (see helpful links above), the tests there use this.
+
 == Framework agnostic (Rails, Merb, etc.)
 
 I designed Authlogic to be framework agnostic, meaning it doesn't care what framework you use it in. Right out of the box it supports rails and merb. I have not had the opportunity to use other frameworks, but the only thing stopping Authlogic from being used in other frameworks is a simple adapter. Check out controller_adapters/rails_adapter, or controller_adapters/merb_adapter.

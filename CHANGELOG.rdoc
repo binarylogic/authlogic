@@ -1,3 +1,8 @@
+== 1.3.7 released 2008-11-30
+
+* Added session generator: script/generate session UserSession
+* Added Test::Unit helpers file, see testing in the README
+
 == 1.3.6 released 2008-11-30
 
 * Modified validates_length_of for password so that there is a fallback validation if the passed "if statement" fails

@@ -46,6 +46,7 @@ test/libs/mock_controller.rb
 test/libs/mock_cookie_jar.rb
 test/libs/mock_request.rb
 test/libs/ordered_hash.rb
+test/libs/user.rb
 test/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/config_test.rb
 test/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/credentials_test.rb
 test/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/logged_in_test.rb
