@@ -127,8 +127,11 @@ module Authlogic
         # * <tt>password_field_validates_length_of_options</tt> - default: {:minimum => 4},
         #   These options are applied to the validates_length_of call for the :password_field
         #
-        # * <tt>login_field_validates_confirmation_of_options</tt> - default: {},
+        # * <tt>password_field_validates_confirmation_of_options</tt> - default: {},
         #   These options are applied to the validates_confirmation_of call for the :password_field
+        #
+        # * <tt>password_confirmation_field_validates_presence_of_options</tt> - default: {},
+        #   These options are applied to the validates_presence_of call for the :password_confirmation_field.
         #
         # * <tt>email_field_validation_options</tt> - default: {},
         #   The same as :validation_options but these are only applied to validations that pertain to the :email_field
@@ -197,6 +200,8 @@ module Authlogic
                 options[validation_key] = options[field_key].merge(options[validation_key] || {})
               end
             end
+            
+            options[:password_confirmation_field_validates_presence_of_options] ||= {}
             
             if options[:scope]
               options[:login_field_validates_uniqueness_of_options][:scope] ||= options[:scope]

@@ -100,6 +100,10 @@ Lets assume you are setting up a session for your User model.
 
 Create your user_session.rb file:
 
+  $ script/generate session user_session
+
+This will create a file that looks similar to:
+
   # app/models/user_session.rb
   class UserSession < Authlogic::Session::Base
     # configuration here, just like ActiveRecord, or in an initializer
@@ -452,7 +456,7 @@ You get the following methods:
   set_cookie_for(record_object)
   set_http_auth_for(username, password)
 
-In your test, before you execute a request, just call one of those methods and it will set the proper values so that it will seems as if that record is logged in.
+In your test, before you execute a request, just call one of those methods and it will set the proper values so that it will seem as if that record is logged in.
 
 You can also checkout the authlogic_example application (see helpful links above), the tests there use this.
 

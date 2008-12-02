@@ -1,4 +1,6 @@
 CHANGELOG.rdoc
+generators/session/session_generator.rb
+generators/session/templates/session.rb
 init.rb
 lib/authlogic/controller_adapters/abstract_adapter.rb
 lib/authlogic/controller_adapters/merb_adapter.rb
@@ -27,6 +29,7 @@ lib/authlogic/session/params.rb
 lib/authlogic/session/perishability.rb
 lib/authlogic/session/scopes.rb
 lib/authlogic/session/session.rb
+lib/authlogic/testing/test_unit_helpers.rb
 lib/authlogic/version.rb
 lib/authlogic.rb
 Manifest

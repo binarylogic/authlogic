@@ -45,7 +45,8 @@ module ORMAdaptersTests
             :validate_email_field => true,
             :validation_options => {},
             :login_field_validation_options => {},
-            :transition_from_crypto_provider => []
+            :transition_from_crypto_provider => [],
+            :password_confirmation_field_validates_presence_of_options => {}
            }
           assert_equal default_config, User.acts_as_authentic_config
         end

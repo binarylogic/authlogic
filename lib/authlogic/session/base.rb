@@ -357,7 +357,7 @@ module Authlogic
           return if respond_to?(login_field) # already created these methods
           
           self.class.class_eval <<-"end_eval", __FILE__, __LINE__
-            alias_method :#{klass_name.underscore.split("/").last}, :record
+            alias_method :#{klass_name.demodulize.underscore}, :record
             
             attr_reader :#{login_field}
             
