@@ -19,7 +19,7 @@ module Authlogic
       
       # = Rails Implementation
       #
-      # Lets Authlogic know about the controller object, AKA "activates" authlogic.
+      # Lets Authlogic know about the controller object via a before filter, AKA "activates" authlogic.
       module RailsImplementation
         def self.included(klass) # :nodoc:
           klass.prepend_before_filter :activate_authlogic

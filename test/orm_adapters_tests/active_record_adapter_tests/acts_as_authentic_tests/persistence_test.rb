@@ -39,6 +39,15 @@ module ORMAdaptersTests
           assert !UserSession.find
           assert UserSession.find(:ziggity_zack)
         end
+        
+        def test_password
+          ben = users(:ben)
+          old_persistence_token = ben.persistence_token
+          ben.password = ""
+          assert_equal old_persistence_token, ben.persistence_token
+          ben.password = "newpass"
+          assert_not_equal old_persistence_token, ben.persistence_token
+        end
       end
     end
   end

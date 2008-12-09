@@ -10,7 +10,7 @@ module Authlogic
   #
   #   class MyAwesomeEncryptionMethod
   #     def self.encrypt(*tokens)
-  #       # the tokens passed wil be an array of objects, what type of object is irrelevant
+  #       # the tokens passed will be an array of objects, what type of object is irrelevant,
   #       # just do what you need to do with them and return a single encrypted string.
   #       # for example, you will most likely join all of the objects into a single string and then encrypt that string
   #     end

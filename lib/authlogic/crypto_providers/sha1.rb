@@ -5,7 +5,7 @@ module Authlogic
     # = Sha1
     #
     # This class was made for the users transitioning from restful_authentication. I highly discourage using this crypto provider as it inferior to your other options.
-    # Please use the Sha512 crypto provider or the BCrypt provider.
+    # Please use any other provider offered by Authlogic.
     class Sha1
       class << self
         def join_token

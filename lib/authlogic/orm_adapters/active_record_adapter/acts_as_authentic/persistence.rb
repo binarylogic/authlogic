@@ -49,7 +49,7 @@ module Authlogic
               end
             
               def #{options[:password_field]}_with_persistence=(value)
-                reset_#{options[:persistence_token_field]}
+                reset_#{options[:persistence_token_field]} unless value.blank?
                 self.#{options[:password_field]}_without_persistence = value
               end
               alias_method_chain :#{options[:password_field]}=, :persistence

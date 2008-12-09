@@ -7,7 +7,7 @@ module Authlogic
     class MerbAdapter < AbstractAdapter
       # = Merb Implementation
       #
-      # Lets Authlogic know about the controller object, AKA "activates" authlogic.
+      # Lets Authlogic know about the controller object via a before filter, AKA "activates" authlogic.
       module MerbImplementation
         def self.included(klass) # :nodoc:
           klass.before :activate_authlogic

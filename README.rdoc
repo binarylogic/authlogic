@@ -6,7 +6,7 @@ So what is Authlogic, and why would I create a solution to a problem that alread
 
 Let's take a rails application...
 
-Wouldn't it be nice to keep your app up to date with the latest and greatest security techniques with a simple update of a plugin?
+Wouldn't it be nice to keep your app up to date with the latest and greatest security techniques with a simple update of a gem?
 
 What if you could have authentication up and running in minutes without having to run a generator? All because it's simple, like everything else.
 
@@ -420,9 +420,9 @@ This is one of my favorite features that I think is pretty cool. It's things lik
 
 Just to clear up any confusion, Authlogic stores both the record id and the persistence token in the session. Why? So stale sessions can not be persisted. It stores the id so it can quickly find the record, and the persistence token to ensure no sessions are stale. The persistence token changes with the password, if someone is logged in and their password is changed, they should be logged out, unless they made the change. That being said, the person making the change needs their session to be updated with the new persistence token, so they stay logged in, which is what this section is all about.
 
-That being said...What if a user changes their password? You have to re-log them in with the new password, recreate the session, etc, pain in the ass. Or what if a user creates a new user account? You have to do the same thing. Here's an even better one: what if a user is in the admin area and changes his own password? There might even be another place passwords can change. It shouldn't matter, your code should be written in a way where you don't have to remember to do this.
+So what if a user changes their password? You have to re-log them in with the new password, recreate the session, etc. This is messy and leads to redundant code. Or what if a user creates a new user account? You have to do the same thing. Here's an even better one: what if a user is in the admin area and changes their own password? There might even be another place passwords can change. It shouldn't matter, your code should be written in a way where you don't have to remember to do this.
 
-Instead of updating sessions all over the place, doesn't it make sense to do this at a lower level? Like the User model? You're saying "but Ben, models can't mess around with sessions and cookies". True...but Authlogic can, and you can access Authlogic just like a model. I know in most situations it's not good practice to do this but I view this in the same class as sweepers, and feel like it actually is good practice here. User sessions are directly tied to users, they should be connected on the model level.
+Instead of updating sessions all over the place, doesn't it make sense to do this at a lower level? Like the User model? You're saying "but Ben, models can't mess around with sessions and cookies". True...but Authlogic can, and you can access Authlogic just like a model. I know in most situations it's not good practice to do this, but I view this in the same class as sweepers, and feel like it actually is good practice here. User sessions are directly tied to users, they should be connected on the model level.
 
 Fear not, because the acts_as_authentic method you call in your model takes care of this for you, by adding an after_save callback to automatically keep the session up to date. You don't have to worry about it anymore. Don't even think about it. Let your UsersController deal with users, not users *AND* sessions. *ANYTIME* the user changes his password in *ANY* way, his session will be updated.
 

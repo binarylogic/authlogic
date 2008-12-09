@@ -1,8 +1,12 @@
 module Authlogic
-  module Testing
+  module Testing # :nodoc:
     # = Test Unit Helpers
     #
-    # Provides useful methods for testing in Test::Unit, lets you log records in, etc.
+    # Provides useful methods for testing in Test::Unit, lets you log records in, etc. Just include this in your test_helper filter:
+    #
+    #   require "authlogic/testing/test_unit_helpers"
+    #
+    # Then you will have the methods below to use in your tests.
     module TestUnitHelpers
       private
         def session_class(record) # :nodoc:
