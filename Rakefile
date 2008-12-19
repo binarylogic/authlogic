@@ -11,7 +11,7 @@ begin
     p.project = 'authlogic'
     p.summary = "A clean, simple, and unobtrusive ruby authentication solution."
     p.url = "http://github.com/binarylogic/authlogic"
-    p.dependencies = %w(activesupport)
+    p.dependencies = %w(activesupport echoe)
   end
 rescue LoadError => boom
   puts "You are missing a dependency required for meta-operations on this gem."
