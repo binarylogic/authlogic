@@ -274,6 +274,39 @@ module SessionTests
       assert session.errors.empty?
     end
     
+    def test_valid_record
+      session = UserSession.new      
+      ben = users(:ben)
+      session.send(:record=, ben)
+      assert session.send :valid_record?
+      assert session.errors.empty?
+
+      ben.update_attribute(:active, false)
+      assert !session.send(:valid_record?) 
+      assert session.errors.on_base.size > 0
+
+      ben.active = true
+      ben.approved = false
+      ben.save
+      assert !session.send(:valid_record?) 
+      assert session.errors.on_base.size > 0
+
+      ben.approved = true
+      ben.confirmed = false
+      ben.save
+      assert !session.send(:valid_record?) 
+      assert session.errors.on_base.size > 0
+
+      ben.approved = false
+      ben.confirmed = false
+      ben.active = false
+
+      UserSession.disable_magic_states = true
+      session = UserSession.new
+      session.send(:record=, ben)   
+      assert session.send :valid_record?
+    end
+    
     def test_valid_http_auth
       ben = users(:ben)
       session = UserSession.new

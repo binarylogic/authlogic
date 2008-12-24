@@ -65,6 +65,21 @@ module Authlogic
         end
         alias_method :cookie_key=, :cookie_key
         
+        # Set this to true if you want to disable the checking of active?, approved?, and confirmed? on your record. This is more or less of a
+        # convenience feature, since 99% of the time if those methods exist and return false you will not want the user logging in. You could
+        # easily accomplish this same thing with a before_validation method or other callbacks.
+        #
+        # * <tt>Default:</tt> false
+        # * <tt>Accepts:</tt> Boolean
+        def disable_magic_states(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:disable_magic_states)
+          else
+            write_inheritable_attribute(:disable_magic_states, value)
+          end
+        end
+        alias_method :disable_magic_states=, :disable_magic_states
+        
         # Authlogic tries to validate the credentials passed to it. One part of validation is actually finding the user and making sure it exists. What method it uses the do this is up to you.
         #
         # Let's say you have a UserSession that is authenticating a User. By default UserSession will call User.find_by_login(login). You can change what method UserSession calls by specifying it here. Then
@@ -331,6 +346,10 @@ module Authlogic
         
         def cookie_key
           build_key(self.class.cookie_key)
+        end
+        
+        def disable_magic_states?
+          self.class.disable_magic_states == true
         end
         
         def find_by_login_method

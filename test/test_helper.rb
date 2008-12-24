@@ -50,6 +50,9 @@ ActiveRecord::Schema.define(:version => 1) do
     t.datetime  :last_login_at
     t.string    :current_login_ip
     t.string    :last_login_ip
+    t.boolean   :active, :default => true
+    t.boolean   :approved, :default => true
+    t.boolean   :confirmed, :default => true
   end
   
   create_table :employees do |t|

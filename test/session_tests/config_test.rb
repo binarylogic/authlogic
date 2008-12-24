@@ -23,6 +23,18 @@ module SessionTests
       session = UserSession.new
       assert_equal "user_credentials", session.cookie_key
     end
+    
+    def test_disable_magic_states
+      UserSession.disable_magic_states = true
+      assert_equal true, UserSession.disable_magic_states
+      session = UserSession.new
+      assert_equal true, session.disable_magic_states?
+    
+      UserSession.disable_magic_states false
+      assert_equal false, UserSession.disable_magic_states
+      session = UserSession.new
+      assert_equal false, session.disable_magic_states?
+    end
   
     def test_find_by_login_method
       UserSession.find_by_login_method = "my_login_method"

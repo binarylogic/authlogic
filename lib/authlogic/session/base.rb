@@ -439,12 +439,14 @@ module Authlogic
         end
         
         def valid_record?
+          return true if disable_magic_states?
           [:active, :approved, :confirmed].each do |required_status|
             if record.respond_to?("#{required_status}?") && !record.send("#{required_status}?")
               errors.add_to_base(send("not_#{required_status}_message"))
               return false
             end
           end
+          true
         end
     end
   end
