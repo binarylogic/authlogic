@@ -116,12 +116,12 @@ module Authlogic
               def validate_#{options[:password_field]}?
                 case #{options[:password_field_validates_length_of_options][:if].inspect}
                 when String
-                  return false unless eval('#{options[:password_field_validates_length_of_options][:if]}')
+                  return false if !eval('#{options[:password_field_validates_length_of_options][:if]}')
                 when Symbol
-                  return false unless send(#{options[:password_field_validates_length_of_options][:if].inspect})
+                  return false if !send(#{options[:password_field_validates_length_of_options][:if].inspect})
                 end
                 
-                #{options[:crypted_password_field]}.blank?
+                new_record? || #{options[:password_salt_field]}_changed? || #{options[:crypted_password_field]}.blank?
               end
               
               private
