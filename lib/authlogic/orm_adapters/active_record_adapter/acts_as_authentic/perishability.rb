@@ -26,7 +26,7 @@ module Authlogic
             class_eval <<-"end_eval", __FILE__, __LINE__
               validates_uniqueness_of :#{options[:perishable_token_field]}, :if => :#{options[:perishable_token_field]}_changed?
               
-              before_validation :reset_#{options[:perishable_token_field]}
+              before_validation :reset_#{options[:perishable_token_field]}, :unless => :disable_#{options[:perishable_token_field]}_maintenance?
               
               def self.find_using_#{options[:perishable_token_field]}(token, age = #{options[:perishable_token_valid_for]})
                 return if token.blank?
@@ -50,6 +50,10 @@ module Authlogic
               def reset_#{options[:perishable_token_field]}!
                 reset_#{options[:perishable_token_field]}
                 save_without_session_maintenance(false)
+              end
+              
+              def disable_#{options[:perishable_token_field]}_maintenance?
+                #{options[:disable_perishable_token_maintenance].inspect} == true
               end
             end_eval
           end

@@ -71,6 +71,11 @@ module Authlogic
         #   Authlogic gives you a sepcial method for finding records by the perishable token (see Authlogic::ORMAdapters::ActiveRecordAdapter::ActcsAsAuthentic::Perishability). In this method
         #   it checks for the age of the token. If the token is older than whatever you specify here, a record will NOT be returned. This way the tokens are perishable, thus making this system much
         #   more secure.
+        #
+        # * <tt>disable_perishble_token_maintenance</tt> - default: false,
+        #   Authlogic automatically maintains when to reset the perishable_token. This token should reset frequently because it is "perishable", but how frequent depends on your app.
+        #   By default it tries to reset this token as much as possible, which is done via a before_validation callback. If for some reason you want to maintain this yourself just
+        #   set this to true and use the reset_perishable_token and reset_perishable_token! methods to maintain it yourself.
         #   
         # * <tt>persistence_field</tt> - default: :persistence_token, :remember_token, or :cookie_tokien, depending on which column is present,
         #   defaults to :persistence_token if none are present,

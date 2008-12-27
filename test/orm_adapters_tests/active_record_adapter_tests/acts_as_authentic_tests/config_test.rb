@@ -112,6 +112,16 @@ module ORMAdaptersTests
           #assert !user.errors.on(:password)
         end
         
+        def test_disable_perishable_token_maintenance
+          ben = users(:ben)
+          assert !ben.disable_perishable_token_maintenance?
+          User.acts_as_authentic(:disable_perishable_token_maintenance => true)
+          assert ben.disable_perishable_token_maintenance?
+          old_perishable_token = ben.perishable_token
+          assert ben.valid?
+          assert_equal old_perishable_token, ben.perishable_token
+        end
+        
         private
           def get_default_configuration
             @default_configuration = User.acts_as_authentic_config
