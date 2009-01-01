@@ -2,9 +2,10 @@ require "test/unit"
 
 module Authlogic
   module ShouldaMacros
-    def should_be_authentic(model)
+    def should_be_authentic
+      klass = model_class
       should "acts as authentic" do
-        assert model.respond_to?(:acts_as_authentic_config)
+        assert klass.respond_to?(:acts_as_authentic_config)
       end
     end
   end
