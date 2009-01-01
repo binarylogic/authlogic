@@ -2,13 +2,20 @@
 
 Authlogic is a clean, simple, and unobtrusive ruby authentication solution. Put simply, its the Chuck Norris of authentication solutions for your framework of choice.
 
-So what is Authlogic, and why would I create a solution to a problem that already has plenty of solutions? Because none of the solutions felt right to me, RESTful development and authentication just didn't seem to go well together. It was like trying to fit a square peg in a round hole. All of the current solutions, for both rails and merb, just seemed to force that square peg in the round hole for me. Just because they did it for me doesn't make it right. They were either too complicated, bloated, littered my application with tons of code, had no platform for reasonable updating, used an inferior encryption algorithm, or were just confusing. This is not the simple / elegant ruby we all fell in love with. We need a "ruby like" authentication solution. Authlogic is my attempt to satisfy that need...
+So what is Authlogic, and why would I create a solution to a problem that already has plenty of solutions? Because none of the current solutions feel right. The feel wrong because they don't properly follow the MVC design pattern. Somewhere along the line people forgot that the "M" in MVC is not *ONLY* for data access, its where you place your domain logic. This is why the RESTful design pattern and the current authentication solutions don't play nice. It's like fitting a square peg in a round hole, which is a red flag that something is wrong. Authlogic solves this by placing the session maintenance logic into its own domain (aka "model"), where it belongs. Moving session maintenance into its own domain has many benefits:
+
+1. It's easier to update and stay current with the latest security practices. Since authlogic sits in between you and your session it can assist in keeping your security top notch. Such as upgrading your hashing algorithm, helping you transition to a new algorithm, etc. Since Authlogic is a gem, you get all of these benefits just like you do with everything else in ruby, through rubygems.
+2. It ties everything together on the domain level. Such as when a new user registers. No reason to manually log the user in, authlogic handles this for you via callbacks. The same goes for when a user changes their password. Authlogic handles maintaining the session for you.
+3. Your application can stay clean and focused and free of redundant authentication code from app to app. Meaning generators are *NOT* necessary at all.
+4. A by product of #3 is that you don't have to test the same code over and over in each of your apps. You don't test the internals of ActiveRecord in each of your apps, so why would you test the internals of Authlogic? It's already been thoroughly tested for you. Focus on your application, and get rid of the noise by testing your application specific code.
+5. You get to write your own code, just like you do for any other model. Meaning the code you write is specific to your application, the way you want it, and more importantly you understand it.
+6. You are not restricted to a single session. Think about Apple's me.com, where they need you to authenticate a second time before changing your billing information. Why not just create a second session for this? It works just like your initial session. Then your billing controller can require an "ultra secure" session.
+
+Authlogic can do all of this, keep reading to find out how...
+
+== Quick example
 
 Let's take a rails application...
-
-Wouldn't it be nice to keep your app up to date with the latest and greatest security techniques with a simple update of a gem?
-
-What if you could have authentication up and running in minutes without having to run a generator? All because it's simple, like everything else.
 
 What if creating a user session could be as simple as...
 
@@ -66,8 +73,6 @@ Or how about persisting the session...
       end
   end
 
-Authlogic and REST are like peas and carrots, as Forrest Gump would say. But This is just the tip of the ice berg. Keep reading to find out everything Authlogic can do.
-
 == Helpful links
 
 *	<b>Documentation:</b> http://authlogic.rubyforge.org
@@ -116,7 +121,7 @@ The user model needs to have the following columns. The names of these columns c
 
     t.string    :login,                 :null => false
     t.string    :crypted_password,      :null => false
-    t.string    :password_salt,         :null => false # not needed if you are encrypting your pw instead of using a hash algorithm.
+    t.string    :password_salt,         :null => false
     t.string    :persistence_token,     :null => false
     t.string    :single_access_token,   :null => false # optional, see the tokens section below.
     t.string    :perishable_token,      :null => false # optional, see the tokens section below.
