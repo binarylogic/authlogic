@@ -7,6 +7,8 @@ module Authlogic
       include Config
       
       class << self
+        attr_accessor :methods_configured
+        
         # Returns true if a controller have been set and can be used properly. This MUST be set before anything can be done. Similar to how ActiveRecord won't allow you to do anything
         # without establishing a DB connection. In your framework environment this is done for you, but if you are using Authlogic outside of your frameword, you need to assign a controller
         # object to Authlogic via Authlogic::Session::Base.controller = obj.
@@ -353,25 +355,35 @@ module Authlogic
           self.class.controller
         end
         
+        # The goal with Authlogic is to feel as natural as possible. As a result, this method creates methods on the fly
+        # based on the configuration set. By default the configuration is based off of the columns names in the authenticating
+        # model. Thus allowing you to call user_session.username instead of user_session.login if you have a username column
+        # instead of a login column. Since class configuration can change during initialization it makes the most sense to enforce
+        # this configuration during the first initialization. At this point, all configuration should be set.
+        #
+        # Lastly, each method is defined individually to allow the user to provide their own "custom" method and this makes sure
+        # we don't replace their method.
         def create_configurable_methods!
-          return if respond_to?(login_field) # already created these methods
+          return if self.class.methods_configured == true
+          
+          self.class.send(:alias_method, klass_name.demodulize.underscore.to_sym, :record)
+          self.class.send(:attr_writer, login_field) if !respond_to?("#{login_field}=")
+          self.class.send(:attr_reader, login_field) if !respond_to?(login_field)
+          self.class.send(:attr_writer, password_field) if !respond_to?("#{password_field}=")
+          self.class.send(:define_method, password_field) {} if !respond_to?(password_field)
           
           self.class.class_eval <<-"end_eval", __FILE__, __LINE__
-            alias_method :#{klass_name.demodulize.underscore}, :record
-            
-            attr_reader :#{login_field}
-            
-            def #{login_field}=(value)
+            def #{login_field}_with_authentication_flag=(value)
               self.authenticating_with = :password
-              @#{login_field} = value
+              self.#{login_field}_without_authentication_flag = value
             end
+            alias_method_chain :#{login_field}=, :authentication_flag
             
-            def #{password_field}=(value)
+            def #{password_field}_with_authentication_flag=(value)
               self.authenticating_with = :password
-              @#{password_field} = value
+              self.#{password_field}_without_authentication_flag = value
             end
-
-            def #{password_field}; end
+            alias_method_chain :#{password_field}=, :authentication_flag
             
             private
               # The password should not be accessible publicly. This way forms using form_for don't fill the password with the attempted password. The prevent this we just create this method that is private.
@@ -379,6 +391,8 @@ module Authlogic
                 @#{password_field}
               end
           end_eval
+          
+          self.class.methods_configured = true
         end
         
         def klass

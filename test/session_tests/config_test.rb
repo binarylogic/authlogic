@@ -102,6 +102,7 @@ module SessionTests
     end
     
     def test_login_field
+      UserSession.methods_configured = false
       UserSession.login_field = :saweet
       assert_equal :saweet, UserSession.login_field
       session = UserSession.new
@@ -176,6 +177,7 @@ module SessionTests
     end
   
     def test_password_field
+      UserSession.methods_configured = false
       UserSession.password_field = :saweet
       assert_equal :saweet, UserSession.password_field
       session = UserSession.new

@@ -2,6 +2,7 @@
 
 * Added the disable_perishable_token_maintenance option to disable the automatic resetting of the perishable_token, meaning you will have to maintain this yourself.
 * Changed shoulda macro to conform to standards so model is not required to be passed
+* Modified method definitions for the Session class to check for already defined methods, allowing you to write your own "credential" methods, and Authlogic will not overwrite your custom methods.
 
 == 1.3.8 released 2008-12-24
 
