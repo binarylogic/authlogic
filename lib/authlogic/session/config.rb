@@ -315,7 +315,7 @@ module Authlogic
         # Specify a list of allowed request types and single access authentication will only be allowed for the ones you specify. Checkout the "Single Access / Private Feeds Access" section in the README.
         #
         # * <tt>Default:</tt> "application/rss+xml", "application/atom+xml"
-        # * <tt>Accepts:</tt> String, or :all to allow single access authentication for any and all request types
+        # * <tt>Accepts:</tt> String of request type, or :all to allow single access authentication for any and all request types
         def single_access_allowed_request_types(*values)
           if values.blank?
             read_inheritable_attribute(:single_access_allowed_request_types) || single_access_allowed_request_types("application/rss+xml", "application/atom+xml")

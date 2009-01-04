@@ -12,7 +12,7 @@ module Authlogic
     module Params
       # Tries to validate the session from information in the params token
       def valid_params?
-        if params_credentials && single_access_token_field && single_access_allowed_request_types.include?(controller.request_content_type)
+        if params_credentials && single_access_token_field && (single_access_allowed_request_types.include?(controller.request_content_type) || single_access_allowed_request_types.include?(:all))
           self.unauthorized_record = search_for_record("find_by_#{single_access_token_field}", params_credentials)
           self.persisting = false
           return true if valid?
