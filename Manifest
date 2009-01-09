@@ -29,6 +29,7 @@ lib/authlogic/session/params.rb
 lib/authlogic/session/perishability.rb
 lib/authlogic/session/scopes.rb
 lib/authlogic/session/session.rb
+lib/authlogic/session/timeout.rb
 lib/authlogic/testing/test_unit_helpers.rb
 lib/authlogic/version.rb
 lib/authlogic.rb
@@ -67,4 +68,5 @@ test/session_tests/params_test.rb
 test/session_tests/perishability_test.rb
 test/session_tests/scopes_test.rb
 test/session_tests/session_test.rb
+test/session_tests/timeout_test.rb
 test/test_helper.rb
