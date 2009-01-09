@@ -33,6 +33,7 @@ require File.dirname(__FILE__) + "/authlogic/session/params"
 require File.dirname(__FILE__) + "/authlogic/session/perishability"
 require File.dirname(__FILE__) + "/authlogic/session/session"
 require File.dirname(__FILE__) + "/authlogic/session/scopes"
+require File.dirname(__FILE__) + "/authlogic/session/timeout"
 require File.dirname(__FILE__) + "/authlogic/session/base"
 
 module Authlogic
@@ -45,6 +46,7 @@ module Authlogic
       include Perishability
       include Session
       include Scopes
+      include Timeout
     end
   end
 end

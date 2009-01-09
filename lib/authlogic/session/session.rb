@@ -25,10 +25,10 @@ module Authlogic
               self.unauthorized_record = record
             end
           end
-          return valid?
+          valid? && !stale?
+        else
+          false
         end
-        
-        false
       end
       
       private

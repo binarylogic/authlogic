@@ -176,6 +176,26 @@ module Authlogic
         end
         alias_method :login_field=, :login_field
         
+        # With acts_as_authentic you get a :logged_in_timeout configuration option. If this is set, after this amount of time has passed the user
+        # will be marked as logged out. Obviously, since web based apps are on a per request basis, we have to define a time limit threshold that
+        # determines when we consider a user to be "logged out". Meaning, if they login and then leave the website, when do mark them as logged out?
+        # I recommend just using this as a fun feature on your website or reports, giving you a ballpark number of users logged in and active. This is
+        # not meant to be a dead accurate representation of a users logged in state, since there is really no real way to do this with web based apps.
+        #
+        # That being said, you can use that feature to require a login if their session timesout. Similar to how financial sites work. Just set this option to
+        # true and if your record returns true for logged_out? then they will be required to log back in.
+        #
+        # * <tt>Default:</tt> false
+        # * <tt>Accepts:</tt> Boolean
+        def logout_on_timeout(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:logout_on_timeout) || logout_on_timeout(false)
+          else
+            write_inheritable_attribute(:logout_on_timeout, value)
+          end
+        end
+        alias_method :logout_on_timeout=, :logout_on_timeout
+        
         # The error message used when the record returns false to active?
         #
         # * <tt>Default:</tt> "Your account is not active"
@@ -374,6 +394,10 @@ module Authlogic
       
         def login_field
           self.class.login_field
+        end
+        
+        def logout_on_timeout?
+          self.class.logout_on_timeout == true
         end
         
         def not_active_message

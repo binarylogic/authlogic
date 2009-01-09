@@ -27,6 +27,7 @@ module Authlogic
                 named_scope :logged_out, lambda { {:conditions => ["last_request_at is NULL or last_request_at <= ?", #{options[:logged_in_timeout]}.seconds.ago]} }
                 
                 def logged_in?
+                  raise "Can not determine the records login state because there is no last_request_at column" if !respond_to?(:last_request_at)
                   !last_request_at.nil? && last_request_at > #{options[:logged_in_timeout]}.seconds.ago
                 end
               

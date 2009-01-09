@@ -17,9 +17,9 @@ module Authlogic
           self.persisting = false
           return true if valid?
           self.persisting = true
+        else
+          false
         end
-        
-        false
       end
       
       private

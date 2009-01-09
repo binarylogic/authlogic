@@ -2,7 +2,7 @@
 
 Authlogic is a clean, simple, and unobtrusive ruby authentication solution. Put simply, its the Chuck Norris of authentication solutions for your framework of choice.
 
-So what is Authlogic, and why would I create a solution to a problem that already has plenty of solutions? Because none of the current solutions feel right. The feel wrong because logic is not organized properly in the MVC structure. A common misconception with the MVC design pattern is that the model "M" is only for data access logic, which is wrong. A model is a place for domain logic. This is why the RESTful design pattern and the current authentication solutions don't play nice, because the logic is not in the right spot. It's like fitting a square peg in a round hole, which is a red flag that something is wrong. Authlogic solves this by placing the session maintenance logic into its own domain (aka "model"), where it belongs. Moving session maintenance into its own domain has many benefits:
+So what is Authlogic, and why would I create a solution to a problem that already has plenty of solutions? Because none of the current solutions feel right. The feel wrong because logic is not organized properly in the MVC structure. As you may know, a common misconception with the MVC design pattern is that the model "M" is only for data access logic, which is wrong. A model is a place for domain logic. This is why the RESTful design pattern and the current authentication solutions don't play nice, because the logic is not in the right spot. Authlogic solves this by placing the session maintenance logic into its own domain (aka "model"), where it belongs. Moving session maintenance into its own domain has its benefits:
 
 1. It's easier to update and stay current with the latest security practices. Since authlogic sits in between you and your session it can assist in keeping your security top notch. Such as upgrading your hashing algorithm, helping you transition to a new algorithm, etc. Also, Authlogic is a gem, which means you get all of these benefits easily, through a rubygems update.
 2. It ties everything together on the domain level. Take a new user registration for example, no reason to manually log the user in, authlogic handles this for you via callbacks. The same applies to a user changing their password. Authlogic handles maintaining the session for you.
@@ -67,7 +67,7 @@ Or how about persisting the session...
         @current_user_session = UserSession.find
       end
       
-      end current_user
+      def current_user
         return @current_user if defined?(@current_user)
         @current_user = current_user_session && current_user_session.user
       end
@@ -359,7 +359,7 @@ Now mix and match the above, it can get pretty hairy. Fear not, because Authlogi
 
 I will describe each below, in order.
 
-=== Scoping your model
+=== 1. Scoping your model
 
 This scopes your login field validation, so that users are allowed to have the same login, just not in the same account.
 
@@ -368,7 +368,7 @@ This scopes your login field validation, so that users are allowed to have the s
     acts_as_authentic :scope => :account_id
   end
 
-=== Scoping your session
+=== 2. Scoping your session
 
 When the session tries to validate it searches for a record. You want to scope that search. No problem...
 
@@ -385,7 +385,7 @@ This works just like ActiveRecord, so it should come natural. Here is how you ge
     authenticates_many :user_sessions
   end
 
-=== Scoping cookies
+=== 3. Scoping cookies
 
 What's neat about cookies is that if you use sub domains they automatically scope their self. Meaning if you create a cookie in whatever.yourdomain.com it will not exist in another.yourdomain.com. So if you are using subdomains to scope your users, you don't have to do anything.
 
@@ -418,6 +418,22 @@ The errors in Authlogic work JUST LIKE ActiveRecord. In fact, it uses the exact 
         errors.add_to_base("You must be awesome to log in") unless record.awesome?
       end
   end
+
+== Timing Out Sessions
+
+Think about financial websites, if you are inactive for a certain period of time you will be asked to log back in on your next request. You can do this with Authlogic easily, there are 2 parts to this:
+
+1. Define the timeout threshold:
+
+  acts_as_authentic :logged_in_timeout => 10.minutes # default is 10.minutes
+
+2. Enable logging out on timeouts
+
+  class UserSession < Authlogic::Session::Base
+    logout_on_timeout true # default if false
+  end
+
+This will require a user to log back in if they are inactive for more than 10 minutes. In order for this feature to be used you must have a last_request_at datetime field in your data for whatever model you are authenticating with.
 
 == Automatic Session Updating
 
