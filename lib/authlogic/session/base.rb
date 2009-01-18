@@ -7,6 +7,8 @@ module Authlogic
       include Config
       
       class << self
+        attr_accessor :methods_configured
+        
         # Returns true if a controller has been set and can be used properly. This MUST be set before anything can be done. Similar to how ActiveRecord won't allow you to do anything
         # without establishing a DB connection. In your framework environment this is done for you, but if you are using Authlogic outside of your framework, you need to assign a controller
         # object to Authlogic via Authlogic::Session::Base.controller = obj. See the controller= method for more information.
@@ -86,7 +88,7 @@ module Authlogic
         end
       end
     
-      attr_accessor :new_session, :methods_configured
+      attr_accessor :new_session
       attr_reader :record, :unauthorized_record
       attr_writer :authenticating_with, :id, :persisting
     

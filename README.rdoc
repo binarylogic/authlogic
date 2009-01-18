@@ -82,8 +82,10 @@ Or how about persisting the session...
 *	<b>Live example of the tutorials above (with source):</b> http://authlogicexample.binarylogic.com
 *	<b>Tutorial: Easily migrate from restful_authentication:</b> http://www.binarylogic.com/2008/11/23/tutorial-easily-migrate-from-restful_authentication-to-authlogic
 *	<b>Tutorial: Upgrade passwords easily with Authlogic:</b> http://www.binarylogic.com/2008/11/23/tutorial-upgrade-passwords-easily-with-authlogic
-* <b>Google group:</b> http://groups.google.com/group/authlogic
 * <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
+* <b>Google group:</b> http://groups.google.com/group/authlogic
+
+If you find a bug or a problem please post it on lighthouse. If you need help with something or it is specific to your app, please use google groups. I check both regularly and get emails when anything happens, so that is the best place to get help.
 
 == Install and use
 
