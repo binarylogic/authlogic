@@ -13,6 +13,10 @@ module Authlogic
         controller.send(:cookies)
       end
       
+      def cookie_domain
+        controller.class.session_options[:session_domain]
+      end
+      
       def request_content_type
         request.format.to_s
       end

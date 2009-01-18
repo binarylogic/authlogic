@@ -12,6 +12,10 @@ module Authlogic
         def self.included(klass) # :nodoc:
           klass.before :activate_authlogic
         end
+        
+        def cookie_domain
+          Merb::Config[:session_cookie_domain]
+        end
 
         private
           def activate_authlogic

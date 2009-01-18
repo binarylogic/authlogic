@@ -22,6 +22,10 @@ module Authlogic
       def cookies
         controller.cookies
       end
+      
+      def cookie_domain
+        raise "The cookie_domain method has not been implemented by the controller adapter"
+      end
 
       def params
         controller.params

@@ -396,7 +396,7 @@ But what if you *don't* want to separate your cookies by subdomains? You can acc
 
   ActionController::Base.session_options[:session_domain] = '.mydomain.com'
 
-If for some reason the above doesn't work for you, do some simple Google searches. There are a million blog posts on this.
+Notice the above is configuration for your session, not your cookies. Authlogic notices this and assume this is how you want to treat your cookies as well. As a result, it applies this domain to the cookies it sets. Now your session and all cookies act the same and are scoped under the same domain under Authlogic.
 
 Now let's look at this from the other angle. What if you are *NOT* using subdomains, but still want to separate cookies for each account. Simple, set the :scope_cookies option for authenticate_many:
 

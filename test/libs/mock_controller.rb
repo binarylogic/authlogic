@@ -13,6 +13,10 @@ class MockController < Authlogic::ControllerAdapters::AbstractAdapter
     @cookies ||= MockCookieJar.new
   end
   
+  def cookie_domain
+    nil
+  end
+  
   def params
     @params ||= {}
   end
