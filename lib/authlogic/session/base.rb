@@ -7,16 +7,16 @@ module Authlogic
       include Config
       
       class << self
-        attr_accessor :methods_configured
-        
-        # Returns true if a controller have been set and can be used properly. This MUST be set before anything can be done. Similar to how ActiveRecord won't allow you to do anything
-        # without establishing a DB connection. In your framework environment this is done for you, but if you are using Authlogic outside of your frameword, you need to assign a controller
-        # object to Authlogic via Authlogic::Session::Base.controller = obj.
+        # Returns true if a controller has been set and can be used properly. This MUST be set before anything can be done. Similar to how ActiveRecord won't allow you to do anything
+        # without establishing a DB connection. In your framework environment this is done for you, but if you are using Authlogic outside of your framework, you need to assign a controller
+        # object to Authlogic via Authlogic::Session::Base.controller = obj. See the controller= method for more information.
         def activated?
           !controller.blank?
         end
         
-        def controller=(value) # :nodoc:
+        # This accepts a controller object wrapped with the Authlogic controller adapter. The controller adapters close the gap between the different controllers in each framework.
+        # That being said, Authlogic is expecting your object's class to extend Authlogic::ControllerAdapters::AbstractAdapter. See Authlogic::ControllerAdapters for more info.
+        def controller=(value)
           Thread.current[:authlogic_controller] = value
         end
         
@@ -33,7 +33,7 @@ module Authlogic
           session.save(&block)
         end
         
-        # Same as create but calls create!, which raises an exception when authentication fails
+        # Same as create but calls create!, which raises an exception when authentication fails.
         def create!(*args)
           session = new(*args)
           session.save!
@@ -67,7 +67,7 @@ module Authlogic
         end
         
         # The name of the class that this session is authenticating with. For example, the UserSession class will authenticate with the User class
-        # unless you specify otherwise in your configuration.
+        # unless you specify otherwise in your configuration. See authenticate_with for information on how to change this value.
         def klass
           @klass ||=
             if klass_name
@@ -86,7 +86,7 @@ module Authlogic
         end
       end
     
-      attr_accessor :new_session
+      attr_accessor :new_session, :methods_configured
       attr_reader :record, :unauthorized_record
       attr_writer :authenticating_with, :id, :persisting
     

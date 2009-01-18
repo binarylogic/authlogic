@@ -77,7 +77,7 @@ module Authlogic
         #   By default it tries to reset this token as much as possible, which is done via a before_validation callback. If for some reason you want to maintain this yourself just
         #   set this to true and use the reset_perishable_token and reset_perishable_token! methods to maintain it yourself.
         #   
-        # * <tt>persistence_field</tt> - default: :persistence_token, :remember_token, or :cookie_tokien, depending on which column is present,
+        # * <tt>persistence_token_field</tt> - default: :persistence_token, :remember_token, or :cookie_tokien, depending on which column is present,
         #   defaults to :persistence_token if none are present,
         #   This is the name of the field your persistence token is stored. The persistence token is a unique token that is stored in the users cookie and
         #   session. This way you have complete control of when sessions expire and you don't have to change passwords to expire sessions. This also

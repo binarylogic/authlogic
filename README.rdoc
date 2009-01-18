@@ -82,6 +82,7 @@ Or how about persisting the session...
 *	<b>Live example of the tutorials above (with source):</b> http://authlogicexample.binarylogic.com
 *	<b>Tutorial: Easily migrate from restful_authentication:</b> http://www.binarylogic.com/2008/11/23/tutorial-easily-migrate-from-restful_authentication-to-authlogic
 *	<b>Tutorial: Upgrade passwords easily with Authlogic:</b> http://www.binarylogic.com/2008/11/23/tutorial-upgrade-passwords-easily-with-authlogic
+* <b>Google group:</b> http://groups.google.com/group/authlogic
 * <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
 
 == Install and use
@@ -433,7 +434,7 @@ Think about financial websites, if you are inactive for a certain period of time
     logout_on_timeout true # default if false
   end
 
-This will require a user to log back in if they are inactive for more than 10 minutes. In order for this feature to be used you must have a last_request_at datetime field in your data for whatever model you are authenticating with.
+This will require a user to log back in if they are inactive for more than 10 minutes. In order for this feature to be used you must have a last_request_at datetime column in your table for whatever model you are authenticating with.
 
 == Automatic Session Updating
 
