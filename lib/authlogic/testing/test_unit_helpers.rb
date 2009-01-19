@@ -16,14 +16,14 @@ module Authlogic
         # Sets the session for a record. This way when you execute a request in your test, session values will be present.
         def set_session_for(record)
           session_class = session_class(record)
-          @request.session[session_class.session_key] = record.persistence_token
+          @request.session[session_class.session_key] = record.send(record.class.acts_as_authentic_config[:persistence_token_field])
           @request.session["#{session_class.session_key}_id"] = record.id
         end
         
         # Sets the cookie for a record. This way when you execute a request in your test, cookie values will be present.
         def set_cookie_for(record)
           session_class = session_class(record)
-          @request.cookies[session_class.cookie_key] = record.persistence_token
+          @request.cookies[session_class.cookie_key] = record.record.send(record.class.acts_as_authentic_config[:persistence_token_field])
         end
         
         # Sets the HTTP_AUTHORIZATION header for basic HTTP auth. This way when you execute a request in your test that is trying to authenticate
