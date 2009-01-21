@@ -1,6 +1,7 @@
 == 1.3.10
 
 * Added support for cookie domain, based on your frameworks session domain configuration
+* Updated test helper functions to use the persistence token config value
 
 == 1.3.9 released 2009-1-9
 

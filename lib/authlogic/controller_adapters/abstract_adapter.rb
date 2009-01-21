@@ -24,7 +24,7 @@ module Authlogic
       end
       
       def cookie_domain
-        raise "The cookie_domain method has not been implemented by the controller adapter"
+        raise NotImplementedError.new("The cookie_domain method has not been implemented by the controller adapter")
       end
 
       def params

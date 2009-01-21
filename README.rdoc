@@ -309,9 +309,9 @@ This field is optional, if you want to use it just add the field to your databas
 
 This is great for private feed access. So your URL to that user's private feed could look something like:
 
-  http://www.mydomain.com/account/feed.rss?single_access_token=4LiXF7FiGUppIPubBPey
+  http://www.mydomain.com/account/feed.rss?user_credentials=4LiXF7FiGUppIPubBPey
 
-The single_access_token parameter name is configurable (see Authlogic::Session::Config), but if that parameter exists Authlogic will automatically use it to try and grant that user access. You don't have to do a thing: UserSession.find will take care of it just like it does for everything else.
+The user_credentials parameter name is configurable (see Authlogic::Session::Config), but if that parameter exists Authlogic will automatically use it to try and grant that user access. You don't have to do a thing: UserSession.find will take care of it just like it does for everything else.
 
 For more information see: Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::SingleAccess
 

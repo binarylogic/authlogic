@@ -13,7 +13,7 @@ module Authlogic
         # without establishing a DB connection. In your framework environment this is done for you, but if you are using Authlogic outside of your framework, you need to assign a controller
         # object to Authlogic via Authlogic::Session::Base.controller = obj. See the controller= method for more information.
         def activated?
-          !controller.blank?
+          !controller.nil?
         end
         
         # This accepts a controller object wrapped with the Authlogic controller adapter. The controller adapters close the gap between the different controllers in each framework.
