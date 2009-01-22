@@ -2,6 +2,7 @@
 
 * Added support for cookie domain, based on your frameworks session domain configuration
 * Updated test helper functions to use the persistence token config value
+* Check for UTC times when using Time.now for current_login_at and last_request_at
 
 == 1.3.9 released 2009-1-9
 

@@ -277,7 +277,7 @@ module Authlogic
           
           if record.respond_to?(:current_login_at)
             record.last_login_at = record.current_login_at if record.respond_to?(:last_login_at)
-            record.current_login_at = Time.now
+            record.current_login_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
           end
           
           if record.respond_to?(:current_login_ip)

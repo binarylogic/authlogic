@@ -19,7 +19,7 @@ module Authlogic
       private
         def update_last_request_at!
           if record.class.column_names.include?("last_request_at") && (record.last_request_at.blank? || last_request_at_threshold.to_i.seconds.ago >= record.last_request_at)
-            record.last_request_at = Time.now
+            record.last_request_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
             record.save_without_session_maintenance(false)
           end
         end
