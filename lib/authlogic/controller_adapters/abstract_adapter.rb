@@ -43,6 +43,10 @@ module Authlogic
         controller.session
       end
       
+      def single_access_allowed?
+        controller.respond_to?(:single_access_allowed?, true) && controller.send(:single_access_allowed?)
+      end
+      
       private
         def method_missing(id, *args, &block)
           controller.send(id, *args, &block)

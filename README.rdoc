@@ -300,7 +300,17 @@ This token is used to persist the user's session. This is the token that is stor
 
 === 2. Single access token (private feed access, etc.)
 
-This token is used for single access only, it is not persisted. Meaning the user provides it, Authlogic grants them access, and that's it. If they want access again they need to provide the token again. Authlogic will *NEVER* store this value in the session or a cookie. For added security, by default this token is *ONLY* allowed for RSS and ATOM requests. Also, this token does *NOT* change with the password. Meaning if the user changes their password, this token will remain the same. Lastly, this token uses a "friendly" toke (see the URL example below) so that it is easier to email / copy and paste. You can change all of this with configuration (see Authlogic::Session::config), so if you don't like how this works by default, just set some simple configuration in your session.
+This token is used for single access only, it is not persisted. Meaning the user provides it, Authlogic grants them access, and that's it. If they want access again they need to provide the token again. Authlogic will *NEVER* store this value in the session or a cookie. For added security, by default this token is *ONLY* allowed for RSS and ATOM requests. Also, this token does *NOT* change with the password. Meaning if the user changes their password, this token will remain the same. Lastly, this token uses a "friendly" token (see the URL example below) so that it is easier to email / copy and paste. You can change all of this with configuration (see Authlogic::Session::config), so if you don't like how this works by default, just set some simple configuration in your session.
+
+For even more flexibility Authlogic looks for a method in your controller called single_access_allowed?. If that method exists and returns true Authlogic will try to log in the user with this method. Here is a quick example:
+
+class UsersController < ApplicationController
+  private
+    def single_access_allowed?
+      action_name == "index"
+    end
+
+The above will only allow logging in via the single access toke with the index method only.
 
 This field is optional, if you want to use it just add the field to your database:
 
