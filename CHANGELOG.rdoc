@@ -4,6 +4,7 @@
 * Updated test helper functions to use the persistence token config value
 * Check for UTC times when using Time.now for current_login_at and last_request_at
 * Single access now looks for a single_access_allowed? method in your controllers to determine if single access should be allowed or not. Allowing you to define exactly when single access is allowed.
+* Finding the authenticated record uses klass.primary_key instead of assuming id.
 
 == 1.3.9 released 2009-1-9
 

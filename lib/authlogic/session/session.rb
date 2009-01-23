@@ -15,7 +15,7 @@ module Authlogic
         persistence_token, record_id = session_credentials
         if !persistence_token.blank?
           if record_id
-            record = search_for_record("find_by_id", record_id)
+            record = search_for_record("find_by_#{klass.primary_key}", record_id)
             self.unauthorized_record = record if record && record.send(persistence_token_field) == persistence_token
           else
             # For backwards compatibility, will eventually be removed, just need to let the sessions update theirself
