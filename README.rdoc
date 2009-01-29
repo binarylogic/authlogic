@@ -477,6 +477,10 @@ Obviously there is a little more to it than this, but hopefully this clarifies a
 
 When things come together like this I think its a sign that you are doing something right. Put that in your pipe and smoke it!
 
+== Internationalization (I18n)
+
+Please see Authlogic::I18n for more information. Internationalization is very easy to implement, in fact if you are using the default rails I18n library then you don't need to do anything other than defining the messages in your localization configuration files. See Authlogic::I18n for a complete list of keys you need to define.
+
 == Testing
 
 Testing with authlogic is easy, there is a helper file that will add some convenient test helpers for you. In your test_helper.rb file do the following:

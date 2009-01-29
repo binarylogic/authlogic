@@ -412,19 +412,19 @@ module Authlogic
           
           case authenticating_with
           when :password
-            errors.add(login_field, login_blank_message) if send(login_field).blank?
-            errors.add(password_field, password_blank_message) if send("protected_#{password_field}").blank?
+            errors.add(login_field, I18n.t('error_messages.login_blank', :default => "can not be blank")) if send(login_field).blank?
+            errors.add(password_field, I18n.t('error_messages.password_blank', :default => "can not be blank")) if send("protected_#{password_field}").blank?
             return false if errors.count > 0
             
             unchecked_record = search_for_record(find_by_login_method, send(login_field))
             
             if unchecked_record.blank?
-              errors.add(login_field, login_not_found_message)
+              errors.add(login_field, I18n.t('error_messages.login_not_found', :default => "does not exist"))
               return false
             end
             
             unless unchecked_record.send(verify_password_method, send("protected_#{password_field}"))
-              errors.add(password_field, password_invalid_message)
+              errors.add(password_field, I18n.t('error_messages.password_invalid', :default => "is not valid"))
               return false
             end
             
@@ -433,12 +433,12 @@ module Authlogic
             unchecked_record = unauthorized_record
             
             if unchecked_record.blank?
-              errors.add_to_base("You can not login with a blank record.")
+              errors.add_to_base(I18n.t('error_messages.blank_record', :default => "You can not login with a blank record"))
               return false
             end
             
             if unchecked_record.new_record?
-              errors.add_to_base("You can not login with a new record.")
+              errors.add_to_base(I18n.t('error_messages.new_record', :default => "You can not login with a new record"))
               return false
             end
             
@@ -452,7 +452,7 @@ module Authlogic
           return true if disable_magic_states?
           [:active, :approved, :confirmed].each do |required_status|
             if record.respond_to?("#{required_status}?") && !record.send("#{required_status}?")
-              errors.add_to_base(send("not_#{required_status}_message"))
+              errors.add_to_base(I18n.t("errors_messages.not_#{required_status}", :default => "Your account is not #{required_status}"))
               return false
             end
           end

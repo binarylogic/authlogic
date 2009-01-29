@@ -134,29 +134,13 @@ module Authlogic
         end
         alias_method :last_request_at_threshold=, :last_request_at_threshold
         
-        # The error message used when the login is left blank.
-        #
-        # * <tt>Default:</tt> "can not be blank"
-        # * <tt>Accepts:</tt> String
-        def login_blank_message(value = nil)
-          if value.nil?
-            read_inheritable_attribute(:login_blank_message) || login_blank_message("can not be blank")
-          else
-            write_inheritable_attribute(:login_blank_message, value)
-          end
+        def login_blank_message(value = nil) # :nodoc:
+          new_i18n_error
         end
         alias_method :login_blank_message=, :login_blank_message
         
-        # The error message used when the login could not be found in the database.
-        #
-        # * <tt>Default:</tt> "does not exist"
-        # * <tt>Accepts:</tt> String
-        def login_not_found_message(value = nil)
-          if value.nil?
-            read_inheritable_attribute(:login_not_found_message) || login_not_found_message("does not exist")
-          else
-            write_inheritable_attribute(:login_not_found_message, value)
-          end
+        def login_not_found_message(value = nil) # :nodoc:
+          new_i18n_error
         end
         alias_method :login_not_found_message=, :login_not_found_message
         
@@ -196,42 +180,18 @@ module Authlogic
         end
         alias_method :logout_on_timeout=, :logout_on_timeout
         
-        # The error message used when the record returns false to active?
-        #
-        # * <tt>Default:</tt> "Your account is not active"
-        # * <tt>Accepts:</tt> String
-        def not_active_message(value = nil)
-          if value.nil?
-            read_inheritable_attribute(:not_active_message) || not_active_message("Your account is not active")
-          else
-            write_inheritable_attribute(:not_active_message, value)
-          end
+        def not_active_message(value = nil) # :nodoc:
+          new_i18n_error
         end
         alias_method :not_active_message=, :not_active_message
         
-        # The error message used when the record returns false to approved?
-        #
-        # * <tt>Default:</tt> "Your account is not approved"
-        # * <tt>Accepts:</tt> String
-        def not_approved_message(value = nil)
-          if value.nil?
-            read_inheritable_attribute(:not_approved_message) || not_approved_message("Your account is not approved")
-          else
-            write_inheritable_attribute(:not_approved_message, value)
-          end
+        def not_approved_message(value = nil) # :nodoc:
+          new_i18n_error
         end
         alias_method :not_approved_message=, :not_approved_message
         
-        # The error message used when the record returns false to confirmed?
-        #
-        # * <tt>Default:</tt> "Your account is not confirmed"
-        # * <tt>Accepts:</tt> String
-        def not_confirmed_message(value = nil)
-          if value.nil?
-            read_inheritable_attribute(:not_confirmed_message) || not_confirmed_message("Your account is not confirmed")
-          else
-            write_inheritable_attribute(:not_confirmed_message, value)
-          end
+        def not_confirmed_message(value = nil) # :nodoc:
+          new_i18n_error
         end
         alias_method :not_confirmed_message=, :not_confirmed_message
         
@@ -253,16 +213,8 @@ module Authlogic
         end
         alias_method :params_key=, :params_key
         
-        # The error message used when the password is left blank.
-        #
-        # * <tt>Default:</tt> "can not be blank"
-        # * <tt>Accepts:</tt> String
-        def password_blank_message(value = nil)
-          if value.nil?
-            read_inheritable_attribute(:password_blank_message) || password_blank_message("can not be blank")
-          else
-            write_inheritable_attribute(:password_blank_message, value)
-          end
+        def password_blank_message(value = nil) # :nodoc:
+          new_i18n_error
         end
         alias_method :password_blank_message=, :password_blank_message
         
@@ -279,16 +231,8 @@ module Authlogic
         end
         alias_method :password_field=, :password_field
         
-        # The error message used when the password is invalid.
-        #
-        # * <tt>Default:</tt> "is invalid"
-        # * <tt>Accepts:</tt> String
-        def password_invalid_message(value = nil)
-          if value.nil?
-            read_inheritable_attribute(:password_invalid_message) || password_invalid_message("is invalid")
-          else
-            write_inheritable_attribute(:password_invalid_message, value)
-          end
+        def password_invalid_message(value = nil) # :nodoc:
+          new_i18n_error
         end
         alias_method :password_invalid_message=, :password_invalid_message
         
@@ -357,6 +301,11 @@ module Authlogic
           end
         end
         alias_method :verify_password_method=, :verify_password_method
+        
+        private
+          def new_i18n_error
+            raise NotImplementedError.new("As of v 1.4.0 Authlogic implements a new I18n solution that is much cleaner and easier. Please see Authlogic::I18n for more information on how to provide internationalization in Authlogic.")
+          end
       end
       
       module InstanceMethods # :nodoc:
@@ -383,14 +332,6 @@ module Authlogic
         def last_request_at_threshold
           self.class.last_request_at_threshold
         end
-        
-        def login_blank_message
-          self.class.login_blank_message
-        end
-        
-        def login_not_found_message
-          self.class.login_not_found_message
-        end
       
         def login_field
           self.class.login_field
@@ -400,18 +341,6 @@ module Authlogic
           self.class.logout_on_timeout == true
         end
         
-        def not_active_message
-          self.class.not_active_message
-        end
-        
-        def not_approved_message
-          self.class.not_approved_message
-        end
-        
-        def not_confirmed_message
-          self.class.not_confirmed_message
-        end
-        
         def params_allowed_request_types
           build_key(self.class.params_allowed_request_types)
         end
@@ -419,17 +348,9 @@ module Authlogic
         def params_key
           build_key(self.class.params_key)
         end
-        
-        def password_blank_message
-          self.class.password_blank_message
-        end
       
         def password_field
           self.class.password_field
-        end
-        
-        def password_invalid_message
-          self.class.password_invalid_message
         end
         
         def perishable_token_field

@@ -1,0 +1,52 @@
+module Authlogic
+  # I18n
+  #
+  # Allows any message, error message, etc to use internationalization. In earlier versions of Authlogic each message was translated via configuration.
+  # This cluttered up the configuration and cluttered up Authlogic. So all translation has been extracted out into this class. Now all messages pass through
+  # this class, making it much easier to implement in I18n library / plugin you want. Use this as a layer that sits between Authlogic and whatever I18n
+  # library you want to use.
+  #
+  # By default this uses the rails I18n library, if it exists. If it doesnt exist it just returns the default english message. Using the Authlogic I18n class
+  # works EXACTLY like the rails I18n class. Here is how all messages are translated internally with Authlogic:
+  #
+  #   Authlogic::I18n.t('error_messages.password_invalid', :default => "is invalid")
+  #
+  # If you use a different I18n library or plugin just redefine the t method in the Authlogic::I18n class to do whatever you want with those options. For example:
+  #
+  #   # config/initializers/authlogic.rb
+  #   module MyAuthlogicI18nAdapter
+  #     def t(key, options = {})
+  #       # you will have key which will be something like: "error_messages.password_invalid"
+  #       # you will also have options[:default], which will be the default english version of the message
+  #       # do whatever you want here with the arguments passed to you.
+  #     end
+  #   end
+  #   
+  #   Authlogic::I18n.extend MyAuthlogicI18nAdapter
+  #
+  #   That it's! Here is a complete list of the keys that are passed. Just defined these however you wish:
+  #
+  #   authlogic:
+  #     error_messages:
+  #       login_blank: can not be blank
+  #       login_not_found: does not exist
+  #       password_blank: can not be blank
+  #       password_invlid: is not valid
+  #       not_active: Your account is not active
+  #       not_confirmed: Your account is not confirmed
+  #       not_approved: Your account is not approved
+  #       blank_record: You can not login with a blank record
+  #       new_record: You can not login with a new record
+  class I18n
+    class << self
+      # All message translation is passed to this method. The first argument is the key for the message. The second is options, see the rails I18n library for a list of options used.
+      def t(key, options = {})
+        if defined?(::I18n)
+          ::I18n.t(key, options.merge(:scope => :authlogic))
+        else
+          options[:default]
+        end
+      end
+    end
+  end
+end
