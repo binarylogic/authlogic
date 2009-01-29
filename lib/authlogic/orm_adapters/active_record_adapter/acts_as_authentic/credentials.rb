@@ -68,7 +68,7 @@ module Authlogic
                 self.#{options[:password_salt_field]} = self.class.unique_token
                 self.#{options[:crypted_password_field]} = #{options[:crypto_provider]}.encrypt(*encrypt_arguments(@#{options[:password_field]}, #{options[:act_like_restful_authentication].inspect} ? :restful_authentication : nil))
               end
-              alias_method :update_#{options[:password_field]}, :#{options[:password_field]}= # this is to avoids the method chain, so we are ONLY changing the password
+              alias_method :update_#{options[:password_field]}, :#{options[:password_field]}= # this is to avoid the method chain, so we are ONLY changing the password
               
               def valid_#{options[:password_field]}?(attempted_password)
                 return false if attempted_password.blank? || #{options[:crypted_password_field]}.blank? || #{options[:password_salt_field]}.blank?
@@ -100,7 +100,7 @@ module Authlogic
                 self.#{options[:password_field]} = friendly_token
                 self.#{options[:password_field]}_confirmation = friendly_token
               end
-              alias_method :randomize_password, :reset_password
+              alias_method :randomize_#{options[:password_field]}, :reset_#{options[:password_field]}
               
               def confirm_#{options[:password_field]}
                 raise "confirm_#{options[:password_field]} has been removed, please use #{options[:password_field]}_confirmation. " +
@@ -111,7 +111,7 @@ module Authlogic
                 reset_#{options[:password_field]}
                 save_without_session_maintenance(false)
               end
-              alias_method :randomize_password!, :reset_password!
+              alias_method :randomize_#{options[:password_field]}!, :reset_#{options[:password_field]}!
               
               def validate_#{options[:password_field]}?
                 case #{options[:password_field_validates_length_of_options][:if].inspect}
