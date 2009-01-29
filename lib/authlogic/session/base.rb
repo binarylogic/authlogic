@@ -452,7 +452,7 @@ module Authlogic
           return true if disable_magic_states?
           [:active, :approved, :confirmed].each do |required_status|
             if record.respond_to?("#{required_status}?") && !record.send("#{required_status}?")
-              errors.add_to_base(I18n.t("errors_messages.not_#{required_status}", :default => "Your account is not #{required_status}"))
+              errors.add_to_base(I18n.t("error_messages.not_#{required_status}", :default => "Your account is not #{required_status}"))
               return false
             end
           end

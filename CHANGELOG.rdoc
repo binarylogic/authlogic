@@ -1,3 +1,8 @@
+== 1.4.1
+
+* Fixed I18n key misspelling.
+* Added I18n keys for ORM error messages.
+
 == 1.4.0 released 2009-1-28
 
 * Added support for cookie domain, based on your frameworks session domain configuration

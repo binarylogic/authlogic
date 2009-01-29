@@ -30,10 +30,10 @@ module Authlogic
                 case options[:login_field_type]
                 when :email
                   validates_length_of options[:login_field], {:within => 6..100}.merge(options[:login_field_validates_length_of_options])
-                  validates_format_of options[:login_field], {:with => email_field_regex, :message => "should look like an email address."}.merge(options[:login_field_validates_format_of_options])
+                  validates_format_of options[:login_field], {:with => email_field_regex, :message => I18n.t('error_messages.email_invalid', :default => "should look like an email address.")}.merge(options[:login_field_validates_format_of_options])
                 else
                   validates_length_of options[:login_field], {:within => 2..100}.merge(options[:login_field_validates_length_of_options])
-                  validates_format_of options[:login_field], {:with => /\A\w[\w\.\-_@ ]+\z/, :message => "should use only letters, numbers, spaces, and .-_@ please."}.merge(options[:login_field_validates_format_of_options])
+                  validates_format_of options[:login_field], {:with => /\A\w[\w\.\-_@ ]+\z/, :message => I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")}.merge(options[:login_field_validates_format_of_options])
                 end
                 
                 validates_uniqueness_of options[:login_field], {:allow_blank => true}.merge(options[:login_field_validates_uniqueness_of_options].merge(:if => "#{options[:login_field]}_changed?".to_sym))
@@ -47,7 +47,7 @@ module Authlogic
               
               if options[:validate_email_field] && options[:email_field]
                 validates_length_of options[:email_field], {:within => 6..100}.merge(options[:email_field_validates_length_of_options])
-                validates_format_of options[:email_field], {:with => email_field_regex, :message => "should look like an email address."}.merge(options[:email_field_validates_format_of_options])
+                validates_format_of options[:email_field], {:with => email_field_regex, :message => I18n.t('error_messages.email_invalid', :default => "should look like an email address.")}.merge(options[:email_field_validates_format_of_options])
                 validates_uniqueness_of options[:email_field], options[:email_field_validates_uniqueness_of_options].merge(:if => "#{options[:email_field]}_changed?".to_sym)
               end
             end

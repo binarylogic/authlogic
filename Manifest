@@ -9,6 +9,7 @@ lib/authlogic/crypto_providers/aes256.rb
 lib/authlogic/crypto_providers/bcrypt.rb
 lib/authlogic/crypto_providers/sha1.rb
 lib/authlogic/crypto_providers/sha512.rb
+lib/authlogic/i18n.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/config.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/credentials.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/logged_in.rb
