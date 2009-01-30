@@ -23,7 +23,7 @@ module Authlogic
         # Sets the cookie for a record. This way when you execute a request in your test, cookie values will be present.
         def set_cookie_for(record)
           session_class = session_class(record)
-          @request.cookies[session_class.cookie_key] = record.record.send(record.class.acts_as_authentic_config[:persistence_token_field])
+          @request.cookies[session_class.cookie_key] = record.send(record.class.acts_as_authentic_config[:persistence_token_field])
         end
         
         # Sets the HTTP_AUTHORIZATION header for basic HTTP auth. This way when you execute a request in your test that is trying to authenticate
