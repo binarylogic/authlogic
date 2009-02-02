@@ -3,6 +3,7 @@
 * Fixed I18n key misspelling.
 * Added I18n keys for ORM error messages.
 * Use the password_field configuration value for the alias_methods defined in acts_as_authentic/credentials.rb
+* Change shoulda macros implementation to follow the shoulda documentation
 
 == 1.4.0 released 2009-1-28
 
