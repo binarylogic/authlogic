@@ -14,7 +14,8 @@ module Authlogic
       end
       
       def cookie_domain
-        controller.class.session_options[:session_domain]
+        @cookie_domain_key ||= (Rails::VERSION::MAJOR >= 2 && RAILS::VERSION::MINOR:: >= 3) ? :domain : :session_domain
+        controller.class.session_options[@cookie_domain_key]
       end
       
       def request_content_type
