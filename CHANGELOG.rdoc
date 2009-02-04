@@ -5,6 +5,7 @@
 * Use the password_field configuration value for the alias_methods defined in acts_as_authentic/credentials.rb
 * Change shoulda macros implementation to follow the shoulda documentation
 * Rails >2.3 uses :domain for the session option instead of :session_domain. Authlogic now uses the proper key in the rails adapter.
+* Added validate_password attribute to force password validation regardless if the password is blank. This is useful for forms explicitly changing passwords.
 
 == 1.4.0 released 2009-1-28
 

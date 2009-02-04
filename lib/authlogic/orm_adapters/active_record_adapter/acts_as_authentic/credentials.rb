@@ -52,6 +52,7 @@ module Authlogic
               end
             end
             
+            attr_accessor "validate_#{options[:password_field]}".to_sym
             attr_reader options[:password_field]
             
             class_eval <<-"end_eval", __FILE__, __LINE__
@@ -121,7 +122,7 @@ module Authlogic
                   return false if !send(#{options[:password_field_validates_length_of_options][:if].inspect})
                 end
                 
-                new_record? || #{options[:password_salt_field]}_changed? || #{options[:crypted_password_field]}.blank?
+                new_record? || #{options[:password_salt_field]}_changed? || #{options[:crypted_password_field]}.blank? || ["true", "1", "yes"].include?(validate_#{options[:password_field]}.to_s)
               end
               
               private
