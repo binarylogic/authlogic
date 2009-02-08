@@ -29,10 +29,10 @@ module Authlogic
               if options[:validate_login_field]
                 case options[:login_field_type]
                 when :email
-                  validates_length_of options[:login_field], {:within => 6..100}.merge(options[:login_field_validates_length_of_options])
+                  validates_length_of options[:login_field], sanitize_validation_length_options({:within => 6..100}, options[:login_field_validates_length_of_options])
                   validates_format_of options[:login_field], {:with => email_field_regex, :message => I18n.t('error_messages.email_invalid', :default => "should look like an email address.")}.merge(options[:login_field_validates_format_of_options])
                 else
-                  validates_length_of options[:login_field], {:within => 2..100}.merge(options[:login_field_validates_length_of_options])
+                  validates_length_of options[:login_field], sanitize_validation_length_options({:within => 2..100}, options[:login_field_validates_length_of_options])
                   validates_format_of options[:login_field], {:with => /\A\w[\w\.\-_@ ]+\z/, :message => I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")}.merge(options[:login_field_validates_format_of_options])
                 end
                 
@@ -40,13 +40,13 @@ module Authlogic
               end
               
               if options[:validate_password_field]
-                validates_length_of options[:password_field], {:minimum => 4}.merge(options[:password_field_validates_length_of_options].merge(:if => "validate_#{options[:password_field]}?".to_sym))
+                validates_length_of options[:password_field], sanitize_validation_length_options({:minimum => 4}, options[:password_field_validates_length_of_options].merge(:if => "validate_#{options[:password_field]}?".to_sym))
                 validates_confirmation_of options[:password_field], options[:password_field_validates_confirmation_of_options].merge(:if => "#{options[:password_salt_field]}_changed?".to_sym)
                 validates_presence_of "#{options[:password_field]}_confirmation", options[:password_confirmation_field_validates_presence_of_options].merge(:if => "#{options[:password_salt_field]}_changed?".to_sym)
               end
               
               if options[:validate_email_field] && options[:email_field]
-                validates_length_of options[:email_field], {:within => 6..100}.merge(options[:email_field_validates_length_of_options])
+                validates_length_of options[:email_field], sanitize_validation_length_options({:within => 6..100}, options[:email_field_validates_length_of_options])
                 validates_format_of options[:email_field], {:with => email_field_regex, :message => I18n.t('error_messages.email_invalid', :default => "should look like an email address.")}.merge(options[:email_field_validates_format_of_options])
                 validates_uniqueness_of options[:email_field], options[:email_field_validates_uniqueness_of_options].merge(:if => "#{options[:email_field]}_changed?".to_sym)
               end
@@ -134,6 +134,12 @@ module Authlogic
                   end
                 end
             end_eval
+          end
+          
+          def sanitize_validation_length_options(defaults, options)
+            length_keys = [:minimum, :maximum, :in, :within, :is]
+            length_keys.each { |key| defaults.delete(key) } if options.keys.find { |key| length_keys.include?(key.to_sym) }
+            defaults.merge(options)
           end
         end
       end
