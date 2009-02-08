@@ -4,7 +4,7 @@ module Authlogic
     #
     # Just like in ActiveRecord you have before_save, before_validation, etc. You have similar callbacks with Authlogic, see all callbacks below.
     module Callbacks
-      CALLBACKS = %w(before_create after_create before_destroy after_destroy before_find after_find before_save after_save before_update after_update before_validation after_validation)
+      CALLBACKS = %w(before_create after_create before_destroy after_destroy before_find after_find before_save after_save before_update after_update before_validation validate after_validation)
 
       def self.included(base) #:nodoc:
         [:destroy, :find_record, :save, :validate].each do |method|
@@ -77,6 +77,7 @@ module Authlogic
       def validate_with_callbacks
         run_callbacks(:before_validation)
         validate_without_callbacks
+        run_callbacks(:validate)
         run_callbacks(:after_validation) if errors.empty?
       end
     end

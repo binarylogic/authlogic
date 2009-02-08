@@ -219,6 +219,7 @@ Just like ActiveRecord you can create your own hooks / callbacks so that you can
   after_update
   
   before_validation
+  validate
   after_validation
 
 See Authlogic::Session::Callbacks for more information
