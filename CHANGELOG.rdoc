@@ -1,4 +1,4 @@
-== 1.4.1
+== 1.4.1 released 2009-2-8
 
 * Fixed I18n key misspelling.
 * Added I18n keys for ORM error messages.

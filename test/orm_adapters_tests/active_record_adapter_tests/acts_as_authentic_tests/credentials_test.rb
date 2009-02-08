@@ -57,6 +57,13 @@ module ORMAdaptersTests
           assert user.valid?
         end
         
+        # Make sure the default :within option is ignored, since AR will raise an error if :within and :minimum are passed.
+        def test_multiple_length_options
+          User.acts_as_authentic(:login_field_validates_length_of_options => {:minimum => 6})
+          user = User.new
+          assert_nothing_raised { user.valid? }
+        end
+        
         def test_employee_validations
           employee = Employee.new
           employee.password = "pass"
