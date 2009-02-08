@@ -66,6 +66,18 @@ module Authlogic
               def reset_#{options[:persistence_token_field]}?
                 #{options[:persistence_token_field]}.blank?
               end
+              
+              # When a user logs in we need to ensure they have a persistence token. Think about apps that are transitioning and
+              # never have a persistence token to begin with. When their users log in their persistence token needs to be set.
+              # The only other time persistence tokens are reset is in a before_validation on the user, and when a user is saved
+              # from the session we skip validation for performance reasons. We do save_without_session_maintenance(false), the false
+              # indicates to skip validation.
+              def valid_#{options[:password_field]}_with_persistence?(attempted_password)
+                result = valid_password_without_persistence?(attempted_password)
+                reset_#{options[:persistence_token_field]}! if result && #{options[:persistence_token_field]}.blank?
+                result
+              end
+              alias_method_chain :valid_#{options[:password_field]}?, :persistence
             end_eval
           end
         end

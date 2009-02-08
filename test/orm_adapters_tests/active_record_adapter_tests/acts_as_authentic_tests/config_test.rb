@@ -136,9 +136,16 @@ module ORMAdaptersTests
             User.acts_as_authentic(:crypto_provider => crypto_provider, :transition_from_crypto_provider => from_crypto_providers)
             records.each do |record|
               old_hash = record.crypted_password
+              old_persistence_token = record.persistence_token
               assert record.valid_password?(password_for(record))
-              assert_not_equal old_hash, record.crypted_password
+              assert_not_equal old_hash.to_s, record.crypted_password.to_s
+              assert_not_equal old_persistence_token.to_s, record.persistence_token.to_s # we need to make sure the persistence token gets reset, what if it is nil and has never been used before?
+              
+              old_hash = record.crypted_password
+              old_persistence_token = record.persistence_token
               assert record.valid_password?(password_for(record))
+              assert_equal old_hash.to_s, record.crypted_password.to_s
+              assert_equal old_persistence_token.to_s, record.persistence_token.to_s
             end
           end
       end

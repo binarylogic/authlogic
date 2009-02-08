@@ -69,7 +69,6 @@ module Authlogic
                 self.#{options[:password_salt_field]} = self.class.unique_token
                 self.#{options[:crypted_password_field]} = #{options[:crypto_provider]}.encrypt(*encrypt_arguments(@#{options[:password_field]}, #{options[:act_like_restful_authentication].inspect} ? :restful_authentication : nil))
               end
-              alias_method :update_#{options[:password_field]}, :#{options[:password_field]}= # this is to avoid the method chain, so we are ONLY changing the password
               
               def valid_#{options[:password_field]}?(attempted_password)
                 return false if attempted_password.blank? || #{options[:crypted_password_field]}.blank? || #{options[:password_salt_field]}.blank?
@@ -85,7 +84,7 @@ module Authlogic
                     # then let's reset the password using the new algorithm. If the algorithm has a cost (BCrypt) and the cost has changed, update the password with
                     # the new cost.
                     if index > 0 || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(#{options[:crypted_password_field]}))
-                      update_#{options[:password_field]}(attempted_password)
+                      self.password = attempted_password
                       save(false)
                     end
                     
