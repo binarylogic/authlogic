@@ -9,6 +9,7 @@
 * The class level find method will return a session object if the session is stale. The protection is that there will be no record associated with that session. This allows you to receive an object and call the stale? method on it to determine why the user must log back in.
 * Added validate callbacks in Session::Base so you can run callbacks by calling validate :my_method, just like in AR.
 * Checked for blank persistence tokens when trying to validate passwords, this is where transitioning occurs. People transitioning from older systems never had a persistence token, which means it would be nil here.
+* Update allowed domain name extensions for email
 
 == 1.4.0 released 2009-1-28
 

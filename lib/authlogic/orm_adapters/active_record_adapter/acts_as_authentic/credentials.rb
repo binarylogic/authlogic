@@ -23,7 +23,7 @@ module Authlogic
             if options[:validate_fields]
               email_name_regex  = '[\w\.%\+\-]+'
               domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
-              domain_tld_regex  = '(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|jobs|museum)'
+              domain_tld_regex  = '(?:[A-Z]{2}|aero|ag|asia|at|be|biz|ca|cc|cn|com|de|edu|eu|fm|gov|gs|jobs|jp|in|info|me|mil|mobi|museum|ms|name|net|nu|nz|org|tc|tw|tv|uk|us|vg|ws)'
               email_field_regex ||= /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
               
               if options[:validate_login_field]
