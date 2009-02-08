@@ -13,7 +13,7 @@ module Authlogic
       def valid_cookie?
         if cookie_credentials
           self.unauthorized_record = search_for_record("find_by_#{persistence_token_field}", cookie_credentials)
-          valid? && !stale?
+          valid?
         else
           false
         end

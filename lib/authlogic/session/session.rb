@@ -25,7 +25,7 @@ module Authlogic
               self.unauthorized_record = record
             end
           end
-          valid? && !stale?
+          valid?
         else
           false
         end

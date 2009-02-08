@@ -64,8 +64,11 @@ module Authlogic
         def find(id = nil)
           args = [id].compact
           session = new(*args)
-          return session if session.find_record
-          nil
+          if session.find_record
+            session
+          else
+            nil
+          end
         end
         
         # The name of the class that this session is authenticating with. For example, the UserSession class will authenticate with the User class
