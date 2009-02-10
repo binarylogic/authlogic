@@ -10,8 +10,8 @@ module Authlogic
       def self.included(klass)
         klass.class_eval do
           alias_method_chain :find_record, :timeout
-          after_find :update_last_request_at!
-          after_save :update_last_request_at!
+          after_find :update_last_request_at
+          after_save :update_last_request_at
         end
       end
       
@@ -30,8 +30,8 @@ module Authlogic
       end
     
       private
-        def update_last_request_at!
-          if record.class.column_names.include?("last_request_at") && (record.last_request_at.blank? || last_request_at_threshold.to_i.seconds.ago >= record.last_request_at)
+        def update_last_request_at
+          if record && record.class.column_names.include?("last_request_at") && (record.last_request_at.blank? || last_request_at_threshold.to_i.seconds.ago >= record.last_request_at)
             record.last_request_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
             record.save_without_session_maintenance(false)
           end

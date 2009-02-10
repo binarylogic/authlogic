@@ -1,3 +1,7 @@
+== 1.4.2
+
+* Cleaned up callbacks system to use hooks and execute in the proper order.
+
 == 1.4.1 released 2009-2-8
 
 * Fixed I18n key misspelling.

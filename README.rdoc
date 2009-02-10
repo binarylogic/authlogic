@@ -203,26 +203,7 @@ Need Authlogic to check your own "state"? No problem, check out the hooks sectio
 
 Just like ActiveRecord you can create your own hooks / callbacks so that you can do whatever you want when certain actions are performed. Such as before_save, after_save, etc.
 
-  before_create
-  after_create
-  
-  before_destroy
-  after_destroy
-  
-  before_find
-  after_find
-  
-  before_save
-  after_save
-  
-  before_update
-  after_update
-  
-  before_validation
-  validate
-  after_validation
-
-See Authlogic::Session::Callbacks for more information
+See Authlogic::Session::Callbacks for more information.
 
 == Multiple Sessions / Session Identifiers
 
@@ -438,7 +419,7 @@ The errors in Authlogic work JUST LIKE ActiveRecord. In fact, it uses the exact 
       end
   end
 
-== Timing Out Sessions
+== Timing Out Sessions (Logging out after inactivity)
 
 Think about financial websites, if you are inactive for a certain period of time you will be asked to log back in on your next request. You can do this with Authlogic easily, there are 2 parts to this:
 
@@ -483,7 +464,7 @@ Obviously there is a little more to it than this, but hopefully this clarifies a
 
 When things come together like this I think its a sign that you are doing something right. Put that in your pipe and smoke it!
 
-== Internationalization (I18n)
+== Internationalization (I18n) / Changing Messages
 
 Please see Authlogic::I18n for more information. Internationalization is very easy to implement, in fact if you are using the default rails I18n library then you don't need to do anything other than defining the messages in your localization configuration files. See Authlogic::I18n for a complete list of keys you need to define.
 

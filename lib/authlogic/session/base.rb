@@ -64,7 +64,9 @@ module Authlogic
         def find(id = nil)
           args = [id].compact
           session = new(*args)
+          session.before_find
           if session.find_record
+            session.after_find
             session
           else
             nil
@@ -165,8 +167,13 @@ module Authlogic
       
       # Resets everything, your errors, record, cookies, and session. Basically "logs out" a user.
       def destroy
+        before_destroy
+        
         errors.clear
         @record = nil
+        
+        after_destroy
+        
         true
       end
       
@@ -276,6 +283,10 @@ module Authlogic
       def save(&block)
         result = nil
         if valid?
+          # hooks
+          before_save
+          new_session? ? before_create : before_update
+          
           record.login_count = (record.login_count.blank? ? 1 : record.login_count + 1) if record.respond_to?(:login_count)
           
           if record.respond_to?(:current_login_at)
@@ -289,6 +300,10 @@ module Authlogic
           end
           
           record.save_without_session_maintenance(false)
+          
+          # hooks
+          new_session? ? after_create : after_update
+          after_save
           
           self.new_session = false
           result = self
@@ -323,7 +338,13 @@ module Authlogic
       def valid?
         errors.clear
         if valid_credentials?
+          # hooks
+          before_validation
+          new_session? ? before_validation_on_create : before_validation_on_update
           validate
+          new_session? ? after_validation_on_create : after_validation_on_update
+          after_validation
+          
           valid_record?
           return true if errors.empty?
         end
@@ -343,10 +364,6 @@ module Authlogic
         end
         
         false
-      end
-      
-      # Overwite this method to add your own validation, or use callbacks: before_validation, after_validation
-      def validate
       end
       
       private
