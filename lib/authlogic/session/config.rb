@@ -185,6 +185,25 @@ module Authlogic
         end
         alias_method :logout_on_timeout=, :logout_on_timeout
         
+        # To help protect from brute force attacks you can set a limit on the allowed number of consecutive failed logins. By default this is 50, this is a very liberal
+        # number, and if someone fails to login after 50 tries it should be pretty obvious that it's a machine trying to login in and very likely a brute force attack.
+        #
+        # In order to enable this field your model MUST have a failed_login_count (integer) field.
+        #
+        # If you don't know what a brute force attack is, it's when a machine tries to login into a system using every combination of character possible. Thus resulting
+        # in possibly millions of attempts to log into an account.
+        #
+        # * <tt>Default:</tt> 50
+        # * <tt>Accepts:</tt> Integer, set to 0 to disable
+        def consecutive_failed_logins_limit(value = nil)
+          if value.nil?
+            read_inheritable_attribute(:consecutive_failed_logins_limit) || consecutive_failed_logins_limit(50)
+          else
+            write_inheritable_attribute(:consecutive_failed_logins_limit, value)
+          end
+        end
+        alias_method :logout_on_timeout=, :logout_on_timeout
+        
         def not_active_message(value = nil) # :nodoc:
           new_i18n_error
         end
@@ -316,6 +335,10 @@ module Authlogic
       module InstanceMethods # :nodoc:
         def change_single_access_token_with_password?
           self.class.change_single_access_token_with_password == true
+        end
+        
+        def consecutive_failed_logins_limit
+          self.class.consecutive_failed_logins_limit
         end
         
         def cookie_key

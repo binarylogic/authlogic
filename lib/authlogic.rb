@@ -26,12 +26,14 @@ end
 
 require File.dirname(__FILE__) + "/authlogic/session/authenticates_many_association"
 require File.dirname(__FILE__) + "/authlogic/session/active_record_trickery"
+require File.dirname(__FILE__) + "/authlogic/session/brute_force_protection"
 require File.dirname(__FILE__) + "/authlogic/session/callbacks"
 require File.dirname(__FILE__) + "/authlogic/session/config"
 require File.dirname(__FILE__) + "/authlogic/session/cookies"
 require File.dirname(__FILE__) + "/authlogic/session/errors"
 require File.dirname(__FILE__) + "/authlogic/session/params"
 require File.dirname(__FILE__) + "/authlogic/session/perishability"
+require File.dirname(__FILE__) + "/authlogic/session/record_info"
 require File.dirname(__FILE__) + "/authlogic/session/session"
 require File.dirname(__FILE__) + "/authlogic/session/scopes"
 require File.dirname(__FILE__) + "/authlogic/session/timeout"
@@ -42,9 +44,11 @@ module Authlogic
     class Base
       include ActiveRecordTrickery
       include Callbacks
+      include BruteForceProtection
       include Cookies
       include Params
       include Perishability
+      include RecordInfo
       include Session
       include Scopes
       include Timeout

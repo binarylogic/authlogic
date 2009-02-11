@@ -1,6 +1,7 @@
 == 1.4.2
 
 * Cleaned up callbacks system to use hooks and execute in the proper order.
+* Added brute force protection. See the consecutive_failed_logins_limit configuration option in Authlogic::Session::Config. Also see Authlogic::Session:BruteForceProtection
 
 == 1.4.1 released 2009-2-8
 

@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string    :first_name
     t.string    :last_name
     t.integer   :login_count
+    t.integer   :failed_login_count
     t.datetime  :last_request_at
     t.datetime  :current_login_at
     t.datetime  :last_login_at

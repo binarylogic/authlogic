@@ -129,6 +129,7 @@ The user model needs to have the following columns. The names of these columns c
     t.string    :single_access_token,   :null => false # optional, see the tokens section below.
     t.string    :perishable_token,      :null => false # optional, see the tokens section below.
     t.integer   :login_count,           :null => false, :default => 0 # optional, this is a "magic" column, see the magic columns section below
+    t.integer   :failed_login_count,    :null => false, :default => 0 # optional, this is a "magic" column, see the magic columns section below
 
 === Set up your model
 
@@ -178,6 +179,7 @@ Just like ActiveRecord has "magic" columns, such as: created_at and updated_at. 
 
   Column name           Description
   login_count           Increased every time an explicit login is made. This will *NOT* increase if logging in by a session, cookie, or basic http auth
+  failed_login_count    This increases for each consecutive failed login. See Authlogic::Session::BruteForceProtection and the consecutive_failed_logins_limit config option for more details.
   last_request_at       Updates every time the user logs in, either by explicitly logging in, or logging in by cookie, session, or http auth
   current_login_at      Updates with the current time when an explicit login is made.
   last_login_at         Updates with the value of current_login_at before it is reset.

@@ -286,22 +286,6 @@ module Authlogic
           # hooks
           before_save
           new_session? ? before_create : before_update
-          
-          record.login_count = (record.login_count.blank? ? 1 : record.login_count + 1) if record.respond_to?(:login_count)
-          
-          if record.respond_to?(:current_login_at)
-            record.last_login_at = record.current_login_at if record.respond_to?(:last_login_at)
-            record.current_login_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
-          end
-          
-          if record.respond_to?(:current_login_ip)
-            record.last_login_ip = record.current_login_ip if record.respond_to?(:last_login_ip)
-            record.current_login_ip = controller.request.remote_ip
-          end
-          
-          record.save_without_session_maintenance(false)
-          
-          # hooks
           new_session? ? after_create : after_update
           after_save
           
@@ -342,10 +326,12 @@ module Authlogic
           before_validation
           new_session? ? before_validation_on_create : before_validation_on_update
           validate
-          new_session? ? after_validation_on_create : after_validation_on_update
-          after_validation
           
           valid_record?
+          
+          # hooks
+          new_session? ? after_validation_on_create : after_validation_on_update
+          after_validation
           return true if errors.empty?
         end
         
