@@ -40,8 +40,12 @@ module SessionTests
       set_session_for(ben)
       session = UserSession.find
       assert !session.stale?
-      session.record.last_request_at = 3.years.ago
+      
+      ben.update_attribute(:last_request_at, 3.years.ago)
+      session = UserSession.find
       assert session.stale?
+      assert_nil @controller.session["user_credentials"]
+      assert_nil @controller.session["user_credentials_id"]
       UserSession.logout_on_timeout = false
     end
     
@@ -55,6 +59,7 @@ module SessionTests
       assert session.stale?
       
       ben.update_attribute(:last_request_at, Time.now)
+      set_session_for(ben)
       session = UserSession.find
       assert !session.stale?
     end
