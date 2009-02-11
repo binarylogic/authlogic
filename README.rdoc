@@ -412,7 +412,7 @@ With the above information you should be able to scope your sessions any way you
 The errors in Authlogic work JUST LIKE ActiveRecord. In fact, it uses the exact same ActiveRecord errors class. Use it the same way:
 
   class UserSession
-    before_validation :check_if_awesome
+    validate :check_if_awesome
     
     private
       def check_if_awesome

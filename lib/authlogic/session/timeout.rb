@@ -10,6 +10,7 @@ module Authlogic
       def self.included(klass)
         klass.class_eval do
           alias_method_chain :find_record, :timeout
+          before_find :reset_stale_state
           after_find :update_last_request_at
           after_save :update_last_request_at
         end
@@ -19,17 +20,24 @@ module Authlogic
       # returned. This allows you to perform a current_user_session.stale? query in order to inform your users of why they need to log back in.
       def find_record_with_timeout
         result = find_record_without_timeout
-        self.record = nil if result && stale?
+        if result && stale?
+          self.record = nil
+          @stale = true
+        end
         result
       end
     
       # Tells you if the record is stale or not. Meaning the record has timed out. This will only return true if you set logout_on_timeout to true in your configuration.
       # Basically how a bank website works. If you aren't active over a certain period of time your session becomes stale and requires you to log back in.
       def stale?
-        logout_on_timeout? && record && record.logged_out?
+        @stale == true || (logout_on_timeout? && record && record.logged_out?)
       end
     
       private
+        def reset_stale_state
+          @stale = nil
+        end
+        
         def update_last_request_at
           if record && record.class.column_names.include?("last_request_at") && (record.last_request_at.blank? || last_request_at_threshold.to_i.seconds.ago >= record.last_request_at)
             record.last_request_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
