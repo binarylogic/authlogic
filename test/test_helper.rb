@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table :users do |t|
     t.datetime  :created_at      
     t.datetime  :updated_at
+    #t.integer   :lock_version
     t.integer   :company_id
     t.string    :login
     t.string    :crypted_password

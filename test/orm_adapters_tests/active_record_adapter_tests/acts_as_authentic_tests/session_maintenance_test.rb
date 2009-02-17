@@ -16,6 +16,7 @@ module ORMAdaptersTests
           old_cookie_key = @controller.cookies["user_credentials"]
           ben.password = "newpass"
           ben.password_confirmation = "newpass"
+          ben.first_name = "ass2"
           ben.save
           assert @controller.session["user_credentials"]
           assert @controller.cookies["user_credentials"]

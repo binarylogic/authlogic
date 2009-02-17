@@ -62,8 +62,7 @@ module Authlogic
         #
         # See the id method for more information on ids.
         def find(id = nil)
-          args = [id].compact
-          session = new(*args)
+          session = new(id)
           session.before_find
           if session.find_record
             session.after_find
@@ -92,7 +91,7 @@ module Authlogic
             end
         end
       end
-    
+      
       attr_accessor :new_session
       attr_reader :record, :unauthorized_record
       attr_writer :authenticating_with, :id, :persisting

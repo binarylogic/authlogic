@@ -13,7 +13,7 @@ require File.dirname(__FILE__) + "/authlogic/crypto_providers/bcrypt"
 require File.dirname(__FILE__) + "/authlogic/crypto_providers/aes256"
 
 if defined?(ActiveRecord)
-  require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic"
+  require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/base"
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/credentials"
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/logged_in"
   require File.dirname(__FILE__) + "/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/perishability"

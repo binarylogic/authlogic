@@ -150,15 +150,6 @@ module Authlogic
         # * <tt>email_field_validates_uniqueness_of_options</tt> - default: same as :login_field if :login_field_type == :email,
         #   These options are applied to the validates_uniqueness_of call for the :email_field
         module Config
-          def first_column_to_exist(*columns_to_check) # :nodoc:
-            columns_to_check.each { |column_name| return column_name.to_sym if column_names.include?(column_name.to_s) }
-            columns_to_check.first ? columns_to_check.first.to_sym : nil
-          end
-          
-          def meta_def(name, &block)
-            (class << self; self; end).instance_eval { define_method name, &block }
-          end
-        
           def acts_as_authentic_with_config(options = {})
             # Stop all configuration if the DB is not set up
             begin
@@ -224,11 +215,14 @@ module Authlogic
             
             options[:transition_from_crypto_provider] = [options[:transition_from_crypto_provider]].compact unless options[:transition_from_crypto_provider].is_a?(Array)
             
-            meta_def :acts_as_authentic_config do
-              options
-            end
-          
+            cattr_accessor :acts_as_authentic_config
+            self.acts_as_authentic_config = options
             acts_as_authentic_without_config(options)
+          end
+          
+          def first_column_to_exist(*columns_to_check) # :nodoc:
+            columns_to_check.each { |column_name| return column_name.to_sym if column_names.include?(column_name.to_s) }
+            columns_to_check.first ? columns_to_check.first.to_sym : nil
           end
         end
       end
