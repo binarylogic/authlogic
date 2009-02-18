@@ -33,14 +33,17 @@ module SessionTests
       assert !session.stale?
     end
     
-    def test_stale
+    def test_not_stale
       UserSession.logout_on_timeout = true
       ben = users(:ben)
       ben.update_attribute(:last_request_at, Time.now)
       set_session_for(ben)
       session = UserSession.find
       assert !session.stale?
-      
+    end
+    
+    def test_stale
+      ben = users(:ben)
       ben.update_attribute(:last_request_at, 3.years.ago)
       session = UserSession.find
       assert session.stale?
