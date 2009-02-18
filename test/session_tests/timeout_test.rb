@@ -44,6 +44,7 @@ module SessionTests
     
     def test_stale
       ben = users(:ben)
+      set_session_for(ben)
       ben.update_attribute(:last_request_at, 3.years.ago)
       session = UserSession.find
       assert session.stale?

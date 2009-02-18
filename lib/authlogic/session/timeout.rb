@@ -12,7 +12,7 @@ module Authlogic
           alias_method_chain :find_record, :timeout
           before_find :reset_stale_state
           after_find :update_last_request_at
-          after_save :update_last_request_at
+          before_save :set_last_request_at
         end
       end
       
@@ -39,9 +39,12 @@ module Authlogic
         end
         
         def update_last_request_at
+          record.save_without_session_maintenance(false) if set_last_request_at
+        end
+
+        def set_last_request_at
           if record && record.class.column_names.include?("last_request_at") && (record.last_request_at.blank? || last_request_at_threshold.to_i.seconds.ago >= record.last_request_at)
             record.last_request_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
-            record.save_without_session_maintenance(false)
           end
         end
     end
