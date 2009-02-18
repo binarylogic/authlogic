@@ -6,7 +6,7 @@ module Authlogic
     # provides. Similar to how ActiveRecord has an adapter for MySQL, PostgreSQL, SQLite, etc.
     class RailsAdapter < AbstractAdapter
       def authenticate_with_http_basic(&block)
-        controller.authenticate_with_http_basic(&block)
+        controller.authenticate_or_request_with_http_basic(&block)
       end
       
       def cookies
