@@ -133,7 +133,17 @@ module ORMAdaptersTests
           assert_not_equal old_salt, ben.password_salt
           assert_not_equal old_persistence_token, ben.persistence_token
           assert UserSession.find
+        end
+        
+        def test_reset_password!
+          UserSession.create(users(:ben))
+          session = UserSession.find
+          assert session
+          ben = session.record
           
+          old_password = ben.crypted_password
+          old_salt = ben.password_salt
+          old_persistence_token = ben.persistence_token
           ben.reset_password!
           ben.reload
           assert_not_equal old_password, ben.crypted_password

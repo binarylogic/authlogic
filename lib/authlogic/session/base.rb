@@ -61,12 +61,12 @@ module Authlogic
         #   UserSession.find(:secure)
         #
         # See the id method for more information on ids.
-        def find(id = nil)
+        def find(id = nil, priority_record = nil)
           session = new(id)
           session.before_find
           if record = session.find_record
             session.after_find
-            record.save_without_session_maintenance(false) if record.changed?
+            record.save_without_session_maintenance(false) if record.changed? && record != priority_record
             session
           else
             nil

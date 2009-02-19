@@ -39,7 +39,7 @@ module Authlogic
                   @_logged_out = true
           
                   #{options[:session_ids].inspect}.each do |session_id|
-                    session = #{options[:session_class]}.find(session_id)
+                    session = #{options[:session_class]}.find(session_id, self)
                     if session
                       if !session.record.blank?
                         @_logged_out = false
