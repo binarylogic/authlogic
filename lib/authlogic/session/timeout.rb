@@ -11,7 +11,7 @@ module Authlogic
         klass.class_eval do
           alias_method_chain :find_record, :timeout
           before_find :reset_stale_state
-          after_find :update_last_request_at
+          after_find :set_last_request_at
           before_save :set_last_request_at
         end
       end
@@ -36,10 +36,6 @@ module Authlogic
       private
         def reset_stale_state
           @stale = nil
-        end
-        
-        def update_last_request_at
-          record.save_without_session_maintenance(false) if set_last_request_at
         end
 
         def set_last_request_at

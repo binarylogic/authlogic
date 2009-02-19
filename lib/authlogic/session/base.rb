@@ -64,8 +64,9 @@ module Authlogic
         def find(id = nil)
           session = new(id)
           session.before_find
-          if session.find_record
+          if record = session.find_record
             session.after_find
+            record.save_without_session_maintenance(false) if record.changed?
             session
           else
             nil
