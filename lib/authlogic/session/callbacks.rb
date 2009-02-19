@@ -8,6 +8,7 @@ module Authlogic
     #
     #   before_find
     #   after_find
+    #   save record if changed?
     #   
     #   before_validation
     #   before_validation_on_create
@@ -16,6 +17,7 @@ module Authlogic
     #   after_validation_on_update
     #   after_validation_on_create
     #   after_validation
+    #   save record if changed?
     #   
     #   before_save
     #   before_create
@@ -23,10 +25,14 @@ module Authlogic
     #   after_update
     #   after_create
     #   after_save
+    #   save record if changed?
     #   
     #   before_destroy
     #   destroy
     #   after_destroy
+    #
+    # Notice the "save record if changed?" lines above. This helps with performance. If you need to make changes to the associated record, there is no need to save the record, Authlogic will do it for you.
+    # This allow multiple modules to modify the record and execute as few queries as possible.
     #
     # **WARNING**: unlike ActiveRecord, these callbacks must be set up on the class level:
     #
@@ -36,7 +42,7 @@ module Authlogic
     #     # ..etc
     #   end
     #
-    # Defining a "before_validation" method will work, but overwrite the execution of the callback chain, so you must chose one method or the other. The preferred method is the method above.
+    # You can NOT define a "before_validation" method, this is bad practice and does not allow Authlogic to extend properly with multiple extensions. Please ONLY use the method above.
     module Callbacks
       METHODS = [
         "before_find", "after_find",

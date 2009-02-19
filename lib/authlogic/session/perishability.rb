@@ -11,7 +11,7 @@ module Authlogic
       
       private
         def reset_perishable_token!
-          record.send("reset_#{perishable_token_field}!") if record.respond_to?("reset_#{perishable_token_field}!") && !record.send("disable_#{perishable_token_field}_maintenance?")
+          record.send("reset_#{perishable_token_field}") if record.respond_to?("reset_#{perishable_token_field}") && !record.send("disable_#{perishable_token_field}_maintenance?")
         end
     end
   end

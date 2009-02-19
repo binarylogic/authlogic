@@ -47,7 +47,7 @@ module Authlogic
           if !errors.empty?
             record.failed_login_count ||= 0
             record.failed_login_count += 1
-            record.save_without_session_maintenance(false)
+            #record.save_without_session_maintenance(false)
           end
         end
     end

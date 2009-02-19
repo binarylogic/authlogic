@@ -289,6 +289,7 @@ module Authlogic
           new_session? ? after_create : after_update
           after_save
           
+          record.save_without_session_maintenance(false) if record.changed?
           self.new_session = false
           result = self
         else
@@ -332,6 +333,9 @@ module Authlogic
           # hooks
           new_session? ? after_validation_on_create : after_validation_on_update
           after_validation
+          
+          record.save_without_session_maintenance(false) if record.changed?
+          
           return true if errors.empty?
         end
         

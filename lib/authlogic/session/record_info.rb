@@ -19,7 +19,7 @@ module Authlogic
             record.current_login_ip = controller.request.remote_ip
           end
           
-          record.save_without_session_maintenance(false)
+          #record.save_without_session_maintenance(false)
         end
     end
   end
