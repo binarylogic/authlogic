@@ -10,6 +10,7 @@ lib/authlogic/crypto_providers/bcrypt.rb
 lib/authlogic/crypto_providers/sha1.rb
 lib/authlogic/crypto_providers/sha512.rb
 lib/authlogic/i18n.rb
+lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/base.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/config.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/credentials.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/logged_in.rb
@@ -17,17 +18,18 @@ lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/perishability
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/persistence.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/session_maintenance.rb
 lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic/single_access.rb
-lib/authlogic/orm_adapters/active_record_adapter/acts_as_authentic.rb
 lib/authlogic/orm_adapters/active_record_adapter/authenticates_many.rb
 lib/authlogic/session/active_record_trickery.rb
 lib/authlogic/session/authenticates_many_association.rb
 lib/authlogic/session/base.rb
+lib/authlogic/session/brute_force_protection.rb
 lib/authlogic/session/callbacks.rb
 lib/authlogic/session/config.rb
 lib/authlogic/session/cookies.rb
 lib/authlogic/session/errors.rb
 lib/authlogic/session/params.rb
 lib/authlogic/session/perishability.rb
+lib/authlogic/session/record_info.rb
 lib/authlogic/session/scopes.rb
 lib/authlogic/session/session.rb
 lib/authlogic/session/timeout.rb
@@ -63,6 +65,7 @@ test/orm_adapters_tests/active_record_adapter_tests/authenticates_many_test.rb
 test/session_tests/active_record_trickery_test.rb
 test/session_tests/authenticates_many_association_test.rb
 test/session_tests/base_test.rb
+test/session_tests/brute_force_protection_test.rb
 test/session_tests/config_test.rb
 test/session_tests/cookies_test.rb
 test/session_tests/params_test.rb

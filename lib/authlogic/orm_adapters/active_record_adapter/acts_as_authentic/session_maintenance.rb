@@ -63,11 +63,10 @@ module Authlogic
                   session_id = #{options[:session_ids].inspect}.first
           
                   # If we are already logged in, ignore this completely. All that we care about is updating ourself.
-                  next if #{options[:session_class]}.find(session_id, self)
+                  return if #{options[:session_class]}.find(session_id, self)
                         
                   # Log me in
-                  args = [self, session_id].compact
-                  #{options[:session_class]}.create(*args)
+                  #{options[:session_class]}.create(*[self, session_id].compact)
                 end
         
                 def update_sessions!
