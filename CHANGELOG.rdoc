@@ -1,9 +1,10 @@
-== 1.4.2
+== 1.4.2 released 2009-2-20
 
 * Cleaned up callbacks system to use hooks and execute in the proper order.
 * Added brute force protection. See the consecutive_failed_logins_limit configuration option in Authlogic::Session::Config. Also see Authlogic::Session:BruteForceProtection
 * Fixed issue with calling stale? when there is no record.
 * Simon Harris fixed the issue of using lock_version with the associated record and also optimized the library for better performance.
+* Implemented saving the record during the callback chain to execute as few queries as possible. This way modules can hook into Authlogic, modify the associated record, and not have to worry about saving the record.
 
 == 1.4.1 released 2009-2-8
 

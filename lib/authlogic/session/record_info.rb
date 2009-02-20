@@ -18,8 +18,6 @@ module Authlogic
             record.last_login_ip = record.current_login_ip if record.respond_to?(:last_login_ip)
             record.current_login_ip = controller.request.remote_ip
           end
-          
-          #record.save_without_session_maintenance(false)
         end
     end
   end
