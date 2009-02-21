@@ -93,8 +93,8 @@ module Authlogic
         end
       end
       
-      attr_accessor :new_session
-      attr_reader :record, :unauthorized_record
+      attr_accessor :attempted_record, :new_session, :record
+      attr_reader :unauthorized_record
       attr_writer :authenticating_with, :id, :persisting
     
       # You can initialize a session by doing any of the following:
@@ -322,25 +322,23 @@ module Authlogic
       # you will not have a record.
       def valid?
         errors.clear
-        if valid_credentials?
-          # hooks
-          before_validation
-          new_session? ? before_validation_on_create : before_validation_on_update
-          validate
-          
-          valid_record?
-          
-          # hooks
+        self.attempted_record = nil
+        
+        before_validation
+        new_session? ? before_validation_on_create : before_validation_on_update
+        valid_credentials?
+        validate
+        
+        if errors.empty?
           new_session? ? after_validation_on_create : after_validation_on_update
           after_validation
-          
-          record.save_without_session_maintenance(false) if record.changed?
-          
-          return true if errors.empty?
+        else
+          self.record = nil
         end
         
-        self.record = nil
-        false
+        attempted_record.save_without_session_maintenance(false) if attempted_record && attempted_record.changed?
+        self.attempted_record = nil
+        errors.empty?
       end
       
       # Tries to validate the session from information from a basic http auth, if it was provided.
@@ -409,53 +407,44 @@ module Authlogic
           self.class.klass_name
         end
         
-        def record=(value)
-          @record = value
-        end
-        
         def search_for_record(method, value)
           klass.send(method, value)
         end
         
         def valid_credentials?
-          unchecked_record = nil
-          
           case authenticating_with
           when :password
             errors.add(login_field, I18n.t('error_messages.login_blank', :default => "can not be blank")) if send(login_field).blank?
             errors.add(password_field, I18n.t('error_messages.password_blank', :default => "can not be blank")) if send("protected_#{password_field}").blank?
             return false if errors.count > 0
             
-            unchecked_record = search_for_record(find_by_login_method, send(login_field))
+            self.attempted_record = search_for_record(find_by_login_method, send(login_field))
             
-            if unchecked_record.blank?
+            if attempted_record.blank?
               errors.add(login_field, I18n.t('error_messages.login_not_found', :default => "does not exist"))
               return false
             end
             
-            unless unchecked_record.send(verify_password_method, send("protected_#{password_field}"))
+            unless attempted_record.send(verify_password_method, send("protected_#{password_field}"))
               errors.add(password_field, I18n.t('error_messages.password_invalid', :default => "is not valid"))
               return false
             end
-            
-            self.record = unchecked_record
           when :unauthorized_record
-            unchecked_record = unauthorized_record
+            self.attempted_record = unauthorized_record
             
-            if unchecked_record.blank?
+            if attempted_record.blank?
               errors.add_to_base(I18n.t('error_messages.blank_record', :default => "You can not login with a blank record"))
               return false
             end
             
-            if unchecked_record.new_record?
+            if attempted_record.new_record?
               errors.add_to_base(I18n.t('error_messages.new_record', :default => "You can not login with a new record"))
               return false
             end
-            
-            self.record = unchecked_record
           end
           
-          true
+          self.record = attempted_record
+          valid_record?
         end
         
         def valid_record?

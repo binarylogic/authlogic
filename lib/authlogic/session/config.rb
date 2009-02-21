@@ -202,7 +202,7 @@ module Authlogic
             write_inheritable_attribute(:consecutive_failed_logins_limit, value)
           end
         end
-        alias_method :logout_on_timeout=, :logout_on_timeout
+        alias_method :consecutive_failed_logins_limit=, :consecutive_failed_logins_limit
         
         def not_active_message(value = nil) # :nodoc:
           new_i18n_error

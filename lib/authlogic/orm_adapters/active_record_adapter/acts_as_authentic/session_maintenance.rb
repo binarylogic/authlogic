@@ -40,11 +40,9 @@ module Authlogic
           
                   #{options[:session_ids].inspect}.each do |session_id|
                     session = #{options[:session_class]}.find(session_id, self)
-                    if session
-                      if !session.record.blank?
-                        @_logged_out = false
-                        @_sessions << session if session.record == self
-                      end
+                    if session && !session.record.blank?
+                      @_logged_out = false
+                      @_sessions << session if session.record == self
                     end
                   end
                 end
