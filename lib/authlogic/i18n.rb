@@ -33,7 +33,7 @@ module Authlogic
   #       login_blank: can not be blank
   #       login_not_found: does not exist
   #       login_invalid: should use only letters, numbers, spaces, and .-_@ please.
-  #       consecutive_failed_logins_limit_exceeded: Consecutive failed logins limit exceeded.
+  #       consecutive_failed_logins_limit_exceeded: Consecutive failed logins limit exceeded, account is disabled.
   #       email_invalid: should look like an email address.
   #       password_blank: can not be blank
   #       password_invalid: is not valid

@@ -1,3 +1,7 @@
+== 1.4.3 released 2009-2-22
+
+* Fixed issue with brute force protection.
+
 == 1.4.2 released 2009-2-20
 
 * Cleaned up callbacks system to use hooks and execute in the proper order.

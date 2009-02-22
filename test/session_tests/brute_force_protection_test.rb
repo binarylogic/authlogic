@@ -35,7 +35,7 @@ module SessionTests
       UserSession.consecutive_failed_logins_limit = 50
     end
     
-    def test_resetting_failed_logins_limit
+    def test_resetting_failed_logins_count
       ben = users(:ben)
       
       2.times do |i|
