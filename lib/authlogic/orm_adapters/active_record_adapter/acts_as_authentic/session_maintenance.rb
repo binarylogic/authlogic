@@ -18,7 +18,7 @@ module Authlogic
             acts_as_authentic_without_session_maintenance(options)
           
             before_save :get_session_information, :if => :update_sessions?
-            after_save :maintain_sessions!, :if => :update_sessions?
+            before_save :maintain_sessions!, :if => :update_sessions?
           
             class_eval <<-"end_eval", __FILE__, __LINE__
               def save_without_session_maintenance(*args)

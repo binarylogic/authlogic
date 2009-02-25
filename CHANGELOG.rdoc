@@ -1,3 +1,7 @@
+== 1.4.4
+
+* Moved session maintenance to a before_save, to save on queries executed and to skip an unexpected / additional save on the user object.
+
 == 1.4.3 released 2009-2-22
 
 * Fixed issue with brute force protection.

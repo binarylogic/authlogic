@@ -41,7 +41,6 @@ module Authlogic
   #       not_confirmed: Your account is not confirmed
   #       not_approved: Your account is not approved
   #       blank_record: You can not login with a blank record
-  #       new_record: You can not login with a new record
   class I18n
     class << self
       # All message translation is passed to this method. The first argument is the key for the message. The second is options, see the rails I18n library for a list of options used.

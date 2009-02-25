@@ -436,11 +436,6 @@ module Authlogic
               errors.add_to_base(I18n.t('error_messages.blank_record', :default => "You can not login with a blank record"))
               return false
             end
-            
-            if attempted_record.new_record?
-              errors.add_to_base(I18n.t('error_messages.new_record', :default => "You can not login with a new record"))
-              return false
-            end
           end
           
           self.record = attempted_record
