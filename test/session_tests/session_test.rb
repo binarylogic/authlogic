@@ -41,5 +41,23 @@ module SessionTests
       assert UserSession.find
       assert_equal ben.persistence_token, @controller.session["user_credentials"]
     end
+    
+    def test_session_is_not_modified_if_it_is_not_included_in_find_with
+      with_find_with [:params, :cookie, :http_auth] do
+        ben = users(:ben)
+        session = UserSession.new(ben)
+        assert @controller.session["user_credentials"].blank?
+        assert session.save
+        assert @controller.session["user_credentials"].blank?
+      end
+    end
+    
+    private
+    def with_find_with(new_find_with)
+      previous_find_with, UserSession.find_with = UserSession.find_with, new_find_with
+      yield
+    ensure
+      UserSession.find_with = previous_find_with
+    end
   end
 end

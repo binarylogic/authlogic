@@ -5,9 +5,9 @@ module Authlogic
     # Handles all parts of authentication that deal with sessions. Such as persisting a session and saving / destroy a session.
     module Session
       def self.included(klass)
-        klass.after_save :update_session, :if => :persisting?
-        klass.after_destroy :update_session, :if => :persisting?
-        klass.after_find :update_session, :if => :persisting? # to continue persisting the session after an http_auth request
+        klass.after_save :update_session, :if => :persisting_and_using_sessions?
+        klass.after_destroy :update_session, :if => :persisting_and_using_sessions?
+        klass.after_find :update_session, :if => :persisting_and_using_sessions? # to continue persisting the session after an http_auth request
       end
       
       # Tries to validate the session from information in the session
@@ -39,6 +39,14 @@ module Authlogic
         def update_session
           controller.session[session_key] = record && record.send(persistence_token_field)
           controller.session["#{session_key}_id"] = record && record.send(record.class.primary_key)
+        end
+        
+        def persist_using_sessions?
+          find_with.include?(:session)
+        end
+        
+        def persisting_and_using_sessions?
+          persisting? && persist_using_sessions?
         end
     end
   end
