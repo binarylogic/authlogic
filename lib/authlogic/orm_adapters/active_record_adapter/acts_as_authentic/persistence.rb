@@ -40,7 +40,7 @@ module Authlogic
           
             class_eval <<-"end_eval", __FILE__, __LINE__
               def self.unique_token
-                Authlogic::CryptoProviders::Sha512.encrypt(Time.now.to_s + (1..10).collect{ rand.to_s }.join)
+                Authlogic::Random.hex_token
               end
             
               def forget!

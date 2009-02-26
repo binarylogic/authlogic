@@ -57,10 +57,7 @@ module Authlogic
             
             class_eval <<-"end_eval", __FILE__, __LINE__
               def self.friendly_unique_token
-                chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
-                newpass = ""
-                1.upto(20) { |i| newpass << chars[rand(chars.size-1)] }
-                newpass
+                Authlogic::Random.friendly_token
               end
               
               def #{options[:password_field]}=(pass)
