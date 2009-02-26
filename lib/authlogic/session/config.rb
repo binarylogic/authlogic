@@ -104,14 +104,14 @@ module Authlogic
         end
         alias_method :find_by_login_method=, :find_by_login_method
         
-        # Calling UserSession.find tries to find the user session by session, then cookie, then params, and finally by basic http auth.
+        # Calling UserSession.find tries to find the user session by cookie, then session, then params, and finally by basic http auth.
         # This option allows you to change the order or remove any of these.
         #
-        # * <tt>Default:</tt> [:params, :session, :cookie, :http_auth]
+        # * <tt>Default:</tt> [:params, :cookie, :session, :http_auth]
         # * <tt>Accepts:</tt> Array, and can only use any of the 3 options above
         def find_with(*values)
           if values.blank?
-            read_inheritable_attribute(:find_with) || find_with(:params, :session, :cookie, :http_auth)
+            read_inheritable_attribute(:find_with) || find_with(:params, :cookie, :session, :http_auth)
           else
             values.flatten!
             write_inheritable_attribute(:find_with, values)
