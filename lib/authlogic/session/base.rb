@@ -63,10 +63,11 @@ module Authlogic
         # See the id method for more information on ids.
         def find(id = nil, priority_record = nil)
           session = new(id)
+          session.priority_record = priority_record
           session.before_find
-          if record = session.find_record
+          if session.find_record
             session.after_find
-            record.save_without_session_maintenance(false) if record.changed? && record != priority_record
+            session.save_record
             session
           else
             nil
@@ -93,8 +94,8 @@ module Authlogic
         end
       end
       
-      attr_accessor :attempted_record, :new_session, :record
-      attr_reader :unauthorized_record
+      attr_accessor :new_session, :priority_record, :record
+      attr_reader :attempted_record, :unauthorized_record
       attr_writer :authenticating_with, :id, :persisting
     
       # You can initialize a session by doing any of the following:
@@ -120,11 +121,12 @@ module Authlogic
         
         self.id = args.pop if args.last.is_a?(Symbol)
         
-        if args.first.is_a?(Hash)
+        if args.size == 1 && args.first.is_a?(Hash)
           self.credentials = args.first
         elsif !args.first.blank? && args.first.class < ::ActiveRecord::Base
-          self.unauthorized_record = args.first
-          self.remember_me = args[1] if args.size > 1
+          self.unauthorized_record = args.shift
+          self.priority_record = args.shift if args.first.class < ::ActiveRecord::Base
+          self.remember_me = args.shift if !args.empty?
         end
       end
       
@@ -288,7 +290,7 @@ module Authlogic
           new_session? ? after_create : after_update
           after_save
           
-          record.save_without_session_maintenance(false) if record.changed?
+          save_record
           self.new_session = false
           result = self
         else
@@ -304,6 +306,11 @@ module Authlogic
         result = save
         raise SessionInvalid.new(self) unless result
         result
+      end
+      
+      def save_record(alternate_record = nil) # :nodoc:
+        r = alternate_record || record
+        r.save_without_session_maintenance(false) if r && r != priority_record && r.changed?
       end
       
       # This lets you create a session by passing a single object of whatever you are authenticating. Let's say User. By passing a user object you are vouching for this user and saying you can guarantee
@@ -335,7 +342,7 @@ module Authlogic
           self.record = nil
         end
         
-        attempted_record.save_without_session_maintenance(false) if attempted_record && attempted_record.changed?
+        save_record(attempted_record)
         self.attempted_record = nil
         errors.empty?
       end
@@ -354,6 +361,10 @@ module Authlogic
       end
       
       private
+        def attempted_record=(value)
+          @attempted_record = value == priority_record ? priority_record :  value
+        end
+        
         def controller
           self.class.controller
         end

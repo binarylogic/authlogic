@@ -1,6 +1,8 @@
 == 1.4.4
 
 * Moved session maintenance to a before_save, to save on queries executed and to skip an unexpected / additional save on the user object.
+* Extracted random string generation into its own class and leverages SecureRandom if it is available
+* Move cookies to a higher priority when trying to find the record to help with performance since Rails 3 lazily loads the sessions
 
 == 1.4.3 released 2009-2-22
 
