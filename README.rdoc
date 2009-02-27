@@ -487,6 +487,12 @@ In your test, before you execute a request, just call one of those methods and i
 
 You can also checkout the authlogic_example application (see helpful links above), the tests there use this.
 
+== Deployment
+
+When deploying your application to Apache and Passenger/mod_rails you should use Rails' ActiveRecord session store. Other Rails session systems can be problematic and give you unexpected results (like not being able to logout). 
+
+AuthLogic has proven itself in different and complex production environments using the ActiveRecord session store.
+
 == Framework agnostic (Rails, Merb, etc.)
 
 I designed Authlogic to be framework agnostic, meaning it doesn't care what framework you use it in. Right out of the box it supports rails and merb. I have not had the opportunity to use other frameworks, but the only thing stopping Authlogic from being used in other frameworks is a simple adapter. Check out controller_adapters/rails_adapter, or controller_adapters/merb_adapter.
