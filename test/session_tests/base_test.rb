@@ -106,6 +106,11 @@ module SessionTests
       assert_equal true, session.remember_me
       assert_equal({:password => "<Protected>", :login => "login"}, session.credentials)
     end
+    
+    def test_credentials_are_params_safe
+      session = UserSession.new
+      assert_nothing_raised { session.credentials = {:hacker_method => "error!"} }
+    end
   
     def test_destroy
       ben = users(:ben)

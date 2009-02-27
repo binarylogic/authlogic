@@ -158,7 +158,7 @@ module Authlogic
       # Lets you set your loging and password via a hash format. This is "params" safe. It only allows for 3 keys: your login field name, password field name, and remember me.
       def credentials=(values)
         return if values.blank? || !values.is_a?(Hash)
-        values.each do |field, value|
+        values.with_indifferent_access.slice(login_field, password_field, 'remember_me').each do |field, value|
           next if value.blank?
           send("#{field}=", value)
         end
