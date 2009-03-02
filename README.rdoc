@@ -489,9 +489,11 @@ You can also checkout the authlogic_example application (see helpful links above
 
 == Deployment
 
-When deploying your application to Apache and Passenger/mod_rails you should use Rails' ActiveRecord session store. Other Rails session systems can be problematic and give you unexpected results (like not being able to logout). 
+If you are having problems with your sessions, right now there is a bug with Rails sessions using cookie store. Checkout the comments on this commit: http://github.com/binarylogic/authlogic/commit/495e95e5a2f724e6f1e339c4871168c6c5e6a7ca
 
-AuthLogic has proven itself in different and complex production environments using the ActiveRecord session store.
+As a temporary fix, you should use Rails' ActiveRecord session store. Authlogic just leverages the Rails' session system, it doesn't do anything tricky, or anything you wouldn't do in your controller.
+
+Regardless, once a fix is released this will be a non issue.
 
 == Framework agnostic (Rails, Merb, etc.)
 

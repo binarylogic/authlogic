@@ -36,21 +36,17 @@ module Authlogic
                 def get_session_information
                   # Need to determine if we are completely logged out, or logged in as another user
                   @_sessions = []
-                  @_logged_out = true
           
                   #{options[:session_ids].inspect}.each do |session_id|
                     session = #{options[:session_class]}.find(session_id, self)
-                    if session && !session.record.blank?
-                      @_logged_out = false
-                      @_sessions << session if session.record == self
-                    end
+                    @_sessions << session if session && session.record && session.record == self
                   end
                 end
         
                 def maintain_sessions!
-                  if @_logged_out
+                  if @_sessions.empty?
                     create_session!
-                  elsif !@_sessions.blank?
+                  else
                     update_sessions!
                   end
                 end
@@ -59,9 +55,7 @@ module Authlogic
                   # We only want to automatically login into the first session, since this is the main session. The other sessions are sessions
                   # that need to be created after logging into the main session.
                   session_id = #{options[:session_ids].inspect}.first
-                   
-                  # Log me in, only if we aren't already logged in
-                  #{options[:session_class]}.create(*[self, self, session_id].compact) if !#{options[:session_class]}.find(session_id, self)
+                  #{options[:session_class]}.create(*[self, self, session_id].compact)
                 end
         
                 def update_sessions!
