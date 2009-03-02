@@ -14,6 +14,14 @@ module Authlogic
         def human_attribute_name(*args)
           klass.human_attribute_name(*args)
         end
+        
+        def human_name(*args)
+          klass.human_name(*args)
+        end
+        
+        def self_and_descendents_from_active_record
+          [ self ]
+        end
       end
       
       module InstanceMethods # :nodoc:
