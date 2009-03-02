@@ -18,7 +18,7 @@ module Authlogic
             acts_as_authentic_without_session_maintenance(options)
             
             before_save :get_session_information, :if => :update_sessions?
-            before_save :maintain_sessions!, :if => :update_sessions?
+            before_save :maintain_sessions, :if => :update_sessions?
             
             class_eval <<-"end_eval", __FILE__, __LINE__
               def save_without_session_maintenance(*args)
@@ -43,15 +43,15 @@ module Authlogic
                   end
                 end
                 
-                def maintain_sessions!
+                def maintain_sessions
                   if @_sessions.empty?
-                    create_session!
+                    create_session
                   else
-                    update_sessions!
+                    update_sessions
                   end
                 end
                 
-                def create_session!
+                def create_session
                   # We only want to automatically login into the first session, since this is the main session. The other sessions are sessions
                   # that need to be created after logging into the main session.
                   session_id = #{options[:session_ids].inspect}.first
@@ -60,7 +60,7 @@ module Authlogic
                   return true
                 end
                 
-                def update_sessions!
+                def update_sessions
                   # We found sessions above, let's update them with the new info
                   @_sessions.each do |stale_session|
                     stale_session.unauthorized_record = self
