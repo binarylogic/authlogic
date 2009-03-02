@@ -56,6 +56,8 @@ module Authlogic
                   # that need to be created after logging into the main session.
                   session_id = #{options[:session_ids].inspect}.first
                   #{options[:session_class]}.create(*[self, self, session_id].compact)
+
+                  return true
                 end
         
                 def update_sessions!
@@ -64,6 +66,8 @@ module Authlogic
                     stale_session.unauthorized_record = self
                     stale_session.save
                   end
+
+                  return true
                 end
             end_eval
           end
