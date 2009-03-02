@@ -297,7 +297,7 @@ module Authlogic
           result = false
         end
         
-        yield result if block_given?
+        yield result if result and block_given?
         result
       end
       
