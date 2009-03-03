@@ -4,14 +4,12 @@ module ORMAdaptersTests
   module ActiveRecordAdapterTests
     module ActsAsAuthenticTests
       class PerishabilityTest < ActiveSupport::TestCase
-        def test_before_validation
+        def test_before_save
           ben = users(:ben)
           old_perishable_token = ben.perishable_token
-          assert ben.valid?
+          assert ben.save
           assert_not_equal old_perishable_token, ben.perishable_token
           ben.reload
-          assert_equal old_perishable_token, ben.perishable_token
-          assert ben.save
           assert_not_equal old_perishable_token, ben.perishable_token
         end
         
