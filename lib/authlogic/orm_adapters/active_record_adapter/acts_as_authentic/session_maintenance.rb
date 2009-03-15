@@ -39,7 +39,7 @@ module Authlogic
                   
                   #{options[:session_ids].inspect}.each do |session_id|
                     session = #{options[:session_class]}.find(session_id, self)
-                    @_sessions << session if session && session.record && session.record == self
+                    @_sessions << session if session && session.record
                   end
                 end
                 
@@ -63,6 +63,7 @@ module Authlogic
                 def update_sessions
                   # We found sessions above, let's update them with the new info
                   @_sessions.each do |stale_session|
+                    next if stale_session.record != self
                     stale_session.unauthorized_record = self
                     stale_session.save
                   end

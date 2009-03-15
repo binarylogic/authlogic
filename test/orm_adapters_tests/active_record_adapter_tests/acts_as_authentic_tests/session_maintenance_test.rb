@@ -16,7 +16,7 @@ module ORMAdaptersTests
           old_cookie_key = @controller.cookies["user_credentials"]
           ben.password = "newpass"
           ben.password_confirmation = "newpass"
-          ben.save
+          assert ben.save
           assert @controller.session["user_credentials"]
           assert @controller.cookies["user_credentials"]
           assert_not_equal @controller.session["user_credentials"], old_session_key
@@ -29,7 +29,17 @@ module ORMAdaptersTests
           old_session_key = @controller.session["user_credentials"]
           old_cookie_key = @controller.cookies["user_credentials"]
           ben.first_name = "Ben"
-          ben.save
+          assert ben.save
+          assert_equal @controller.session["user_credentials"], old_session_key
+          assert_equal @controller.cookies["user_credentials"], old_cookie_key
+        end
+        
+        def test_creating_other_user
+          ben = users(:ben)
+          UserSession.create(ben)
+          old_session_key = @controller.session["user_credentials"]
+          old_cookie_key = @controller.cookies["user_credentials"]
+          assert User.create(:login => "awesome", :password => "saweet", :password_confirmation => "saweet", :email => "awesome@saweet.com")
           assert_equal @controller.session["user_credentials"], old_session_key
           assert_equal @controller.cookies["user_credentials"], old_cookie_key
         end
@@ -42,7 +52,7 @@ module ORMAdaptersTests
           zack = users(:zack)
           zack.password = "newpass"
           zack.password_confirmation = "newpass"
-          zack.save
+          assert zack.save
           assert_equal @controller.session["user_credentials"], old_session_key
           assert_equal @controller.cookies["user_credentials"], old_cookie_key
         end
@@ -52,7 +62,7 @@ module ORMAdaptersTests
           assert !UserSession.find
           ben.password = "newpass"
           ben.password_confirmation = "newpass"
-          ben.save
+          assert ben.save
           assert UserSession.find
           assert_equal ben, UserSession.find.record
         end
