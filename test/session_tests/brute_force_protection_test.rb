@@ -2,6 +2,14 @@ require File.dirname(__FILE__) + '/../test_helper.rb'
 
 module SessionTests
   class BruteForceProtectionTest < ActiveSupport::TestCase
+    def test_consecutive_failed_logins_limit_config
+      UserSession.consecutive_failed_logins_limit = 10
+      assert_equal 10, UserSession.consecutive_failed_logins_limit
+    
+      UserSession.consecutive_failed_logins_limit 50
+      assert_equal 50, UserSession.consecutive_failed_logins_limit
+    end
+    
     def test_under_limit
       ben = users(:ben)
       ben.failed_login_count = UserSession.consecutive_failed_logins_limit - 1
@@ -21,7 +29,7 @@ module SessionTests
       ben = users(:ben)
       
       2.times do |i|
-        session = UserSession.new(:login => ben.login, :password => "badpassword")
+        session = UserSession.new(:login => ben.login, :password => "badpassword1")
         assert !session.save
         assert session.errors.on(:password)
         assert_equal i + 1, ben.reload.failed_login_count

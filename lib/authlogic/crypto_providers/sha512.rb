@@ -1,9 +1,7 @@
 require "digest/sha2"
 
 module Authlogic
-  # = Crypto Providers
-  #
-  # The acts_as_authentic method allows you to pass a :crypto_provider option. This allows you to use any type of encryption you like.
+  # The acts_as_authentic method has a crypto_provider option. This allows you to use any type of encryption you like.
   # Just create a class with a class level encrypt and matches? method. See example below.
   #
   # === Example

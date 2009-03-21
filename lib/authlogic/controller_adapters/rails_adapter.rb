@@ -1,7 +1,5 @@
 module Authlogic
   module ControllerAdapters
-    # = Rails Adapter
-    #
     # Adapts authlogic to work with rails. The point is to close the gap between what authlogic expects and what the rails controller object
     # provides. Similar to how ActiveRecord has an adapter for MySQL, PostgreSQL, SQLite, etc.
     class RailsAdapter < AbstractAdapter
@@ -22,8 +20,6 @@ module Authlogic
         request.format.to_s
       end
       
-      # = Rails Implementation
-      #
       # Lets Authlogic know about the controller object via a before filter, AKA "activates" authlogic.
       module RailsImplementation
         def self.included(klass) # :nodoc:

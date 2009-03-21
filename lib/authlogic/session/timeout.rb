@@ -1,48 +1,80 @@
 module Authlogic
   module Session
-    # = Timeout
+    # Think about financial websites, if you are inactive for a certain period of time you will be asked to
+    # log back in on your next request. You can do this with Authlogic easily, there are 2 parts to this:
     #
-    # This is reponsibile for determining if the session is stale or fresh. It is also responsible for maintaining the last_request_at value if the column is present.
+    # 1. Define the timeout threshold:
     #
-    # Think about how financial websites work. If you are inactive after a certain period of time you must log back in. By default this is disabled, but if enabled this
-    # module kicks in. See the logout_on_timeout configuration option for how to turn this on.
+    #   acts_as_authentic :logged_in_timeout => 10.minutes # default is 10.minutes
+    #
+    # 2. Enable logging out on timeouts
+    #
+    #   class UserSession < Authlogic::Session::Base
+    #     logout_on_timeout true # default if false
+    #   end
+    #
+    # This will require a user to log back in if they are inactive for more than 10 minutes. In order for
+    # this feature to be used you must have a last_request_at datetime column in your table for whatever model
+    # you are authenticating with.
     module Timeout
       def self.included(klass)
         klass.class_eval do
-          alias_method_chain :find_record, :timeout
-          before_find :reset_stale_state
-          after_find :set_last_request_at
-          before_save :set_last_request_at
+          extend Config
+          include InstanceMethods
+          before_persisting :reset_stale_state
+          after_persisting :enforce_timeout
+          attr_accessor :stale_record
         end
       end
       
-      # This implements the stale functionality when trying to find a session. If the session is stale the record will be cleared, but the session object will still be
-      # returned. This allows you to perform a current_user_session.stale? query in order to inform your users of why they need to log back in.
-      def find_record_with_timeout
-        result = find_record_without_timeout
-        if result && stale?
-          self.record = nil
-          @stale = true
+      # Configuration for the timeout feature.
+      module Config
+        # With acts_as_authentic you get a :logged_in_timeout configuration option. If this is set, after this amount of time has passed the user
+        # will be marked as logged out. Obviously, since web based apps are on a per request basis, we have to define a time limit threshold that
+        # determines when we consider a user to be "logged out". Meaning, if they login and then leave the website, when do mark them as logged out?
+        # I recommend just using this as a fun feature on your website or reports, giving you a ballpark number of users logged in and active. This is
+        # not meant to be a dead accurate representation of a users logged in state, since there is really no real way to do this with web based apps.
+        # Think about a user that logs in and doesn't log out. There is no action that tells you that the user isn't technically still logged in and
+        # active.
+        #
+        # That being said, you can use that feature to require a new login if their session timesout. Similar to how financial sites work. Just set this option to
+        # true and if your record returns true for stale? then they will be required to log back in.
+        #
+        # Lastly, UserSession.find will still return a object is the session is stale, but you will not get a record. This allows you to determine if the
+        # user needs to log back in because their session went stale, or because they just aren't logged in. Just call current_user_session.stale? as your flag.
+        #
+        # * <tt>Default:</tt> false
+        # * <tt>Accepts:</tt> Boolean
+        def logout_on_timeout(value = nil)
+          config(:logout_on_timeout, value, false)
         end
-        result
+        alias_method :logout_on_timeout=, :logout_on_timeout
       end
-    
-      # Tells you if the record is stale or not. Meaning the record has timed out. This will only return true if you set logout_on_timeout to true in your configuration.
-      # Basically how a bank website works. If you aren't active over a certain period of time your session becomes stale and requires you to log back in.
-      def stale?
-        @stale == true || (logout_on_timeout? && record && record.logged_out?)
-      end
-    
-      private
-        def reset_stale_state
-          @stale = nil
+      
+      # Instance methods for the timeout feature.
+      module InstanceMethods
+        # Tells you if the record is stale or not. Meaning the record has timed out. This will only return true if you set logout_on_timeout to true in your configuration.
+        # Basically how a bank website works. If you aren't active over a certain period of time your session becomes stale and requires you to log back in.
+        def stale?
+          !stale_record.nil? || (logout_on_timeout? && record && record.logged_out?)
         end
-
-        def set_last_request_at
-          if record && record.class.column_names.include?("last_request_at") && (record.last_request_at.blank? || last_request_at_threshold.to_i.seconds.ago >= record.last_request_at)
-            record.last_request_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
+    
+        private
+          def reset_stale_state
+            self.stale_record = nil
           end
-        end
+          
+          def enforce_timeout
+            if stale?
+              self.stale_record = record
+              self.record = nil
+            end
+          end
+          
+          def logout_on_timeout?
+            self.class.logout_on_timeout == true
+          end
+      end
     end
   end
 end

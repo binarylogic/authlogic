@@ -1,8 +1,8 @@
 = Authlogic
 
-Authlogic is a clean, simple, and unobtrusive ruby authentication solution. Put simply, its the Chuck Norris of authentication solutions for your framework of choice.
+Authlogic is a clean, simple, and unobtrusive ruby authentication solution.
 
-So what is Authlogic, and why would I create a solution to a problem that already has plenty of solutions? Because none of the current solutions feel right. The feel wrong because logic is not organized properly in the MVC structure. As you may know, a common misconception with the MVC design pattern is that the model "M" is only for data access logic, which is wrong. A model is a place for domain logic. This is why the RESTful design pattern and the current authentication solutions don't play nice, because the logic is not in the right spot. Authlogic solves this by placing the session maintenance logic into its own domain (aka "model"), where it belongs. Moving session maintenance into its own domain has its benefits:
+What inspired me to create Authlogic was the messiness of the current authentication solutions. Put simply, they just didn't feel right. They felt wrong because the logic was not organized properly. As you may know, a common misconception with the MVC design pattern is that the model "M" is only for data access logic, which is wrong. A model is a place for domain logic. This is why the RESTful design pattern and the current authentication solutions don't play nice. Authlogic solves this by placing the session maintenance logic into its own domain (aka "model"). Moving session maintenance into its own domain has its benefits:
 
 1. It's easier to update and stay current with the latest security practices. Since authlogic sits in between you and your session it can assist in keeping your security top notch. Such as upgrading your hashing algorithm, helping you transition to a new algorithm, etc. Also, Authlogic is a gem, which means you get all of these benefits easily, through a rubygems update.
 2. It ties everything together on the domain level. Take a new user registration for example, no reason to manually log the user in, authlogic handles this for you via callbacks. The same applies to a user changing their password. Authlogic handles maintaining the session for you.
@@ -13,11 +13,84 @@ So what is Authlogic, and why would I create a solution to a problem that alread
 
 Authlogic can do all of this and much more, keep reading to see...
 
+== Helpful links
+
+*	<b>Documentation:</b> http://authlogic.rubyforge.org
+*	<b>Tutorial: Authlogic basic setup:</b> http://www.binarylogic.com/2008/11/3/tutorial-authlogic-basic-setup
+*	<b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
+*	<b>Tutorial: Using OpenID with Authlogic:</b> http://www.binarylogic.com/2008/11/21/tutorial-using-openid-with-authlogic
+*	<b>Live example of the tutorials above (with source):</b> http://authlogicexample.binarylogic.com
+*	<b>Tutorial: Easily migrate from restful_authentication:</b> http://www.binarylogic.com/2008/11/23/tutorial-easily-migrate-from-restful_authentication-to-authlogic
+*	<b>Tutorial: Upgrade passwords easily with Authlogic:</b> http://www.binarylogic.com/2008/11/23/tutorial-upgrade-passwords-easily-with-authlogic
+* <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
+* <b>Google group:</b> http://groups.google.com/group/authlogic
+
+**Before contacting me, please read:**
+If you find a bug or a problem please post it on lighthouse. If you need help with something, please use google groups. I check both regularly and get emails when anything happens, so that is the best place to get help. Please do not email me directly, with issues regarding Authlogic.
+
+== Documentation
+
+You can find anything you want about Authlogic in the documentation, all that you need to do is understand the basic design behind it.
+
+That being said, Authlogic is split into 2 main parts:
+
+  1. Authlogic::Session, which manages sessions.
+  2. Authlogic::ActsAsAuthentic, which adds in functionality to your ActiveRecord model.
+
+Each of the above has its various sub modules that contain common logic. The modules is responsible for including everything related to it, including configuration.
+
+For example, if you want to timeout users after a certain period of inactivity, you would look in Authlogic::Session::Timeout. To help you out, I listed the following modules with short descriptions:
+
+=== Authlogic::ActsAsAuthentic module
+
+This module is for the acts_as_authentic method you call in your model. It contains all code for the model side of the authentication.
+
+* Authlogic::ActsAsAuthentic::Base - Provides the acts_as_authentic class method and includes all of the submodules.
+* Authlogic::ActsAsAuthentic::Email - Handles everything related to the email field.
+* Authlogic::ActsAsAuthentic::LoggedInStatus - Provides handy named scopes and methods for determining if the user is logged in or out.
+* Authlogic::ActsAsAuthentic::Login - Handles everything related to the login field.
+* Authlogic::ActsAsAuthentic::MagicColumns - Handles everything related to the "magic" fields: login_count, failed_login_count, etc.
+* Authlogic::ActsAsAuthentic::Password - This one is important. It handles encrypting your password, salting it, etc. It also has support for migrating password algorithms and transitioning from restful_authentication.
+* Authlogic::ActsAsAuthentic::PerishableToken - Handles maintaining the perishable token field, also provides a class level method for finding record using the token.
+* Authlogic::ActsAsAuthentic::PersistenceToken - Handles maintaining the persistence token. This is the token stored in cookies and sessions to persist the users session.
+* Authlogic::ActsAsAuthentic::RestfulAuthentication - Provides configuration options to easily migrate from the restful_authentication plugin.
+* Authlogic::ActsAsAuthentic::Scope - Allows you to scope validations, etc. Just like the :scope option for validates_uniqueness_of
+* Authlogic::ActsAsAuthentic::SessionMaintenance - Handles automatically logging the user in. EX: a new user registers, automatically log them in.
+* Authlogic::ActsAsAuthentic::SingleAccessToken - Handles maintaining the single access token.
+
+=== Authlogic::Session module
+
+This module is for the session side of authentication. It interfaces with the model and ultimately maintains the cookie and session value among other things.
+
+* Authlogic::Session::BruteForceProtection - Disables accounts after a certain number of consecutive failed login attempted.
+* Authlogic::Session::Callbacks - Your tools to extend Authlogic, lets you hook in and add/modify behavior.
+* Authlogic::Session::Cookies - Handles authentication via cookies.
+* Authlogic::Session::Errors - Stores validation errors, extends ActiveRecord::Errors.
+* Authlogic::Session::HttpAuth - Handles authentication via basic HTTP authentication.
+* Authlogic::Session::MagicColumns - Maintains "magic" database columns, similar to created_at and updated_at for ActiveRecord.
+* Authlogic::Session::MagicStates - Automatically validates based on the records states: active, approved, and confirmed.
+* Authlogic::Session::Params - Handles authentication via params, aka single access token.
+* Authlogic::Session::Password - Handles authentication via a traditional username and password.
+* Authlogic::Session::PerishableToken - Maintains the perishable token, used for resetting passwords, etc.
+* Authlogic::Session::Scopes - Implements scoping, just like ActiveRecord's with_scope, but for Authlogic instead.
+* Authlogic::Session::Session - Handles authentication via the session.
+* Authlogic::Session::Timeout - Implements automatically logging out after a certain period of inactivity.
+* Authlogic::Session::UnauthorizedRecord - Handles authentication by passing an ActiveRecord object.
+
+=== Miscellaneous modules
+
+* Authlogic::AuthenticatesMany - Responsible for allowing you to scope sessions to a parent record. Similar to a has_many and belongs_to relationship. This lets you do the same thing with sessions.
+* Authlogic::ControllerAdapters - Contains adapters for the various framework controllers: Rails, Merb, etc.
+* Authlogic::CryptoProviders - Contains various encryption algorithms that Authlogic uses, allowing you to choose your encryption method.
+* Authlogic::I18n - Acts JUST LIKE the rails I18n library, and provides internationalization to Authlogic.
+* Authlogic::Random - Responsible for generating random strings.
+* Authlogic::Testing - Various helper methods for testing frameworks to help you test your code.
+* Authlogic::Version - A handy class for determine the version of Authlogic in a number of ways.
+
+
 == Quick example
 
-Let's take a rails application...
-
-What if creating a user session could be as simple as...
+What if creating sessions worked like an ORM library on the surface...
 
   UserSession.create(params[:user_session])
 
@@ -43,7 +116,7 @@ What if your user sessions controller could look just like your other controller
     end
   end
 
-Look familiar? If you didn't know any better, you would think UserSession was an ActiveRecord model. I think that's pretty cool, because it fits nicely into the RESTful development pattern, a style we all know and love. What about the view...
+As you can see, this fits nicely into the RESTful development pattern. What about the view...
 
   <% form_for @user_session do |f| %>
     <%= f.error_messages %>
@@ -72,20 +145,6 @@ Or how about persisting the session...
         @current_user = current_user_session && current_user_session.user
       end
   end
-
-== Helpful links
-
-*	<b>Documentation:</b> http://authlogic.rubyforge.org
-*	<b>Tutorial: Authlogic basic setup:</b> http://www.binarylogic.com/2008/11/3/tutorial-authlogic-basic-setup
-*	<b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
-*	<b>Tutorial: Using OpenID with Authlogic:</b> http://www.binarylogic.com/2008/11/21/tutorial-using-openid-with-authlogic
-*	<b>Live example of the tutorials above (with source):</b> http://authlogicexample.binarylogic.com
-*	<b>Tutorial: Easily migrate from restful_authentication:</b> http://www.binarylogic.com/2008/11/23/tutorial-easily-migrate-from-restful_authentication-to-authlogic
-*	<b>Tutorial: Upgrade passwords easily with Authlogic:</b> http://www.binarylogic.com/2008/11/23/tutorial-upgrade-passwords-easily-with-authlogic
-* <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
-* <b>Google group:</b> http://groups.google.com/group/authlogic
-
-If you find a bug or a problem please post it on lighthouse. If you need help with something or it is specific to your app, please use google groups. I check both regularly and get emails when anything happens, so that is the best place to get help.
 
 == Install and use
 
@@ -122,388 +181,44 @@ This will create a file that looks similar to:
 
 The user model needs to have the following columns. The names of these columns can be changed with configuration. Better yet, Authlogic tries to guess these names by checking for the existence of common names. See Authlogic::Session::Config::ClassMethods for more details, but chances are you won't have to specify any configuration for your field names, even if they aren't the same names as below.
 
-    t.string    :login,                 :null => false
-    t.string    :crypted_password,      :null => false
-    t.string    :password_salt,         :null => false
-    t.string    :persistence_token,     :null => false
-    t.string    :single_access_token,   :null => false # optional, see the tokens section below.
-    t.string    :perishable_token,      :null => false # optional, see the tokens section below.
-    t.integer   :login_count,           :null => false, :default => 0 # optional, this is a "magic" column, see the magic columns section below
-    t.integer   :failed_login_count,    :null => false, :default => 0 # optional, this is a "magic" column, see the magic columns section below
+    t.string    :login,               :null => false                # optional, you can use email instead, or both
+    t.string    :crypted_password,    :null => false
+    t.string    :password_salt,       :null => false
+    t.string    :persistence_token,   :null => false
+    t.string    :single_access_token, :null => false                # optional, see Authlogic::Session::Params
+    t.string    :perishable_token,    :null => false                # optional, see Authlogic::Session::Perishability
+    t.integer   :login_count,         :null => false, :default => 0 # optional, see Authlogic::Session::MagicColumns
+    t.integer   :failed_login_count,  :null => false, :default => 0 # optional, see Authlogic::Session::MagicColumns
+    t.datetime  :last_request_at                                    # optional, see Authlogic::Session::MagicColumns
+    t.datetime  :current_login_at                                   # optional, see Authlogic::Session::MagicColumns
+    t.datetime  :last_login_at                                      # optional, see Authlogic::Session::MagicColumns
+    t.string    :current_login_ip                                   # optional, see Authlogic::Session::MagicColumns
+    t.string    :last_login_ip                                      # optional, see Authlogic::Session::MagicColumns
 
 === Set up your model
 
 Make sure you have a model that you will be authenticating with. For this example let's say you have a User model:
 
   class User < ActiveRecord::Base
-    acts_as_authentic # for options see documentation: Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::Config
+    acts_as_authentic # for options see documentation in: Authlogic::ActsAsAuthentic
   end
 
-One thing to keep in mind here is that the default :crypto_provider for Authlogic is Sha512. You are *NOT* forced to use this. See the encryption methods section below for more information.
+One thing to keep in mind here is that the default crypto_provider for Authlogic is Sha512. You are *NOT* forced to use this. You can easily choose your own encryption method, or even write your own: see the Authlogic::ActsAsAuthentic::Password module for more info.
 
-You are all set, now go use it just like you would with any other ActiveRecord model. Either glance at the code at the beginning of this README or check out the tutorials (see above in "helpful links") for a more detailed walk through.
+You are all set. You might also want to check out the tutorials (see above in "helpful links") for a more detailed walk through.
 
-== Migrating an existing app from restful_authentication and upgrading your encryption
+=== Next Steps
 
-For those that are switching existing apps over, I made an option especially for you. Just do the following and everything will be taken care of, your users won't even know anything changed:
+Some of the following next steps might apply to you. If you, check out the documentation for the module.
 
-  # app/models/user.rb
-  class User < ActiveRecord::Base
-    acts_as_authentic :act_like_restful_authentication => true
-  end
+1. Migrating from restful_authentication? Checkout Authlogic::ActsAsAuthentic::RestfulAuthentication
+2. Need multiple session types in your app? Check out Authlogic::Session::Base#id
+3. Need to reset passwords or activate accounts? Use the perishable token. See Authlogic::ActsAsAuthentic::PerishableToken
+4. Need to give API access or access to a private feed? Use basic HTTP auth or authentication by params. See Authlogic::Session::HttpAuth or Authlogic::Session::Params
+5. Need to internationalize your app? See Authlogic::I18n
+6. Need help testing? Checkout the Authlogic::
 
-The above will not change a thing, from your database's perspective it will be as if you are still using restful_authentication.
-
-Or you can upgrade from Sha1 and transition your users to a much more secure encryption algorithm:
-
-  # app/models/user.rb
-  class User < ActiveRecord::Base
-    acts_as_authentic :transition_from_restful_authentication => true
-  end
-
-By default this will switch your users to Authlogic's Sha512 implementation. You do *NOT* have to use this. Check out the encryption methods section below for a list of encryption methods Authlogic provides you. If you want to use something besides Sha512 just specify it by doing:
-
-  # app/models/user.rb
-  class User < ActiveRecord::Base
-    acts_as_authentic :transition_from_restful_authentication => true,
-      :crypto_provider => Authlogic::CryptoProviders::BCrypt
-  end
-
-Every time a user logs in their password will be upgraded and every time a new account is created it will use the new algorithm all while allowing users to login with the old algorithm.
-
-For more information checkout my blog post on this: http://www.binarylogic.com/2008/11/23/tutorial-easily-migrate-from-restful_authentication-to-authlogic
-
-== Magic Columns
-
-Just like ActiveRecord has "magic" columns, such as: created_at and updated_at. Authlogic has its own "magic" columns too:
-
-  Column name           Description
-  login_count           Increased every time an explicit login is made. This will *NOT* increase if logging in by a session, cookie, or basic http auth
-  failed_login_count    This increases for each consecutive failed login. See Authlogic::Session::BruteForceProtection and the consecutive_failed_logins_limit config option for more details.
-  last_request_at       Updates every time the user logs in, either by explicitly logging in, or logging in by cookie, session, or http auth
-  current_login_at      Updates with the current time when an explicit login is made.
-  last_login_at         Updates with the value of current_login_at before it is reset.
-  current_login_ip      Updates with the request remote_ip when an explicit login is made.
-  last_login_ip         Updates with the value of current_login_ip before it is reset.
-  
-== Magic States
-
-Authlogic tries to check the state of the record before creating the session. If your record responds to the following methods and any of them return false, validation will fail:
-
-  Method name           Description
-  active?               Is the record marked as active?
-  approved?             Has the record been approved?
-  confirmed?            Has the record been conirmed?
-
-Authlogic does nothing to define these methods for you, its up to you to define what they mean. If your object responds to these methods Authlogic will use them, otherwise they are ignored.
-  
-What's neat about this is that these are checked upon any type of login. When logging in explicitly, by cookie, session, or basic http auth. So if you mark a user inactive in the middle of their session they wont be logged back in next time they refresh the page. Giving you complete control.
-
-Need Authlogic to check your own "state"? No problem, check out the hooks section below. Add in a before_validation to do your own checking. The sky is the limit.
-
-== Hooks / Callbacks
-
-Just like ActiveRecord you can create your own hooks / callbacks so that you can do whatever you want when certain actions are performed. Such as before_save, after_save, etc.
-
-See Authlogic::Session::Callbacks for more information.
-
-== Multiple Sessions / Session Identifiers
-
-You're asking: "why would I want multiple sessions?". Take this example:
-
-You have an app where users login and then need to re-login to view / change their billing information. Similar to how Apple's me.com works. What you could do is have the user login with their normal session, then have an entirely new session that represents their "secure" session. But wait, this is 2 users sessions. No problem:
-
-  # regular user session
-  @user_session = UserSession.new
-  @user_session.id
-  # => nil
-  
-  # secure user session
-  @secure_user_session = UserSession.new(:secure)
-  @secure_user_session.id
-  # => :secure
-
-This will keep everything separate. The :secure session will store its info in a separate cookie, separate session, etc. Just set the id and you are good to go. Need to retrieve the session?
-
-  @user_session = UserSession.find
-  @secure_user_session = UserSession.find(:secure)
-
-For more information on ids checkout Authlogic::Session::Base#id
-
-== Encryption methods
-
-Authlogic is designed so you can use *any* encryption method you want. It delegates this task to a class of your choice. Authlogic comes preloaded with some common algorithms:
-
-1. Authlogic::CryptoProviders::Sha1 (used mainly for migrating from restful_authentication)
-2. Authlogic::CryptoProviders::Sha512 (default)
-3. Authlogic::CryptoProviders::BCrypt (requires bcrypt-ruby gem)
-4. Authlogic::CryptoProviders::AES256 (requires you to supply a key, see the AES256 class in the docs for more info)
-
-By default Authlogic uses salted Sha512 with 20 stretches, but you can easily change this. For example, if you wanted to use the BCrypt algorithm just do the following:
-
-  acts_as_authentic :crypto_provider => Authlogic::CryptoProviders::BCrypt
-
-For more information on BCrypt checkout my blog post on it: http://www.binarylogic.com/2008/11/22/storing-nuclear-launch-codes-in-your-app-enter-bcrypt-for-authlogic
-
-Also, check out the Authlogic::CryptoProviders module and subclasses to get an idea of how to write your own crypto provider. You don't have to use the provided classes, you can easily write your own. All that you have to do is make a class with a class level encrypt and matches? method. That's it, all of the encryption and decryption logic is left to you.
-
-== Switching to a new encryption method
-
-Switching to a new encryption method used to be a pain in the ass. Authlogic has an option that makes this dead simple. Let's say you want to migrate to the BCrypt encryption method from Sha512:
-
-  acts_as_authentic :crypto_provider => Authlogic::CryptoProviders::BCrypt,
-    :transition_from_crypto_provider => Authlogic::CryptoProviders::Sha512
-
-That's it. When a user successfully logs in and is using the old method their password will be updated with the new method and all new registrations will use the new method as well. Your users won't know anything changed.
-
-But wait, what if a couple of years later CCrypt comes out and its better than BCrypt and you're still in the middle of transitioning all of your users to BCrypt. Oh no!
-
-Not to worry, because Authlogic can transition your users from more than one algorithm. Just pass an array to :transition_from_crypto_provider
-
-  acts_as_authentic :crypto_provider => CCrypt,
-    :transition_from_crypto_provider => [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::BCrypt]
-
-That's it, specify as many as you want. One thing to keep in mind here is that if you are using BCrypt you should never have to do this. All that you need to do is increase the cost to make the algorithm stronger, no need to jump to entirely new algorithm. I did this for example purposes only.
-
-== Tokens (persistence, resetting passwords, private feed access, etc.)
-
-To start, let me define tokens as Authlogic sees it. A token is a form of credentials that grants some type of access to their account. Depending on the type of access, a different type of token may be needed. Put simply, it's a way for the user to say "I am this person, let me proceed". What types of different access you ask? Here are just a few:
-
-1. Regular account access
-2. Access to reset their password
-3. Access to a private feed
-4. Access to confirm their account
-
-There could be many more depending on your application. What's great about Authlogic is that it doesn't care what you do or how you want to grant access to accounts. That's up to you and your application. Authlogic just cares about the type of tokens you need. Instead of giving you a token for each specific task, it gives you all of the necessary *types* of tokens, and you get to use them how you wish. It maintains the tokens and gives you all of the tools you need to use them. Just add the fields to your database and you are good to go.
-
-Here are the 3 tokens in more detail:
-
-=== 1. Persistence token (stored in cookie / session)
-
-This token is used to persist the user's session. This is the token that is stored in the session and the cookie, so that during each request the user stays logged in. What's unique about this token is that the first time it is used the value is stored in the session, thus persisting the session. This field is required and must be in your database.
-
-=== 2. Single access token (private feed access, etc.)
-
-This token is used for single access only, it is not persisted. Meaning the user provides it, Authlogic grants them access, and that's it. If they want access again they need to provide the token again. Authlogic will *NEVER* store this value in the session or a cookie. For added security, by default this token is *ONLY* allowed for RSS and ATOM requests. Also, this token does *NOT* change with the password. Meaning if the user changes their password, this token will remain the same. Lastly, this token uses a "friendly" token (see the URL example below) so that it is easier to email / copy and paste. You can change all of this with configuration (see Authlogic::Session::config), so if you don't like how this works by default, just set some simple configuration in your session.
-
-For even more flexibility Authlogic looks for a method in your controller called single_access_allowed?. If that method exists and returns true Authlogic will try to log in the user with this method. Here is a quick example:
-
-class UsersController < ApplicationController
-  private
-    def single_access_allowed?
-      action_name == "index"
-    end
-
-The above will only allow logging in via the single access toke with the index method only.
-
-This field is optional, if you want to use it just add the field to your database:
-
-  t.string :single_access_token, :null => false
-  # or call it feeds_token, feed_token, or whatever you want with configuration
-
-This is great for private feed access. So your URL to that user's private feed could look something like:
-
-  http://www.mydomain.com/account/feed.rss?user_credentials=4LiXF7FiGUppIPubBPey
-
-The user_credentials parameter name is configurable (see Authlogic::Session::Config), but if that parameter exists Authlogic will automatically use it to try and grant that user access. You don't have to do a thing: UserSession.find will take care of it just like it does for everything else.
-
-For more information see: Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::SingleAccess
-
-=== 3. Perishable token (resetting passwords, confirming accounts, etc)
-
-This token is used for temporary account access, hence the term "perishable". This token is constantly changing, it changes...
-
-1. In a before_validation in your model, so basically every time the record is saved
-2. Any time a new session is successfully saved (aka logged in)
-
-This is perfect for <b>resetting passwords</b> or <b>confirming accounts</b>. You email them a url with this token in it, and then use this token to find the record and perform your action.
-
-This field is optional, if you want to use it just add the field to your database:
-
-  t.string :perishable_token, :null => false
-  # or call it password_reset_token, pw_reset_token, activation_token, or whatever you want with configuration
-
-Finding the record with this token couldn't be easier, Authlogic provides a special finder method that you can use. I highly recommend using it as it adds extra security:
-
-  User.find_using_perishable_token(token)
-  User.find_using_perishable_token(token, 20.minutes)
-
-That's all you need to do to locate the record. Here is what it does for extra security:
-
-1. Ignores blank tokens all together. If a blank token is passed nil will be returned.
-2. It checks the age of the token, by default the threshold is 10 minutes, meaning if the token is older than 10 minutes, it is not valid and no record will be returned. You can change the default or just override it by passing the threshold as the second parameter. If you don't want a threshold at all, pass 0.
-
-Just like the single access token this uses a friendly token, so it is easier to email / copy and paste.
-
-For a detailed tutorial on how to reset password using this token see the helpful links section above.
-
-For more information see: Authlogic::ORMAdapters::ActiveRecordAdapter::ActsAsAuthentic::Perishability
-
-== Scoping
-
-Scoping with authentication is a little tricky because it can come in many different flavors:
-
-1. Accounts have many users, meaning users can only belong to one account at a time.
-2. Accounts have and belong to many users, meaning a user can belong to more than one account.
-3. Users access their accounts via subdomains.
-4. Users access their accounts by selecting their account and storing their selection, *NOT* using subdomains. Maybe you store their selection in a session, cookie, or the database. It doesn't matter.
-
-Now mix and match the above, it can get pretty hairy. Fear not, because Authlogic is designed in a manner where it doesn't care how you do it, all that you have to do is break it down. When scoping a session there are 3 parts you might want to scope:
-
-1. The model (the validations, etc)
-2. The session (finding the record)
-3. The cookies (the names of the session key and cookie)
-
-I will describe each below, in order.
-
-=== 1. Scoping your model
-
-This scopes your login field validation, so that users are allowed to have the same login, just not in the same account.
-
-  # app/models/user.rb
-  class User < ActiveRecord::Base
-    acts_as_authentic :scope => :account_id
-  end
-
-=== 2. Scoping your session
-
-When the session tries to validate it searches for a record. You want to scope that search. No problem...
-
-The goal of Authlogic was to not try and introduce anything new. As a result I came up with:
-
-  @account.user_sessions.find
-  @account.user_sessions.create
-  @account.user_sessions.build
-  # ... etc
-
-This works just like ActiveRecord, so it should come natural. Here is how you get this functionality:
-
-  class Account < ActiveRecord::Base
-    authenticates_many :user_sessions
-  end
-
-=== 3. Scoping cookies
-
-What's neat about cookies is that if you use sub domains they automatically scope their self. Meaning if you create a cookie in whatever.yourdomain.com it will not exist in another.yourdomain.com. So if you are using subdomains to scope your users, you don't have to do anything.
-
-But what if you *don't* want to separate your cookies by subdomains? You can accomplish this by doing:
-
-  ActionController::Base.session_options[:session_domain] = '.mydomain.com'
-
-or for Rails 2.3.0 or higher:
-
-  ActionController::Base.session_options[:domain] = '.mydomain.com'
-
-
-Notice the above is configuration for your session, not your cookies. Authlogic notices this and assume this is how you want to treat your cookies as well. As a result, it applies this domain to the cookies it sets. Now your session and all cookies act the same and are scoped under the same domain under Authlogic.
-
-Now let's look at this from the other angle. What if you are *NOT* using subdomains, but still want to separate cookies for each account. Simple, set the :scope_cookies option for authenticate_many:
-
-  class Account < ActiveRecord::Base
-    authenticates_many :user_sessions, :scope_cookies => true
-  end
-
-Done, Authlogic will give each cookie a unique name depending on the account.
-
-With the above information you should be able to scope your sessions any way you want. Just mix and match the tools above to accomplish this. Also check out the documentation on Authlogic::ActiveRecord::AuthenticatesMany.
-
-== Errors
-
-The errors in Authlogic work JUST LIKE ActiveRecord. In fact, it uses the exact same ActiveRecord errors class. Use it the same way:
-
-  class UserSession
-    validate :check_if_awesome
-    
-    private
-      def check_if_awesome
-        errors.add(:login, "must contain awesome") if login && !login.include?("awesome")
-        errors.add_to_base("You must be awesome to log in") unless record.awesome?
-      end
-  end
-
-== Timing Out Sessions (Logging out after inactivity)
-
-Think about financial websites, if you are inactive for a certain period of time you will be asked to log back in on your next request. You can do this with Authlogic easily, there are 2 parts to this:
-
-1. Define the timeout threshold:
-
-  acts_as_authentic :logged_in_timeout => 10.minutes # default is 10.minutes
-
-2. Enable logging out on timeouts
-
-  class UserSession < Authlogic::Session::Base
-    logout_on_timeout true # default if false
-  end
-
-This will require a user to log back in if they are inactive for more than 10 minutes. In order for this feature to be used you must have a last_request_at datetime column in your table for whatever model you are authenticating with.
-
-== Automatic Session Updating
-
-This is one of my favorite features that I think is pretty cool. It's things like this that make a library great and let you know you are on the right track.
-
-Just to clear up any confusion, Authlogic stores both the record id and the persistence token in the session. Why? So stale sessions can not be persisted. It stores the id so it can quickly find the record, and the persistence token to ensure no sessions are stale. The persistence token changes with the password, if someone is logged in and their password is changed, they should be logged out, unless they made the change. That being said, the person making the change needs their session to be updated with the new persistence token, so they stay logged in, which is what this section is all about.
-
-So what if a user changes their password? You have to re-log them in with the new password, recreate the session, etc. This is messy and leads to redundant code. Or what if a user creates a new user account? You have to do the same thing. Here's an even better one: what if a user is in the admin area and changes their own password? There might even be another place passwords can change. It shouldn't matter, your code should be written in a way where you don't have to remember to do this.
-
-Instead of updating sessions all over the place, doesn't it make sense to do this at a lower level? Like the User model? You're saying "but Ben, models can't mess around with sessions and cookies". True...but Authlogic can, and you can access Authlogic just like a model. I know in most situations it's not good practice to do this, but I view this in the same class as sweepers, and feel like it actually is good practice here. User sessions are directly tied to users, they should be connected on the model level.
-
-Fear not, because the acts_as_authentic method you call in your model takes care of this for you, by adding an after_save callback to automatically keep the session up to date. You don't have to worry about it anymore. Don't even think about it. Let your UsersController deal with users, not users *AND* sessions. *ANYTIME* the user changes his password in *ANY* way, his session will be updated.
-
-Here is basically how this is done....
-
-  class User < ActiveRecord::Base
-    after_save :maintain_sessions!
-    
-    private
-      def maintain_sessions!
-        # If we aren't logged in and a user is created, log them in as that user
-        # If we aren't logged in and a user's password changes, log them in as that user
-        # If we are logged in and they change their password, update the session so they remain logged in
-      end
-  end
-
-Obviously there is a little more to it than this, but hopefully this clarifies any confusion. Basically if you are *logged out* and you are changing passwords, Authlogic will log you in, since you already know the password for that account. Lastly, this can be altered / disabled via a configuration option. Just set :session_ids => nil when calling acts_as_authentic.
-
-When things come together like this I think its a sign that you are doing something right. Put that in your pipe and smoke it!
-
-== Internationalization (I18n) / Changing Messages
-
-Please see Authlogic::I18n for more information. Internationalization is very easy to implement, in fact if you are using the default rails I18n library then you don't need to do anything other than defining the messages in your localization configuration files. See Authlogic::I18n for a complete list of keys you need to define.
-
-== Testing
-
-Testing with authlogic is easy, there is a helper file that will add some convenient test helpers for you. In your test_helper.rb file do the following:
-
-  # test/test_helper.rb
-  require 'authlogic/testing/test_unit_helpers'
-
-You get the following methods:
-
-  set_session_for(record_object)
-  set_cookie_for(record_object)
-  set_http_auth_for(username, password)
-
-In your test, before you execute a request, just call one of those methods and it will set the proper values so that it will seem as if that record is logged in.
-
-You can also checkout the authlogic_example application (see helpful links above), the tests there use this.
-
-== Deployment
-
-If you are having problems with your sessions, right now there is a bug with Rails sessions using cookie store. Checkout the comments on this commit: http://github.com/binarylogic/authlogic/commit/495e95e5a2f724e6f1e339c4871168c6c5e6a7ca
-
-As a temporary fix, you should use Rails' ActiveRecord session store. Authlogic just leverages the Rails' session system, it doesn't do anything tricky, or anything you wouldn't do in your controller.
-
-Regardless, once a fix is released this will be a non issue.
-
-== Framework agnostic (Rails, Merb, etc.)
-
-I designed Authlogic to be framework agnostic, meaning it doesn't care what framework you use it in. Right out of the box it supports rails and merb. I have not had the opportunity to use other frameworks, but the only thing stopping Authlogic from being used in other frameworks is a simple adapter. Check out controller_adapters/rails_adapter, or controller_adapters/merb_adapter.
-
-Since pretty much all of the frameworks in ruby follow the Rack standards, the code should be very similar across adapters. In fact that abstract adapter assumes you are following the Rack standards. If your framework is following the rack standards, there really isn't any code you should have to write. Check out the merb_adapter to see for yourself, the merb adapter is basically blank. You're saying "but Ben, why not just hook into Rack and avoid the need for controller adapters all together?". It's not that simple, because rails doesn't inherit from the Rack::Request class, plus there are small differences between how rack is implemented in each framework. Authlogic has to hook into your controller with a before_filter anyways, so it can "activate" itself. Why not just use the controller object? Also when we have access to the controller object we can do other nifty things. Checkout the OpenID tutorial in the helpful links section above to see what I mean.
-
-The point in all of this rambling is that implementing Authlogic is as simple as creating an adapter. I created both the rails and merb adapters in under 10 minutes. If you have an adapter you created and would like to add please let me know and I will add it into the source.
-
-== How it works
+== Interesting in how it works?
 
 Interested in how all of this all works? Basically a before filter is automatically set in your controller which lets Authlogic know about the current controller object. This "activates" Authlogic and allows Authlogic to set sessions, cookies, login via basic http auth, etc. If you are using your framework in a multiple thread environment, don't worry. I kept that in mind and made this thread safe.
 

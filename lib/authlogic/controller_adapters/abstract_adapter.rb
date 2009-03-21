@@ -1,8 +1,7 @@
 module Authlogic
   module ControllerAdapters # :nodoc:
-    # = Abstract Adapter
-    #
-    # Allows you to use Authlogic in any framework you want, not just rails. See the RailsAdapter or MerbAdapter for an example of how to adapt Authlogic to work with your framework.
+    # Allows you to use Authlogic in any framework you want, not just rails. See the RailsAdapter or MerbAdapter
+    # for an example of how to adapt Authlogic to work with your framework.
     class AbstractAdapter
       attr_accessor :controller
 

@@ -2,8 +2,6 @@ require "digest/sha1"
 
 module Authlogic
   module CryptoProviders
-    # = Sha1
-    #
     # This class was made for the users transitioning from restful_authentication. I highly discourage using this crypto provider as it inferior to your other options.
     # Please use any other provider offered by Authlogic.
     class Sha1

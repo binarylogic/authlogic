@@ -5,8 +5,6 @@ end
 
 module Authlogic
   module CryptoProviders
-    # = Bcrypt
-    #
     # For most apps Sha512 is plenty secure, but if you are building an app that stores nuclear launch codes you might want to consier BCrypt. This is an extremely
     # secure hashing algorithm, mainly because it is slow. A brute force attack on a BCrypt encrypted password would take much longer than a brute force attack on a
     # password encrypted with a Sha algorithm. Keep in mind you are sacrificing performance by using this, generating a password takes exponentially longer than any

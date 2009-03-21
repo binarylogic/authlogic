@@ -2,8 +2,6 @@ require "openssl"
 
 module Authlogic
   module CryptoProviders
-    # = AES256
-    #
     # This encryption method is reversible if you have the supplied key. So in order to use this encryption method you must supply it with a key first.
     # In an initializer, or before your application initializes, you should do the following:
     #

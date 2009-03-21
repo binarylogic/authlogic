@@ -1,3 +1,13 @@
+== 2.0.0 RC 1
+
+* Refactored nearly all code and tests, especially acts_as_authentic. Got rid of the meta programming and rewrote to use modules and hooks.
+* Changed configuration method for acts_as_authentic to accept a block instead of a hash.
+* Added more hooks / callbacks to Session::Base.
+* Reorganized all modules to contain related configuration options and any other relevant code.
+* Split out authentication by password and unauthorized record into their own modules, to make way for alternate authentication add ons (OpenId, etc)
+* The record attribute will NEVER be set until after validation passes, similar to how ActiveRecord executes UPDATEs and CREATEs.
+* Fixed bug with session maintenance where user would log in as new user when creating another user account, typically an admin function.
+
 == 1.4.4
 
 * Moved session maintenance to a before_save, to save on queries executed and to skip an unexpected / additional save on the user object.

@@ -1,6 +1,17 @@
 module Authlogic
   module Session
-    class Errors < ::ActiveRecord::Errors # :nodoc:
+    # The errors in Authlogic work JUST LIKE ActiveRecord. In fact, it uses the exact same ActiveRecord errors class. Use it the same way:
+    #
+    #   class UserSession
+    #     validate :check_if_awesome
+    #
+    #     private
+    #       def check_if_awesome
+    #         errors.add(:login, "must contain awesome") if login && !login.include?("awesome")
+    #         errors.add_to_base("You must be awesome to log in") unless record.awesome?
+    #       end
+    #   end
+    class Errors < ::ActiveRecord::Errors
     end
     
     class NotActivated < ::StandardError # :nodoc:

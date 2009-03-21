@@ -1,7 +1,7 @@
 module Authlogic
-  module Testing # :nodoc:
-    # = Test Unit Helpers
-    #
+  # Various utilities to help with testing. Keep in mind, Authlogic is thoroughly tested for you, the only thing you should be
+  # testing is code you write, such as code in your controller.
+  module Testing
     # Provides useful methods for testing in Test::Unit, lets you log records in, etc. Just include this in your test_helper filter:
     #
     #   require "authlogic/testing/test_unit_helpers"

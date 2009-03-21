@@ -7,7 +7,6 @@ require File.dirname(__FILE__) + '/../lib/authlogic' unless defined?(Authlogic)
 require File.dirname(__FILE__) + '/libs/mock_request'
 require File.dirname(__FILE__) + '/libs/mock_cookie_jar'
 require File.dirname(__FILE__) + '/libs/mock_controller'
-require File.dirname(__FILE__) + '/libs/user'
 
 ActiveRecord::Schema.verbose = false
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :dbfile => ":memory:")
@@ -45,8 +44,8 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string    :email
     t.string    :first_name
     t.string    :last_name
-    t.integer   :login_count
-    t.integer   :failed_login_count
+    t.integer   :login_count, :default => 0, :null => false
+    t.integer   :failed_login_count, :default => 0, :null => false
     t.datetime  :last_request_at
     t.datetime  :current_login_at
     t.datetime  :last_login_at
@@ -67,7 +66,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string    :persistence_token
     t.string    :first_name
     t.string    :last_name
-    t.integer   :login_count
+    t.integer   :login_count, :default => 0, :null => false
     t.datetime  :last_request_at
     t.datetime  :current_login_at
     t.datetime  :last_login_at
@@ -76,31 +75,17 @@ ActiveRecord::Schema.define(:version => 1) do
   end
 end
 
-class Project < ActiveRecord::Base
-  has_and_belongs_to_many :users
-end
+require File.dirname(__FILE__) + '/libs/project'
+require File.dirname(__FILE__) + '/libs/employee'
+require File.dirname(__FILE__) + '/libs/employee_session'
+require File.dirname(__FILE__) + '/libs/user'
+require File.dirname(__FILE__) + '/libs/user_session'
+require File.dirname(__FILE__) + '/libs/company'
 
-class UserSession < Authlogic::Session::Base
-end
-
-class EmployeeSession < Authlogic::Session::Base
-end
-
-class Company < ActiveRecord::Base
-  authenticates_many :employee_sessions
-  authenticates_many :user_sessions
-  has_many :employees, :dependent => :destroy
-  has_many :users, :dependent => :destroy
-end
 
 Authlogic::CryptoProviders::AES256.key = "myafdsfddddddddddddddddddddddddddddddddddddddddddddddd"
 
-class Employee < ActiveRecord::Base
-  acts_as_authentic :crypto_provider => Authlogic::CryptoProviders::AES256
-  belongs_to :company
-end
-
-class Test::Unit::TestCase
+class ActiveSupport::TestCase
   self.fixture_path = File.dirname(__FILE__) + "/fixtures"
   self.use_transactional_fixtures = true
   self.use_instantiated_fixtures  = false

@@ -39,8 +39,7 @@ module SessionTests
         session = UserSession.new
         assert_equal({:find_options => {:conditions => "awesome = 1"}, :id => "some_id"}, session.scope)
         session.id = :another_id
-        assert_equal "another_id_some_id_user_credentials", session.cookie_key
-        assert_equal "another_id_some_id_user_credentials", session.session_key
+        assert_equal "another_id_some_id_test", session.send(:build_key, "test")
       end
     end
     

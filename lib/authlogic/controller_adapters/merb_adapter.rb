@@ -1,12 +1,8 @@
 module Authlogic
   module ControllerAdapters
-    # = Merb Adapter
-    #
     # Adapts authlogic to work with merb. The point is to close the gap between what authlogic expects and what the merb controller object
     # provides. Similar to how ActiveRecord has an adapter for MySQL, PostgreSQL, SQLite, etc.
     class MerbAdapter < AbstractAdapter
-      # = Merb Implementation
-      #
       # Lets Authlogic know about the controller object via a before filter, AKA "activates" authlogic.
       module MerbImplementation
         def self.included(klass) # :nodoc:
