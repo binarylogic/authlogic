@@ -1,6 +1,8 @@
 module Authlogic
   module ActsAsAuthentic
     # Allows you to scope everything to specific fields.
+    # See the Config submodule for more info.
+    # For information on how to scope off of a parent object see Authlogic::AuthenticatesMany
     module Scope
       # All configuration for the scope feature.
       module Config

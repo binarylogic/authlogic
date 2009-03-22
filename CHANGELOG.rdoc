@@ -1,12 +1,12 @@
-== 2.0.0 RC 1
+== 2.0.0
 
-* Refactored nearly all code and tests, especially acts_as_authentic. Got rid of the meta programming and rewrote to use modules and hooks.
+* Refactored nearly all code and tests, especially acts_as_authentic. Got rid of the meta programming and rewrote to use modules and hooks. Also moved all configuration into their related modules.
+* Set up a strong API with hooks to allow you to modify behavior and most importantly, easily create "add on" modules or alternate authentication methods, etc.
 * Changed configuration method for acts_as_authentic to accept a block instead of a hash.
-* Added more hooks / callbacks to Session::Base.
-* Reorganized all modules to contain related configuration options and any other relevant code.
-* Split out authentication by password and unauthorized record into their own modules, to make way for alternate authentication add ons (OpenId, etc)
 * The record attribute will NEVER be set until after validation passes, similar to how ActiveRecord executes UPDATEs and CREATEs.
 * Fixed bug with session maintenance where user would log in as new user when creating another user account, typically an admin function.
+* Brute force protection is only a temporary ban by default, not a permanent one.
+* Switched to Hoe for gem management instead of Echoe.
 
 == 1.4.4
 

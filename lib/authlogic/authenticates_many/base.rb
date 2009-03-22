@@ -13,7 +13,8 @@ module Authlogic
   #   @account.user_sessions.find(*args)
   #   # ... etc
   #
-  # For more information checkout the authenticates_many method in the Base sub module.
+  # Checkout the authenticates_many method for a list of options.
+  # You may also want to checkout Authlogic::ActsAsAuthentic::Scope to scope your model.
   module AuthenticatesMany
     module Base
       # Allows you set essentially set up a relationship with your sessions. See module definition above for more details.

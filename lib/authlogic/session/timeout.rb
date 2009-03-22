@@ -5,7 +5,9 @@ module Authlogic
     #
     # 1. Define the timeout threshold:
     #
-    #   acts_as_authentic :logged_in_timeout => 10.minutes # default is 10.minutes
+    #   acts_as_authentic do |c|
+    #     c.logged_in_timeout = 10.minutes # default is 10.minutes
+    #   end
     #
     # 2. Enable logging out on timeouts
     #

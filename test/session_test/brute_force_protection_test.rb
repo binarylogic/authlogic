@@ -10,6 +10,14 @@ module SessionTest
         UserSession.consecutive_failed_logins_limit 50
         assert_equal 50, UserSession.consecutive_failed_logins_limit
       end
+      
+      def test_failed_login_ban_for
+        UserSession.failed_login_ban_for = 10
+        assert_equal 10, UserSession.failed_login_ban_for
+    
+        UserSession.failed_login_ban_for 2.hours
+        assert_equal 2.hours.to_i, UserSession.failed_login_ban_for
+      end
     end
     
     class InstaceMethodsTest < ActiveSupport::TestCase
@@ -25,9 +33,12 @@ module SessionTest
         ben.failed_login_count = UserSession.consecutive_failed_logins_limit
         assert ben.save
         assert !UserSession.create(:login => ben.login, :password => "benrocks")
+        assert !UserSession.create(ben)
+        ben.updated_at = (UserSession.failed_login_ban_for + 2.hours.to_i).seconds.ago
+        assert UserSession.create(ben)
       end
     
-      def test_exeeding_failed_logins_limit
+      def test_exceeding_failed_logins_limit
         UserSession.consecutive_failed_logins_limit = 2
         ben = users(:ben)
       
