@@ -7,6 +7,8 @@
 * Fixed bug with session maintenance where user would log in as new user when creating another user account, typically an admin function.
 * Brute force protection is only a temporary ban by default, not a permanent one.
 * Switched to Hoe for gem management instead of Echoe.
+* Added MD5 crypto provider for legacy systems.
+* Make password salt field optional for legacy systems.
 
 == 1.4.4
 

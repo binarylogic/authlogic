@@ -15,10 +15,10 @@ module Authlogic
         
         # The name of the password_salt field in the database.
         #
-        # * <tt>Default:</tt> :password_salt, :pw_salt, :salt
+        # * <tt>Default:</tt> :password_salt, :pw_salt, :salt, nil if none exist
         # * <tt>Accepts:</tt> Symbol
         def password_salt_field(value = nil)
-          config(:password_salt_field, value, first_column_to_exist(:password_salt, :pw_salt, :salt))
+          config(:password_salt_field, value, first_column_to_exist(nil, :password_salt, :pw_salt, :salt))
         end
         alias_method :password_salt_field=, :password_salt_field
         
@@ -36,7 +36,7 @@ module Authlogic
         # * <tt>Default:</tt> {:minimum => 4, :if => "#{password_salt_field}_changed?".to_sym}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_confirmation_of
         def validates_confirmation_of_password_field_options(value = nil)
-          config(:validates_confirmation_of_password_field_options, value, {:minimum => 4, :if => "#{password_salt_field}_changed?".to_sym})
+          config(:validates_confirmation_of_password_field_options, value, {:minimum => 4, :if => (password_salt_field ? "#{password_salt_field}_changed?".to_sym : nil)})
         end
         alias_method :validates_confirmation_of_password_field_options=, :validates_confirmation_of_password_field_options
         
@@ -119,14 +119,14 @@ module Authlogic
           return if pass.blank?
           before_password_set
           @password = pass
-          send("#{aaa_config.password_salt_field}=", Authlogic::Random.friendly_token)
+          send("#{aaa_config.password_salt_field}=", Authlogic::Random.friendly_token) if aaa_config.password_salt_field
           send("#{aaa_config.crypted_password_field}=", aaa_config.crypto_provider.encrypt(*encrypt_arguments(@password, aaa_config.act_like_restful_authentication ? :restful_authentication : nil)))
           after_password_set
         end
         
         # Accepts a raw password to determine if it is the correct password or not.
         def valid_password?(attempted_password)
-          return false if attempted_password.blank? || send(aaa_config.crypted_password_field).blank? || send(aaa_config.password_salt_field).blank?
+          return false if attempted_password.blank? || send(aaa_config.crypted_password_field).blank?
           
           before_password_verification
           
@@ -172,16 +172,17 @@ module Authlogic
         
         private
           def encrypt_arguments(raw_password, arguments_type = nil)
+            salt = aaa_config.password_salt_field ? send(aaa_config.password_salt_field) : nil
             case arguments_type
             when :restful_authentication
-              [REST_AUTH_SITE_KEY, send(aaa_config.password_salt_field), raw_password, REST_AUTH_SITE_KEY]
+              [REST_AUTH_SITE_KEY, salt, raw_password, REST_AUTH_SITE_KEY].compact
             else
-              [raw_password, send(aaa_config.password_salt_field)]
+              [raw_password, salt].compact
             end
           end
           
           def require_password_confirmation?
-            new_record? || send("#{aaa_config.password_salt_field}_changed?") || send(aaa_config.crypted_password_field).blank?
+            new_record? || (aaa_config.password_salt_field && send("#{aaa_config.password_salt_field}_changed?")) || send(aaa_config.crypted_password_field).blank?
           end
       end
     end

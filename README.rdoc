@@ -50,7 +50,7 @@ These modules are for the acts_as_authentic method you call in your model. It co
 * Authlogic::ActsAsAuthentic::LoggedInStatus - Provides handy named scopes and methods for determining if the user is logged in or out.
 * Authlogic::ActsAsAuthentic::Login - Handles everything related to the login field.
 * Authlogic::ActsAsAuthentic::MagicColumns - Handles everything related to the "magic" fields: login_count, failed_login_count, etc.
-* Authlogic::ActsAsAuthentic::Password - This one is important. It handles encrypting your password, salting it, etc. It also has support for migrating password algorithms and transitioning from restful_authentication.
+* Authlogic::ActsAsAuthentic::Password - This one is important. It handles encrypting your password, salting it, etc. It also has support for transitioning password algorithms.
 * Authlogic::ActsAsAuthentic::PerishableToken - Handles maintaining the perishable token field, also provides a class level method for finding record using the token.
 * Authlogic::ActsAsAuthentic::PersistenceToken - Handles maintaining the persistence token. This is the token stored in cookies and sessions to persist the users session.
 * Authlogic::ActsAsAuthentic::RestfulAuthentication - Provides configuration options to easily migrate from the restful_authentication plugin.
@@ -67,7 +67,7 @@ These modules are for the "session side" of authentication. They create a new do
 * Authlogic::Session::Cookies - Authentication via cookies.
 * Authlogic::Session::Existence - Creating, saving, and destroying objects.
 * Authlogic::Session::HttpAuth - Authentication via basic HTTP authentication.
-* Authlogic::Session::Id - Allows sessions to be separated by an id.
+* Authlogic::Session::Id - Allows sessions to be separated by an id, letting you have multiple sessions for a single user.
 * Authlogic::Session::MagicColumns - Maintains "magic" database columns, similar to created_at and updated_at for ActiveRecord.
 * Authlogic::Session::MagicStates - Automatically validates based on the records states: active, approved, and confirmed.
 * Authlogic::Session::Params - Authentication via params, aka single access token.
@@ -182,7 +182,7 @@ The user model should have the following columns. The names of these columns can
 
     t.string    :login,               :null => false                # optional, you can use email instead, or both
     t.string    :crypted_password,    :null => false
-    t.string    :password_salt,       :null => false
+    t.string    :password_salt,       :null => false                # optional, but highly recommended
     t.string    :persistence_token,   :null => false
     t.string    :single_access_token, :null => false                # optional, see Authlogic::Session::Params
     t.string    :perishable_token,    :null => false                # optional, see Authlogic::Session::Perishability
