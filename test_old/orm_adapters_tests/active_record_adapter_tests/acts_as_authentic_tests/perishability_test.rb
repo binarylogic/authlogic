@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../../test_helper.rb'
 
 module ORMAdaptersTests
   module ActiveRecordAdapterTests
-    module ActsAsAuthenticTests
+    module ActsAsAuthenticTest
       class PerishabilityTest < ActiveSupport::TestCase
         def test_before_save
           ben = users(:ben)

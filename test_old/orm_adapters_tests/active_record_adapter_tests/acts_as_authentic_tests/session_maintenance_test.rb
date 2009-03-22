@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../../test_helper.rb'
 
 module ORMAdaptersTests
   module ActiveRecordAdapterTests
-    module ActsAsAuthenticTests
+    module ActsAsAuthenticTest
       class SessionMaintenanceTest < ActiveSupport::TestCase
         def test_login_after_create
           assert User.create(:login => "awesome", :password => "saweet", :password_confirmation => "saweet", :email => "awesome@awesome.com")

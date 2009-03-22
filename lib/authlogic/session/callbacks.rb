@@ -8,9 +8,6 @@ module Authlogic
     #   persist
     #   after_persisting
     #   [save record if record.changed?]
-    #
-    #   before_initialize
-    #   after_initialize
     #   
     #   before_validation
     #   before_validation_on_create
@@ -48,7 +45,6 @@ module Authlogic
     module Callbacks
       METHODS = [
         "before_persisting", "persist", "after_persisting",
-        "before_initialize", "after_initialize",
         "before_validation", "before_validation_on_create", "before_validation_on_update", "validate", "after_validation_on_update", "after_validation_on_create", "after_validation",
         "before_save", "before_create", "before_update", "after_update", "after_create", "after_save",
         "before_destroy", "after_destroy"
@@ -70,6 +66,11 @@ module Authlogic
       
         def persist
           run_callbacks(:persist) { |result, object| result == true }
+        end
+        
+        def save_record(alternate_record = nil)
+          r = alternate_record || record
+          r.save_without_session_maintenance(false) if r && r.changed?
         end
     end
   end

@@ -50,7 +50,19 @@ module Authlogic
       end
       
       # The methods available for an Authlogic::Session::Base object that make up the cookie feature set.
-      module InstanceMethods        
+      module InstanceMethods  
+        def credentials=(value)
+          super
+          values = value.is_a?(Array) ? value : [value]
+          case values.first
+          when Hash
+            self.remember_me = values.first.with_indifferent_access[:remember_me]
+          else
+            r = values.find { |value| value.is_a?(TrueClass) || value.is_a?(FalseClass) }
+            self.remember_me = r if !r.nil?
+          end
+        end
+        
         def remember_me # :nodoc:
           return @remember_me if defined?(@remember_me)
           @remember_me = self.class.remember_me

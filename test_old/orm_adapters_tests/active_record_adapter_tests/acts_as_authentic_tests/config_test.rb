@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../../test_helper.rb'
 
 module ORMAdaptersTests
   module ActiveRecordAdapterTests
-    module ActsAsAuthenticTests
+    module ActsAsAuthenticTest
       class ConfigTest < ActiveSupport::TestCase
         setup :get_default_configuration
         teardown :restore_default_configuration

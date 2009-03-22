@@ -10,7 +10,6 @@ module Authlogic
           extend ClassMethods
           include InstanceMethods
           attr_writer :scope
-          before_initialize :set_scope
         end
       end
       
@@ -74,6 +73,12 @@ module Authlogic
       end
       
       module InstanceMethods
+        # Setting the scope if it exists upon instantiation.
+        def initialize(*args)
+          self.scope = self.class.scope
+          super
+        end
+        
         # The scope of the current object
         def scope
           @scope ||= {}
@@ -82,12 +87,7 @@ module Authlogic
         private
           # Used for things like cookie_key, session_key, etc.
           def build_key(last_part)
-            key_parts = [id, scope[:id], last_part].compact
-            key_parts.join("_")
-          end
-          
-          def set_scope
-            self.scope = self.class.scope
+            [scope[:id], super].compact.join("_")
           end
           
           def search_for_record(*args)

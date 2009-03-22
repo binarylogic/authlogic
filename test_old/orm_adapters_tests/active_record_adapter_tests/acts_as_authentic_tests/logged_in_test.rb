@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../../test_helper.rb'
 
 module ORMAdaptersTests
   module ActiveRecordAdapterTests
-    module ActsAsAuthenticTests
+    module ActsAsAuthenticTest
       class LoggedInTest < ActiveSupport::TestCase
         def test_named_scopes
           assert_equal 0, User.logged_in.count

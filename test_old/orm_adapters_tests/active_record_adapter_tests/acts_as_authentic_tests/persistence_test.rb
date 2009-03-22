@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../../test_helper.rb'
 
 module ORMAdaptersTests
   module ActiveRecordAdapterTests
-    module ActsAsAuthenticTests
+    module ActsAsAuthenticTest
       class PersistenceTest < ActiveSupport::TestCase
         def test_unique_token
           assert_equal 128, User.unique_token.length

@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper.rb'
 
-module SessionTests
+module SessionTest
   class AuthenticatesManyAssociationTest < ActiveSupport::TestCase
     def test_initialize
       assoc = Authlogic::Session::AuthenticatesManyAssociation.new(UserSession, {:conditions => ["1 = ?", 1]}, :some_id)

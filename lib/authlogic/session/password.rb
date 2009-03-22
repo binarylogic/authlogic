@@ -6,7 +6,6 @@ module Authlogic
         klass.class_eval do
           extend Config
           include InstanceMethods
-          before_initialize :configure_password_methods
           validate :validate_by_password, :if => :authenticating_with_password?
           
           class << self
@@ -70,40 +69,8 @@ module Authlogic
       
       # Password related instance methods
       module InstanceMethods
-        # Your login credentials in hash format. Usually {:login => "my login", :password => "<protected>"} depending on your configuration.
-        # Password is protected as a security measure. The raw password should never be publicly accessible.
-        def credentials
-          {login_field => send(login_field), password_field => "<Protected>"}
-        end
-
-        # Lets you set your loging and password via a hash format. This is "params" safe. It only allows for 3 keys: your login field name, password field name, and remember me.
-        def credentials=(values)
-          return if values.blank? || !values.is_a?(Hash)
-          values.with_indifferent_access.slice(login_field, password_field, 'remember_me').each do |field, value|
-            next if value.blank?
-            send("#{field}=", value)
-          end
-        end
-        
-        def inspect
-          if authenticatin_with_password?
-            details = {}
-            details[login_field.to_sym] = send(login_field)
-            details[password_field.to_sym] = "<protected>"
-            "#<#{self.class.name} #{details.inspect}>"
-          else
-            super
-          end
-        end
-        
-        private
-          def authenticating_with_password?
-            !send(login_field).nil? || !send("protected_#{password_field}").nil?
-          end
-          
-          def configure_password_methods
-            return if self.class.configured_password_methods == true
-
+        def initialize(*args)
+          if !self.class.configured_password_methods
             self.class.send(:attr_writer, login_field) if !respond_to?("#{login_field}=")
             self.class.send(:attr_reader, login_field) if !respond_to?(login_field)
             self.class.send(:attr_writer, password_field) if !respond_to?("#{password_field}=")
@@ -118,6 +85,36 @@ module Authlogic
             end_eval
 
             self.class.configured_password_methods = true
+          end
+          
+          super
+        end
+        
+        def credentials
+          if authenticating_with_password?
+            details = {}
+            details[login_field.to_sym] = send(login_field)
+            details[password_field.to_sym] = "<protected>"
+            details
+          else
+            super
+          end
+        end
+        
+        def credentials=(value)
+          super
+          values = value.is_a?(Array) ? value : [value]
+          if values.first.is_a?(Hash)
+            values.first.with_indifferent_access.slice(login_field, password_field).each do |field, value|
+              next if value.blank?
+              send("#{field}=", value)
+            end
+          end
+        end
+        
+        private
+          def authenticating_with_password?
+            !send(login_field).nil? || !send("protected_#{password_field}").nil?
           end
           
           def validate_by_password
