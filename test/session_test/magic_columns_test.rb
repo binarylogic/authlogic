@@ -45,10 +45,11 @@ module SessionTest
         old_last_login_ip = ben.last_login_ip
         old_current_login_ip = ben.current_login_ip
       
-        assert UserSession.create(ben)
-      
+        assert UserSession.create(:login => ben.login, :password => "benrocks")
+        
+        ben.reload
         assert_equal old_login_count + 1, ben.login_count
-        assert_equal old_failed_login_count - 1, ben.failed_login_count
+        assert_equal 0, ben.failed_login_count
         assert_equal old_current_login_at, ben.last_login_at
         assert ben.current_login_at != old_current_login_at
         assert_equal old_current_login_ip, ben.last_login_ip

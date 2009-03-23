@@ -1,5 +1,9 @@
 == 2.0.1
 
+* Reset failed_login_count if consecutive_failed_logins_limit has been exceed and the failed_login_ban_for has passed.
+
+== 2.0.1 released 2009-3-23
+
 * Validate length of password.
 * Dont save sessions with a ! during session maintenance.
 * Add self_and_descendants_from_active_record for Rails 2.3
