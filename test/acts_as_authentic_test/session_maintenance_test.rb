@@ -6,6 +6,14 @@ module ActsAsAuthenticTest
       assert User.create(:login => "awesome", :password => "saweet", :password_confirmation => "saweet", :email => "awesome@awesome.com")
       assert UserSession.find
     end
+    
+    def test_updating_session_with_failed_magic_state
+      ben = users(:ben)
+      ben.confirmed = false
+      ben.password = "newpass"
+      ben.password_confirmation = "newpass"
+      assert ben.save
+    end
 
     def test_update_session_after_password_modify
       ben = users(:ben)

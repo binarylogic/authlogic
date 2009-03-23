@@ -54,9 +54,9 @@ These modules are for the acts_as_authentic method you call in your model. It co
 * Authlogic::ActsAsAuthentic::PerishableToken - Handles maintaining the perishable token field, also provides a class level method for finding record using the token.
 * Authlogic::ActsAsAuthentic::PersistenceToken - Handles maintaining the persistence token. This is the token stored in cookies and sessions to persist the users session.
 * Authlogic::ActsAsAuthentic::RestfulAuthentication - Provides configuration options to easily migrate from the restful_authentication plugin.
-* Authlogic::ActsAsAuthentic::Scope - Allows you to scope validations, etc. Just like the :scope option for validates_uniqueness_of
 * Authlogic::ActsAsAuthentic::SessionMaintenance - Handles automatically logging the user in. EX: a new user registers, automatically log them in.
 * Authlogic::ActsAsAuthentic::SingleAccessToken - Handles maintaining the single access token.
+* Authlogic::ActsAsAuthentic::ValidationsScope - Allows you to scope validations, etc. Just like the :scope option for validates_uniqueness_of
 
 === Authlogic::Session sub modules
 
@@ -222,7 +222,7 @@ Here are some common next steps. They might or might not apply to you. For a com
 8. Need to internationalize your app? See Authlogic::I18n
 9. Need help testing? See the Authlogic::Testing
 
-== Interesting in how it works?
+== Interested in how it works?
 
 Interested in how all of this all works? Basically a before filter is automatically set in your controller which lets Authlogic know about the current controller object. This "activates" Authlogic and allows Authlogic to set sessions, cookies, login via basic http auth, etc. If you are using your framework in a multiple thread environment, don't worry. I kept that in mind and made this thread safe.
 
