@@ -17,7 +17,7 @@ module Authlogic
         # company:
         #
         #   acts_as_authentic do |c|
-        #     c.validation_scope = :company_id
+        #     c.validations_scope = :company_id
         #   end
         #
         # * <tt>Default:</tt> nil

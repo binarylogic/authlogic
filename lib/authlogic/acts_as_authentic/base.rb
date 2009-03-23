@@ -24,6 +24,13 @@ module Authlogic
         #
         # See the various sub modules for the configuration they provide.
         def acts_as_authentic(&block)
+          # Stop all configuration if the DB is not set up
+          begin
+            column_names
+          rescue Exception
+            return
+          end
+          
           yield self if block_given?
           acts_as_authentic_modules.each { |mod| include mod }
         end
