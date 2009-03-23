@@ -3,6 +3,7 @@
 * Validate length of password.
 * Dont save sessions with a ! during session maintenance.
 * Add self_and_descendants_from_active_record for Rails 2.3
+* Abort acts_as_authentic if there is no DB connection or table.
 
 == 2.0.0 released 2009-3-23
 
