@@ -11,6 +11,7 @@ module Authlogic
         end
       end
       
+      # All configuration for the password aspect of acts_as_authentic.
       module Config
         # The name of the crypted_password field in the database.
         #

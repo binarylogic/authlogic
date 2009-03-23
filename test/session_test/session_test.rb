@@ -20,6 +20,15 @@ module SessionTest
         assert_equal ben, session.record
         assert_equal ben.persistence_token, @controller.session["user_credentials"]
       end
+      
+      def test_persist_persist_by_session_with_token_only
+        ben = users(:ben)
+        set_session_for(ben)
+        @controller.session["user_credentials_id"] = nil
+        assert session = UserSession.find
+        assert_equal ben, session.record
+        assert_equal ben.persistence_token, @controller.session["user_credentials"]
+      end
     
       def test_after_save_update_session
         ben = users(:ben)

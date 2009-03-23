@@ -10,6 +10,7 @@ module Authlogic
         end
       end
       
+      # All configuration for the single_access token aspect of acts_as_authentic.
       module Config
         def change_single_access_token_with_password(value = nil)
           config(:change_single_access_token_with_password, value, false)
@@ -17,6 +18,7 @@ module Authlogic
         alias_method :change_single_access_token_with_password=, :change_single_access_token_with_password
       end
       
+      # All method, for the single_access token aspect of acts_as_authentic.
       module Methods
         def self.included(klass)
           return if !klass.column_names.include?("single_access_token")
