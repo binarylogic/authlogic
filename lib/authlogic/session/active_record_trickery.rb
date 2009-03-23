@@ -19,7 +19,13 @@ module Authlogic
           klass.human_name(*args)
         end
         
+        # For rails < 2.3, mispelled
         def self_and_descendents_from_active_record
+          [self]
+        end
+        
+        # For Rails >2.3, fix mispelling
+        def self_and_descendants_from_active_record
           [self]
         end
       end
