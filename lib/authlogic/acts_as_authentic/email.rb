@@ -5,6 +5,13 @@ module Authlogic
     # if you do have a login or username field, Authlogic will still validate your email field. One less thing you have to
     # worry about.
     module Email
+      def self.included(klass)
+        klass.class_eval do
+          extend Config
+          add_acts_as_authentic_module(Methods)
+        end
+      end
+      
       # Configuration to modify how Authlogic handles the email field.
       module Config
         # The name of the field that stores email addresses.
@@ -57,12 +64,10 @@ module Authlogic
       module Methods
         def self.included(klass)
           klass.class_eval do
-            if aaa_config.validate_email_field
-              if aaa_config.email_field
-                validates_length_of aaa_config.email_field, aaa_config.validates_length_of_email_field_options
-                validates_format_of aaa_config.email_field, aaa_config.validates_format_of_email_field_options
-                validates_uniqueness_of aaa_config.email_field, :scope => aaa_config.scope, :if => "#{aaa_config.email_field}_changed?".to_sym
-              end
+            if validate_email_field && email_field
+              validates_length_of email_field, validates_length_of_email_field_options
+              validates_format_of email_field, validates_format_of_email_field_options
+              validates_uniqueness_of email_field, :scope => validations_scope, :if => "#{email_field}_changed?".to_sym
             end
           end
         end

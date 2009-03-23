@@ -3,6 +3,12 @@ module Authlogic
     # Maintains the persistence token, the token responsible for persisting sessions. This token
     # gets stores in the session and the cookie.
     module PersistenceToken
+      def self.included(klass)
+        klass.class_eval do
+          add_acts_as_authentic_module(Methods)
+        end
+      end
+      
       # Methods for the persistence token.
       module Methods
         def self.included(klass)

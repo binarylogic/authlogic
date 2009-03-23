@@ -5,6 +5,13 @@ module Authlogic
     # So if that user is inactive for a certain amount of time we assume they are logged out. That's what this
     # module is all about.
     module LoggedInStatus
+      def self.included(klass)
+        klass.class_eval do
+          extend Config
+          add_acts_as_authentic_module(Methods)
+        end
+      end
+      
       # All configuration for the logged in status feature set.
       module Config
         # The timeout to determine when a user is logged in or not.
@@ -21,21 +28,26 @@ module Authlogic
       module Methods
         def self.included(klass)
           klass.class_eval do
-            named_scope :logged_in, lambda { {:conditions => ["last_request_at > ?", aaa_config.logged_in_timeout.seconds.ago]} }
-            named_scope :logged_out, lambda { {:conditions => ["last_request_at is NULL or last_request_at <= ?", aaa_config.logged_in_timeout.seconds.ago]} }
+            named_scope :logged_in, lambda { {:conditions => ["last_request_at > ?", logged_in_timeout.seconds.ago]} }
+            named_scope :logged_out, lambda { {:conditions => ["last_request_at is NULL or last_request_at <= ?", logged_in_timeout.seconds.ago]} }
           end
         end
         
         # Returns true if the last_request_at > logged_in_timeout.
         def logged_in?
           raise "Can not determine the records login state because there is no last_request_at column" if !respond_to?(:last_request_at)
-          !last_request_at.nil? && last_request_at > aaa_config.logged_in_timeout.seconds.ago
+          !last_request_at.nil? && last_request_at > logged_in_timeout.seconds.ago
         end
         
         # Opposite of logged_in?
         def logged_out?
           !logged_in?
         end
+        
+        private
+          def logged_in_timeout
+            self.class.logged_in_timeout
+          end
       end
     end
   end

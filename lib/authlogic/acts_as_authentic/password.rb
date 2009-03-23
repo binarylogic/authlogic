@@ -3,6 +3,14 @@ module Authlogic
     # This module has a lot of neat functionality. It is responsible for encrypting your password, salting it, and verifying it.
     # It can also help you transition to a new encryption algorithm. See the Config sub module for configuration options.
     module Password
+      def self.included(klass)
+        klass.class_eval do
+          extend Config
+          add_acts_as_authentic_module(Callbacks)
+          add_acts_as_authentic_module(Methods)
+        end
+      end
+      
       module Config
         # The name of the crypted_password field in the database.
         #
@@ -101,9 +109,9 @@ module Authlogic
       module Methods
         def self.included(klass)
           klass.class_eval do
-            if aaa_config.validate_password_field
-              validates_confirmation_of :password, aaa_config.validates_confirmation_of_password_field_options
-              validates_length_of :password_confirmation, aaa_config.validates_length_of_password_confirmation_field_options
+            if validate_password_field
+              validates_confirmation_of :password, validates_confirmation_of_password_field_options
+              validates_length_of :password_confirmation, validates_length_of_password_confirmation_field_options
             end
           end
         end
@@ -119,29 +127,29 @@ module Authlogic
           return if pass.blank?
           before_password_set
           @password = pass
-          send("#{aaa_config.password_salt_field}=", Authlogic::Random.friendly_token) if aaa_config.password_salt_field
-          send("#{aaa_config.crypted_password_field}=", aaa_config.crypto_provider.encrypt(*encrypt_arguments(@password, aaa_config.act_like_restful_authentication ? :restful_authentication : nil)))
+          send("#{password_salt_field}=", Authlogic::Random.friendly_token) if password_salt_field
+          send("#{crypted_password_field}=", crypto_provider.encrypt(*encrypt_arguments(@password, act_like_restful_authentication? ? :restful_authentication : nil)))
           after_password_set
         end
         
         # Accepts a raw password to determine if it is the correct password or not.
         def valid_password?(attempted_password)
-          return false if attempted_password.blank? || send(aaa_config.crypted_password_field).blank?
+          return false if attempted_password.blank? || send(crypted_password_field).blank?
           
           before_password_verification
           
-          crypto_providers = [aaa_config.crypto_provider] + aaa_config.transition_from_crypto_providers
+          crypto_providers = [crypto_provider] + transition_from_crypto_providers
           crypto_providers.each_with_index do |encryptor, index|
             # The arguments_type of for the transitioning from restful_authentication
-            arguments_type = (aaa_config.act_like_restful_authentication && index == 0) ||
-              (aaa_config.transition_from_restful_authentication && index > 0 && encryptor == Authlogic::CryptoProviders::Sha1) ?
+            arguments_type = (act_like_restful_authentication? && index == 0) ||
+              (transition_from_restful_authentication? && index > 0 && encryptor == Authlogic::CryptoProviders::Sha1) ?
               :restful_authentication : nil
             
-            if encryptor.matches?(send(aaa_config.crypted_password_field), *encrypt_arguments(attempted_password, arguments_type))
+            if encryptor.matches?(send(crypted_password_field), *encrypt_arguments(attempted_password, arguments_type))
               # If we are transitioning from an older encryption algorithm and the password is still using the old algorithm
               # then let's reset the password using the new algorithm. If the algorithm has a cost (BCrypt) and the cost has changed, update the password with
               # the new cost.
-              if index > 0 || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(send(aaa_config.crypted_password_field)))
+              if index > 0 || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(send(crypted_password_field)))
                 self.password = attempted_password
                 save(false)
               end
@@ -172,7 +180,7 @@ module Authlogic
         
         private
           def encrypt_arguments(raw_password, arguments_type = nil)
-            salt = aaa_config.password_salt_field ? send(aaa_config.password_salt_field) : nil
+            salt = password_salt_field ? send(password_salt_field) : nil
             case arguments_type
             when :restful_authentication
               [REST_AUTH_SITE_KEY, salt, raw_password, REST_AUTH_SITE_KEY].compact
@@ -182,7 +190,23 @@ module Authlogic
           end
           
           def require_password_confirmation?
-            new_record? || (aaa_config.password_salt_field && send("#{aaa_config.password_salt_field}_changed?")) || send(aaa_config.crypted_password_field).blank?
+            new_record? || (password_salt_field && send("#{password_salt_field}_changed?")) || send(crypted_password_field).blank?
+          end
+          
+          def crypted_password_field
+            self.class.crypted_password_field
+          end
+          
+          def password_salt_field
+            self.class.password_salt_field
+          end
+          
+          def crypto_provider
+            self.class.crypto_provider
+          end
+          
+          def transition_from_crypto_providers
+            self.class.transition_from_crypto_providers
           end
       end
     end

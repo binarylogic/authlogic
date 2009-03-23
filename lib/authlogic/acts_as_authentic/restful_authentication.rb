@@ -2,6 +2,13 @@ module Authlogic
   module ActsAsAuthentic
     # This module is responsible for transitioning existing applications from the restful_authentication plugin.
     module RestfulAuthentication
+      def self.included(klass)
+        klass.class_eval do
+          extend Config
+          include InstanceMethods
+        end
+      end
+      
       module Config
         # Switching an existing app to Authlogic from restful_authentication? No problem, just set this true and your users won't know
         # anything changed. From your database perspective nothing will change at all. Authlogic will continue to encrypt passwords
@@ -35,6 +42,17 @@ module Authlogic
               class_eval("::REST_AUTH_SITE_KEY = nil") if !defined?(::REST_AUTH_SITE_KEY)
               CryptoProviders::Sha1.stretches = 1
             end
+          end
+      end
+      
+      module InstanceMethods
+        private
+          def act_like_restful_authentication?
+            self.class.act_like_restful_authentication == true
+          end
+          
+          def transition_from_restful_authentication?
+            self.class.transition_from_restful_authentication == true
           end
       end
     end

@@ -3,23 +3,23 @@ require File.dirname(__FILE__) + '/../test_helper.rb'
 module ActsAsAuthenticTest
   class PerishableTokenTest < ActiveSupport::TestCase
     def test_perishable_token_valid_for_config
-      assert_equal 10.minutes.to_i, User.aaa_config.perishable_token_valid_for
-      assert_equal 10.minutes.to_i, Employee.aaa_config.perishable_token_valid_for
+      assert_equal 10.minutes.to_i, User.perishable_token_valid_for
+      assert_equal 10.minutes.to_i, Employee.perishable_token_valid_for
       
-      User.aaa_config.perishable_token_valid_for = 1.hour
-      assert_equal 1.hour.to_i, User.aaa_config.perishable_token_valid_for
-      User.aaa_config.perishable_token_valid_for 10.minutes
-      assert_equal 10.minutes.to_i, User.aaa_config.perishable_token_valid_for
+      User.perishable_token_valid_for = 1.hour
+      assert_equal 1.hour.to_i, User.perishable_token_valid_for
+      User.perishable_token_valid_for 10.minutes
+      assert_equal 10.minutes.to_i, User.perishable_token_valid_for
     end
     
     def test_disable_perishable_token_maintenance_config
-      assert !User.aaa_config.disable_perishable_token_maintenance
-      assert !Employee.aaa_config.disable_perishable_token_maintenance
+      assert !User.disable_perishable_token_maintenance
+      assert !Employee.disable_perishable_token_maintenance
       
-      User.aaa_config.disable_perishable_token_maintenance = true
-      assert User.aaa_config.disable_perishable_token_maintenance
-      User.aaa_config.disable_perishable_token_maintenance false
-      assert !User.aaa_config.disable_perishable_token_maintenance
+      User.disable_perishable_token_maintenance = true
+      assert User.disable_perishable_token_maintenance
+      User.disable_perishable_token_maintenance false
+      assert !User.disable_perishable_token_maintenance
     end
     
     def test_validates_uniqueness_of_perishable_token

@@ -3,7 +3,13 @@ module Authlogic
     # Allows you to scope everything to specific fields.
     # See the Config submodule for more info.
     # For information on how to scope off of a parent object see Authlogic::AuthenticatesMany
-    module Scope
+    module ValidationsScope
+      def self.included(klass)
+        klass.class_eval do
+          extend Config
+        end
+      end
+      
       # All configuration for the scope feature.
       module Config
         # Allows you to scope everything to specific field(s). Works just like validates_uniqueness_of.
@@ -11,15 +17,15 @@ module Authlogic
         # company:
         #
         #   acts_as_authentic do |c|
-        #     c.scope = :company_id
+        #     c.validation_scope = :company_id
         #   end
         #
         # * <tt>Default:</tt> nil
         # * <tt>Accepts:</tt> Symbol or Array of symbols
-        def scope(value = nil)
-          config(:scope, value)
+        def validations_scope(value = nil)
+          config(:validations_scope, value)
         end
-        alias_method :scope=, :scope
+        alias_method :validations_scope=, :validations_scope
       end
     end
   end

@@ -2,6 +2,13 @@ module Authlogic
   module ActsAsAuthentic
     # Handles everything related to the login field.
     module Login
+      def self.included(klass)
+        klass.class_eval do
+          extend Config
+          add_acts_as_authentic_module(Methods)
+        end
+      end
+      
       # Confguration for the login field.
       module Config
         # The name of the login field in the database.
@@ -27,7 +34,7 @@ module Authlogic
         # * <tt>Default:</tt> {:within => 6..100}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_login_field_options(value = nil)
-          config(:validates_length_of_login_field_options, value, {:within => 6..100})
+          config(:validates_length_of_login_field_options, value, {:within => 3..100})
         end
         alias_method :validates_length_of_login_field_options=, :validates_length_of_login_field_options
         
@@ -45,12 +52,10 @@ module Authlogic
       module Methods
         def self.included(klass)
           klass.class_eval do
-            if aaa_config.validate_login_field
-              if aaa_config.login_field
-                validates_length_of aaa_config.login_field, aaa_config.validates_length_of_login_field_options
-                validates_format_of aaa_config.login_field, aaa_config.validates_format_of_login_field_options
-                validates_uniqueness_of aaa_config.login_field, :scope => aaa_config.scope, :if => "#{aaa_config.login_field}_changed?".to_sym
-              end
+            if validate_login_field && login_field
+              validates_length_of login_field, validates_length_of_login_field_options
+              validates_format_of login_field, validates_format_of_login_field_options
+              validates_uniqueness_of login_field, :scope => validations_scope, :if => "#{login_field}_changed?".to_sym
             end
           end
         end

@@ -3,13 +3,13 @@ require File.dirname(__FILE__) + '/../test_helper.rb'
 module ActsAsAuthenticTest
   class LoggedInStatusTest < ActiveSupport::TestCase
     def test_logged_in_timeout_config
-      assert_equal 10.minutes.to_i, User.aaa_config.logged_in_timeout
-      assert_equal 10.minutes.to_i, Employee.aaa_config.logged_in_timeout
+      assert_equal 10.minutes.to_i, User.logged_in_timeout
+      assert_equal 10.minutes.to_i, Employee.logged_in_timeout
       
-      User.aaa_config.logged_in_timeout = 1.hour
-      assert_equal 1.hour.to_i, User.aaa_config.logged_in_timeout
-      User.aaa_config.logged_in_timeout 10.minutes
-      assert_equal 10.minutes.to_i, User.aaa_config.logged_in_timeout
+      User.logged_in_timeout = 1.hour
+      assert_equal 1.hour.to_i, User.logged_in_timeout
+      User.logged_in_timeout 10.minutes
+      assert_equal 10.minutes.to_i, User.logged_in_timeout
     end
     
     def test_named_scope_logged_in

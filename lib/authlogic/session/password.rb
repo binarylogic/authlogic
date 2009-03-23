@@ -41,10 +41,10 @@ module Authlogic
         # login with a field called "login" and then find users by email this is compeltely doable. See the find_by_login_method configuration
         # option for more details.
         #
-        # * <tt>Default:</tt> Uses the configuration option in your model: User.aaa_config.login_field
+        # * <tt>Default:</tt> Uses the configuration option in your model: User.login_field
         # * <tt>Accepts:</tt> Symbol or String
         def login_field(value = nil)
-          config(:login_field, value, klass.aaa_config.login_field || klass.aaa_config.email_field)
+          config(:login_field, value, klass.login_field || klass.email_field)
         end
         alias_method :login_field=, :login_field
         

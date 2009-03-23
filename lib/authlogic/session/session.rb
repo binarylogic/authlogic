@@ -31,8 +31,10 @@ module Authlogic
           # Tries to validate the session from information in the session
           def persist_by_session
             persistence_token, record_id = session_credentials
-            if !persistence_token.nil? && !record_id.nil?              
-              record = search_for_record("find_by_#{klass.primary_key}", record_id)
+            if !persistence_token.nil?
+              # Allow finding by persistence token, because when records are created the session is maintained in a before_save, when there is no id.
+              # This is done for performance reasons and to save on queries.
+              record = record_id.nil? ? search_for_record("find_by_persistence_token", persistence_token) : search_for_record("find_by_#{klass.primary_key}", record_id)
               self.unauthorized_record = record if record && record.persistence_token == persistence_token
               valid?
             else

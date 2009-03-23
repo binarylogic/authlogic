@@ -5,6 +5,13 @@ module Authlogic
     # use the token and do what they need to do, that token should expire. Don't worry about maintaining this, changing it, or expiring it
     # yourself. Authlogic does all of this for you. See the sub modules for all of the tools Authlogic provides to you.
     module PerishableToken
+      def self.included(klass)
+        klass.class_eval do
+          extend Config
+          add_acts_as_authentic_module(Methods)
+        end
+      end
+      
       # Change how the perishable token works.
       module Config
         # When using the find_using_perishable_token method the token can expire. If the token is expired, no
@@ -32,6 +39,8 @@ module Authlogic
       # All methods relating to the perishable token.
       module Methods
         def self.included(klass)
+          return if !klass.column_names.include?("perishable_token")
+          
           klass.class_eval do
             extend ClassMethods
             include InstanceMethods
@@ -51,7 +60,7 @@ module Authlogic
           # If you want to use a different timeout value, just pass it as the second parameter:
           #
           #   User.find_using_perishable_token(token, 1.hour)
-          def find_using_perishable_token(token, age = aaa_config.perishable_token_valid_for)
+          def find_using_perishable_token(token, age = perishable_token_valid_for)
             return if token.blank?
             age = age.to_i
             
@@ -82,7 +91,7 @@ module Authlogic
           
           # A convenience method based on the disable_perishable_token_maintenance configuration option.
           def disable_perishable_token_maintenance?
-            aaa_config.disable_perishable_token_maintenance == true
+            self.class.disable_perishable_token_maintenance == true
           end
         end
       end

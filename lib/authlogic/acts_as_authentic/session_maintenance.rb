@@ -18,6 +18,13 @@ module Authlogic
     # That's what this module is all about. This will automatically maintain the cookie and session values as
     # records are saved.
     module SessionMaintenance
+      def self.included(klass)
+        klass.class_eval do
+          extend Config
+          add_acts_as_authentic_module(Methods)
+        end
+      end
+      
       module Config
         # As you may know, authlogic sessions can be separate by id (See Authlogic::Session::Base#id). You can
         # specify here what session ids you want auto maintained. By default it is the main session, which has
@@ -35,7 +42,7 @@ module Authlogic
         # * <tt>Default:</tt> "#{klass.name}Session".constantize
         # * <tt>Accepts:</tt> Class
         def session_class(value = nil)
-          config(:session_class, value, "#{klass.name}Session".constantize)
+          config(:session_class, value, "#{name}Session".constantize)
         end
         alias_method :session_class=, :session_class
       end
@@ -45,7 +52,6 @@ module Authlogic
           klass.class_eval do
             before_save :get_session_information, :if => :update_sessions?
             before_save :maintain_sessions, :if => :update_sessions?
-            attr_accessor
           end
         end
         
@@ -67,15 +73,15 @@ module Authlogic
           end
           
           def update_sessions?
-            !skip_session_maintenance && aaa_config.session_class.activated? && !aaa_config.session_ids.blank? && persistence_token_changed?
+            !skip_session_maintenance && session_class.activated? && !session_ids.blank? && persistence_token_changed?
           end
           
           def get_session_information
             # Need to determine if we are completely logged out, or logged in as another user
             @_sessions = []
             
-            aaa_config.session_ids.each do |session_id|
-              session = aaa_config.session_class.find(session_id, self)
+            session_ids.each do |session_id|
+              session = session_class.find(session_id, self)
               @_sessions << session if session && session.record
             end
           end
@@ -91,8 +97,8 @@ module Authlogic
           def create_session
             # We only want to automatically login into the first session, since this is the main session. The other sessions are sessions
             # that need to be created after logging into the main session.
-            session_id = aaa_config.session_ids.first
-            aaa_config.session_class.create(*[self, self, session_id].compact)
+            session_id = session_ids.first
+            session_class.create!(*[self, self, session_id].compact)
 
             return true
           end
@@ -106,6 +112,14 @@ module Authlogic
             end
 
             return true
+          end
+          
+          def session_ids
+            self.class.session_ids
+          end
+          
+          def session_class
+            self.class.session_class
           end
       end
     end

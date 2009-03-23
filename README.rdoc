@@ -80,6 +80,8 @@ These modules are for the "session side" of authentication. They create a new do
 
 === Miscellaneous modules
 
+Miscellaneous modules that don't really belong solely to either the session or model aspect.
+
 * Authlogic::AuthenticatesMany - Responsible for allowing you to scope sessions to a parent record. Similar to a has_many and belongs_to relationship. This lets you do the same thing with sessions.
 * Authlogic::CryptoProviders - Contains various encryption algorithms that Authlogic uses, allowing you to choose your encryption method.
 * Authlogic::I18n - Acts JUST LIKE the rails I18n library, and provides internationalization to Authlogic.

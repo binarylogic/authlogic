@@ -4,6 +4,12 @@ module Authlogic
     # you. Authlogic has the same thing, but these are maintained on the session side. Please see Authlogic::Session::MagicColumns
     # for more details. This module merely adds validations for the magic columns if they exist.
     module MagicColumns
+      def self.included(klass)
+        klass.class_eval do
+          add_acts_as_authentic_module(Methods)
+        end
+      end
+      
       # Methods relating to the magic columns
       module Methods
         def self.included(klass)
