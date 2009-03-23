@@ -1,4 +1,8 @@
-== 2.0.0
+== 2.0.1
+
+* Validate length of password.
+
+== 2.0.0 released 2009-3-23
 
 * Refactored nearly all code and tests, especially acts_as_authentic. Got rid of the meta programming and rewrote to use modules and hooks. Also moved all configuration into their related modules.
 * Set up a strong API with hooks to allow you to modify behavior and most importantly, easily create "add on" modules or alternate authentication methods, etc.
@@ -10,7 +14,7 @@
 * Added MD5 crypto provider for legacy systems.
 * Make password salt field optional for legacy systems.
 
-== 1.4.4
+== 1.4.4 released 2009-3-2
 
 * Moved session maintenance to a before_save, to save on queries executed and to skip an unexpected / additional save on the user object.
 * Extracted random string generation into its own class and leverages SecureRandom if it is available

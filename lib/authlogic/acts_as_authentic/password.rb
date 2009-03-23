@@ -40,6 +40,15 @@ module Authlogic
         end
         alias_method :validate_password_field=, :validate_password_field
         
+        # A hash of options for the validates_length_of call for the password field. Allows you to change this however you want.
+        #
+        # * <tt>Default:</tt> {:minimum => 4, :if => :require_password?}
+        # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
+        def validates_length_of_password_field_options(value = nil)
+          config(:validates_length_of_password_field_options, value, {:minimum => 4, :if => :require_password?})
+        end
+        alias_method :validates_length_of_password_field_options=, :validates_length_of_password_field_options
+        
         # A hash of options for the validates_confirmation_of call for the password field. Allows you to change this however you want.
         #
         # * <tt>Default:</tt> {:minimum => 4, :if => "#{password_salt_field}_changed?".to_sym}
@@ -51,10 +60,10 @@ module Authlogic
         
         # A hash of options for the validates_length_of call for the password_confirmation field. Allows you to change this however you want.
         #
-        # * <tt>Default:</tt> {:minimum => 4, :if => :require_password_confirmation?}
+        # * <tt>Default:</tt> {:minimum => 4, :if => :require_password_?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_password_confirmation_field_options(value = nil)
-          config(:validates_length_of_password_confirmation_field_options, value, {:minimum => 4, :if => :require_password_confirmation?})
+          config(:validates_length_of_password_confirmation_field_options, value, {:minimum => 4, :if => :require_password?})
         end
         alias_method :validates_length_of_password_confirmation_field_options=, :validates_length_of_password_confirmation_field_options
         
@@ -111,6 +120,7 @@ module Authlogic
         def self.included(klass)
           klass.class_eval do
             if validate_password_field
+              validates_length_of :password, validates_length_of_password_field_options
               validates_confirmation_of :password, validates_confirmation_of_password_field_options
               validates_length_of :password_confirmation, validates_length_of_password_confirmation_field_options
             end
@@ -190,7 +200,7 @@ module Authlogic
             end
           end
           
-          def require_password_confirmation?
+          def require_password?
             new_record? || (password_salt_field && send("#{password_salt_field}_changed?")) || send(crypted_password_field).blank?
           end
           

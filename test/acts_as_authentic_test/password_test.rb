@@ -32,6 +32,17 @@ module ActsAsAuthenticTest
       assert User.validate_password_field
     end
     
+    def test_validates_length_of_password_field_options_config
+      default = {:minimum => 4, :if => :require_password?}
+      assert_equal default, User.validates_length_of_password_field_options
+      assert_equal default, Employee.validates_length_of_password_field_options
+      
+      User.validates_length_of_password_field_options = {:yes => "no"}
+      assert_equal({:yes => "no"}, User.validates_length_of_password_field_options)
+      User.validates_length_of_password_field_options default
+      assert_equal default, User.validates_length_of_password_field_options
+    end
+    
     def test_validates_confirmation_of_password_field_options_config
       default = {:minimum => 4, :if => "#{User.password_salt_field}_changed?".to_sym}
       assert_equal default, User.validates_confirmation_of_password_field_options
@@ -44,7 +55,7 @@ module ActsAsAuthenticTest
     end
     
     def test_validates_length_of_password_confirmation_field_options_config
-      default = {:minimum => 4, :if => :require_password_confirmation?}
+      default = {:minimum => 4, :if => :require_password?}
       assert_equal default, User.validates_length_of_password_confirmation_field_options
       assert_equal default, Employee.validates_length_of_password_confirmation_field_options
       
@@ -105,6 +116,17 @@ module ActsAsAuthenticTest
       
       User.crypto_provider = Authlogic::CryptoProviders::Sha512
       User.transition_from_crypto_providers = []
+    end
+    
+    def test_validates_length_of_password
+      u = User.new
+      u.password_confirmation = "test2"
+      assert !u.valid?
+      assert u.errors.on(:password)
+      
+      u.password = "test"
+      assert !u.valid?
+      assert !u.errors.on(:password_confirmation)
     end
     
     def test_validates_confirmation_of_password

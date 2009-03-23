@@ -8,7 +8,6 @@ generators/session/templates/session.rb
 init.rb
 lib/authlogic.rb
 lib/authlogic/acts_as_authentic/base.rb
-lib/authlogic/acts_as_authentic/config.rb
 lib/authlogic/acts_as_authentic/email.rb
 lib/authlogic/acts_as_authentic/logged_in_status.rb
 lib/authlogic/acts_as_authentic/login.rb
@@ -17,9 +16,9 @@ lib/authlogic/acts_as_authentic/password.rb
 lib/authlogic/acts_as_authentic/perishable_token.rb
 lib/authlogic/acts_as_authentic/persistence_token.rb
 lib/authlogic/acts_as_authentic/restful_authentication.rb
-lib/authlogic/acts_as_authentic/scope.rb
 lib/authlogic/acts_as_authentic/session_maintenance.rb
 lib/authlogic/acts_as_authentic/single_access_token.rb
+lib/authlogic/acts_as_authentic/validations_scope.rb
 lib/authlogic/authenticates_many/association.rb
 lib/authlogic/authenticates_many/base.rb
 lib/authlogic/controller_adapters/abstract_adapter.rb
@@ -27,6 +26,7 @@ lib/authlogic/controller_adapters/merb_adapter.rb
 lib/authlogic/controller_adapters/rails_adapter.rb
 lib/authlogic/crypto_providers/aes256.rb
 lib/authlogic/crypto_providers/bcrypt.rb
+lib/authlogic/crypto_providers/md5.rb
 lib/authlogic/crypto_providers/sha1.rb
 lib/authlogic/crypto_providers/sha512.rb
 lib/authlogic/i18n.rb
@@ -58,7 +58,6 @@ lib/authlogic/testing/test_unit_helpers.rb
 lib/authlogic/version.rb
 shoulda_macros/authlogic.rb
 test/acts_as_authentic_test/base_test.rb
-test/acts_as_authentic_test/config_test.rb
 test/acts_as_authentic_test/email_test.rb
 test/acts_as_authentic_test/logged_in_status_test.rb
 test/acts_as_authentic_test/login_test.rb
@@ -110,12 +109,3 @@ test/session_test/timeout_test.rb
 test/session_test/unauthorized_record_test.rb
 test/session_test/validation_test.rb
 test/test_helper.rb
-test_old/authenticates_many_association_test.rb
-test_old/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/config_test.rb
-test_old/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/credentials_test.rb
-test_old/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/logged_in_test.rb
-test_old/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/perishability_test.rb
-test_old/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/persistence_test.rb
-test_old/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/session_maintenance_test.rb
-test_old/orm_adapters_tests/active_record_adapter_tests/acts_as_authentic_tests/single_access_test.rb
-test_old/orm_adapters_tests/active_record_adapter_tests/authenticates_many_test.rb

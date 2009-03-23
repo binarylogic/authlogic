@@ -82,14 +82,14 @@ require File.dirname(__FILE__) + '/libs/user'
 require File.dirname(__FILE__) + '/libs/user_session'
 require File.dirname(__FILE__) + '/libs/company'
 
-
 Authlogic::CryptoProviders::AES256.key = "myafdsfddddddddddddddddddddddddddddddddddddddddddddddd"
 
 class ActiveSupport::TestCase
+  include ActiveRecord::TestFixtures
   self.fixture_path = File.dirname(__FILE__) + "/fixtures"
-  self.use_transactional_fixtures = true
+  self.use_transactional_fixtures = false
   self.use_instantiated_fixtures  = false
-  self.pre_loaded_fixtures = true
+  self.pre_loaded_fixtures = false
   fixtures :all
   setup :activate_authlogic
   
