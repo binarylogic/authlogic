@@ -1,6 +1,7 @@
 == 2.0.1
 
 * Reset failed_login_count if consecutive_failed_logins_limit has been exceed and the failed_login_ban_for has passed.
+* Update test helpers to use the new configuration scheme.
 
 == 2.0.1 released 2009-3-23
 
