@@ -44,7 +44,7 @@ module Authlogic # :nodoc:
 
     MAJOR = 2
     MINOR = 0
-    TINY  = 1
+    TINY  = 2
 
     # The current version as a Version instance
     CURRENT = new(MAJOR, MINOR, TINY)
