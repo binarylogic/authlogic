@@ -1,7 +1,8 @@
-== 2.0.1
+== 2.0.2
 
 * Reset failed_login_count if consecutive_failed_logins_limit has been exceed and the failed_login_ban_for has passed.
 * Update test helpers to use the new configuration scheme.
+* Fixed issue when logging doesn't update last_request_at, so the next persistence try would fail.
 
 == 2.0.1 released 2009-3-23
 

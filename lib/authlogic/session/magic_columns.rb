@@ -15,9 +15,10 @@ module Authlogic
         klass.class_eval do
           extend Config
           include InstanceMethods
-          after_persisting :set_last_request_at
+          after_persisting :set_last_request_at, :if => :set_last_request_at?
           validate :increase_failed_login_count
           before_save :update_info
+          before_save :set_last_request_at, :if => :set_last_request_at?
         end
       end
       
@@ -59,11 +60,13 @@ module Authlogic
               record.current_login_ip = controller.request.remote_ip
             end
           end
+          
+          def set_last_request_at?
+            record && record.class.column_names.include?("last_request_at") && (record.last_request_at.blank? || last_request_at_threshold.to_i.seconds.ago >= record.last_request_at)
+          end
         
           def set_last_request_at
-            if record && record.class.column_names.include?("last_request_at") && (record.last_request_at.blank? || last_request_at_threshold.to_i.seconds.ago >= record.last_request_at)
-              record.last_request_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
-            end
+            record.last_request_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
           end
           
           def last_request_at_threshold

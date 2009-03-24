@@ -17,7 +17,7 @@ module Authlogic
         def set_session_for(record)
           session_class = session_class(record)
           @request.session[session_class.session_key] = record.persistence_token
-          @request.session["#{session_class.session_key}_id"] = record.id
+          @request.session["#{session_class.session_key}_#{record.class.primary_key}"] = record.id
         end
         
         # Sets the cookie for a record. This way when you execute a request in your test, cookie values will be present.

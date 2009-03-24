@@ -38,6 +38,15 @@ module SessionTest
       
         UserSession.logout_on_timeout = false
       end
+      
+      def test_successful_login
+        UserSession.logout_on_timeout = true
+        ben = users(:ben)
+        assert UserSession.create(:login => ben.login, :password => "benrocks")
+        assert session = UserSession.find
+        assert_equal ben, session.record
+        UserSession.logout_on_timeout = false
+      end
     end
   end
 end
