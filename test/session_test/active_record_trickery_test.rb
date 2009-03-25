@@ -8,7 +8,7 @@ module SessionTest
       end
     
       def test_human_name
-        assert_equal "User", UserSession.human_name
+        assert_equal "Usersession", UserSession.human_name
       end
     
       def test_self_and_descendents_from_active_record

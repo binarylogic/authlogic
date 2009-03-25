@@ -16,7 +16,7 @@ module Authlogic
         end
         
         def human_name(*args)
-          klass.human_name(*args)
+          I18n.t("models.#{name.underscore}", {:count => 1, :default => name.humanize})
         end
         
         # For rails < 2.3, mispelled
