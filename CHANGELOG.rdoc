@@ -1,4 +1,8 @@
-== 2.0.2
+== 2.0.3
+
+* Fixed error where default session class does not exist.
+
+== 2.0.2 released 2009-3-24
 
 * Reset failed_login_count if consecutive_failed_logins_limit has been exceed and the failed_login_ban_for has passed.
 * Update test helpers to use the new configuration scheme.

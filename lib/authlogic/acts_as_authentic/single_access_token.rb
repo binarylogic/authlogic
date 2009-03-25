@@ -12,6 +12,13 @@ module Authlogic
       
       # All configuration for the single_access token aspect of acts_as_authentic.
       module Config
+        # The single access token is used for authentication via URLs, such as a private feed. That being said,
+        # if the user changes their password, that token probably shouldn't change. If it did, the user would have
+        # to update all of their URLs. So be default this is option is disabled, if you need it, feel free to turn
+        # it on.
+        #
+        # * <tt>Default:</tt> false
+        # * <tt>Accepts:</tt> Boolean
         def change_single_access_token_with_password(value = nil)
           config(:change_single_access_token_with_password, value, false)
         end

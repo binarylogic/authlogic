@@ -42,7 +42,8 @@ module Authlogic
         # * <tt>Default:</tt> "#{klass.name}Session".constantize
         # * <tt>Accepts:</tt> Class
         def session_class(value = nil)
-          config(:session_class, value, "#{name}Session".constantize)
+          const = "#{name}Session".constantize rescue nil
+          config(:session_class, value, const)
         end
         alias_method :session_class=, :session_class
       end
