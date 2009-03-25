@@ -11,8 +11,10 @@ module Authlogic
       end
       
       module ClassMethods
-        def human_attribute_name(*args)
-          klass.human_attribute_name(*args)
+        def human_attribute_name(attribute_key_name, options = {})
+          options[:count] ||= 1
+          options[:default] ||= attribute_key_name.humanize
+          I18n.t("attributes.#{name.underscore}.#{attribute_key_name}", options)
         end
         
         def human_name(*args)
