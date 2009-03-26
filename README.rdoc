@@ -62,18 +62,18 @@ These modules are for the acts_as_authentic method you call in your model. It co
 
 These modules are for the "session side" of authentication. They create a new domain for session logic, allowing you to create, destroy, and ultimately manage your sessions.
 
-* Authlogic::Session::BruteForceProtection - Disables accounts after a certain number of consecutive failed login attempted.
-* Authlogic::Session::Callbacks - Your tools to extend Authlogic, lets you hook in and add/modify behavior, on top of overriding methods.
+* Authlogic::Session::BruteForceProtection - Disables accounts after a certain number of consecutive failed logins attempted.
+* Authlogic::Session::Callbacks - Your tools to extend, change, or add onto Authlogic. Lets you hook in and do just about anything you want.
 * Authlogic::Session::Cookies - Authentication via cookies.
 * Authlogic::Session::Existence - Creating, saving, and destroying objects.
 * Authlogic::Session::HttpAuth - Authentication via basic HTTP authentication.
 * Authlogic::Session::Id - Allows sessions to be separated by an id, letting you have multiple sessions for a single user.
 * Authlogic::Session::MagicColumns - Maintains "magic" database columns, similar to created_at and updated_at for ActiveRecord.
-* Authlogic::Session::MagicStates - Automatically validates based on the records states: active, approved, and confirmed.
+* Authlogic::Session::MagicStates - Automatically validates based on the records states: active?, approved?, and confirmed?. If those methods exist for the record.
 * Authlogic::Session::Params - Authentication via params, aka single access token.
 * Authlogic::Session::Password - Authentication via a traditional username and password.
 * Authlogic::Session::Persistence - Persisting sessions / finding sessions.
-* Authlogic::Session::Session - Authentication via the session.
+* Authlogic::Session::Session - Authentication via the session, the controller session that is.
 * Authlogic::Session::Timeout - Automatically logging out after a certain period of inactivity.
 * Authlogic::Session::UnauthorizedRecord - Handles authentication by passing an ActiveRecord object.
 * Authlogic::Session::Validation - Validation / errors.

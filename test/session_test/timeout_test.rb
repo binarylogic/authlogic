@@ -25,7 +25,7 @@ module SessionTest
         assert session.stale?
         assert_equal ben, session.stale_record
         assert_nil session.record
-        assert_nil @controller.session["user_credentials_id"]
+        assert_nil controller.session["user_credentials_id"]
       
         set_session_for(ben)
       

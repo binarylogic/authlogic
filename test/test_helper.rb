@@ -72,9 +72,7 @@ ActiveRecord::Schema.define(:version => 1) do
 end
 
 require File.dirname(__FILE__) + '/../lib/authlogic' unless defined?(Authlogic)
-require File.dirname(__FILE__) + '/libs/mock_request'
-require File.dirname(__FILE__) + '/libs/mock_cookie_jar'
-require File.dirname(__FILE__) + '/libs/mock_controller'
+require File.dirname(__FILE__) + '/../lib/authlogic/test_case'
 require File.dirname(__FILE__) + '/libs/project'
 require File.dirname(__FILE__) + '/libs/employee'
 require File.dirname(__FILE__) + '/libs/employee_session'
@@ -94,11 +92,6 @@ class ActiveSupport::TestCase
   setup :activate_authlogic
   
   private
-    def activate_authlogic
-      @controller = MockController.new
-      Authlogic::Session::Base.controller = @controller
-    end
-    
     def password_for(user)
       case user
       when users(:ben)
@@ -110,43 +103,43 @@ class ActiveSupport::TestCase
     
     def http_basic_auth_for(user = nil, &block)
       unless user.blank?
-        @controller.http_user = user.login
-        @controller.http_password = password_for(user)
+        controller.http_user = user.login
+        controller.http_password = password_for(user)
       end
       yield
-      @controller.http_user = @controller.http_password = nil
+      controller.http_user = controller.http_password = nil
     end
     
     def set_cookie_for(user, id = nil)
-      @controller.cookies["user_credentials"] = {:value => user.persistence_token, :expires => nil}
+      controller.cookies["user_credentials"] = {:value => user.persistence_token, :expires => nil}
     end
     
     def unset_cookie
-      @controller.cookies["user_credentials"] = nil
+      controller.cookies["user_credentials"] = nil
     end
     
     def set_params_for(user, id = nil)
-      @controller.params["user_credentials"] = user.single_access_token
+      controller.params["user_credentials"] = user.single_access_token
     end
     
     def unset_params
-      @controller.params["user_credentials"] = nil
+      controller.params["user_credentials"] = nil
     end
     
     def set_request_content_type(type)
-      @controller.request_content_type = type
+      controller.request_content_type = type
     end
     
     def unset_request_content_type
-      @controller.request_content_type = nil
+      controller.request_content_type = nil
     end
     
     def set_session_for(user, id = nil)
-      @controller.session["user_credentials"] = user.persistence_token
-      @controller.session["user_credentials_id"] = user.id
+      controller.session["user_credentials"] = user.persistence_token
+      controller.session["user_credentials_id"] = user.id
     end
     
     def unset_session
-      @controller.session["user_credentials"] = @controller.session["user_credentials_id"] = nil
+      controller.session["user_credentials"] = controller.session["user_credentials_id"] = nil
     end
 end

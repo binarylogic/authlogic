@@ -1,8 +1,16 @@
 module Authlogic
   module Session
-    # Just like in ActiveRecord you have before_save, before_validation, etc. You have similar callbacks with Authlogic, see the METHODS constant below. The order of execution is as follows:
+    # Between these callsbacks and the configuration, this is the contract between me and you to safely
+    # modify Authlogic's behavior. The ONLY reason these things will change is during a big version upgrade.
+    # For example, going from v1.X.X to 2.0.0.
     #
-    # Here is the order they execute
+    # Check out the sub modules of Authlogic::Session. They are very concise, clear, and to the point. More
+    # importantly they use the same API that you would use to extend Authlogic. That being said, they are great
+    # examples of how to extend Authlogic and add / modify behavior. These modules could easily be pulled out
+    # into their own plugin and become an "add on" without any change.
+    #
+    # Now to the point of this module. Just like in ActiveRecord you have before_save, before_validation, etc.
+    # You have similar callbacks with Authlogic, see the METHODS constant below. The order of execution is as follows:
     #
     #   before_persisting
     #   persist
@@ -27,11 +35,13 @@ module Authlogic
     #   [save record if record.changed?]
     #   
     #   before_destroy
+    #   [save record if record.changed?]
     #   destroy
     #   after_destroy
     #
-    # Notice the "save record if changed?" lines above. This helps with performance. If you need to make changes to the associated record, there is no need to save the record, Authlogic will do it for you.
-    # This allow multiple modules to modify the record and execute as few queries as possible.
+    # Notice the "save record if changed?" lines above. This helps with performance. If you need to make
+    # changes to the associated record, there is no need to save the record, Authlogic will do it for you.
+    # This allows multiple modules to modify the record and execute as few queries as possible.
     #
     # **WARNING**: unlike ActiveRecord, these callbacks must be set up on the class level:
     #
@@ -41,7 +51,8 @@ module Authlogic
     #     # ..etc
     #   end
     #
-    # You can NOT define a "before_validation" method, this is bad practice and does not allow Authlogic to extend properly with multiple extensions. Please ONLY use the method above.
+    # You can NOT define a "before_validation" method, this is bad practice and does not allow Authlogic
+    # to extend properly with multiple extensions. Please ONLY use the method above.
     module Callbacks
       METHODS = [
         "before_persisting", "persist", "after_persisting",

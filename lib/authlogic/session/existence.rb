@@ -42,6 +42,7 @@ module Authlogic
         # the user to authenticate again if it is needed.
         def destroy
           before_destroy
+          save_record
           errors.clear
           @record = nil
           after_destroy

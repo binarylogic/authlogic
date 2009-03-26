@@ -36,7 +36,7 @@ module SessionTest
       def test_init
         UserSession.controller = nil
         assert_raise(Authlogic::Session::Activation::NotActivatedError) { UserSession.new }
-        UserSession.controller = @controller
+        UserSession.controller = controller
       end
     end
   end

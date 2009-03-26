@@ -4,6 +4,7 @@
 * Fixed human_name for the model to use its own human name and not delegate to the associated model. Translation should be under authlogic.models.user_session (or whatever the name of your session is).
 * Fixed human_attribute_name to use Authlogic keys for translation instead of ActiveRecord: authlogic.attributes.user_session.login
 * For transitioning from restful_authentication, set the REST_AUTH_SITE_KEY to '' if it doesn't exist, instead of nil.
+* Completely rewrote Authlogic::Testing, it's now called Authlogic::TestCase. Testing Authlogic is much easier now. Please see Authlogic::TestCase for more info.
 
 == 2.0.2 released 2009-3-24
 

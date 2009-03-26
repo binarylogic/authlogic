@@ -54,7 +54,10 @@ lib/authlogic/session/session.rb
 lib/authlogic/session/timeout.rb
 lib/authlogic/session/unauthorized_record.rb
 lib/authlogic/session/validation.rb
-lib/authlogic/testing/test_unit_helpers.rb
+lib/authlogic/test_case.rb
+lib/authlogic/test_case/mock_controller.rb
+lib/authlogic/test_case/mock_cookie_jar.rb
+lib/authlogic/test_case/mock_request.rb
 lib/authlogic/version.rb
 shoulda_macros/authlogic.rb
 test/acts_as_authentic_test/base_test.rb
@@ -65,6 +68,7 @@ test/acts_as_authentic_test/magic_columns_test.rb
 test/acts_as_authentic_test/password_test.rb
 test/acts_as_authentic_test/perishable_token_test.rb
 test/acts_as_authentic_test/persistence_token_test.rb
+test/acts_as_authentic_test/restful_authentication_test.rb
 test/acts_as_authentic_test/session_maintenance_test.rb
 test/acts_as_authentic_test/single_access_test.rb
 test/authenticates_many_test.rb
@@ -79,9 +83,6 @@ test/fixtures/users.yml
 test/libs/company.rb
 test/libs/employee.rb
 test/libs/employee_session.rb
-test/libs/mock_controller.rb
-test/libs/mock_cookie_jar.rb
-test/libs/mock_request.rb
 test/libs/ordered_hash.rb
 test/libs/project.rb
 test/libs/user.rb

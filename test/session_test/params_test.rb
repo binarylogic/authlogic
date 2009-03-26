@@ -31,22 +31,22 @@ module SessionTest
         assert !session.persisting?
         assert !session.unauthorized_record
         assert !session.record
-        assert_nil @controller.session["user_credentials"]
+        assert_nil controller.session["user_credentials"]
       
         set_request_content_type("text/plain")
         assert !session.persisting?
         assert !session.unauthorized_record
-        assert_nil @controller.session["user_credentials"]
+        assert_nil controller.session["user_credentials"]
       
         set_request_content_type("application/atom+xml")
         assert session.persisting?
         assert_equal ben, session.record
-        assert_nil @controller.session["user_credentials"] # should not persist since this is single access
+        assert_nil controller.session["user_credentials"] # should not persist since this is single access
       
         set_request_content_type("application/rss+xml")
         assert session.persisting?
         assert_equal ben, session.unauthorized_record
-        assert_nil @controller.session["user_credentials"]
+        assert_nil controller.session["user_credentials"]
       end
     end
   end
