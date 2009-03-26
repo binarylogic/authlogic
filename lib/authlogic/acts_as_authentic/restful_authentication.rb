@@ -39,7 +39,7 @@ module Authlogic
             crypto_provider_key = act_like_restful_authentication ? :crypto_provider : :transition_from_crypto_providers
             self.send("#{crypto_provider_key}=", CryptoProviders::Sha1)
             if !defined?(::REST_AUTH_SITE_KEY) || ::REST_AUTH_SITE_KEY.nil?
-              class_eval("::REST_AUTH_SITE_KEY = nil") if !defined?(::REST_AUTH_SITE_KEY)
+              class_eval("::REST_AUTH_SITE_KEY = ''") if !defined?(::REST_AUTH_SITE_KEY)
               CryptoProviders::Sha1.stretches = 1
             end
           end

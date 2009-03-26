@@ -17,7 +17,7 @@ module Authlogic
         klass.class_eval do
           extend Config
           include InstanceMethods
-          validate :validate_magic_states
+          validate :validate_magic_states, :unless => :disable_magic_states?
         end
       end
       
@@ -43,7 +43,7 @@ module Authlogic
           end
         
           def validate_magic_states
-            return true if disable_magic_states? || attempted_record.nil?
+            return true if attempted_record.nil?
             [:active, :approved, :confirmed].each do |required_status|
               if attempted_record.respond_to?("#{required_status}?") && !attempted_record.send("#{required_status}?")
                 errors.add_to_base(I18n.t("error_messages.not_#{required_status}", :default => "Your account is not #{required_status}"))
