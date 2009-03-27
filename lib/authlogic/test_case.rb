@@ -51,7 +51,7 @@ module Authlogic
   module TestCase
     # Activates authlogic with an Authlogic::TestCase::MockController object.
     def activate_authlogic
-      Authlogic::Session::Base.controller = controller
+      Authlogic::Session::Base.controller = (@request && Authlogic::ControllerAdapters::AbstractAdapter.new(@request)) || controller
     end
     
     # The Authlogic::TestCase::MockController object passed to Authlogic to activate it. You can access this in your test.

@@ -74,7 +74,7 @@ module Authlogic
           end
           
           def update_sessions?
-            !skip_session_maintenance && session_class.activated? && !session_ids.blank? && persistence_token_changed?
+            !skip_session_maintenance && session_class && session_class.activated? && !session_ids.blank? && persistence_token_changed?
           end
           
           def get_session_information
