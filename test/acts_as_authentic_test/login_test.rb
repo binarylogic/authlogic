@@ -43,6 +43,16 @@ module ActsAsAuthenticTest
       assert_equal default, User.validates_format_of_login_field_options
     end
     
+    def test_validates_uniqueness_of_login_field_options_config
+      default = {:scope => User.validations_scope, :if => "#{User.login_field}_changed?".to_sym}
+      assert_equal default, User.validates_uniqueness_of_login_field_options
+      
+      User.validates_uniqueness_of_login_field_options = {:yes => "no"}
+      assert_equal({:yes => "no"}, User.validates_uniqueness_of_login_field_options)
+      User.validates_uniqueness_of_login_field_options default
+      assert_equal default, User.validates_uniqueness_of_login_field_options
+    end
+    
     def test_validates_length_of_login_field
       u = User.new
       u.login = "a"

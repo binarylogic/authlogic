@@ -50,6 +50,15 @@ module Authlogic
         end
         alias_method :validates_format_of_email_field_options=, :validates_format_of_email_field_options
         
+        # A hash of options for the validates_uniqueness_of call for the email field. Allows you to change this however you want.
+        #
+        # * <tt>Default:</tt> {:scope => validations_scope, :if => "#{email_field}_changed?".to_sym}
+        # * <tt>Accepts:</tt> Hash of options accepted by validates_uniqueness_of
+        def validates_uniqueness_of_email_field_options(value = nil)
+          config(:validates_uniqueness_of_email_field_options, value, {:scope => validations_scope, :if => "#{email_field}_changed?".to_sym})
+        end
+        alias_method :validates_uniqueness_of_email_field_options=, :validates_uniqueness_of_email_field_options
+        
         private
           def email_regex
             return @email_regex if @email_regex
@@ -67,7 +76,7 @@ module Authlogic
             if validate_email_field && email_field
               validates_length_of email_field, validates_length_of_email_field_options
               validates_format_of email_field, validates_format_of_email_field_options
-              validates_uniqueness_of email_field, :scope => validations_scope, :if => "#{email_field}_changed?".to_sym
+              validates_uniqueness_of email_field, validates_uniqueness_of_email_field_options
             end
           end
         end

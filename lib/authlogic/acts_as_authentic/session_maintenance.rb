@@ -5,7 +5,7 @@ module Authlogic
     #
     # Just to clear up any confusion, Authlogic stores both the record id and the persistence token in the session.
     # Why? So stale sessions can not be persisted. It stores the id so it can quickly find the record, and the
-    # persistence token to ensure no sessions are stale. So if the persistence token changes, the user muct log
+    # persistence token to ensure no sessions are stale. So if the persistence token changes, the user must log
     # back in.
     #
     # Well, the persistence token changes with the password. What happens if the user changes his own password?
@@ -42,7 +42,7 @@ module Authlogic
         # * <tt>Default:</tt> "#{klass.name}Session".constantize
         # * <tt>Accepts:</tt> Class
         def session_class(value = nil)
-          const = "#{name}Session".constantize rescue nil
+          const = "#{base_class.name}Session".constantize rescue nil
           config(:session_class, value, const)
         end
         alias_method :session_class=, :session_class

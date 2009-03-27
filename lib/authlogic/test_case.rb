@@ -26,8 +26,8 @@ module Authlogic
   #
   # === Unit tests
   #
-  # Now here is the tricky part of testing. Since there really is no controller here you need to "fake" Authlogic into
-  # thinking there is. Don't worry, because the Authlogic::TestCase takes care of this for you. Just do the following
+  # Now here is the tricky part of testing. Since there really is no controller here, you need to "fake" Authlogic into
+  # thinking there is. Don't worry, because the this model takes care of this for you. Just do the following
   # in your test's setup and you are good to go:
   #
   #   setup :activate_authlogic
@@ -54,7 +54,8 @@ module Authlogic
       Authlogic::Session::Base.controller = controller
     end
     
-    # The Authlogic::TestCase::MockController object passed to Authlogic to activate it.
+    # The Authlogic::TestCase::MockController object passed to Authlogic to activate it. You can access this in your test.
+    # See the module description for an example.
     def controller
       @controller ||= Authlogic::TestCase::MockController.new
     end
