@@ -1,12 +1,11 @@
 module Authlogic
   module Session
     # Between these callsbacks and the configuration, this is the contract between me and you to safely
-    # modify Authlogic's behavior. The ONLY reason these things will change is during a big version upgrade.
-    # For example, going from v1.X.X to 2.0.0.
+    # modify Authlogic's behavior. I will do everything I can to make sure these do not change.
     #
     # Check out the sub modules of Authlogic::Session. They are very concise, clear, and to the point. More
     # importantly they use the same API that you would use to extend Authlogic. That being said, they are great
-    # examples of how to extend Authlogic and add / modify behavior. These modules could easily be pulled out
+    # examples of how to extend Authlogic and add / modify behavior to Authlogic. These modules could easily be pulled out
     # into their own plugin and become an "add on" without any change.
     #
     # Now to the point of this module. Just like in ActiveRecord you have before_save, before_validation, etc.

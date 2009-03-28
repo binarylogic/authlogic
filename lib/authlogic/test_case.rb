@@ -59,7 +59,9 @@ module Authlogic
   #
   #   require "authlogic/test_case"
   module TestCase
-    # Activates authlogic with an Authlogic::TestCase::MockController object.
+    # Activates authlogic so that you can use it in your tests. You should call this method in your test's setup. Ex:
+    #
+    #   setup :activate_authlogic
     def activate_authlogic
       Authlogic::Session::Base.controller = (@request && Authlogic::TestCase::ControllerAdapter.new(@request)) || controller
     end

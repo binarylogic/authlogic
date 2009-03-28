@@ -29,6 +29,8 @@ module Authlogic
         # This accepts a controller object wrapped with the Authlogic controller adapter. The controller adapters close the gap
         # between the different controllers in each framework. That being said, Authlogic is expecting your object's class to
         # extend Authlogic::ControllerAdapters::AbstractAdapter. See Authlogic::ControllerAdapters for more info.
+        #
+        # Lastly, this is thread safe.
         def controller=(value)
           Thread.current[:authlogic_controller] = value
         end

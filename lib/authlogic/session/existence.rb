@@ -20,7 +20,7 @@ module Authlogic
         # A convenince method. The same as:
         #
         #   session = UserSession.new(*args)
-        #   session.create
+        #   session.save
         #
         # Instead you can do:
         #
@@ -49,7 +49,8 @@ module Authlogic
           true
         end
         
-        # Returns true if the session has not been saved yet.
+        # Returns true if the session is new, meaning no action has been taken on it and a successful save
+        # has not taken place.
         def new_session?
           new_session != false
         end

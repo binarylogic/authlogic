@@ -1,6 +1,6 @@
 module Authlogic
   module TestCase
-    class MockCookieJar < Hash
+    class MockCookieJar < Hash # :nodoc:
       def [](key)
         hash = super
         hash && hash[:value]

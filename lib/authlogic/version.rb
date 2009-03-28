@@ -1,11 +1,8 @@
 module Authlogic # :nodoc:
-  # = Version
-  #
   # A class for describing the current version of a library. The version
   # consists of three parts: the +major+ number, the +minor+ number, and the
   # +tiny+ (or +patch+) number.
   class Version
-    
     include Comparable
   
     # A convenience method for instantiating a new Version instance with the
@@ -44,13 +41,11 @@ module Authlogic # :nodoc:
 
     MAJOR = 2
     MINOR = 0
-    TINY  = 3
+    TINY  = 4
 
     # The current version as a Version instance
     CURRENT = new(MAJOR, MINOR, TINY)
     # The current version as a String
     STRING = CURRENT.to_s
-    
   end
-  
 end

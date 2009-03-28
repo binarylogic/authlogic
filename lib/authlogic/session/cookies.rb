@@ -1,6 +1,6 @@
 module Authlogic
   module Session
-    # Handles all authentication that deals with cookies, such as persisting a session and saving / destroying a session.
+    # Handles all authentication that deals with cookies, such as persisting, saving, and destroying.
     module Cookies
       def self.included(klass)
         klass.class_eval do
@@ -50,7 +50,8 @@ module Authlogic
       end
       
       # The methods available for an Authlogic::Session::Base object that make up the cookie feature set.
-      module InstanceMethods  
+      module InstanceMethods
+        # Allows you to set the remember_me option when passing credentials.
         def credentials=(value)
           super
           values = value.is_a?(Array) ? value : [value]
@@ -63,7 +64,8 @@ module Authlogic
           end
         end
         
-        def remember_me # :nodoc:
+        # Is the cookie going to expire after the session is over, or will it stick around?
+        def remember_me
           return @remember_me if defined?(@remember_me)
           @remember_me = self.class.remember_me
         end
@@ -73,7 +75,7 @@ module Authlogic
           @remember_me = value
         end
       
-        # Allows users to be remembered via a cookie.
+        # See remember_me
         def remember_me?
           remember_me == true || remember_me == "true" || remember_me == "1"
         end

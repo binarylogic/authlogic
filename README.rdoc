@@ -63,7 +63,7 @@ These modules are for the acts_as_authentic method you call in your model. It co
 These modules are for the "session side" of authentication. They create a new domain for session logic, allowing you to create, destroy, and ultimately manage your sessions.
 
 * Authlogic::Session::BruteForceProtection - Disables accounts after a certain number of consecutive failed logins attempted.
-* Authlogic::Session::Callbacks - Your tools to extend, change, or add onto Authlogic. Lets you hook in and do just about anything you want.
+* Authlogic::Session::Callbacks - Your tools to extend, change, or add onto Authlogic. Lets you hook in and do just about anything you want. Start here if you want to write a plugin or add on for Authlogic
 * Authlogic::Session::Cookies - Authentication via cookies.
 * Authlogic::Session::Existence - Creating, saving, and destroying objects.
 * Authlogic::Session::HttpAuth - Authentication via basic HTTP authentication.
@@ -184,9 +184,9 @@ This will create a file that looks similar to:
 The user model should have the following columns. The names of these columns can be changed with configuration. Better yet, Authlogic tries to guess these names by checking for the existence of common names. See the sub modules of Authlogic::Session for more details, but chances are you won't have to specify any configuration for your field names, even if they aren't the same names as below.
 
     t.string    :login,               :null => false                # optional, you can use email instead, or both
-    t.string    :crypted_password,    :null => false
+    t.string    :crypted_password,    :null => false                # required
     t.string    :password_salt,       :null => false                # optional, but highly recommended
-    t.string    :persistence_token,   :null => false
+    t.string    :persistence_token,   :null => false                # required
     t.string    :single_access_token, :null => false                # optional, see Authlogic::Session::Params
     t.string    :perishable_token,    :null => false                # optional, see Authlogic::Session::Perishability
     t.integer   :login_count,         :null => false, :default => 0 # optional, see Authlogic::Session::MagicColumns
@@ -221,7 +221,7 @@ Here are some common next steps. They might or might not apply to you. For a com
 6. Need to reset passwords or activate accounts? Use the perishable token. See Authlogic::ActsAsAuthentic::PerishableToken
 7. Need to give API access or access to a private feed? Use basic HTTP auth or authentication by params. See Authlogic::Session::HttpAuth or Authlogic::Session::Params
 8. Need to internationalize your app? See Authlogic::I18n
-9. Need help testing? See the Authlogic::Testing
+9. Need help testing? See the Authlogic::TestCase
 
 == Interested in how it works?
 

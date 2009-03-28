@@ -10,7 +10,7 @@ module Authlogic
       #     private
       #       def check_if_awesome
       #         errors.add(:login, "must contain awesome") if login && !login.include?("awesome")
-      #         errors.add_to_base("You must be awesome to log in") unless record.awesome?
+      #         errors.add_to_base("You must be awesome to log in") unless attempted_record.awesome?
       #       end
       #   end
       class Errors < ::ActiveRecord::Errors
@@ -39,7 +39,7 @@ module Authlogic
       #    private
       #      def check_if_awesome
       #        errors.add(:login, "must contain awesome") if login && !login.include?("awesome")
-      #        errors.add_to_base("You must be awesome to log in") unless record.awesome?
+      #        errors.add_to_base("You must be awesome to log in") unless attempted_record.awesome?
       #      end
       #  end
       def errors
