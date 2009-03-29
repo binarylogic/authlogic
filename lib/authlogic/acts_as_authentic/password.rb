@@ -40,6 +40,16 @@ module Authlogic
         end
         alias_method :validate_password_field=, :validate_password_field
         
+        # This allows you to set options to be applied to ANY of the validations called on the password field. So only use options
+        # that are universally supported by all of the validation functions. Such as :if or :unless, etc.
+        #
+        # * <tt>Default:</tt> {}
+        # * <tt>Accepts:</tt> A hash of options universally supported by the validation func
+        def validates_password_field_options(value = nil)
+          config(:validates_password_field_options, value, {})
+        end
+        alias_method :validates_password_field_options=, :validates_password_field_options
+        
         # A hash of options for the validates_length_of call for the password field. Allows you to change this however you want.
         #
         # * <tt>Default:</tt> {:minimum => 4, :if => :require_password?}
@@ -120,9 +130,9 @@ module Authlogic
         def self.included(klass)
           klass.class_eval do
             if validate_password_field
-              validates_length_of :password, validates_length_of_password_field_options
-              validates_confirmation_of :password, validates_confirmation_of_password_field_options
-              validates_length_of :password_confirmation, validates_length_of_password_confirmation_field_options
+              validates_length_of :password, validates_password_field_options.merge(validates_length_of_password_field_options)
+              validates_confirmation_of :password, validates_password_field_options.merge(validates_confirmation_of_password_field_options)
+              validates_length_of :password_confirmation, validates_password_field_options.merge(validates_length_of_password_confirmation_field_options)
             end
           end
         end
