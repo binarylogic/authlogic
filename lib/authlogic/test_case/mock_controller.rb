@@ -20,6 +20,10 @@ module Authlogic
       def cookie_domain
         nil
       end
+      
+      def logger
+        @logger ||= MockLogger.new
+      end
   
       def params
         @params ||= {}

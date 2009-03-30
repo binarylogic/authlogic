@@ -1,7 +1,8 @@
-require "authlogic/test_case/controller_adapter"
-require "authlogic/test_case/mock_cookie_jar"
-require "authlogic/test_case/mock_request"
-require "authlogic/test_case/mock_controller"
+require File.dirname(__FILE__) + "/test_case/controller_adapter"
+require File.dirname(__FILE__) + "/test_case/mock_cookie_jar"
+require File.dirname(__FILE__) + "/test_case/mock_controller"
+require File.dirname(__FILE__) + "/test_case/mock_logger"
+require File.dirname(__FILE__) + "/test_case/mock_request"
 
 module Authlogic
   # This is a collection of methods and classes that help you easily test Authlogic. In fact, I use these same tools

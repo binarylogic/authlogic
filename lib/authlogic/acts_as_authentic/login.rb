@@ -29,16 +29,6 @@ module Authlogic
         end
         alias_method :validate_login_field=, :validate_login_field
         
-        # This allows you to set options to be applied to ANY of the validations called on the login field. So only use options
-        # that are universally supported by all of the validation functions. Such as :if or :unless, etc.
-        #
-        # * <tt>Default:</tt> {}
-        # * <tt>Accepts:</tt> A hash of options universally supported by the validation func
-        def validates_login_field_options(value = nil)
-          config(:validates_login_field_options, value, {})
-        end
-        alias_method :validates_login_field_options=, :validates_login_field_options
-        
         # A hash of options for the validates_length_of call for the login field. Allows you to change this however you want.
         #
         # * <tt>Default:</tt> {:within => 6..100}
@@ -72,9 +62,9 @@ module Authlogic
         def self.included(klass)
           klass.class_eval do
             if validate_login_field && login_field
-              validates_length_of login_field, validates_login_field_options.merge(validates_length_of_login_field_options)
-              validates_format_of login_field, validates_login_field_options.merge(validates_format_of_login_field_options)
-              validates_uniqueness_of login_field, validates_login_field_options.merge(validates_uniqueness_of_login_field_options)
+              validates_length_of login_field, validates_length_of_login_field_options
+              validates_format_of login_field, validates_format_of_login_field_options
+              validates_uniqueness_of login_field, validates_uniqueness_of_login_field_options
             end
           end
         end

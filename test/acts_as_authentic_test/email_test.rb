@@ -22,17 +22,6 @@ module ActsAsAuthenticTest
       assert User.validate_email_field
     end
     
-    def test_validates_email_field_options_config
-      default = {}
-      assert_equal default, User.validates_email_field_options
-      assert_equal default, Employee.validates_email_field_options
-      
-      User.validates_email_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_email_field_options)
-      User.validates_email_field_options default
-      assert_equal default, User.validates_email_field_options
-    end
-    
     def test_validates_length_of_email_field_options_config
       assert_equal({:within => 6..100}, User.validates_length_of_email_field_options)
       assert_equal({:within => 6..100}, Employee.validates_length_of_email_field_options)

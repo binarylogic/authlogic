@@ -1,7 +1,6 @@
 == 2.0.5
 
 * Stub out authenticate_with_http_basic for TestCase::Controller adapter.
-* Added validates_login_field_options, validates_email_field_options, and validates_password_field_options to apply universal options for each fields validation calls.
 
 == 2.0.4 released 2009-3-28
 

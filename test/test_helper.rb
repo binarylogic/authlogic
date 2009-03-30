@@ -2,7 +2,7 @@ require "test/unit"
 require "rubygems"
 require "ruby-debug"
 require "active_record"
-require 'active_record/fixtures'
+require "active_record/fixtures"
 
 ActiveRecord::Schema.verbose = false
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :dbfile => ":memory:")
