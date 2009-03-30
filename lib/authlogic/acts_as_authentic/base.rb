@@ -41,9 +41,14 @@ module Authlogic
         # nothing to do with Authlogic.
         #
         # That being said, this is your tool for extending Authlogic and "hooking" into the acts_as_authentic call.
-        def add_acts_as_authentic_module(mod)
+        def add_acts_as_authentic_module(mod, action = :append)
           modules = acts_as_authentic_modules
-          modules << mod
+          case action
+          when :append
+            modules << mod
+          when :prepend
+            modules = [mod] + modules
+          end
           modules.uniq!
           write_inheritable_attribute(:acts_as_authentic_modules, modules)
         end

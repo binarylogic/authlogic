@@ -58,6 +58,7 @@ lib/authlogic/test_case.rb
 lib/authlogic/test_case/controller_adapter.rb
 lib/authlogic/test_case/mock_controller.rb
 lib/authlogic/test_case/mock_cookie_jar.rb
+lib/authlogic/test_case/mock_logger.rb
 lib/authlogic/test_case/mock_request.rb
 lib/authlogic/version.rb
 shoulda_macros/authlogic.rb
