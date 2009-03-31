@@ -4,7 +4,6 @@ module Authlogic
     # a request is made, ultimately letting you log in users in functional tests.
     class ControllerAdapter < ControllerAdapters::AbstractAdapter
       def authenticate_with_http_basic(&block)
-        controller.authenticate_with_http_basic(&block)
       end
       
       def cookies

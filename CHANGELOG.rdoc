@@ -1,6 +1,6 @@
 == 2.0.5 released 2009-3-30
 
-* Stub out authenticate_with_http_basic for TestCase::Controller adapter.
+* Stub out authenticate_with_http_basic for TestCase::ControllerAdapter.
 * Added second parameter for add_acts_as_authentic module to specify the position: append or prepend.
 
 == 2.0.4 released 2009-3-28
