@@ -5,6 +5,7 @@ module SessionTest
     class ClassMethodsTest < ActiveSupport::TestCase
       def test_human_attribute_name
         assert_equal "Some attribute", UserSession.human_attribute_name("some_attribute")
+        assert_equal "Some attribute", UserSession.human_attribute_name(:some_attribute)
       end
     
       def test_human_name

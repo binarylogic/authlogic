@@ -17,7 +17,7 @@ module Authlogic
         #   authlogic.attributes.user_session.login
         def human_attribute_name(attribute_key_name, options = {})
           options[:count] ||= 1
-          options[:default] ||= attribute_key_name.humanize
+          options[:default] ||= attribute_key_name.to_s.humanize
           I18n.t("attributes.#{name.underscore}.#{attribute_key_name}", options)
         end
         
