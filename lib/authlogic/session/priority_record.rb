@@ -16,7 +16,7 @@ module Authlogic
       def credentials=(value)
         super
         values = value.is_a?(Array) ? value : [value]
-        self.priority_record = values.second if values.second.class < ::ActiveRecord::Base
+        self.priority_record = values[1] if values[1].class < ::ActiveRecord::Base
       end
       
       private

@@ -1,3 +1,7 @@
+== 2.0.6
+
+* Don't use second, use [1] instead so older rails systems don't complain.
+
 == 2.0.5 released 2009-3-30
 
 * Stub out authenticate_with_http_basic for TestCase::ControllerAdapter.
