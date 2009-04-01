@@ -45,7 +45,7 @@ module Authlogic
   #       user_session: (or whatever name you are using)
   #         login: login
   #         email: email
-  #         passwword: password
+  #         password: password
   #         remember_me: remember me
   class I18n
     class << self
