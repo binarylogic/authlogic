@@ -64,7 +64,7 @@ module Authlogic
             return @email_regex if @email_regex
             email_name_regex  = '[\w\.%\+\-]+'
             domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
-            domain_tld_regex  = '(?:[A-Z]{2}|aero|ag|asia|at|be|biz|ca|cc|cn|com|de|edu|eu|fm|gov|gs|jobs|jp|in|info|me|mil|mobi|museum|ms|name|net|nu|nz|org|tc|tw|tv|uk|us|vg|ws)'
+            domain_tld_regex  = '(?:[A-Z]{2}|aero|ag|asia|at|be|biz|ca|cc|cn|com|de|edu|eu|fr|fm|gov|gr|gs|jobs|jp|in|info|me|mil|mobi|museum|ms|name|net|nu|nz|org|re|tc|tw|tv|uk|us|vg|ws)'
             @email_regex = /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
           end
       end
