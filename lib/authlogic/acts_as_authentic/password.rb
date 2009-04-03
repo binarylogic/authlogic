@@ -60,10 +60,10 @@ module Authlogic
         
         # A hash of options for the validates_length_of call for the password_confirmation field. Allows you to change this however you want.
         #
-        # * <tt>Default:</tt> {:minimum => 4, :if => :require_password_?}
+        # * <tt>Default:</tt> validates_length_of_password_field_options
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_password_confirmation_field_options(value = nil)
-          config(:validates_length_of_password_confirmation_field_options, value, {:minimum => 4, :if => :require_password?})
+          config(:validates_length_of_password_confirmation_field_options, value, validates_length_of_password_field_options)
         end
         alias_method :validates_length_of_password_confirmation_field_options=, :validates_length_of_password_confirmation_field_options
         
