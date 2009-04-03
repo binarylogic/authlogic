@@ -35,7 +35,9 @@ module Authlogic
     #
     # Tell acts_as_authentic to use it:
     #
-    #   acts_as_authentic :crypto_provider => Authlogic::CryptoProviders::BCrypt
+    #   acts_as_authentic do |c|
+    #     c.crypto_provider = Authlogic::CryptoProviders::BCrypt
+    #   end
     #
     # You are good to go!
     class BCrypt

@@ -2,8 +2,8 @@ require "digest/sha1"
 
 module Authlogic
   module CryptoProviders
-    # This class was made for the users transitioning from restful_authentication. I highly discourage using this crypto provider as it inferior to your other options.
-    # Please use any other provider offered by Authlogic.
+    # This class was made for the users transitioning from restful_authentication. I highly discourage using this
+    # crypto provider as it inferior to your other options. Please use any other provider offered by Authlogic.
     class Sha1
       class << self
         def join_token

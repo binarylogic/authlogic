@@ -1,4 +1,5 @@
 .DS_Store
+.swp
 *.log
 *.sqlite3
 pkg/*

@@ -29,7 +29,7 @@ module Authlogic
       module Methods
         def self.included(klass)
           return if !klass.column_names.include?("single_access_token")
-            
+          
           klass.class_eval do
             include InstanceMethods
             validates_uniqueness_of :single_access_token, :if => :single_access_token_changed?
