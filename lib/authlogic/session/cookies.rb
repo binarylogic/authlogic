@@ -98,13 +98,15 @@ module Authlogic
           end
           
           def cookie_credentials
-            controller.cookies[cookie_key]
+            controller.cookies[cookie_key] && controller.cookies[cookie_key].split("::")
           end
           
           # Tries to validate the session from information in the cookie
           def persist_by_cookie
-            if cookie_credentials
-              self.unauthorized_record = search_for_record("find_by_persistence_token", cookie_credentials)
+            persistence_token, record_id = cookie_credentials
+            if !persistence_token.nil?
+              record = record_id.nil? ? search_for_record("find_by_persistence_token", persistence_token) : search_for_record("find_by_#{klass.primary_key}", record_id)
+              self.unauthorized_record = record if record && record.persistence_token == persistence_token
               valid?
             else
               false
@@ -113,7 +115,7 @@ module Authlogic
         
           def save_cookie
             controller.cookies[cookie_key] = {
-              :value => record.persistence_token,
+              :value => "#{record.persistence_token}::#{record.send(record.class.primary_key)}",
               :expires => remember_me_until,
               :domain => controller.cookie_domain
             }

@@ -7,7 +7,7 @@ module Authlogic
       end
       
       def cookies
-        new_cookies = {}
+        new_cookies = MockCookieJar.new
         super.each do |key, value|
           new_cookies[key] = value[:value]
         end

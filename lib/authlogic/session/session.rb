@@ -49,7 +49,7 @@ module Authlogic
           def session_key
             build_key(self.class.session_key)
           end
-        
+          
           def update_session
             controller.session[session_key] = record && record.persistence_token
             controller.session["#{session_key}_#{klass.primary_key}"] = record && record.send(record.class.primary_key)

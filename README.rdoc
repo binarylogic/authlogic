@@ -2,11 +2,11 @@
 
 Authlogic is a clean, simple, and unobtrusive ruby authentication solution.
 
-What inspired me to create Authlogic was the messiness of the current authentication solutions. Put simply, they just didn't feel right. They felt wrong because the logic was not organized properly. As you may know, a common misconception with the MVC design pattern is that the model "M" is only for data access logic, which is wrong. A model is a place for domain logic. This is why the RESTful design pattern and the current authentication solutions don't play nice. Authlogic solves this by placing the session maintenance logic into its own domain (aka "model"). Moving session maintenance into its own domain has its benefits:
+What inspired me to create Authlogic was the messiness of the current authentication solutions. Put simply, they just didn't feel right, because the logic was not organized properly. As you may know, a common misconception with the MVC design pattern is that the model "M" is only for data access logic, which is wrong. A model is a place for domain logic. This is why the RESTful design pattern and the current authentication solutions don't play nice. Authlogic solves this by placing the session maintenance logic into its own domain (aka "model"). Moving session maintenance into its own domain has its benefits:
 
-1. It's easier to update and stay current with the latest security practices. Since authlogic sits in between you and your session it can assist in keeping your security top notch. Such as upgrading your hashing algorithm, helping you transition to a new algorithm, etc. Also, Authlogic is a gem, which means you get all of these benefits easily, through a rubygems update.
+1. It's easier to update and stay current with the latest security practices. Since authlogic sits in between you and your session it can assist in keeping your security up to date. For example: upgrading your hashing algorithm, helping you transition to a new algorithm, etc. Since all of this logic is in the Authlogic library, staying up to date is as easy as updating the library.
 2. It ties everything together on the domain level. Take a new user registration for example, no reason to manually log the user in, authlogic handles this for you via callbacks. The same applies to a user changing their password. Authlogic handles maintaining the session for you.
-3. Your application can stay clean and focused and free of redundant authentication code from app to app. Meaning generators are *NOT* necessary at all.
+3. Your application can stay clean, focused, and free of redundant authentication code from app to app. Meaning generators are *NOT* necessary. Not any more neccessary than any other control
 4. A byproduct of #3 is that you don't have to test the same code over and over in each of your apps. You don't test the internals of ActiveRecord in each of your apps, so why would you test the internals of Authlogic? It's already been thoroughly tested for you. Focus on your application, and get rid of the noise by testing your application specific code and not generated code that you didn't write.
 5. You get to write your own code, just like you do for any other model. Meaning the code you write is specific to your application, the way you want it, and more importantly you understand it.
 6. You are not restricted to a single session. Think about Apple's me.com, where they need you to authenticate a second time before changing your billing information. Why not just create a second session for this? It works just like your initial session. Then your billing controller can require an "ultra secure" session.
@@ -16,7 +16,6 @@ Authlogic can do all of this and much more, keep reading to see...
 == Helpful links
 
 *	<b>Documentation:</b> http://authlogic.rubyforge.org
-*	<b>Official Authlogic OpenID addon:</b> http://github.com/binarylogic/authlogic_openid
 *	<b>Live example with OpenID & source code:</b> http://authlogicexample.binarylogic.com
 *	<b>Tutorial: Authlogic basic setup:</b> http://www.binarylogic.com/2008/11/3/tutorial-authlogic-basic-setup
 *	<b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
@@ -26,7 +25,13 @@ Authlogic can do all of this and much more, keep reading to see...
 * <b>Google group:</b> http://groups.google.com/group/authlogic
 
 **Before contacting me, please read:**
-If you find a bug or a problem please post it on lighthouse. If you need help with something, please use google groups. I check both regularly and get emails when anything happens, so that is the best place to get help. Please do not email me directly, with issues regarding Authlogic.
+If you find a bug or a problem please post it on lighthouse. If you need help with something, please use google groups. I check both regularly and get emails when anything happens, so that is the best place to get help. Please do not email me directly with issues regarding Authlogic.
+
+== Authlogic "add on" directory
+
+*	<b>Authlogic OpenID addon:</b> http://github.com/binarylogic/authlogic_openid
+
+If you create one of your own, please let me know about it so I can add it to this list.
 
 == Documentation
 

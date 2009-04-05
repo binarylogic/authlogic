@@ -4,6 +4,7 @@
 * Update email regular expression to be less TLD specific: (?:[A-Z]{2,4}|museum|travel)
 * Update shoulda macro for 2.0
 * validates_length_of_password_confirmation_field_options defaults to validates_confirmation_of_password_field_options
+* Use MockCookieJar in tests instead of a Hash.
 
 == 2.0.5 released 2009-3-30
 
