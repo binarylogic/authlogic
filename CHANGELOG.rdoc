@@ -5,6 +5,8 @@
 * Update shoulda macro for 2.0
 * validates_length_of_password_confirmation_field_options defaults to validates_confirmation_of_password_field_options
 * Use MockCookieJar in tests instead of a Hash.
+* Cookies now store the record id as well, for faster lookup. Also to avoid the need to use sessions since sessions are lazily loaded in rails 2.3+
+* Add configuration option for Authlogic::ActsAsAuthentic: ignore_blank_passwords
 
 == 2.0.5 released 2009-3-30
 

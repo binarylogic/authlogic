@@ -22,6 +22,16 @@ module ActsAsAuthenticTest
       assert_equal :password_salt, User.password_salt_field
     end
     
+    def test_ignore_blank_passwords_config
+      assert User.ignore_blank_passwords
+      assert Employee.ignore_blank_passwords
+      
+      User.ignore_blank_passwords = false
+      assert !User.ignore_blank_passwords
+      User.ignore_blank_passwords true
+      assert User.ignore_blank_passwords
+    end
+    
     def test_validate_password_field_config
       assert User.validate_password_field
       assert Employee.validate_password_field

@@ -31,6 +31,22 @@ module Authlogic
         end
         alias_method :password_salt_field=, :password_salt_field
         
+        # By default passwords are required when a record is new or the crypted_password is blank, but if both of these things
+        # are met a password is not required. In this case, blank passwords are ignored.
+        #
+        # Think about a profile page, where the user can edit all of their information, including changing their password.
+        # If they do not want to change their password they just leave the fields blank. This will try to set the password to
+        # a blank value, in which case is incorrect behavior. As such, Authlogic ignores this. But let's say you have a completely
+        # separate page for resetting passwords, you might not want to ignore blank passwords. If this is the case for you, then
+        # just set this value to false.
+        #
+        # * <tt>Default:</tt> true
+        # * <tt>Accepts:</tt> Boolean
+        def ignore_blank_passwords(value = nil)
+          config(:ignore_blank_passwords, value, true)
+        end
+        alias_method :ignore_blank_passwords=, :ignore_blank_passwords
+        
         # Whether or not to validate the password field.
         #
         # * <tt>Default:</tt> true
@@ -135,7 +151,7 @@ module Authlogic
         # This is a virtual method. Once a password is passed to it, it will create new password salt as well as encrypt
         # the password.
         def password=(pass)
-          return if pass.blank?
+          return if ignore_blank_passwords? && pass.blank?
           before_password_set
           @password = pass
           send("#{password_salt_field}=", Authlogic::Random.friendly_token) if password_salt_field
@@ -203,6 +219,10 @@ module Authlogic
           
           def require_password?
             new_record? || password_changed? || send(crypted_password_field).blank?
+          end
+          
+          def ignore_blank_passwords?
+            self.class.ignore_blank_passwords == true
           end
           
           def password_changed?
