@@ -7,6 +7,7 @@
 * Use MockCookieJar in tests instead of a Hash.
 * Cookies now store the record id as well, for faster lookup. Also to avoid the need to use sessions since sessions are lazily loaded in rails 2.3+
 * Add configuration option for Authlogic::ActsAsAuthentic: ignore_blank_passwords
+* Fix cookie_domain in rails adapter
 
 == 2.0.5 released 2009-3-30
 
