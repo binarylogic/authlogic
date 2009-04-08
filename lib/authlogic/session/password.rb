@@ -5,7 +5,7 @@ module Authlogic
       def self.included(klass)
         klass.class_eval do
           extend Config
-          include InstanceMethods
+          include Methods
           validate :validate_by_password, :if => :authenticating_with_password?
           
           class << self
@@ -41,19 +41,19 @@ module Authlogic
         # login with a field called "login" and then find users by email this is compeltely doable. See the find_by_login_method configuration
         # option for more details.
         #
-        # * <tt>Default:</tt> Uses the configuration option in your model: User.login_field
+        # * <tt>Default:</tt> klass.login_field || klass.email_field
         # * <tt>Accepts:</tt> Symbol or String
         def login_field(value = nil)
           config(:login_field, value, klass.login_field || klass.email_field)
         end
         alias_method :login_field=, :login_field
         
-        # Works exactly like login_field, but for the password instead.
+        # Works exactly like login_field, but for the password instead. Returns :password if a login_field exists.
         #
         # * <tt>Default:</tt> :password
         # * <tt>Accepts:</tt> Symbol or String
         def password_field(value = nil)
-          config(:password_field, value, :password)
+          config(:password_field, value, login_field && :password)
         end
         alias_method :password_field=, :password_field
         
@@ -68,21 +68,26 @@ module Authlogic
       end
       
       # Password related instance methods
-      module InstanceMethods
+      module Methods
         def initialize(*args)
           if !self.class.configured_password_methods
-            self.class.send(:attr_writer, login_field) if !respond_to?("#{login_field}=")
-            self.class.send(:attr_reader, login_field) if !respond_to?(login_field)
-            self.class.send(:attr_writer, password_field) if !respond_to?("#{password_field}=")
-            self.class.send(:define_method, password_field) {} if !respond_to?(password_field)
+            if login_field
+              self.class.send(:attr_writer, login_field) if !respond_to?("#{login_field}=")
+              self.class.send(:attr_reader, login_field) if !respond_to?(login_field)
+            end
+            
+            if password_field
+              self.class.send(:attr_writer, password_field) if !respond_to?("#{password_field}=")
+              self.class.send(:define_method, password_field) {} if !respond_to?(password_field)
 
-            self.class.class_eval <<-"end_eval", __FILE__, __LINE__
-              private
-                # The password should not be accessible publicly. This way forms using form_for don't fill the password with the attempted password. The prevent this we just create this method that is private.
-                def protected_#{password_field}
-                  @#{password_field}
-                end
-            end_eval
+              self.class.class_eval <<-"end_eval", __FILE__, __LINE__
+                private
+                  # The password should not be accessible publicly. This way forms using form_for don't fill the password with the attempted password. The prevent this we just create this method that is private.
+                  def protected_#{password_field}
+                    @#{password_field}
+                  end
+              end_eval
+            end
 
             self.class.configured_password_methods = true
           end
@@ -114,7 +119,7 @@ module Authlogic
         
         private
           def authenticating_with_password?
-            !send(login_field).nil? || !send("protected_#{password_field}").nil?
+            login_field && (!send(login_field).nil? || !send("protected_#{password_field}").nil?)
           end
           
           def validate_by_password

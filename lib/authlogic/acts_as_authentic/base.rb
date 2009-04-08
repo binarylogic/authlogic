@@ -73,9 +73,9 @@ module Authlogic
             end
           end
 
-          def first_column_to_exist(*columns_to_check) # :nodoc:
+          def first_column_to_exist(*columns_to_check)
             columns_to_check.each { |column_name| return column_name.to_sym if column_names.include?(column_name.to_s) }
-            columns_to_check.first ? columns_to_check.first.to_sym : nil
+            columns_to_check.first && columns_to_check.first.to_sym
           end
 
       end

@@ -18,7 +18,7 @@ module Authlogic
         # * <tt>Default:</tt> :crypted_password, :encrypted_password, :password_hash, or :pw_hash
         # * <tt>Accepts:</tt> Symbol
         def crypted_password_field(value = nil)
-          config(:crypted_password_field, value, first_column_to_exist(:crypted_password, :encrypted_password, :password_hash, :pw_hash))
+          config(:crypted_password_field, value, first_column_to_exist(nil, :crypted_password, :encrypted_password, :password_hash, :pw_hash))
         end
         alias_method :crypted_password_field=, :crypted_password_field
         
@@ -118,6 +118,7 @@ module Authlogic
         ]
         
         def self.included(klass)
+          return if !klass.column_names.include?(klass.crypted_password_field.to_s)
           klass.define_callbacks *METHODS
         end
         
@@ -134,7 +135,11 @@ module Authlogic
       # The methods related to the password field.
       module Methods
         def self.included(klass)
+          return if !klass.column_names.include?(klass.crypted_password_field.to_s)
+          
           klass.class_eval do
+            include InstanceMethods
+            
             if validate_password_field
               validates_length_of :password, validates_length_of_password_field_options
               validates_confirmation_of :password, validates_confirmation_of_password_field_options
@@ -143,107 +148,109 @@ module Authlogic
           end
         end
         
-        # The password
-        def password
-          @password
-        end
+        module InstanceMethods
+          # The password
+          def password
+            @password
+          end
         
-        # This is a virtual method. Once a password is passed to it, it will create new password salt as well as encrypt
-        # the password.
-        def password=(pass)
-          return if ignore_blank_passwords? && pass.blank?
-          before_password_set
-          @password = pass
-          send("#{password_salt_field}=", Authlogic::Random.friendly_token) if password_salt_field
-          send("#{crypted_password_field}=", crypto_provider.encrypt(*encrypt_arguments(@password, act_like_restful_authentication? ? :restful_authentication : nil)))
-          @password_changed = true
-          after_password_set
-        end
+          # This is a virtual method. Once a password is passed to it, it will create new password salt as well as encrypt
+          # the password.
+          def password=(pass)
+            return if ignore_blank_passwords? && pass.blank?
+            before_password_set
+            @password = pass
+            send("#{password_salt_field}=", Authlogic::Random.friendly_token) if password_salt_field
+            send("#{crypted_password_field}=", crypto_provider.encrypt(*encrypt_arguments(@password, act_like_restful_authentication? ? :restful_authentication : nil)))
+            @password_changed = true
+            after_password_set
+          end
         
-        # Accepts a raw password to determine if it is the correct password or not.
-        def valid_password?(attempted_password)
-          return false if attempted_password.blank? || send(crypted_password_field).blank?
+          # Accepts a raw password to determine if it is the correct password or not.
+          def valid_password?(attempted_password)
+            return false if attempted_password.blank? || send(crypted_password_field).blank?
           
-          before_password_verification
+            before_password_verification
           
-          crypto_providers = [crypto_provider] + transition_from_crypto_providers
-          crypto_providers.each_with_index do |encryptor, index|
-            # The arguments_type of for the transitioning from restful_authentication
-            arguments_type = (act_like_restful_authentication? && index == 0) ||
-              (transition_from_restful_authentication? && index > 0 && encryptor == Authlogic::CryptoProviders::Sha1) ?
-              :restful_authentication : nil
+            crypto_providers = [crypto_provider] + transition_from_crypto_providers
+            crypto_providers.each_with_index do |encryptor, index|
+              # The arguments_type of for the transitioning from restful_authentication
+              arguments_type = (act_like_restful_authentication? && index == 0) ||
+                (transition_from_restful_authentication? && index > 0 && encryptor == Authlogic::CryptoProviders::Sha1) ?
+                :restful_authentication : nil
             
-            if encryptor.matches?(send(crypted_password_field), *encrypt_arguments(attempted_password, arguments_type))
-              # If we are transitioning from an older encryption algorithm and the password is still using the old algorithm
-              # then let's reset the password using the new algorithm. If the algorithm has a cost (BCrypt) and the cost has changed, update the password with
-              # the new cost.
-              if index > 0 || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(send(crypted_password_field)))
-                self.password = attempted_password
-                save(false)
+              if encryptor.matches?(send(crypted_password_field), *encrypt_arguments(attempted_password, arguments_type))
+                # If we are transitioning from an older encryption algorithm and the password is still using the old algorithm
+                # then let's reset the password using the new algorithm. If the algorithm has a cost (BCrypt) and the cost has changed, update the password with
+                # the new cost.
+                if index > 0 || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(send(crypted_password_field)))
+                  self.password = attempted_password
+                  save(false)
+                end
+              
+                after_password_verification
+              
+                return true
               end
-              
-              after_password_verification
-              
-              return true
             end
-          end
           
-          false
-        end
+            false
+          end
         
-        # Resets the password to a random friendly token.
-        def reset_password
-          friendly_token = Authlogic::Random.friendly_token
-          self.password = friendly_token
-          self.password_confirmation = friendly_token
-        end
-        alias_method :randomize_password, :reset_password
+          # Resets the password to a random friendly token.
+          def reset_password
+            friendly_token = Authlogic::Random.friendly_token
+            self.password = friendly_token
+            self.password_confirmation = friendly_token
+          end
+          alias_method :randomize_password, :reset_password
         
-        # Resets the password to a random friendly token and then saves the record.
-        def reset_password!
-          reset_password
-          save_without_session_maintenance(false)
-        end
-        alias_method :randomize_password!, :reset_password!
+          # Resets the password to a random friendly token and then saves the record.
+          def reset_password!
+            reset_password
+            save_without_session_maintenance(false)
+          end
+          alias_method :randomize_password!, :reset_password!
         
-        private
-          def encrypt_arguments(raw_password, arguments_type = nil)
-            salt = password_salt_field ? send(password_salt_field) : nil
-            case arguments_type
-            when :restful_authentication
-              [REST_AUTH_SITE_KEY, salt, raw_password, REST_AUTH_SITE_KEY].compact
-            else
-              [raw_password, salt].compact
+          private
+            def encrypt_arguments(raw_password, arguments_type = nil)
+              salt = password_salt_field ? send(password_salt_field) : nil
+              case arguments_type
+              when :restful_authentication
+                [REST_AUTH_SITE_KEY, salt, raw_password, REST_AUTH_SITE_KEY].compact
+              else
+                [raw_password, salt].compact
+              end
             end
-          end
           
-          def require_password?
-            new_record? || password_changed? || send(crypted_password_field).blank?
-          end
+            def require_password?
+              new_record? || password_changed? || send(crypted_password_field).blank?
+            end
           
-          def ignore_blank_passwords?
-            self.class.ignore_blank_passwords == true
-          end
+            def ignore_blank_passwords?
+              self.class.ignore_blank_passwords == true
+            end
           
-          def password_changed?
-            @password_changed == true
-          end
+            def password_changed?
+              @password_changed == true
+            end
           
-          def crypted_password_field
-            self.class.crypted_password_field
-          end
+            def crypted_password_field
+              self.class.crypted_password_field
+            end
           
-          def password_salt_field
-            self.class.password_salt_field
-          end
+            def password_salt_field
+              self.class.password_salt_field
+            end
           
-          def crypto_provider
-            self.class.crypto_provider
-          end
+            def crypto_provider
+              self.class.crypto_provider
+            end
           
-          def transition_from_crypto_providers
-            self.class.transition_from_crypto_providers
-          end
+            def transition_from_crypto_providers
+              self.class.transition_from_crypto_providers
+            end
+        end
       end
     end
   end
