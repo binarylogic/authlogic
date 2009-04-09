@@ -11,7 +11,8 @@
 * Make password and login fields optional. This allows you to have an alternate authentication method as your main authentication source. Such as OpenID, LDAP, or whatever you want.
 * Reset the @password_changed instance variable after the record has been saved.
 * Add referer and user_agent to mock requests for testing purposes.
-* Add :case_sensitive => false to validates_uniqueness of calls on the login and email fields.
+* Add :case_sensitive => false to validates_uniqueness_of calls on the login and email fields.
+* MockRequest not tries to use controller.env['REMOTE_ADDR'] for the IP address in tests.
 
 == 2.0.5 released 2009-3-30
 

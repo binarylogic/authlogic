@@ -89,5 +89,12 @@ module ActsAsAuthenticTest
       assert !u.valid?
       assert !u.errors.on(:login)
     end
+    
+    def test_find_with_login
+      ben = users(:ben)
+      assert_equal ben, User.find_with_login("bjohnson")
+      assert_equal ben, User.find_with_login("BJOHNSON")
+      assert_equal ben, User.find_with_login("Bjohnson")
+    end
   end
 end
