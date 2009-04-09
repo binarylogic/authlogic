@@ -238,7 +238,7 @@ module Authlogic
             end
             
             def reset_password_changed
-              @password_changed = false
+              @password_changed = nil
             end
           
             def crypted_password_field
