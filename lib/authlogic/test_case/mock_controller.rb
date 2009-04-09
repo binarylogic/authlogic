@@ -30,7 +30,7 @@ module Authlogic
       end
   
       def request
-        @request ||= MockRequest.new
+        @request ||= MockRequest.new(controller)
       end
   
       def request_content_type

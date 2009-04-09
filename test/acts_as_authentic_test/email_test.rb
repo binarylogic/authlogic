@@ -44,7 +44,7 @@ module ActsAsAuthenticTest
     end
     
     def test_validates_uniqueness_of_email_field_options_config
-      default = {:scope => Employee.validations_scope, :if => "#{Employee.email_field}_changed?".to_sym}
+      default = {:case_sensitive => false, :scope => Employee.validations_scope, :if => "#{Employee.email_field}_changed?".to_sym}
       assert_equal default, Employee.validates_uniqueness_of_email_field_options
       
       Employee.validates_uniqueness_of_email_field_options = {:yes => "no"}
@@ -78,6 +78,10 @@ module ActsAsAuthenticTest
     def test_validates_uniqueness_of_email_field
       u = User.new
       u.email = "bjohnson@binarylogic.com"
+      assert !u.valid?
+      assert u.errors.on(:email)
+      
+      u.email = "BJOHNSON@binarylogic.com"
       assert !u.valid?
       assert u.errors.on(:email)
       

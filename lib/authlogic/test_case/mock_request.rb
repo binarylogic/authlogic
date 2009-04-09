@@ -1,6 +1,12 @@
 module Authlogic
   module TestCase
     class MockRequest # :nodoc:
+      attr_accessor :controller
+      
+      def initialize(controller)
+        self.controller = controller
+      end
+      
       def request_method
         nil
       end
@@ -9,7 +15,7 @@ module Authlogic
       end
       
       def remote_ip
-        "1.1.1.1"
+        (controller && controller.respond_to?(:env) && controller.env.is_a?(Hahs) && controller.env['REMOTE_ADDR']) || "1.1.1.1"
       end
       
       def user_agent

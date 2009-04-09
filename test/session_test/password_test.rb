@@ -79,6 +79,13 @@ module SessionTest
         assert Time.now >= session.record.current_login_at
         assert_equal "1.1.1.1", session.record.current_login_ip
       end
+      
+      def test_find_by_is_case_insensitive
+        ben = users(:ben)
+        assert_equal ben, User.find_by_login("bjohnson")
+        assert_equal ben, User.find_by_login("Bjohnson")
+        assert_equal ben, User.find_by_login("BJOHNSON")
+      end
     end
   end
 end

@@ -44,7 +44,7 @@ module ActsAsAuthenticTest
     end
     
     def test_validates_uniqueness_of_login_field_options_config
-      default = {:scope => User.validations_scope, :if => "#{User.login_field}_changed?".to_sym}
+      default = {:case_sensitive => false, :scope => User.validations_scope, :if => "#{User.login_field}_changed?".to_sym}
       assert_equal default, User.validates_uniqueness_of_login_field_options
       
       User.validates_uniqueness_of_login_field_options = {:yes => "no"}
@@ -78,6 +78,10 @@ module ActsAsAuthenticTest
     def test_validates_uniqueness_of_login_field
       u = User.new
       u.login = "bjohnson"
+      assert !u.valid?
+      assert u.errors.on(:login)
+      
+      u.login = "BJOHNSON"
       assert !u.valid?
       assert u.errors.on(:login)
       

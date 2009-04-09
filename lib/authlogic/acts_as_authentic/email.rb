@@ -52,10 +52,10 @@ module Authlogic
         
         # A hash of options for the validates_uniqueness_of call for the email field. Allows you to change this however you want.
         #
-        # * <tt>Default:</tt> {:scope => validations_scope, :if => "#{email_field}_changed?".to_sym}
+        # * <tt>Default:</tt> {:case_sensitive => false, :scope => validations_scope, :if => "#{email_field}_changed?".to_sym}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_uniqueness_of
         def validates_uniqueness_of_email_field_options(value = nil)
-          config(:validates_uniqueness_of_email_field_options, value, {:scope => validations_scope, :if => "#{email_field}_changed?".to_sym})
+          config(:validates_uniqueness_of_email_field_options, value, {:case_sensitive => false, :scope => validations_scope, :if => "#{email_field}_changed?".to_sym})
         end
         alias_method :validates_uniqueness_of_email_field_options=, :validates_uniqueness_of_email_field_options
         
