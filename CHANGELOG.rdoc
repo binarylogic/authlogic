@@ -1,4 +1,8 @@
-== 2.0.6
+== 2.0.7
+
+* Rename TestCase::ControllerAdapter to TestCase::RailsRequestAdapter to help clarify it's usage.
+
+== 2.0.6 release 2009-4-9
 
 * Don't use second, use [1] instead so older rails systems don't complain.
 * Update email regular expression to be less TLD specific: (?:[A-Z]{2,4}|museum|travel)

@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/test_case/controller_adapter"
+require File.dirname(__FILE__) + "/test_case/rails_request_adapter"
 require File.dirname(__FILE__) + "/test_case/mock_cookie_jar"
 require File.dirname(__FILE__) + "/test_case/mock_controller"
 require File.dirname(__FILE__) + "/test_case/mock_logger"
@@ -64,7 +64,7 @@ module Authlogic
     #
     #   setup :activate_authlogic
     def activate_authlogic
-      Authlogic::Session::Base.controller = (@request && Authlogic::TestCase::ControllerAdapter.new(@request)) || controller
+      Authlogic::Session::Base.controller = (@request && Authlogic::TestCase::RailsRequestAdapter.new(@request)) || controller
     end
     
     # The Authlogic::TestCase::MockController object passed to Authlogic to activate it. You can access this in your test.

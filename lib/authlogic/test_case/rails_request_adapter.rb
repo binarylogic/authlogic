@@ -2,7 +2,7 @@ module Authlogic
   module TestCase
     # Adapts authlogic to work with the @request object when testing. This way Authlogic can set cookies and what not before
     # a request is made, ultimately letting you log in users in functional tests.
-    class ControllerAdapter < ControllerAdapters::AbstractAdapter
+    class RailsRequestAdapter < ControllerAdapters::AbstractAdapter
       def authenticate_with_http_basic(&block)
       end
       
