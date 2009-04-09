@@ -16,7 +16,7 @@ Authlogic can do all of this and much more, keep reading to see...
 == Helpful links
 
 *	<b>Documentation:</b> http://authlogic.rubyforge.org
-*	<b>Live example with OpenID & source code:</b> http://authlogicexample.binarylogic.com
+*	<b>Live example with OpenID "add on" & source code:</b> http://authlogicexample.binarylogic.com
 *	<b>Tutorial: Authlogic basic setup:</b> http://www.binarylogic.com/2008/11/3/tutorial-authlogic-basic-setup
 *	<b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
 *	<b>Tutorial: Easily migrate from restful_authentication:</b> http://www.binarylogic.com/2008/11/23/tutorial-easily-migrate-from-restful_authentication-to-authlogic
@@ -24,12 +24,16 @@ Authlogic can do all of this and much more, keep reading to see...
 * <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
 * <b>Google group:</b> http://groups.google.com/group/authlogic
 
-**Before contacting me, please read:**
-If you find a bug or a problem please post it on lighthouse. If you need help with something, please use google groups. I check both regularly and get emails when anything happens, so that is the best place to get help. Please do not email me directly with issues regarding Authlogic.
+<b>Before contacting me, please read:</b>
+
+If you find a bug or a problem please post it on lighthouse. If you need help with something, please use google groups. I check both regularly and get emails when anything happens, so that is the best place to get help.
+
+Please do not email me directly with issues regarding Authlogic. This is an inefficient way to get help because it doesn't help people who have the same problem in the future.
 
 == Authlogic "add ons"
 
 *	<b>Authlogic OpenID addon:</b> http://github.com/binarylogic/authlogic_openid
+*	<b>Authlogic LDAP addon:</b> http://github.com/binarylogic/authlogic_ldap
 
 If you create one of your own, please let me know about it so I can add it to this list.
 

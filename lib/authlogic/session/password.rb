@@ -5,7 +5,7 @@ module Authlogic
       def self.included(klass)
         klass.class_eval do
           extend Config
-          include Methods
+          include InstanceMethods
           validate :validate_by_password, :if => :authenticating_with_password?
           
           class << self
@@ -68,7 +68,7 @@ module Authlogic
       end
       
       # Password related instance methods
-      module Methods
+      module InstanceMethods
         def initialize(*args)
           if !self.class.configured_password_methods
             if login_field
