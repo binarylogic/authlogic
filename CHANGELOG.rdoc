@@ -13,6 +13,8 @@
 * Add referer and user_agent to mock requests for testing purposes.
 * Add :case_sensitive => false to validates_uniqueness_of calls on the login and email fields.
 * MockRequest not tries to use controller.env['REMOTE_ADDR'] for the IP address in tests.
+* Add in custom find_with_email and find_with_login methods to perform case insensitive searches for databases that are case sensitive by default. This is only done if the :case_insensitive option for validates_uniqueness_of_login_field_options or validates_uniqueness_of_email_field_options is set to false. Which, as of this version, it is. If you are using MySQL this has been the default behavior all along. If you are using SQLite or Postgres this has NOT been the default behavior.
+* Added in exception explaining that you are using the old configuration for acts_as_authentic with an example of the new format.
 
 == 2.0.5 released 2009-3-30
 
