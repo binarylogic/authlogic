@@ -15,7 +15,7 @@ module Authlogic
       end
       
       def remote_ip
-        (controller && controller.respond_to?(:env) && controller.env.is_a?(Hahs) && controller.env['REMOTE_ADDR']) || "1.1.1.1"
+        (controller && controller.respond_to?(:env) && controller.env.is_a?(Hash) && controller.env['REMOTE_ADDR']) || "1.1.1.1"
       end
       
       def user_agent

@@ -1,6 +1,6 @@
-== 2.0.7
+== 2.0.7 release 2009-4-9
 
-* Rename TestCase::ControllerAdapter to TestCase::RailsRequestAdapter to help clarify it's usage.
+* Rename TestCase::ControllerAdapter to TestCase::RailsRequestAdapter to help clarify it's usage and fix a constant typo.
 
 == 2.0.6 release 2009-4-9
 
