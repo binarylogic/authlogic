@@ -16,8 +16,10 @@ module Authlogic
             extend ClassMethods
             include InstanceMethods
             
-            after_password_set :reset_persistence_token
-            after_password_verification :reset_persistence_token!, :if => :reset_persistence_token?
+            if respond_to?(:after_password_set) && respond_to?(:after_password_verification)
+              after_password_set :reset_persistence_token
+              after_password_verification :reset_persistence_token!, :if => :reset_persistence_token?
+            end
             
             validates_presence_of :persistence_token
             validates_uniqueness_of :persistence_token, :if => :persistence_token_changed?

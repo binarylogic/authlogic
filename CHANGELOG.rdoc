@@ -1,3 +1,7 @@
+== 2.0.9
+
+* Fix bug where hooks provided by the password module were called when the password module was not being used due to the fact that the password field did not exist.
+
 == 2.0.8 release 2009-4-9
 
 * Dont reset the @password_changed instance variable to false because its halts the callback chain, instead reset it to nil.

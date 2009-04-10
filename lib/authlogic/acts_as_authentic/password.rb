@@ -118,7 +118,7 @@ module Authlogic
         ]
         
         def self.included(klass)
-          return if !klass.column_names.include?(klass.crypted_password_field.to_s)
+          return if klass.crypted_password_field.nil?
           klass.define_callbacks *METHODS
         end
         
@@ -135,7 +135,7 @@ module Authlogic
       # The methods related to the password field.
       module Methods
         def self.included(klass)
-          return if !klass.column_names.include?(klass.crypted_password_field.to_s)
+          return if klass.crypted_password_field.nil?
           
           klass.class_eval do
             include InstanceMethods
