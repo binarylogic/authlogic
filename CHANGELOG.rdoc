@@ -1,4 +1,4 @@
-== 2.0.8
+== 2.0.8 release 2009-4-9
 
 * Dont reset the @password_changed instance variable to false because its halts the callback chain, instead reset it to nil.
 
