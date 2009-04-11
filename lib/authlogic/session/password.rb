@@ -32,10 +32,10 @@ module Authlogic
         # Now just specifcy the name of this method for this configuration option and you are all set. You can do anything you want here. Maybe you allow users to have multiple logins
         # and you want to search a has_many relationship, etc. The sky is the limit.
         #
-        # * <tt>Default:</tt> "find_by_case_insensitive_#{login_field}"
+        # * <tt>Default:</tt> "find_by_smart_case_login_field"
         # * <tt>Accepts:</tt> Symbol or String
         def find_by_login_method(value = nil)
-          config(:find_by_login_method, value, "find_with_#{login_field}")
+          config(:find_by_login_method, value, "find_by_smart_case_login_field")
         end
         alias_method :find_by_login_method=, :find_by_login_method
         

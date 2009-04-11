@@ -73,30 +73,10 @@ module Authlogic
       module Methods
         def self.included(klass)
           klass.class_eval do
-            extend ClassMethods
-            
             if validate_email_field && email_field
               validates_length_of email_field, validates_length_of_email_field_options
               validates_format_of email_field, validates_format_of_email_field_options
               validates_uniqueness_of email_field, validates_uniqueness_of_email_field_options
-            end
-          end
-        end
-        
-        # Class methods relating to the email field
-        module ClassMethods
-          # Calls alias_method if your email_field name is "out of the norm".
-          def self.included(klass)
-            klass.send(:alias_method, "find_with_email", "find_with_#{email_field}") if klass.email_field != :email
-          end
-          
-          # Please see the find_with_login method in Authlogic::ActsAsAuthentic::Login module. It's the same exact thing
-          # but for the login field instead of the email field.
-          def find_with_email(email)
-            if validates_uniqueness_of_email_field_options[:case_sensitive] == false
-              first(:conditions => ["LOWER(#{quoted_table_name}.#{email_field}) = ?", email.downcase])
-            else
-              send("find_by_#{email_field}", email)
             end
           end
         end

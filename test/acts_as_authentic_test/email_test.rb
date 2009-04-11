@@ -89,12 +89,5 @@ module ActsAsAuthenticTest
       assert !u.valid?
       assert !u.errors.on(:email)
     end
-    
-    def test_find_with_email
-      ben = users(:ben)
-      assert_equal ben, User.find_with_email("bjohnson@binarylogic.com")
-      assert_equal ben, User.find_with_email("bJohnson@binarylogic.com")
-      assert_equal ben, User.find_with_email("BJOHNSON@BINARYLOGIC.COM")
-    end
   end
 end

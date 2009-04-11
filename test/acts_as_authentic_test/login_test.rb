@@ -90,11 +90,16 @@ module ActsAsAuthenticTest
       assert !u.errors.on(:login)
     end
     
-    def test_find_with_login
+    def test_find_by_smart_case_login_field
       ben = users(:ben)
-      assert_equal ben, User.find_with_login("bjohnson")
-      assert_equal ben, User.find_with_login("BJOHNSON")
-      assert_equal ben, User.find_with_login("Bjohnson")
+      assert_equal ben, User.find_by_smart_case_login_field("bjohnson")
+      assert_equal ben, User.find_by_smart_case_login_field("BJOHNSON")
+      assert_equal ben, User.find_by_smart_case_login_field("Bjohnson")
+      
+      drew = employees(:drew)
+      assert_equal drew, Employee.find_by_smart_case_login_field("dgainor@binarylogic.com")
+      assert_equal drew, Employee.find_by_smart_case_login_field("Dgainor@binarylogic.com")
+      assert_equal drew, Employee.find_by_smart_case_login_field("DGAINOR@BINARYLOGIC.COM")
     end
   end
 end

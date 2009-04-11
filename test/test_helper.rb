@@ -69,11 +69,22 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string    :current_login_ip
     t.string    :last_login_ip
   end
+  
+  create_table :affiliates do |t|
+    t.datetime  :created_at      
+    t.datetime  :updated_at
+    t.integer   :company_id
+    t.string    :username
+    t.string    :pw_hash
+    t.string    :pw_salt
+    t.string    :persistence_token
+  end
 end
 
 require File.dirname(__FILE__) + '/../lib/authlogic' unless defined?(Authlogic)
 require File.dirname(__FILE__) + '/../lib/authlogic/test_case'
 require File.dirname(__FILE__) + '/libs/project'
+require File.dirname(__FILE__) + '/libs/affiliate'
 require File.dirname(__FILE__) + '/libs/employee'
 require File.dirname(__FILE__) + '/libs/employee_session'
 require File.dirname(__FILE__) + '/libs/user'

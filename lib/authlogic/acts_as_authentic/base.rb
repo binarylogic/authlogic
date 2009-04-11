@@ -61,13 +61,13 @@ module Authlogic
           acts_as_authentic_modules.delete(mod)
           acts_as_authentic_modules
         end
-      
+        
         private
           def acts_as_authentic_modules
             key = :acts_as_authentic_modules
             inheritable_attributes.include?(key) ? read_inheritable_attribute(key) : []
           end
-        
+          
           def config(key, value, default_value = nil, read_value = nil)
             if value == read_value
               inheritable_attributes.include?(key) ? read_inheritable_attribute(key) : default_value
@@ -75,12 +75,11 @@ module Authlogic
               write_inheritable_attribute(key, value)
             end
           end
-
+          
           def first_column_to_exist(*columns_to_check)
             columns_to_check.each { |column_name| return column_name.to_sym if column_names.include?(column_name.to_s) }
             columns_to_check.first && columns_to_check.first.to_sym
           end
-
       end
     end
   end
