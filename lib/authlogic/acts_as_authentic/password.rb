@@ -31,6 +31,16 @@ module Authlogic
         end
         alias_method :password_salt_field=, :password_salt_field
         
+        # Whether or not to require a password confirmation. If you don't want your users to confirm their password
+        # just set this to false.
+        #
+        # * <tt>Default:</tt> true
+        # * <tt>Accepts:</tt> Boolean
+        def require_password_confirmation(value = nil)
+          config(:require_password_confirmation, value, true)
+        end
+        alias_method :require_password_confirmation=, :require_password_confirmation
+        
         # By default passwords are required when a record is new or the crypted_password is blank, but if both of these things
         # are met a password is not required. In this case, blank passwords are ignored.
         #
@@ -56,15 +66,6 @@ module Authlogic
         end
         alias_method :validate_password_field=, :validate_password_field
         
-        # Whether or not to validate the length of the password field.
-        #
-        # * <tt>Default:</tt> true
-        # * <tt>Accepts:</tt> Boolean
-        def validate_length_of_password_field(value = nil)
-          config(:validate_length_of_password_field, value, true)
-        end
-        alias_method :validate_length_of_password_field=, :validate_length_of_password_field
-        
         # A hash of options for the validates_length_of call for the password field. Allows you to change this however you want.
         #
         # * <tt>Default:</tt> {:minimum => 4, :if => :require_password?}
@@ -74,15 +75,6 @@ module Authlogic
         end
         alias_method :validates_length_of_password_field_options=, :validates_length_of_password_field_options
         
-        # Whether or not to validate the confirmation of the password field.
-        #
-        # * <tt>Default:</tt> true
-        # * <tt>Accepts:</tt> Boolean
-        def validate_confirmation_of_password_field(value = nil)
-          config(:validate_confirmation_of_password_field, value, true)
-        end
-        alias_method :validate_confirmation_of_password_field=, :validate_confirmation_of_password_field
-        
         # A hash of options for the validates_confirmation_of call for the password field. Allows you to change this however you want.
         #
         # * <tt>Default:</tt> {:minimum => 4, :if => "#{password_salt_field}_changed?".to_sym}
@@ -91,15 +83,6 @@ module Authlogic
           config(:validates_confirmation_of_password_field_options, value, {:minimum => 4, :if => :require_password?})
         end
         alias_method :validates_confirmation_of_password_field_options=, :validates_confirmation_of_password_field_options
-        
-        # Whether or not to validate the length of the password confirmation field.
-        #
-        # * <tt>Default:</tt> true
-        # * <tt>Accepts:</tt> Boolean
-        def validate_length_of_password_confirmation_field(value = nil)
-          config(:validate_length_of_password_confirmation_field, value, true)
-        end
-        alias_method :validate_length_of_password_confirmation_field=, :validate_length_of_password_confirmation_field
         
         # A hash of options for the validates_length_of call for the password_confirmation field. Allows you to change this however you want.
         #
@@ -168,9 +151,12 @@ module Authlogic
             include InstanceMethods
             
             if validate_password_field
-              validates_length_of(:password, validates_length_of_password_field_options) if validate_length_of_password_field
-              validates_confirmation_of(:password, validates_confirmation_of_password_field_options) if validate_confirmation_of_password_field
-              validates_length_of(:password_confirmation, validates_length_of_password_confirmation_field_options) if validate_length_of_password_confirmation_field
+              validates_length_of :password, validates_length_of_password_field_options
+              
+              if require_password_confirmation
+                validates_confirmation_of :password, validates_confirmation_of_password_field_options
+                validates_length_of :password_confirmation, validates_length_of_password_confirmation_field_options
+              end
             end
             
             after_save :reset_password_changed
