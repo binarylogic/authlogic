@@ -7,19 +7,13 @@ module Authlogic
         self.controller = controller
       end
       
-      def request_method
-        nil
-      end
-      
-      def referer
-      end
-      
       def remote_ip
         (controller && controller.respond_to?(:env) && controller.env.is_a?(Hash) && controller.env['REMOTE_ADDR']) || "1.1.1.1"
       end
       
-      def user_agent
-      end
+      private
+        def method_missiing(*args, &block)
+        end
     end
   end
 end
