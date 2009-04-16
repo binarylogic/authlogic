@@ -31,7 +31,7 @@ module Authlogic
         
         # A hash of options for the validates_length_of call for the login field. Allows you to change this however you want.
         #
-        # * <tt>Default:</tt> {:within => 6..100}
+        # * <tt>Default:</tt> {:within => 3..100}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_login_field_options(value = nil)
           config(:validates_length_of_login_field_options, value, {:within => 3..100})

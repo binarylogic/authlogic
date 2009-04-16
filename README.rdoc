@@ -156,7 +156,7 @@ Or how about persisting the session...
       end
   end
 
-== Install and use
+== Quick Setup Tutorial
 
 === 1. Install the gem
 
@@ -173,7 +173,7 @@ Or you install this as a plugin (for older versions of rails)
 
   script/plugin install git://github.com/binarylogic/authlogic.git
 
-=== 2. Create your session
+=== 2. Create your UserSession Model
 
 Lets assume you are setting up a session for your User model.
 
@@ -185,12 +185,14 @@ This will create a file that looks similar to:
 
   # app/models/user_session.rb
   class UserSession < Authlogic::Session::Base
-    # configuration here, see sub modules of Authlogic::Session
+    # configuration here, see documentation for sub modules of Authlogic::Session
   end
+
+Remember all of those repetitive authentication methods you added in your controllers? All of that "cruft" is taken care of in this file. It basically sits in between you and the cookies. Similar to how ActiveRecord sits in between you and the database.
 
 === 3. Ensure proper database fields
 
-The user model should have the following columns. The names of these columns can be changed with configuration. Better yet, Authlogic tries to guess these names by checking for the existence of common names. See the sub modules of Authlogic::Session for more details, but chances are you won't have to specify any configuration for your field names, even if they aren't the same names as below.
+The user model should have the following columns. The names of these columns can be changed with configuration. Better yet, Authlogic tries to guess these names by checking for the existence of common names. If you checkout the Authlogic::ActsAsAuthentic submodules in the documentation, it will show you the various names checked, chances are you won't have to specify any configuration for your field names, even if they aren't the same names as below.
 
     t.string    :login,               :null => false                # optional, you can use email instead, or both
     t.string    :crypted_password,    :null => false                # optional, see below
@@ -206,7 +208,7 @@ The user model should have the following columns. The names of these columns can
     t.string    :current_login_ip                                   # optional, see Authlogic::Session::MagicColumns
     t.string    :last_login_ip                                      # optional, see Authlogic::Session::MagicColumns
 
-Notice the login and crypted_password fields are optional. If you prefer, you could use OpenID, LDAP, or whatever you want as your main authentication source and not even provide your own authentication system. I recommend providing your own as an option though. Your interface, such as the registration form, can dictate which method is the default. Lastly, adding 3rd party authentication methods should be as easy as installing an Authlogic "add on" gem. See "Authligic add ons" above.
+Notice the login and crypted_password fields are optional. If you prefer, you could use OpenID, LDAP, or whatever you want as your main authentication source and not even provide your own authentication system. These authentication methods can EASILY be added by using an authlogic add on (see above). I recommend providing your own as an option though. Your interface, such as the registration form, can dictate which method is the default.
 
 === 4. Set up your model
 
@@ -218,11 +220,54 @@ Make sure you have a model that you will be authenticating with. Since we are us
     end # block optional
   end
 
-You are all set.
+=== 5. Create a UserSessionsController
 
-=== 5. Next Steps
+You do this JUST LIKE you do for any other model. The actions are exactly the same as well:
 
-Here are some common next steps. They might or might not apply to you. For a complete list of everything Authlogic can do please read the documentation or see the sub module list above.
+  $ script/generate controller user_sessions
+
+[Here are the contents of this controller](http://github.com/binarylogic/authlogic_example/blob/5819a13477797d758cb6871f475ed1c54bf8a3a7/app/controllers/user_sessions_controller.rb).
+
+Notice it's exactly the same as any other resource controller.
+
+=== 6. Map a resource to your UserSessionsController
+
+Again, this is exactly the same as any other controller:
+
+  # config/routes.rb
+  map.resource :user_session
+  map.root :controller => "user_sessions", :action => "new"
+
+=== 7. Persist sessions
+
+Your application controller will be responsible for persisting your session. This is my favorite part because it is so easy. I am able to do in 2 methods what used to take 5 to 6 different methods:
+
+  # app/controllers/application.rb
+  class ApplicationController < ActionController::Base
+    filter_parameter_logging :password, :password_confirmation
+    helper_method :current_user_session, :current_user
+  
+    private
+      def current_user_session
+        return @current_user_session if defined?(@current_user_session)
+        @current_user_session = UserSession.find
+      end
+    
+      def current_user
+        return @current_user if defined?(@current_user)
+        @current_user = current_user_session && current_user_session.user
+      end
+  end
+
+That's it! You can name these methods anything you want. That's what's great about Authlogic, it doesn't assume things for you, you are in control of the application specific parts of authentication.
+
+=== 8. Restrict Access
+
+Again, this is application specific. You can do this however you wish. For an example [see the ApplicationController](http://github.com/binarylogic/authlogic_example/blob/5819a13477797d758cb6871f475ed1c54bf8a3a7/app/controllers/application_controller.rb) in the authlogic example app. Also, checkout the before_filters in the other controllers. Restricting access is as simple as that. There are a million ways to do this, but this seems to be the most common.
+
+=== 9. Next Steps
+
+Here are some common next steps. They might or might not apply to you. For a complete list of everything Authlogic can do please read the [documentation](http://authlogic.rubyforge.org) or see the sub module list above.
 
 1. Want to use another encryption algorithm, such as BCrypt? See Authlogic::ActsAsAuthentic::Password::Config
 2. Migrating from restful_authentication? See Authlogic::ActsAsAuthentic::RestfulAuthentication::Config
@@ -233,6 +278,8 @@ Here are some common next steps. They might or might not apply to you. For a com
 7. Need to give API access or access to a private feed? Use basic HTTP auth or authentication by params. See Authlogic::Session::HttpAuth or Authlogic::Session::Params
 8. Need to internationalize your app? See Authlogic::I18n
 9. Need help testing? See the Authlogic::TestCase
+
+I've yet to encounter a case that authlogic does not handle. If you have a unique situation glance at the [documentation](http://authlogic.rubyforge.org). I was very thorough with it, and you can discover all kinds of cool things Authlogic can do for you.
 
 == Interested in how it works?
 
