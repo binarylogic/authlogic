@@ -16,11 +16,9 @@ Authlogic can do all of this and much more, keep reading to see...
 == Helpful links
 
 *	<b>Documentation:</b> http://authlogic.rubyforge.org
-*	<b>Live example with OpenID "add on" & source code:</b> http://authlogicexample.binarylogic.com
-*	<b>Tutorial: Authlogic basic setup:</b> http://www.binarylogic.com/2008/11/3/tutorial-authlogic-basic-setup
+*	<b>Live example with OpenID "add on":</b> http://authlogicexample.binarylogic.com
+*	<b>Live example source:</b> http://github.com/binarylogic/authlogic_example/tree/master
 *	<b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
-*	<b>Tutorial: Easily migrate from restful_authentication:</b> http://www.binarylogic.com/2008/11/23/tutorial-easily-migrate-from-restful_authentication-to-authlogic
-*	<b>Tutorial: Upgrade passwords easily with Authlogic:</b> http://www.binarylogic.com/2008/11/23/tutorial-upgrade-passwords-easily-with-authlogic
 * <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
 * <b>Google group:</b> http://groups.google.com/group/authlogic
 
@@ -226,7 +224,7 @@ You do this JUST LIKE you do for any other model. The actions are exactly the sa
 
   $ script/generate controller user_sessions
 
-[Here are the contents of this controller](http://github.com/binarylogic/authlogic_example/blob/5819a13477797d758cb6871f475ed1c54bf8a3a7/app/controllers/user_sessions_controller.rb).
+(Here are the contents of this controller)[http://github.com/binarylogic/authlogic_example/blob/5819a13477797d758cb6871f475ed1c54bf8a3a7/app/controllers/user_sessions_controller.rb].
 
 Notice it's exactly the same as any other resource controller.
 
@@ -263,11 +261,11 @@ That's it! You can name these methods anything you want. That's what's great abo
 
 === 8. Restrict Access
 
-Again, this is application specific. You can do this however you wish. For an example [see the ApplicationController](http://github.com/binarylogic/authlogic_example/blob/5819a13477797d758cb6871f475ed1c54bf8a3a7/app/controllers/application_controller.rb) in the authlogic example app. Also, checkout the before_filters in the other controllers. Restricting access is as simple as that. There are a million ways to do this, but this seems to be the most common.
+Again, this is application specific. You can do this however you wish. For an example (see the ApplicationController)[http://github.com/binarylogic/authlogic_example/blob/5819a13477797d758cb6871f475ed1c54bf8a3a7/app/controllers/application_controller.rb] in the authlogic example app. Also, checkout the before_filters in the other controllers. Restricting access is as simple as that. There are a million ways to do this, but this seems to be the most common.
 
 === 9. Next Steps
 
-Here are some common next steps. They might or might not apply to you. For a complete list of everything Authlogic can do please read the [documentation](http://authlogic.rubyforge.org) or see the sub module list above.
+Here are some common next steps. They might or might not apply to you. For a complete list of everything Authlogic can do please read the (documentation)[http://authlogic.rubyforge.org] or see the sub module list above.
 
 1. Want to use another encryption algorithm, such as BCrypt? See Authlogic::ActsAsAuthentic::Password::Config
 2. Migrating from restful_authentication? See Authlogic::ActsAsAuthentic::RestfulAuthentication::Config
@@ -324,4 +322,4 @@ A lot of them forced me to name my password column as "this", or the key of my c
 I am not trying to  "bash" any other authentication solutions. These are just my opinions, formulate your own opinion. I released Authlogic because I was "scratching my own itch". It has made my life easier and I enjoy using it, hopefully it does the same for you.
 
 
-Copyright (c) 2009 {Ben Johnson of Binary Logic}(http://www.binarylogic.com), released under the MIT license
+Copyright (c) 2009 (Ben Johnson of Binary Logic)[http://www.binarylogic.com], released under the MIT license
