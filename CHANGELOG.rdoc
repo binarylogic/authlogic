@@ -1,6 +1,7 @@
 == 2.0.11
 
 * Fix bug when password is turned off and the SingleAccessToken module calls the after_password_set callback.
+* HTTP basic auth can now be toggled on or off. It also checks for the existence of a standard username and password before enabling itself.
 
 == 2.0.10 release 2009-4-21
 

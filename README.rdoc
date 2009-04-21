@@ -27,6 +27,7 @@ You can also log out / destroy the session:
 == Helpful links
 
 *	<b>Documentation:</b> http://authlogic.rubyforge.org
+*	<b>Repository:</b> http://github.com/binarylogic/authlogic/tree/master
 *	<b>Live example with OpenID "add on":</b> http://authlogicexample.binarylogic.com
 *	<b>Live example source with tutorial:</b> http://github.com/binarylogic/authlogic_example/tree/master
 *	<b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic

@@ -86,6 +86,7 @@ test/libs/affiliate.rb
 test/libs/company.rb
 test/libs/employee.rb
 test/libs/employee_session.rb
+test/libs/ldaper.rb
 test/libs/ordered_hash.rb
 test/libs/project.rb
 test/libs/user.rb
