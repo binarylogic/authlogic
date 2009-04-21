@@ -34,7 +34,7 @@ module Authlogic
             include InstanceMethods
             validates_uniqueness_of :single_access_token, :if => :single_access_token_changed?
             before_validation :reset_single_access_token, :if => :reset_single_access_token?
-            after_password_set :reset_single_access_token, :if => :change_single_access_token_with_password?
+            after_password_set(:reset_single_access_token, :if => :change_single_access_token_with_password?) if respond_to?(:after_password_set)
           end
         end
         

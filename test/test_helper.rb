@@ -79,6 +79,13 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string    :pw_salt
     t.string    :persistence_token
   end
+  
+  create_table :ldapers do |t|
+    t.datetime  :created_at      
+    t.datetime  :updated_at
+    t.string    :ldap_login
+    t.string    :persistence_token
+  end
 end
 
 require File.dirname(__FILE__) + '/../lib/authlogic' unless defined?(Authlogic)
@@ -87,6 +94,7 @@ require File.dirname(__FILE__) + '/libs/project'
 require File.dirname(__FILE__) + '/libs/affiliate'
 require File.dirname(__FILE__) + '/libs/employee'
 require File.dirname(__FILE__) + '/libs/employee_session'
+require File.dirname(__FILE__) + '/libs/ldaper'
 require File.dirname(__FILE__) + '/libs/user'
 require File.dirname(__FILE__) + '/libs/user_session'
 require File.dirname(__FILE__) + '/libs/company'

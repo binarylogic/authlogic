@@ -1,4 +1,8 @@
-== 2.0.10
+== 2.0.11
+
+* Fix bug when password is turned off and the SingleAccessToken module calls the after_password_set callback.
+
+== 2.0.10 release 2009-4-21
 
 * Mock request is now transparent to non existent methods. Since the methods calls really have no functional value when testing authlogic.
 * Allow password confirmation to be disabled.

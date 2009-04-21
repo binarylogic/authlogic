@@ -35,5 +35,10 @@ module ActsAsAuthenticTest
       
       User.change_single_access_token_with_password = false
     end
+    
+    def test_after_password_set_is_not_called
+      ldaper = Ldaper.new
+      assert ldaper.save
+    end
   end
 end
