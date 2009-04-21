@@ -50,60 +50,60 @@ You can find anything you want about Authlogic in the documentation, all that yo
 
 That being said, there are 2 models involved during authentication. Your Authlogic model and your ActiveRecord model:
 
-  1. *Authlogic::Session*, which manages sessions.
-  2. *Authlogic::ActsAsAuthentic*, which adds in functionality to your ActiveRecord model.
+  1. <b>Authlogic::Session</b>, which manages sessions.
+  2. <b>Authlogic::ActsAsAuthentic</b>, which adds in functionality to your ActiveRecord model.
 
 Each of the above has its various sub modules that contain common logic. The sub modules are responsible for including everything related to it: configuration, class methods, instance methods, etc.
 
-For example, if you want to timeout users after a certain period of inactivity, you would look in *Authlogic::Session::Timeout*. To help you out, I listed the following "publicly relevant" modules with short descriptions. For the sake of brevity, there are more modules than listed here, the ones not listed are more for internal use, but you can easily read up on them in the {documentation}[http://authlogic.rubyforge.org].
+For example, if you want to timeout users after a certain period of inactivity, you would look in <b>Authlogic::Session::Timeout</b>. To help you out, I listed the following "publicly relevant" modules with short descriptions. For the sake of brevity, there are more modules than listed here, the ones not listed are more for internal use, but you can easily read up on them in the {documentation}[http://authlogic.rubyforge.org].
 
 === Authlogic::ActsAsAuthentic sub modules
 
 These modules are for the acts_as_authentic method you call in your model. It contains all code for the "model side" of the authentication.
 
-* *Authlogic::ActsAsAuthentic::Base* - Provides the acts_as_authentic class method and includes all of the submodules.
-* *Authlogic::ActsAsAuthentic::Email* - Handles everything related to the email field.
-* *Authlogic::ActsAsAuthentic::LoggedInStatus* - Provides handy named scopes and methods for determining if the user is logged in or out.
-* *Authlogic::ActsAsAuthentic::Login* - Handles everything related to the login field.
-* *Authlogic::ActsAsAuthentic::MagicColumns* - Handles everything related to the "magic" fields: login_count, failed_login_count, etc.
-* *Authlogic::ActsAsAuthentic::Password* - This one is important. It handles encrypting your password, salting it, etc. It also has support for transitioning password algorithms.
-* *Authlogic::ActsAsAuthentic::PerishableToken* - Handles maintaining the perishable token field, also provides a class level method for finding record using the token.
-* *Authlogic::ActsAsAuthentic::PersistenceToken* - Handles maintaining the persistence token. This is the token stored in cookies and sessions to persist the users session.
-* *Authlogic::ActsAsAuthentic::RestfulAuthentication* - Provides configuration options to easily migrate from the restful_authentication plugin.
-* *Authlogic::ActsAsAuthentic::SessionMaintenance* - Handles automatically logging the user in. EX: a new user registers, automatically log them in.
-* *Authlogic::ActsAsAuthentic::SingleAccessToken* - Handles maintaining the single access token.
-* *Authlogic::ActsAsAuthentic::ValidationsScope* - Allows you to scope validations, etc. Just like the :scope option for validates_uniqueness_of
+* <b>Authlogic::ActsAsAuthentic::Base</b> - Provides the acts_as_authentic class method and includes all of the submodules.
+* <b>Authlogic::ActsAsAuthentic::Email</b> - Handles everything related to the email field.
+* <b>Authlogic::ActsAsAuthentic::LoggedInStatus</b> - Provides handy named scopes and methods for determining if the user is logged in or out.
+* <b>Authlogic::ActsAsAuthentic::Login</b> - Handles everything related to the login field.
+* <b>Authlogic::ActsAsAuthentic::MagicColumns</b> - Handles everything related to the "magic" fields: login_count, failed_login_count, etc.
+* <b>Authlogic::ActsAsAuthentic::Password</b> - This one is important. It handles encrypting your password, salting it, etc. It also has support for transitioning password algorithms.
+* <b>Authlogic::ActsAsAuthentic::PerishableToken</b> - Handles maintaining the perishable token field, also provides a class level method for finding record using the token.
+* <b>Authlogic::ActsAsAuthentic::PersistenceToken</b> - Handles maintaining the persistence token. This is the token stored in cookies and sessions to persist the users session.
+* <b>Authlogic::ActsAsAuthentic::RestfulAuthentication</b> - Provides configuration options to easily migrate from the restful_authentication plugin.
+* <b>Authlogic::ActsAsAuthentic::SessionMaintenance</b> - Handles automatically logging the user in. EX: a new user registers, automatically log them in.
+* <b>Authlogic::ActsAsAuthentic::SingleAccessToken</b> - Handles maintaining the single access token.
+* <b>Authlogic::ActsAsAuthentic::ValidationsScope</b> - Allows you to scope validations, etc. Just like the :scope option for validates_uniqueness_of
 
 === Authlogic::Session sub modules
 
 These modules are for the "session side" of authentication. They create a new domain for session logic, allowing you to create, destroy, and ultimately manage your sessions.
 
-* *Authlogic::Session::BruteForceProtection* - Disables accounts after a certain number of consecutive failed logins attempted.
-* *Authlogic::Session::Callbacks* - Your tools to extend, change, or add onto Authlogic. Lets you hook in and do just about anything you want. Start here if you want to write a plugin or add on for Authlogic
-* *Authlogic::Session::Cookies* - Authentication via cookies.
-* *Authlogic::Session::Existence* - Creating, saving, and destroying objects.
-* *Authlogic::Session::HttpAuth* - Authentication via basic HTTP authentication.
-* *Authlogic::Session::Id* - Allows sessions to be separated by an id, letting you have multiple sessions for a single user.
-* *Authlogic::Session::MagicColumns* - Maintains "magic" database columns, similar to created_at and updated_at for ActiveRecord.
-* *Authlogic::Session::MagicStates* - Automatically validates based on the records states: active?, approved?, and confirmed?. If those methods exist for the record.
-* *Authlogic::Session::Params* - Authentication via params, aka single access token.
-* *Authlogic::Session::Password* - Authentication via a traditional username and password.
-* *Authlogic::Session::Persistence* - Persisting sessions / finding sessions.
-* *Authlogic::Session::Session* - Authentication via the session, the controller session that is.
-* *Authlogic::Session::Timeout* - Automatically logging out after a certain period of inactivity.
-* *Authlogic::Session::UnauthorizedRecord* - Handles authentication by passing an ActiveRecord object.
-* *Authlogic::Session::Validation* - Validation / errors.
+* <b>Authlogic::Session::BruteForceProtection</b> - Disables accounts after a certain number of consecutive failed logins attempted.
+* <b>Authlogic::Session::Callbacks</b> - Your tools to extend, change, or add onto Authlogic. Lets you hook in and do just about anything you want. Start here if you want to write a plugin or add on for Authlogic
+* <b>Authlogic::Session::Cookies</b> - Authentication via cookies.
+* <b>Authlogic::Session::Existence</b> - Creating, saving, and destroying objects.
+* <b>Authlogic::Session::HttpAuth</b> - Authentication via basic HTTP authentication.
+* <b>Authlogic::Session::Id</b> - Allows sessions to be separated by an id, letting you have multiple sessions for a single user.
+* <b>Authlogic::Session::MagicColumns</b> - Maintains "magic" database columns, similar to created_at and updated_at for ActiveRecord.
+* <b>Authlogic::Session::MagicStates</b> - Automatically validates based on the records states: active?, approved?, and confirmed?. If those methods exist for the record.
+* <b>Authlogic::Session::Params</b> - Authentication via params, aka single access token.
+* <b>Authlogic::Session::Password</b> - Authentication via a traditional username and password.
+* <b>Authlogic::Session::Persistence</b> - Persisting sessions / finding sessions.
+* <b>Authlogic::Session::Session</b> - Authentication via the session, the controller session that is.
+* <b>Authlogic::Session::Timeout</b> - Automatically logging out after a certain period of inactivity.
+* <b>Authlogic::Session::UnauthorizedRecord</b> - Handles authentication by passing an ActiveRecord object.
+* <b>Authlogic::Session::Validation</b> - Validation / errors.
 
 === Miscellaneous modules
 
 Miscellaneous modules that don't really belong solely to either the session or model aspect.
 
-* *Authlogic::AuthenticatesMany* - Responsible for allowing you to scope sessions to a parent record. Similar to a has_many and belongs_to relationship. This lets you do the same thing with sessions.
-* *Authlogic::CryptoProviders* - Contains various encryption algorithms that Authlogic uses, allowing you to choose your encryption method.
-* *Authlogic::I18n* - Acts JUST LIKE the rails I18n library, and provides internationalization to Authlogic.
-* *Authlogic::Random* - A simple class to generate random tokens.
-* *Authlogic::TestCase* - Various helper methods for testing frameworks to help you test your code.
-* *Authlogic::Version* - A handy class for determine the version of Authlogic in a number of ways.
+* <b>Authlogic::AuthenticatesMany</b> - Responsible for allowing you to scope sessions to a parent record. Similar to a has_many and belongs_to relationship. This lets you do the same thing with sessions.
+* <b>Authlogic::CryptoProviders</b> - Contains various encryption algorithms that Authlogic uses, allowing you to choose your encryption method.
+* <b>Authlogic::I18n</b> - Acts JUST LIKE the rails I18n library, and provides internationalization to Authlogic.
+* <b>Authlogic::Random</b> - A simple class to generate random tokens.
+* <b>Authlogic::TestCase</b> - Various helper methods for testing frameworks to help you test your code.
+* <b>Authlogic::Version</b> - A handy class for determine the version of Authlogic in a number of ways.
 
 == Quick Rails examples
 
