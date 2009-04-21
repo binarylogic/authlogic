@@ -2,101 +2,110 @@
 
 Authlogic is a clean, simple, and unobtrusive ruby authentication solution.
 
-What inspired me to create Authlogic was the messiness of the current authentication solutions. Put simply, they just didn't feel right, because the logic was not organized properly. As you may know, a common misconception with the MVC design pattern is that the model "M" is only for data access logic, which is wrong. A model is a place for domain logic. This is why the RESTful design pattern and the current authentication solutions don't play nice. Authlogic solves this by placing the session maintenance logic into its own domain (aka "model").Moving session maintenance into its own domain has its benefits:
+A code example can replace a thousand words...
 
-1. <b>It's easier to update and stay current with the latest security practices.</b> To make my point, take a look at the commits to any other authentication solution, then look at the {commits for authlogic}[http://github.com/binarylogic/authlogic/commits/master]. How many commits could you easily start using if you already had an app using an alternate solution? My guess is very few, if not none. You can't just re-run the generator they provide. All of those cool new features and bug fixes are going to have be manually added or wait for your next application. With Authlogic you can start using the latest code with a simple update of a gem. So when Authlogics adds a cool new feature just update your gem and you can start using it.
-2. <b>It ties everything together on the domain level.</b> Take a new user registration for example, no reason to manually log the user in, authlogic handles this for you via callbacks. The same applies to a user changing their password. Authlogic handles maintaining the session for you.
-3. <b>Your application can stay clean, focused, and free of redundant authentication code from app to app.</b> Meaning generators are *NOT* necessary. Not any more neccessary than any other control
-4. <b>A byproduct of #3 is that you don't have to test the same code over and over in each of your apps.</b> You don't test the internals of ActiveRecord in each of your apps, so why would you test the internals of Authlogic? It's already been thoroughly tested for you. Focus on your application, and get rid of the noise by testing your application specific code and not generated code that you didn't write.
-5. <b>You get to write your own code, just like you do for any other model, the way you like it.</b> Meaning the code you write is specific to your application, the way you want it, and more importantly you understand it.
-6. <b>You are not restricted to a single session.</b> Think about Apple's me.com, where they need you to authenticate a second time before changing your billing information. Why not just create a second session for this? It works just like your initial session. Then your billing controller can require an "ultra secure" session.
+Authlogic introduces a new type of model:
 
-Authlogic can do all of this and much more, keep reading to see...
+  class UserSession < Authlogic::Session::Base
+  end
+
+Log in with any of the following. Use it just like your other models:
+
+  UserSession.create(my_user_object)
+  UserSession.create(:login => "bjohnson", :password => "my password")
+  session = UserSession.new(:login => "bjohnson", :password => "my password"); session.save
+  UserSession.create(:openid_identifier => "identifier") # requires the authlogic-oid "add on" gem
+
+After a session has been created, you can persist it across requests:
+
+  session = UserSession.find
+
+You can also log out / destroy the session:
+
+  session.destroy
 
 == Helpful links
 
 *	<b>Documentation:</b> http://authlogic.rubyforge.org
 *	<b>Live example with OpenID "add on":</b> http://authlogicexample.binarylogic.com
-*	<b>Live example source:</b> http://github.com/binarylogic/authlogic_example/tree/master
+*	<b>Live example source with tutorial:</b> http://github.com/binarylogic/authlogic_example/tree/master
 *	<b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
 * <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
 * <b>Google group:</b> http://groups.google.com/group/authlogic
 
 <b>Before contacting me, please read:</b>
 
-If you find a bug or a problem please post it on lighthouse. If you need help with something, please use google groups. I check both regularly and get emails when anything happens, so that is the best place to get help.
-
-Please do not email me directly with issues regarding Authlogic. This is an inefficient way to get help because it doesn't help people who have the same problem in the future.
+If you find a bug or a problem please post it on lighthouse. If you need help with something, please use google groups. I check both regularly and get emails when anything happens, so that is the best place to get help. This also benefits other people in the future with the same questions / problems. I will *NOT* respond to emails that should otherwise be in lighthouse or google groups.
 
 == Authlogic "add ons"
 
 *	<b>Authlogic OpenID addon:</b> http://github.com/binarylogic/authlogic_openid
 *	<b>Authlogic LDAP addon:</b> http://github.com/binarylogic/authlogic_ldap
 
-If you create one of your own, please let me know about it so I can add it to this list.
+If you create one of your own, please let me know about it so I can add it to this list. Or just fork the project, add your link, and send me a pull request.
 
-== Documentation
+== Documentation explanation
 
 You can find anything you want about Authlogic in the documentation, all that you need to do is understand the basic design behind it.
 
-That being said, Authlogic is split into 2 main parts:
+That being said, there are 2 models involved during authentication. Your Authlogic model and your ActiveRecord model:
 
-  1. Authlogic::Session, which manages sessions.
-  2. Authlogic::ActsAsAuthentic, which adds in functionality to your ActiveRecord model.
+  1. *Authlogic::Session*, which manages sessions.
+  2. *Authlogic::ActsAsAuthentic*, which adds in functionality to your ActiveRecord model.
 
 Each of the above has its various sub modules that contain common logic. The sub modules are responsible for including everything related to it: configuration, class methods, instance methods, etc.
 
-For example, if you want to timeout users after a certain period of inactivity, you would look in Authlogic::Session::Timeout. To help you out, I listed the following "publicly relevant" modules with short descriptions. For the sake of brevity, there are more modules than listed here, the ones not listed are more for internal use, but you can easily read up on them in the documentation.
+For example, if you want to timeout users after a certain period of inactivity, you would look in *Authlogic::Session::Timeout*. To help you out, I listed the following "publicly relevant" modules with short descriptions. For the sake of brevity, there are more modules than listed here, the ones not listed are more for internal use, but you can easily read up on them in the {documentation}[http://authlogic.rubyforge.org].
 
 === Authlogic::ActsAsAuthentic sub modules
 
 These modules are for the acts_as_authentic method you call in your model. It contains all code for the "model side" of the authentication.
 
-* Authlogic::ActsAsAuthentic::Base - Provides the acts_as_authentic class method and includes all of the submodules.
-* Authlogic::ActsAsAuthentic::Email - Handles everything related to the email field.
-* Authlogic::ActsAsAuthentic::LoggedInStatus - Provides handy named scopes and methods for determining if the user is logged in or out.
-* Authlogic::ActsAsAuthentic::Login - Handles everything related to the login field.
-* Authlogic::ActsAsAuthentic::MagicColumns - Handles everything related to the "magic" fields: login_count, failed_login_count, etc.
-* Authlogic::ActsAsAuthentic::Password - This one is important. It handles encrypting your password, salting it, etc. It also has support for transitioning password algorithms.
-* Authlogic::ActsAsAuthentic::PerishableToken - Handles maintaining the perishable token field, also provides a class level method for finding record using the token.
-* Authlogic::ActsAsAuthentic::PersistenceToken - Handles maintaining the persistence token. This is the token stored in cookies and sessions to persist the users session.
-* Authlogic::ActsAsAuthentic::RestfulAuthentication - Provides configuration options to easily migrate from the restful_authentication plugin.
-* Authlogic::ActsAsAuthentic::SessionMaintenance - Handles automatically logging the user in. EX: a new user registers, automatically log them in.
-* Authlogic::ActsAsAuthentic::SingleAccessToken - Handles maintaining the single access token.
-* Authlogic::ActsAsAuthentic::ValidationsScope - Allows you to scope validations, etc. Just like the :scope option for validates_uniqueness_of
+* *Authlogic::ActsAsAuthentic::Base* - Provides the acts_as_authentic class method and includes all of the submodules.
+* *Authlogic::ActsAsAuthentic::Email* - Handles everything related to the email field.
+* *Authlogic::ActsAsAuthentic::LoggedInStatus* - Provides handy named scopes and methods for determining if the user is logged in or out.
+* *Authlogic::ActsAsAuthentic::Login* - Handles everything related to the login field.
+* *Authlogic::ActsAsAuthentic::MagicColumns* - Handles everything related to the "magic" fields: login_count, failed_login_count, etc.
+* *Authlogic::ActsAsAuthentic::Password* - This one is important. It handles encrypting your password, salting it, etc. It also has support for transitioning password algorithms.
+* *Authlogic::ActsAsAuthentic::PerishableToken* - Handles maintaining the perishable token field, also provides a class level method for finding record using the token.
+* *Authlogic::ActsAsAuthentic::PersistenceToken* - Handles maintaining the persistence token. This is the token stored in cookies and sessions to persist the users session.
+* *Authlogic::ActsAsAuthentic::RestfulAuthentication* - Provides configuration options to easily migrate from the restful_authentication plugin.
+* *Authlogic::ActsAsAuthentic::SessionMaintenance* - Handles automatically logging the user in. EX: a new user registers, automatically log them in.
+* *Authlogic::ActsAsAuthentic::SingleAccessToken* - Handles maintaining the single access token.
+* *Authlogic::ActsAsAuthentic::ValidationsScope* - Allows you to scope validations, etc. Just like the :scope option for validates_uniqueness_of
 
 === Authlogic::Session sub modules
 
 These modules are for the "session side" of authentication. They create a new domain for session logic, allowing you to create, destroy, and ultimately manage your sessions.
 
-* Authlogic::Session::BruteForceProtection - Disables accounts after a certain number of consecutive failed logins attempted.
-* Authlogic::Session::Callbacks - Your tools to extend, change, or add onto Authlogic. Lets you hook in and do just about anything you want. Start here if you want to write a plugin or add on for Authlogic
-* Authlogic::Session::Cookies - Authentication via cookies.
-* Authlogic::Session::Existence - Creating, saving, and destroying objects.
-* Authlogic::Session::HttpAuth - Authentication via basic HTTP authentication.
-* Authlogic::Session::Id - Allows sessions to be separated by an id, letting you have multiple sessions for a single user.
-* Authlogic::Session::MagicColumns - Maintains "magic" database columns, similar to created_at and updated_at for ActiveRecord.
-* Authlogic::Session::MagicStates - Automatically validates based on the records states: active?, approved?, and confirmed?. If those methods exist for the record.
-* Authlogic::Session::Params - Authentication via params, aka single access token.
-* Authlogic::Session::Password - Authentication via a traditional username and password.
-* Authlogic::Session::Persistence - Persisting sessions / finding sessions.
-* Authlogic::Session::Session - Authentication via the session, the controller session that is.
-* Authlogic::Session::Timeout - Automatically logging out after a certain period of inactivity.
-* Authlogic::Session::UnauthorizedRecord - Handles authentication by passing an ActiveRecord object.
-* Authlogic::Session::Validation - Validation / errors.
+* *Authlogic::Session::BruteForceProtection* - Disables accounts after a certain number of consecutive failed logins attempted.
+* *Authlogic::Session::Callbacks* - Your tools to extend, change, or add onto Authlogic. Lets you hook in and do just about anything you want. Start here if you want to write a plugin or add on for Authlogic
+* *Authlogic::Session::Cookies* - Authentication via cookies.
+* *Authlogic::Session::Existence* - Creating, saving, and destroying objects.
+* *Authlogic::Session::HttpAuth* - Authentication via basic HTTP authentication.
+* *Authlogic::Session::Id* - Allows sessions to be separated by an id, letting you have multiple sessions for a single user.
+* *Authlogic::Session::MagicColumns* - Maintains "magic" database columns, similar to created_at and updated_at for ActiveRecord.
+* *Authlogic::Session::MagicStates* - Automatically validates based on the records states: active?, approved?, and confirmed?. If those methods exist for the record.
+* *Authlogic::Session::Params* - Authentication via params, aka single access token.
+* *Authlogic::Session::Password* - Authentication via a traditional username and password.
+* *Authlogic::Session::Persistence* - Persisting sessions / finding sessions.
+* *Authlogic::Session::Session* - Authentication via the session, the controller session that is.
+* *Authlogic::Session::Timeout* - Automatically logging out after a certain period of inactivity.
+* *Authlogic::Session::UnauthorizedRecord* - Handles authentication by passing an ActiveRecord object.
+* *Authlogic::Session::Validation* - Validation / errors.
 
 === Miscellaneous modules
 
 Miscellaneous modules that don't really belong solely to either the session or model aspect.
 
-* Authlogic::AuthenticatesMany - Responsible for allowing you to scope sessions to a parent record. Similar to a has_many and belongs_to relationship. This lets you do the same thing with sessions.
-* Authlogic::CryptoProviders - Contains various encryption algorithms that Authlogic uses, allowing you to choose your encryption method.
-* Authlogic::I18n - Acts JUST LIKE the rails I18n library, and provides internationalization to Authlogic.
-* Authlogic::Random - A simple class to generate random tokens.
-* Authlogic::TestCase - Various helper methods for testing frameworks to help you test your code.
-* Authlogic::Version - A handy class for determine the version of Authlogic in a number of ways.
+* *Authlogic::AuthenticatesMany* - Responsible for allowing you to scope sessions to a parent record. Similar to a has_many and belongs_to relationship. This lets you do the same thing with sessions.
+* *Authlogic::CryptoProviders* - Contains various encryption algorithms that Authlogic uses, allowing you to choose your encryption method.
+* *Authlogic::I18n* - Acts JUST LIKE the rails I18n library, and provides internationalization to Authlogic.
+* *Authlogic::Random* - A simple class to generate random tokens.
+* *Authlogic::TestCase* - Various helper methods for testing frameworks to help you test your code.
+* *Authlogic::Version* - A handy class for determine the version of Authlogic in a number of ways.
 
-== Quick example
+== Quick Rails examples
 
 What if creating sessions worked like an ORM library on the surface...
 
@@ -173,47 +182,20 @@ Or you install this as a plugin (for older versions of rails)
 
 See the {authlogic example}[http://github.com/binarylogic/authlogic_example/tree/master] for a setup tutorial. I did this because not only do you have a tutorial to go by, but you have an example app that uses the same tutorial, so you can play around with with the code.
 
-== Interested in how it works?
+== Tell me quickly how Authlogic works
 
-Interested in how all of this all works? Basically a before filter is automatically set in your controller which lets Authlogic know about the current controller object. This "activates" Authlogic and allows Authlogic to set sessions, cookies, login via basic http auth, etc. If you are using your framework in a multiple thread environment, don't worry. I kept that in mind and made this thread safe.
+Interested in how all of this all works? Think about an ActiveRecord model. A database connection must be established before you can use it. In the case of Authlogic, a controller connection must be established before you can use it. It uses that controller connection to modify cookies, the current session, login with HTTP basic, etc. It connects to the controller through a before filter that is automatically set in your controller which lets Authlogic know about the current controller object. Then Authlogic leverages that to do everything, it's a pretty simple design.
 
-From there it is pretty simple. When you try to create a new session the record is authenticated and then all of the session / cookie magic is done for you. The sky is the limit.
+== What sets Authlogic apart and why I created it
 
-== What's wrong with the current solutions?
+What inspired me to create Authlogic was the messiness of the current authentication solutions. Put simply, they just didn't feel right, because the logic was not organized properly. As you may know, a common misconception with the MVC design pattern is that the model "M" is only for data access logic, which is wrong. A model is a place for domain logic. This is why the RESTful design pattern and the current authentication solutions don't play nice. Authlogic solves this by placing the session maintenance logic into its own domain (aka "model").Moving session maintenance into its own domain has its benefits:
 
-You probably don't care, but I think releasing the millionth ruby authentication solution requires a little explanation.
-
-I don't necessarily think the current solutions are "wrong", nor am I saying Authlogic is the answer to your prayers. But, to me, the current solutions were lacking something. Here's what I came up with...
-
-=== Generators are messy
-
-Generators have their place, and it is not to add authentication to an app. It doesn't make sense. Generators are meant to be a starting point for repetitive tasks that have no sustainable pattern. Take controllers, the set up is the same thing over and over, but they eventually evolve to a point where there is no clear cut pattern. Trying to extract a pattern out into a library would be extremely hard, messy, and overly complicated. As a result, generators make sense here.
-
-Authentication is a one time set up process for your app. It's the same thing over and over and the pattern never really changes. The only time it changes is to conform with newer / stricter security techniques. This is exactly why generators should not be an authentication solution. Generators add code to your application, once code crosses that line, you are responsible for maintaining it. You get to make sure it stays up with the latest and greatest security techniques. And when the plugin you used releases some major update, you can't just re-run the generator, you get to sift through the code to see what changed. You don't really have a choice either, because you can't ignore security updates.
-
-Using a library that hundreds of other people use has it advantages. Probably one of the biggest advantages if that you get to benefit from other people using the same code. When Bob in California figures out a new awesome security technique and adds it into Authlogic, you get to benefit from that with a single update. The catch is that this benefit is limited to code that is not "generated" or added into your app. As I said above, once code is "generated" and added into your app, it's your responsibility.
-
-Lastly, there is a pattern here, why clutter up all of your applications with the same code over and over?
-
-=== Security gets outdated
-
-Just as I stated in the above section, you can't stay up to date with your security since the code is generated and updating the plugin does nothing. If there is one thing you should stay up to date with, it's security. But it's not just the fact that there is no reasonable method for receiving updates. It's the fact that they tie you down to an encryption algorithm *AND* they use a bad one at that. Every single solution I've seen uses Sha1, which is joining the party with MD5. Sha1 is not as secure as it used to be. But that's the nature of algorithms, they eventually get phased out, which is fine. Everyone knows this, why not accommodate for this? Authlogic does this with the :transition_from_crypto_provider option. It takes care of transitioning all of your users to a new algorithm. Even better, it provides BCrypt as an option which should, in theory, never require you to switch since you can adjust the cost and make the encryption stronger. At the same time, still compatible with older passwords using the lower cost.
-
-=== Why test the same code over and over?
-
-I've noticed my apps get cluttered with authentication tests, and they are the same exact tests! This irritates me. When you have identical tests across your apps thats a red flag that code can be extracted into a library. What's great about Authlogic is that I tested it for you. You don't write tests that test the internals of ActiveRecord do you? The same applies for Authlogic. Only test code that you've written. Essentially testing authentication is similar to testing any another RESTful controller. This makes your tests focused and easier to understand.
-
-=== Limited to a single authentication
-
-I recently had an app where you could log in as a user and also log in as an employee. I won't go into the specifics of the app, but it made the most sense to do it this way. So I had two sessions in one app. None of the current solutions I found easily supported this. They all assumed a single session. One session was messy enough, adding another just put me over the edge and eventually forced me to write Authlogic. Authlogic can support 100 different sessions easily and in a clean format. Just like an app can support 100 different models and 100 different records of each model.
-
-=== Too presumptuous
-
-A lot of them forced me to name my password column as "this", or the key of my cookie had to be "this". They were a little too presumptuous. I am probably overly picky, but little details like that should be configurable. This also made it very hard to implement into an existing app.
-
-=== Disclaimer
-
-I am not trying to  "bash" any other authentication solutions. These are just my opinions, formulate your own opinion. I released Authlogic because I was "scratching my own itch". It has made my life easier and I enjoy using it, hopefully it does the same for you.
+1. <b>It's cleaner.</b> There are no generators in Authlogic. Authlogic provides a class that you can use, it's plain and simple ruby. More importantly, the code in your app is code you write, written the way you want, nice and clean. It's code that should be in your app and is specific to your app, not a redundant authentication pattern.
+2. <b>Easier to stay up-to-date.<b> To make my point, take a look at the commits to any other authentication solution, then look at the {commits for authlogic}[http://github.com/binarylogic/authlogic/commits/master]. How many commits could you easily start using if you already had an app using that solution? With an alternate solution, very few, if any. All of those cool new features and bug fixes are going to have be manually added or wait for your next application. Which is the main reason a generator is not suitable as an authentication solution. With Authlogic you can start using the latest code with a simple update of a gem. No generators, no mess.
+3. <b>It ties everything together on the domain level.</b> Take a new user registration for example, no reason to manually log the user in, authlogic handles this for you via callbacks. The same applies to a user changing their password. Authlogic handles maintaining the session for you.
+4. <b>No redundant tests.</b> Because Authlogic doesn't use generators, #1 also applies to tests. Authlogic is *thoroughly* tested for you. You don't go and test the internals of ActiveRecord in each of your apps do you? So why do the same for Authlogic? Your application tests should be for application specific code. Get rid of the noise and make your tests focused and concise, no reason to copy tests from app to app.
+5. <b>You are not restricted to a single session.</b> Think about Apple's me.com, where they need you to authenticate a second time before changing your billing information. Why not just create a second session for this? It works just like your initial session. Then your billing controller can require an "ultra secure" session.
+6. <b>Easily extendable.</b> One of the distinct advantages of using a library is the ability to use it's API, assuming it has one. Authlogic has an *excellent* public API, meaning it can easily be extended and grow beyond the core library. Checkout the "add ons" list above to see what I mean.
 
 
 Copyright (c) 2009 (Ben Johnson of Binary Logic)[http://www.binarylogic.com], released under the MIT license
