@@ -34,6 +34,10 @@ module Authlogic
         
         # A hash of options for the validates_length_of call for the email field. Allows you to change this however you want.
         #
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
+        # merge options into it. Checkout the convenience function merge_validates_length_of_email_field_options to merge
+        # options.</b>
+        #
         # * <tt>Default:</tt> {:within => 6..100}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_email_field_options(value = nil)
@@ -41,7 +45,22 @@ module Authlogic
         end
         alias_method :validates_length_of_email_field_options=, :validates_length_of_email_field_options
         
+        # A convenience function to merge options into the validates_length_of_email_field_options. So intead of:
+        #
+        #   self.validates_length_of_email_field_options = validates_length_of_email_field_options.merge(:my_option => my_value)
+        #
+        # You can do this:
+        #
+        #   merge_validates_length_of_email_field_options :my_option => my_value
+        def merge_validates_length_of_email_field_options(options = {})
+          self.validates_length_of_email_field_options = validates_length_of_email_field_options.merge(options)
+        end
+        
         # A hash of options for the validates_format_of call for the email field. Allows you to change this however you want.
+        #
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
+        # merge options into it. Checkout the convenience function merge_validates_format_of_email_field_options to merge
+        # options.</b>
         #
         # * <tt>Default:</tt> {:with => email_regex, :message => I18n.t('error_messages.email_invalid', :default => "should look like an email address.")}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_format_of
@@ -50,7 +69,16 @@ module Authlogic
         end
         alias_method :validates_format_of_email_field_options=, :validates_format_of_email_field_options
         
+        # See merge_validates_length_of_email_field_options. The same thing except for validates_format_of_email_field_options.
+        def merge_validates_format_of_email_field_options(options = {})
+          self.validates_format_of_email_field_options = validates_format_of_email_field_options.merge(options)
+        end
+        
         # A hash of options for the validates_uniqueness_of call for the email field. Allows you to change this however you want.
+        #
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
+        # merge options into it. Checkout the convenience function merge_validates_uniqueness_of_email_field_options to merge
+        # options.</b>
         #
         # * <tt>Default:</tt> {:case_sensitive => false, :scope => validations_scope, :if => "#{email_field}_changed?".to_sym}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_uniqueness_of
@@ -58,6 +86,11 @@ module Authlogic
           config(:validates_uniqueness_of_email_field_options, value, {:case_sensitive => false, :scope => validations_scope, :if => "#{email_field}_changed?".to_sym})
         end
         alias_method :validates_uniqueness_of_email_field_options=, :validates_uniqueness_of_email_field_options
+        
+        # See merge_validates_length_of_email_field_options. The same thing except for validates_uniqueness_of_email_field_options.
+        def merge_validates_uniqueness_of_email_field_options(options = {})
+          self.validates_uniqueness_of_email_field_options = validates_uniqueness_of_email_field_options.merge(options)
+        end
         
         private
           def email_regex

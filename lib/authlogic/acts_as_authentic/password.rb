@@ -68,6 +68,10 @@ module Authlogic
         
         # A hash of options for the validates_length_of call for the password field. Allows you to change this however you want.
         #
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
+        # merge options into it. Checkout the convenience function merge_validates_length_of_password_field_options to merge
+        # options.</b>
+        #
         # * <tt>Default:</tt> {:minimum => 4, :if => :require_password?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_password_field_options(value = nil)
@@ -75,7 +79,22 @@ module Authlogic
         end
         alias_method :validates_length_of_password_field_options=, :validates_length_of_password_field_options
         
+        # A convenience function to merge options into the validates_length_of_login_field_options. So intead of:
+        #
+        #   self.validates_length_of_password_field_options = validates_length_of_password_field_options.merge(:my_option => my_value)
+        #
+        # You can do this:
+        #
+        #   merge_validates_length_of_password_field_options :my_option => my_value
+        def merge_validates_length_of_password_field_options(options = {})
+          self.validates_length_of_password_field_options = validates_length_of_password_field_options.merge(options)
+        end
+        
         # A hash of options for the validates_confirmation_of call for the password field. Allows you to change this however you want.
+        #
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
+        # merge options into it. Checkout the convenience function merge_validates_length_of_login_field_options to merge
+        # options.</b>
         #
         # * <tt>Default:</tt> {:minimum => 4, :if => "#{password_salt_field}_changed?".to_sym}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_confirmation_of
@@ -84,7 +103,16 @@ module Authlogic
         end
         alias_method :validates_confirmation_of_password_field_options=, :validates_confirmation_of_password_field_options
         
+        # See merge_validates_length_of_password_field_options. The same thing, except for validates_confirmation_of_password_field_options
+        def merge_validates_confirmation_of_password_field_options(options = {})
+          self.validates_confirmation_of_password_field_options = validates_confirmation_of_password_field_options.merge(options)
+        end
+        
         # A hash of options for the validates_length_of call for the password_confirmation field. Allows you to change this however you want.
+        #
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
+        # merge options into it. Checkout the convenience function merge_validates_length_of_login_field_options to merge
+        # options.</b>
         #
         # * <tt>Default:</tt> validates_length_of_password_field_options
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
@@ -92,6 +120,11 @@ module Authlogic
           config(:validates_length_of_password_confirmation_field_options, value, validates_length_of_password_field_options)
         end
         alias_method :validates_length_of_password_confirmation_field_options=, :validates_length_of_password_confirmation_field_options
+        
+        # See merge_validates_length_of_password_field_options. The same thing, except for validates_length_of_password_confirmation_field_options
+        def merge_validates_length_of_password_confirmation_field_options(options = {})
+          self.validates_length_of_password_confirmation_field_options = validates_length_of_password_confirmation_field_options.merge(options)
+        end
         
         # The class you want to use to encrypt and verify your encrypted passwords. See the Authlogic::CryptoProviders module for more info
         # on the available methods and how to create your own.

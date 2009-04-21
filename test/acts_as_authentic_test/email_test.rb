@@ -73,6 +73,10 @@ module ActsAsAuthenticTest
       u.email = "a@a.com"
       assert !u.valid?
       assert !u.errors.on(:email)
+      
+      u.email = "dakota.dux+1@gmail.com"
+      assert !u.valid?
+      assert !u.errors.on(:email)
     end
     
     def test_validates_uniqueness_of_email_field
