@@ -2,6 +2,7 @@
 
 * Mock request is now transparent to non existent methods. Since the methods calls really have no functional value when testing authlogic.
 * Allow password confirmation to be disabled.
+* Modified login format validation to allow for the + character since emails addresses allow that as a valid character.
 
 == 2.0.9 release 2009-4-9
 
