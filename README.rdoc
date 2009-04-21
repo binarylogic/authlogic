@@ -50,10 +50,10 @@ You can find anything you want about Authlogic in the documentation, all that yo
 
 That being said, there are 2 models involved during authentication. Your Authlogic model and your ActiveRecord model:
 
-  1. <b>Authlogic::Session</b>, which manages sessions.
-  2. <b>Authlogic::ActsAsAuthentic</b>, which adds in functionality to your ActiveRecord model.
+1. <b>Authlogic::Session</b>, which manages sessions.
+2. <b>Authlogic::ActsAsAuthentic</b>, which adds in functionality to your ActiveRecord model.
 
-Each of the above has its various sub modules that contain common logic. The sub modules are responsible for including everything related to it: configuration, class methods, instance methods, etc.
+Each of the above has its various sub modules that contain common logic. The sub modules are responsible for including *everything* related to it: configuration, class methods, instance methods, etc.
 
 For example, if you want to timeout users after a certain period of inactivity, you would look in <b>Authlogic::Session::Timeout</b>. To help you out, I listed the following "publicly relevant" modules with short descriptions. For the sake of brevity, there are more modules than listed here, the ones not listed are more for internal use, but you can easily read up on them in the {documentation}[http://authlogic.rubyforge.org].
 
@@ -105,7 +105,7 @@ Miscellaneous modules that don't really belong solely to either the session or m
 * <b>Authlogic::TestCase</b> - Various helper methods for testing frameworks to help you test your code.
 * <b>Authlogic::Version</b> - A handy class for determine the version of Authlogic in a number of ways.
 
-== Quick Rails examples
+== Quick Rails example
 
 What if creating sessions worked like an ORM library on the surface...
 
@@ -178,9 +178,9 @@ Or you install this as a plugin (for older versions of rails)
 
   script/plugin install git://github.com/binarylogic/authlogic.git
 
-== Setup Tutorial
+== Detailed Setup Tutorial
 
-See the {authlogic example}[http://github.com/binarylogic/authlogic_example/tree/master] for a setup tutorial. I did this because not only do you have a tutorial to go by, but you have an example app that uses the same tutorial, so you can play around with with the code.
+See the {authlogic example}[http://github.com/binarylogic/authlogic_example/tree/master] for a detailed setup tutorial. I did this because not only do you have a tutorial to go by, but you have an example app that uses the same tutorial, so you can play around with with the code. If you have problems you can compare the code to see what you are doing differently.
 
 == Tell me quickly how Authlogic works
 
@@ -198,4 +198,4 @@ What inspired me to create Authlogic was the messiness of the current authentica
 6. <b>Easily extendable.</b> One of the distinct advantages of using a library is the ability to use it's API, assuming it has one. Authlogic has an *excellent* public API, meaning it can easily be extended and grow beyond the core library. Checkout the "add ons" list above to see what I mean.
 
 
-Copyright (c) 2009 (Ben Johnson of Binary Logic)[http://www.binarylogic.com], released under the MIT license
+Copyright (c) 2009 {Ben Johnson of Binary Logic}[http://www.binarylogic.com], released under the MIT license

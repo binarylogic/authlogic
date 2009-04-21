@@ -82,6 +82,7 @@ test/fixtures/companies.yml
 test/fixtures/employees.yml
 test/fixtures/projects.yml
 test/fixtures/users.yml
+test/libs/affiliate.rb
 test/libs/company.rb
 test/libs/employee.rb
 test/libs/employee_session.rb
