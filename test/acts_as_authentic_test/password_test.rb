@@ -32,6 +32,14 @@ module ActsAsAuthenticTest
       assert User.ignore_blank_passwords
     end
     
+    def test_check_passwords_against_database
+      assert User.check_passwords_against_database
+      User.check_passwords_against_database = false
+      assert !User.check_passwords_against_database
+      User.check_passwords_against_database true
+      assert User.check_passwords_against_database
+    end
+    
     def test_validate_password_field_config
       assert User.validate_password_field
       assert Employee.validate_password_field
@@ -158,6 +166,26 @@ module ActsAsAuthenticTest
       transition_password_to(Authlogic::CryptoProviders::BCrypt, ben)
       transition_password_to(Authlogic::CryptoProviders::Sha1, ben, [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::BCrypt])
       transition_password_to(Authlogic::CryptoProviders::Sha512, ben, [Authlogic::CryptoProviders::Sha1, Authlogic::CryptoProviders::BCrypt])
+    end
+    
+    def test_checks_password_against_database
+      ben = users(:ben)
+      ben.password = "new pass"
+      assert !ben.valid_password?("new pass")
+      assert ben.valid_password?("benrocks")
+    end
+    
+    def test_checks_password_against_database_and_always_fails_on_new_records
+      user = User.new
+      user.password = "new pass"
+      assert !user.valid_password?("new pass")
+    end
+    
+    def test_checks_password_against_object
+      ben = users(:ben)
+      ben.password = "new pass"
+      assert ben.valid_password?("new pass", false)
+      assert !ben.valid_password?("benrocks", false)
     end
     
     def test_reset_password

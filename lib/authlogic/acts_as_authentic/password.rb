@@ -57,6 +57,23 @@ module Authlogic
         end
         alias_method :ignore_blank_passwords=, :ignore_blank_passwords
         
+        # When calling valid_password?("some pass") do you want to check that password against what's in that object or whats in
+        # the datbase. Take this example:
+        #
+        #   u = User.first
+        #   u.password = "new pass"
+        #   u.valid_password?("old pass")
+        #
+        # Should the last line above return true or false? The record hasn't been saved yet, so most would assume yes.
+        # Other would assume no. So I let you decide by giving you this option.
+        #
+        # * <tt>Default:</tt> true
+        # * <tt>Accepts:</tt> Boolean
+        def check_passwords_against_database(value = nil)
+          config(:check_passwords_against_database, value, true)
+        end
+        alias_method :check_passwords_against_database=, :check_passwords_against_database
+        
         # Whether or not to validate the password field.
         #
         # * <tt>Default:</tt> true
@@ -214,30 +231,29 @@ module Authlogic
             after_password_set
           end
         
-          # Accepts a raw password to determine if it is the correct password or not.
-          def valid_password?(attempted_password)
-            return false if attempted_password.blank? || send(crypted_password_field).blank?
-          
+          # Accepts a raw password to determine if it is the correct password or not. Notice the second argument. That
+          # determines if we should be checking against the database or not. Take this example:
+          #
+          #   u = User.first
+          #   u.password = "new pass"
+          #   u.valid_password?("old pass")
+          #
+          # Should the last line above return true or false? The record hasn't been saved yet, so most would assume yes.
+          # Other would assume no. So I let you decide by giving you an option.
+          def valid_password?(attempted_password, check_against_database = check_passwords_against_database?)
+            crypted = check_against_database && send("#{crypted_password_field}_changed?") ? send("#{crypted_password_field}_was") : send(crypted_password_field)
+            return false if attempted_password.blank? || crypted.blank?
             before_password_verification
           
-            crypto_providers = [crypto_provider] + transition_from_crypto_providers
             crypto_providers.each_with_index do |encryptor, index|
               # The arguments_type of for the transitioning from restful_authentication
               arguments_type = (act_like_restful_authentication? && index == 0) ||
                 (transition_from_restful_authentication? && index > 0 && encryptor == Authlogic::CryptoProviders::Sha1) ?
                 :restful_authentication : nil
             
-              if encryptor.matches?(send(crypted_password_field), *encrypt_arguments(attempted_password, arguments_type))
-                # If we are transitioning from an older encryption algorithm and the password is still using the old algorithm
-                # then let's reset the password using the new algorithm. If the algorithm has a cost (BCrypt) and the cost has changed, update the password with
-                # the new cost.
-                if index > 0 || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(send(crypted_password_field)))
-                  self.password = attempted_password
-                  save(false)
-                end
-              
+              if encryptor.matches?(crypted, *encrypt_arguments(attempted_password, check_against_database, arguments_type))
+                transition_password(attempted_password) if transition_password?(index, encryptor, crypted, check_against_database)
                 after_password_verification
-              
                 return true
               end
             end
@@ -261,14 +277,39 @@ module Authlogic
           alias_method :randomize_password!, :reset_password!
         
           private
-            def encrypt_arguments(raw_password, arguments_type = nil)
-              salt = password_salt_field ? send(password_salt_field) : nil
+            def check_passwords_against_database?
+              self.class.check_passwords_against_database == true
+            end
+            
+            def crypto_providers
+              [crypto_provider] + transition_from_crypto_providers
+            end
+            
+            def encrypt_arguments(raw_password, check_against_database, arguments_type = nil)
+              salt = nil
+              salt = (check_against_database && send("#{password_salt_field}_changed?") ? send("#{password_salt_field}_was") : send(password_salt_field)) if password_salt_field
+              
               case arguments_type
               when :restful_authentication
                 [REST_AUTH_SITE_KEY, salt, raw_password, REST_AUTH_SITE_KEY].compact
               else
                 [raw_password, salt].compact
               end
+            end
+            
+            # Determines if we need to tranisiton the password.
+            # If the index > 0 then we are using an "transition from" crypto provider.
+            # If the encryptor has a cost and the cost it outdated.
+            # If we aren't using database values
+            # If we are using database values, only if the password hasnt change so we don't overwrite any changes
+            def transition_password?(index, encryptor, crypted, check_against_database)
+              (index > 0 || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(send(crypted_password_field)))) &&
+                (!check_against_database || !send("#{crypted_password_field}_changed?"))
+            end
+            
+            def transition_password(attempted_password)
+              self.password = attempted_password
+              save(false)
             end
           
             def require_password?
