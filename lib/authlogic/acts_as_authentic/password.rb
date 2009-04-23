@@ -231,15 +231,9 @@ module Authlogic
             after_password_set
           end
         
-          # Accepts a raw password to determine if it is the correct password or not. Notice the second argument. That
-          # determines if we should be checking against the database or not. Take this example:
-          #
-          #   u = User.first
-          #   u.password = "new pass"
-          #   u.valid_password?("old pass")
-          #
-          # Should the last line above return true or false? The record hasn't been saved yet, so most would assume yes.
-          # Other would assume no. So I let you decide by giving you an option.
+          # Accepts a raw password to determine if it is the correct password or not. Notice the second argument. That defaults to the value of
+          # check_passwords_against_database. See that method for mor information, but basically it just tells Authlogic to check the password
+          # against the value in the database or the value in the object.
           def valid_password?(attempted_password, check_against_database = check_passwords_against_database?)
             crypted = check_against_database && send("#{crypted_password_field}_changed?") ? send("#{crypted_password_field}_was") : send(crypted_password_field)
             return false if attempted_password.blank? || crypted.blank?

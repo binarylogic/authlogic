@@ -3,6 +3,7 @@
 * Fix bug when password is turned off and the SingleAccessToken module calls the after_password_set callback.
 * HTTP basic auth can now be toggled on or off. It also checks for the existence of a standard username and password before enabling itself.
 * Added option check_passwords_against_database for Authlogic::ActsAsAuthentic::Password to toggle between checking the password against the database value or the object value. Also added the same functionality to the instance method: valid_password?("password", true), where the second argument tells Authlogic to check the password against the database value. The default for this new feature is true.
+* Add a maintain_sessions configuration option to Authlogic::ActsAsAuthentic::SessionMaintenance as a "clearer" option to disable automatic session maintenance.
 
 == 2.0.10 release 2009-4-21
 

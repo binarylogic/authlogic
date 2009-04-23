@@ -2,6 +2,14 @@ require File.dirname(__FILE__) + '/../test_helper.rb'
 
 module ActsAsAuthenticTest
   class SessionMaintenanceTest < ActiveSupport::TestCase
+    def test_maintain_sessions_config
+      assert User.maintain_sessions
+      User.maintain_sessions = false
+      assert !User.maintain_sessions
+      User.maintain_sessions true
+      assert User.maintain_sessions
+    end
+    
     def test_login_after_create
       assert User.create(:login => "awesome", :password => "saweet", :password_confirmation => "saweet", :email => "awesome@awesome.com")
       assert UserSession.find
