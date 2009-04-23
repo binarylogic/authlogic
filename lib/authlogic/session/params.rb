@@ -48,10 +48,10 @@ module Authlogic
         alias_method :params_key=, :params_key
         
         # Authentication is allowed via a single access token, but maybe this is something you don't want for your application as a whole. Maybe this is something you only want for specific request types.
-        # Specify a list of allowed request types and single access authentication will only be allowed for the ones you specify. Checkout the "Single Access / Private Feeds Access" section in the README.
+        # Specify a list of allowed request types and single access authentication will only be allowed for the ones you specify.
         #
-        # * <tt>Default:</tt> "application/rss+xml", "application/atom+xml"
-        # * <tt>Accepts:</tt> String of request type, or :all to allow single access authentication for any and all request types
+        # * <tt>Default:</tt> ["application/rss+xml", "application/atom+xml"]
+        # * <tt>Accepts:</tt> String of a request type, or :all to allow single access authentication for any and all request types
         def single_access_allowed_request_types(value = nil)
           config(:single_access_allowed_request_types, value, ["application/rss+xml", "application/atom+xml"])
         end
@@ -70,7 +70,7 @@ module Authlogic
           def params_enabled?
             params_credentials && klass.column_names.include?("single_access_token") &&
               (single_access_allowed_request_types.include?(controller.request_content_type) ||
-                single_access_allowed_request_types.include?(:all) ||
+                single_access_allowed_request_types.include?(:all) || single_access_allowed_request_types == :all ||
                   controller.single_access_allowed?)
           end
           
