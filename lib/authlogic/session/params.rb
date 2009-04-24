@@ -68,10 +68,15 @@ module Authlogic
           end
           
           def params_enabled?
-            params_credentials && klass.column_names.include?("single_access_token") &&
-              (single_access_allowed_request_types.include?(controller.request_content_type) ||
-                single_access_allowed_request_types.include?(:all) || single_access_allowed_request_types == :all ||
-                  controller.single_access_allowed?)
+            return false if !params_credentials || !klass.column_names.include?("single_access_token")
+            return controller.single_access_allowed? if controller.responds_to_single_access_allowed?
+            
+            case single_access_allowed_request_types
+            when Array
+              single_access_allowed_request_types.include?(controller.request_content_type) || single_access_allowed_request_types.include?(:all)
+            else
+              single_access_allowed_request_types == :all
+            end
           end
           
           def params_key

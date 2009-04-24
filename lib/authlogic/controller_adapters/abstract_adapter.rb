@@ -42,8 +42,12 @@ module Authlogic
         controller.session
       end
       
+      def responds_to_single_access_allowed?
+        controller.respond_to?(:single_access_allowed?, true)
+      end
+      
       def single_access_allowed?
-        controller.respond_to?(:single_access_allowed?, true) && controller.send(:single_access_allowed?)
+        controller.send(:single_access_allowed?)
       end
       
       private
