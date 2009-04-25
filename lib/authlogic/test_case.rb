@@ -35,6 +35,20 @@ module Authlogic
   # Authlogic::Session::Activation::NotActivatedError any time you try to instantiate an object without a "connection".
   # So before you do anything with Authlogic, you need to activate / connect Authlogic. Let's walk through how to do this in tests:
   #
+  # === Fixtures / Factories
+  #
+  # Creating users via fixtures / factories is easy. Here's an example of a fixture:
+  #
+  #   ben:
+  #     email: whatever@whatever.com
+  #     password_salt: <%= salt = Authlogic::Random.hex_token %>
+  #     crypted_password: <%= Authlogic::CryptoProviders::Sha512.encrypt("benrocks" + salt) %>
+  #     persistence_token: <%= Authlogic::Random.hex_token %>
+  #     single_access_token: <%= Authlogic::Random.friendly_token %>
+  #     perishable_token: <%= Authlogic::Random.friendly_token %>
+  #
+  # Notice the crypted_password value. Just supplement that with whatever crypto provider you are using, if you are not using the default.
+  #
   # === Functional tests
   #
   # Activating Authlogic isn't a problem here, because making a request will activate Authlogic for you. The problem is
