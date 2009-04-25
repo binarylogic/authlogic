@@ -51,7 +51,7 @@ module Authlogic
         # Specify a list of allowed request types and single access authentication will only be allowed for the ones you specify.
         #
         # * <tt>Default:</tt> ["application/rss+xml", "application/atom+xml"]
-        # * <tt>Accepts:</tt> String of a request type, or :all to allow single access authentication for any and all request types
+        # * <tt>Accepts:</tt> String of a request type, or :all or :any to allow single access authentication for any and all request types
         def single_access_allowed_request_types(value = nil)
           config(:single_access_allowed_request_types, value, ["application/rss+xml", "application/atom+xml"])
         end
@@ -75,7 +75,7 @@ module Authlogic
             when Array
               single_access_allowed_request_types.include?(controller.request_content_type) || single_access_allowed_request_types.include?(:all)
             else
-              single_access_allowed_request_types == :all
+              [:all, :any].include?(single_access_allowed_request_types)
             end
           end
           

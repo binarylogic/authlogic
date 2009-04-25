@@ -29,14 +29,14 @@ You can also log out / destroy the session:
 *	<b>Documentation:</b> http://authlogic.rubyforge.org
 *	<b>Repository:</b> http://github.com/binarylogic/authlogic/tree/master
 *	<b>Live example with OpenID "add on":</b> http://authlogicexample.binarylogic.com
-*	<b>Live example source with tutorial:</b> http://github.com/binarylogic/authlogic_example/tree/master
+*	<b>Live example repository with tutorial:</b> http://github.com/binarylogic/authlogic_example/tree/master
 *	<b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
 * <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
 * <b>Google group:</b> http://groups.google.com/group/authlogic
 
-<b>Before contacting me, please read:</b>
+<b>Before contacting me directly, please read:</b>
 
-If you find a bug or a problem please post it on lighthouse. If you need help with something, please use google groups. I check both regularly and get emails when anything happens, so that is the best place to get help. This also benefits other people in the future with the same questions / problems. I will *NOT* respond to emails that should otherwise be in lighthouse or google groups.
+If you find a bug or a problem please post it on lighthouse. If you need help with something, please use google groups. I check both regularly and get emails when anything happens, so that is the best place to get help. This also benefits other people in the future with the same questions / problems. Thank you.
 
 == Authlogic "add ons"
 
@@ -47,12 +47,12 @@ If you create one of your own, please let me know about it so I can add it to th
 
 == Documentation explanation
 
-You can find anything you want about Authlogic in the documentation, all that you need to do is understand the basic design behind it.
+You can find anything you want about Authlogic in the {documentation}, all that you need to do is understand the basic design behind it.
 
 That being said, there are 2 models involved during authentication. Your Authlogic model and your ActiveRecord model:
 
-1. <b>Authlogic::Session</b>, which manages sessions.
-2. <b>Authlogic::ActsAsAuthentic</b>, which adds in functionality to your ActiveRecord model.
+1. <b>Authlogic::Session</b>, your session models that extend Authlogic::Session::Base.
+2. <b>Authlogic::ActsAsAuthentic</b>, which adds in functionality to your ActiveRecord model when you call acts_as_authentic.
 
 Each of the above has its various sub modules that contain common logic. The sub modules are responsible for including *everything* related to it: configuration, class methods, instance methods, etc.
 
@@ -60,7 +60,7 @@ For example, if you want to timeout users after a certain period of inactivity, 
 
 === Authlogic::ActsAsAuthentic sub modules
 
-These modules are for the acts_as_authentic method you call in your model. It contains all code for the "model side" of the authentication.
+These modules are for the ActiveRecord side of things, the models that call acts_as_authentic.
 
 * <b>Authlogic::ActsAsAuthentic::Base</b> - Provides the acts_as_authentic class method and includes all of the submodules.
 * <b>Authlogic::ActsAsAuthentic::Email</b> - Handles everything related to the email field.
@@ -77,7 +77,7 @@ These modules are for the acts_as_authentic method you call in your model. It co
 
 === Authlogic::Session sub modules
 
-These modules are for the "session side" of authentication. They create a new domain for session logic, allowing you to create, destroy, and ultimately manage your sessions.
+These modules are for the models that extend Authlogic::Session::Base.
 
 * <b>Authlogic::Session::BruteForceProtection</b> - Disables accounts after a certain number of consecutive failed logins attempted.
 * <b>Authlogic::Session::Callbacks</b> - Your tools to extend, change, or add onto Authlogic. Lets you hook in and do just about anything you want. Start here if you want to write a plugin or add on for Authlogic
@@ -97,7 +97,7 @@ These modules are for the "session side" of authentication. They create a new do
 
 === Miscellaneous modules
 
-Miscellaneous modules that don't really belong solely to either the session or model aspect.
+Miscellaneous modules that shared across the authentication process and are more "utility" modules and classes.
 
 * <b>Authlogic::AuthenticatesMany</b> - Responsible for allowing you to scope sessions to a parent record. Similar to a has_many and belongs_to relationship. This lets you do the same thing with sessions.
 * <b>Authlogic::CryptoProviders</b> - Contains various encryption algorithms that Authlogic uses, allowing you to choose your encryption method.
@@ -182,6 +182,14 @@ Or you install this as a plugin (for older versions of rails)
 == Detailed Setup Tutorial
 
 See the {authlogic example}[http://github.com/binarylogic/authlogic_example/tree/master] for a detailed setup tutorial. I did this because not only do you have a tutorial to go by, but you have an example app that uses the same tutorial, so you can play around with with the code. If you have problems you can compare the code to see what you are doing differently.
+
+== Testing
+
+I think one of the best aspects of Authlogic is testing. For one, it cuts out <b>a lot</b> of redundant tests in your applications because Authlogic is already thoroughly tested for you. It doesn't include a bunch of tests into your application, because it comes tested, just like any other library.
+
+For example, think about ActiveRecord. You don't test the internals of ActiveRecord, because the creators of ActiveRecord have already tested the internals for you. It wouldn't make sense for ActiveRecord to copy it's hundreds of tests into your applications. The same concept applies to Authlogic. You only need to test code you write that is specific to your application, just like everything else in your application.
+
+That being said, testing your code that uses Authlogic is easy. Since everyone uses a different testing suite, I created a helpful module called Authlogic::TestCase, which is basically a set of tools for testing authlogic. I explain testing Authlogic thoroughly in the {Authlogic::TestCase section of the documentation}[http://authlogic.rubyforge.org/classes/Authlogic/TestCase.html]. It should answer any questions you have in regards to testing Authlogic.
 
 == Tell me quickly how Authlogic works
 
