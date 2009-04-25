@@ -1,4 +1,4 @@
-== 2.0.11
+== 2.0.11 release 2009-4-25
 
 * Fix bug when password is turned off and the SingleAccessToken module calls the after_password_set callback.
 * HTTP basic auth can now be toggled on or off. It also checks for the existence of a standard username and password before enabling itself.
@@ -6,6 +6,7 @@
 * Add a maintain_sessions configuration option to Authlogic::ActsAsAuthentic::SessionMaintenance as a "clearer" option to disable automatic session maintenance.
 * single_access_allowed_request_types can also be equal to :all instead of just [:all].
 * Refactor params_enabled? so that the single_access_allowed? method in controllers takes precedence.
+* Added testing comments in the README and expanded on the documentation in Authlogic::TestCase
 
 == 2.0.10 release 2009-4-21
 

@@ -5,11 +5,16 @@ require File.dirname(__FILE__) + "/test_case/mock_logger"
 require File.dirname(__FILE__) + "/test_case/mock_request"
 
 module Authlogic
-  # I get a lot of questions about how to properly test with Authlogic. As a result, I did my due diligence writing this
-  # documentation. I apologize if it is a little wordy, but my intention is to cover every aspect of testing.
-  #
-  # To get started, this module is a collection of methods and classes that help you easily test Authlogic. In fact,
+  # This module is a collection of methods and classes that help you easily test Authlogic. In fact,
   # I use these same tools to test the internals of Authlogic.
+  #
+  # === The quick and dirty
+  #
+  #   require "authlogic/test_case" # include at the top of test_helper.rb
+  #   setup :activate_authlogic # run before tests are executed
+  #   UserSession.create(users(:whomever)) # logs a user in
+  #
+  # For a more detailed explanation, see below.
   #
   # === Setting up
   #
@@ -18,7 +23,7 @@ module Authlogic
   #
   #   require "authlogic/test_case"
   #
-  # If you are using Test::Unit::TestCase, the standard testing library that comes with ruby, then you can skip this part.
+  # If you are using Test::Unit::TestCase, the standard testing library that comes with ruby, then you can skip this next part.
   # If you are not, you need to include the Authlogic::TestCase into your testing suite as follows:
   #
   #   include Authlogic::TestCase

@@ -4,7 +4,7 @@ Authlogic is a clean, simple, and unobtrusive ruby authentication solution.
 
 A code example can replace a thousand words...
 
-Authlogic introduces a new type of model. You can have as many as you want, and name them whatever you want. In this case we are authenticating with a User model, which is inferred by the name:
+Authlogic introduces a new type of model. You can have as many as you want, and name them whatever you want, just like your other models. In this example we want to authenticate with the User model, which is inferred by the name:
 
   class UserSession < Authlogic::Session::Base
   end
@@ -16,7 +16,7 @@ Log in with any of the following. Use it just like your other models:
   session = UserSession.new(:login => "bjohnson", :password => "my password"); session.save
   UserSession.create(:openid_identifier => "identifier") # requires the authlogic-oid "add on" gem
 
-After a session has been created, you can persist it across requests:
+After a session has been created, you can persist it across requests. Thus keeping the user logged in:
 
   session = UserSession.find
 
@@ -189,7 +189,7 @@ I think one of the best aspects of Authlogic is testing. For one, it cuts out <b
 
 For example, think about ActiveRecord. You don't test the internals of ActiveRecord, because the creators of ActiveRecord have already tested the internals for you. It wouldn't make sense for ActiveRecord to copy it's hundreds of tests into your applications. The same concept applies to Authlogic. You only need to test code you write that is specific to your application, just like everything else in your application.
 
-That being said, testing your code that uses Authlogic is easy. Since everyone uses a different testing suite, I created a helpful module called Authlogic::TestCase, which is basically a set of tools for testing authlogic. I explain testing Authlogic thoroughly in the {Authlogic::TestCase section of the documentation}[http://authlogic.rubyforge.org/classes/Authlogic/TestCase.html]. It should answer any questions you have in regards to testing Authlogic.
+That being said, testing your code that uses Authlogic is easy. Since everyone uses different testing suites, I created a helpful module called Authlogic::TestCase, which is basically a set of tools for testing code using Authlogic. I explain testing Authlogic thoroughly in the {Authlogic::TestCase section of the documentation}[http://authlogic.rubyforge.org/classes/Authlogic/TestCase.html]. It should answer any questions you have in regards to testing Authlogic.
 
 == Tell me quickly how Authlogic works
 
@@ -197,7 +197,7 @@ Interested in how all of this all works? Think about an ActiveRecord model. A da
 
 == What sets Authlogic apart and why I created it
 
-What inspired me to create Authlogic was the messiness of the current authentication solutions. Put simply, they just didn't feel right, because the logic was not organized properly. As you may know, a common misconception with the MVC design pattern is that the model "M" is only for data access logic, which is wrong. A model is a place for domain logic. This is why the RESTful design pattern and the current authentication solutions don't play nice. Authlogic solves this by placing the session maintenance logic into its own domain (aka "model").Moving session maintenance into its own domain has its benefits:
+What inspired me to create Authlogic was the messiness of the current authentication solutions. Put simply, they just didn't feel right, because the logic was not organized properly. As you may know, a common misconception with the MVC design pattern is that the model "M" is only for data access logic, which is wrong. A model is a place for domain logic. This is why the RESTful design pattern and the current authentication solutions don't play nice. Authlogic solves this by placing the session maintenance logic into its own domain (aka "model"). Moving session maintenance into its own domain has its benefits:
 
 1. <b>It's cleaner.</b> There are no generators in Authlogic. Authlogic provides a class that you can use, it's plain and simple ruby. More importantly, the code in your app is code you write, written the way you want, nice and clean. It's code that should be in your app and is specific to your app, not a redundant authentication pattern.
 2. <b>Easier to stay up-to-date.</b> To make my point, take a look at the commits to any other authentication solution, then look at the {commits for authlogic}[http://github.com/binarylogic/authlogic/commits/master]. How many commits could you easily start using if you already had an app using that solution? With an alternate solution, very few, if any. All of those cool new features and bug fixes are going to have be manually added or wait for your next application. Which is the main reason a generator is not suitable as an authentication solution. With Authlogic you can start using the latest code with a simple update of a gem. No generators, no mess.
