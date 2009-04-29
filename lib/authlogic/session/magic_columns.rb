@@ -61,8 +61,24 @@ module Authlogic
             end
           end
           
-          def set_last_request_at?
-            record && record.class.column_names.include?("last_request_at") && (record.last_request_at.blank? || last_request_at_threshold.to_i.seconds.ago >= record.last_request_at)
+          # This method lets authlogic know whether it should allow the last_request_at field to be updated
+          # with the current time (Time.now). One thing to note here is that it also checks for the existence of a
+          # last_request_update_allowed? method in your controller. This allows you to control this method pragmatically
+          # in your controller.
+          #
+          # For example, what if you had a javascript function that polled the server updating how much time is left in their
+          # session before it times out. Obviously you would want to ignore this request, because then the user would never time out.
+          # So you can do something like this in your controller:
+          #
+          #   def last_request_update_allowed?
+          #     action_name =! "update_session_time_left"
+          #   end
+          #
+          # You can do whatever you want with that method.
+          def set_last_request_at? # :doc:
+            return false if !record || !klass.column_names.include?("last_request_at")
+            return controller.last_request_update_allowed? if controller.responds_to_last_request_update_allowed?
+            record.last_request_at.blank? || last_request_at_threshold.to_i.seconds.ago >= record.last_request_at
           end
         
           def set_last_request_at

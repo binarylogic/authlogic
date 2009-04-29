@@ -50,6 +50,14 @@ module Authlogic
         controller.send(:single_access_allowed?)
       end
       
+      def responds_to_last_request_update_allowed?
+        controller.respond_to?(:last_request_update_allowed?, true)
+      end
+      
+      def last_request_update_allowed?
+        controller.send(:last_request_update_allowed?)
+      end
+      
       private
         def method_missing(id, *args, &block)
           controller.send(id, *args, &block)

@@ -1,3 +1,7 @@
+== 2.0.12
+
+* Added the ability to add a last_request_update_allowed? method in your controller to pragmatically tell Authlogic when and when not to update the last_request_at field in your database. This only takes effect if the method if present.
+
 == 2.0.11 release 2009-4-25
 
 * Fix bug when password is turned off and the SingleAccessToken module calls the after_password_set callback.

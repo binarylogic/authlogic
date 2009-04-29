@@ -1,1 +1,1 @@
-require "authlogic"
+require File.dirname(__FILE__) + "/rails/init.rb"
