@@ -33,7 +33,7 @@ module ActsAsAuthenticTest
     end
     
     def test_validates_format_of_email_field_options_config
-      default = {:with => User.send(:email_regex), :message => I18n.t('error_messages.email_invalid', :default => "should look like an email address.")}
+      default = {:with => Authlogic::Regex.email, :message => I18n.t('error_messages.email_invalid', :default => "should look like an email address.")}
       assert_equal default, User.validates_format_of_email_field_options
       assert_equal default, Employee.validates_format_of_email_field_options
       

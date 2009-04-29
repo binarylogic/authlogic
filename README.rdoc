@@ -24,6 +24,12 @@ You can also log out / destroy the session:
 
   session.destroy
 
+Sessions are automatically maintained. You can switch this on and off with configuration, but the following will automatically log a user in after a successful registration:
+
+  User.create(params[:user])
+
+This also updates the session when the user changes his/her password.
+
 == Helpful links
 
 * <b>Documentation:</b> http://authlogic.rubyforge.org

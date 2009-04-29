@@ -62,10 +62,10 @@ module Authlogic
         # merge options into it. Checkout the convenience function merge_validates_format_of_email_field_options to merge
         # options.</b>
         #
-        # * <tt>Default:</tt> {:with => email_regex, :message => I18n.t('error_messages.email_invalid', :default => "should look like an email address.")}
+        # * <tt>Default:</tt> {:with => Authlogic::Regex.email, :message => I18n.t('error_messages.email_invalid', :default => "should look like an email address.")}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_format_of
         def validates_format_of_email_field_options(value = nil)
-          config(:validates_format_of_email_field_options, value, {:with => email_regex, :message => I18n.t('error_messages.email_invalid', :default => "should look like an email address.")})
+          config(:validates_format_of_email_field_options, value, {:with => Authlogic::Regex.email, :message => I18n.t('error_messages.email_invalid', :default => "should look like an email address.")})
         end
         alias_method :validates_format_of_email_field_options=, :validates_format_of_email_field_options
         
@@ -91,15 +91,6 @@ module Authlogic
         def merge_validates_uniqueness_of_email_field_options(options = {})
           self.validates_uniqueness_of_email_field_options = validates_uniqueness_of_email_field_options.merge(options)
         end
-        
-        private
-          def email_regex
-            return @email_regex if @email_regex
-            email_name_regex  = '[\w\.%\+\-]+'
-            domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
-            domain_tld_regex  = '(?:[A-Z]{2,4}|museum|travel)'
-            @email_regex = /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
-          end
       end
       
       # All methods relating to the email field

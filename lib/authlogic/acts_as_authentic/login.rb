@@ -59,10 +59,10 @@ module Authlogic
         # merge options into it. Checkout the convenience function merge_validates_format_of_login_field_options to merge
         # options.</b>
         #
-        # * <tt>Default:</tt> {:with => /\A\w[\w\.\-_@ ]+\z/, :message => I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")}
+        # * <tt>Default:</tt> {:with => Authlogic::Regex.login, :message => I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_format_of
         def validates_format_of_login_field_options(value = nil)
-          config(:validates_format_of_login_field_options, value, {:with => /\A\w[\w\.+-_@ ]+\z/, :message => I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")})
+          config(:validates_format_of_login_field_options, value, {:with => Authlogic::Regex.login, :message => I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")})
         end
         alias_method :validates_format_of_login_field_options=, :validates_format_of_login_field_options
         
