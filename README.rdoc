@@ -51,7 +51,7 @@ Authlogic is very flexible, it has a strong public API and a plethora of hooks t
 
 * <b>Documentation:</b> http://authlogic.rubyforge.org
 * <b>Repository:</b> http://github.com/binarylogic/authlogic/tree/master
-* <b>{Railscasts}[http://railscasts.com/] Screencast:</b> http://railscasts.com/episodes/160-authlogic
+* <b>Railscasts Screencast:</b> http://railscasts.com/episodes/160-authlogic
 * <b>Live example with OpenID "add on":</b> http://authlogicexample.binarylogic.com
 * <b>Live example repository with tutorial in README:</b> http://github.com/binarylogic/authlogic_example/tree/master
 * <b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic

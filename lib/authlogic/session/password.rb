@@ -164,13 +164,12 @@ module Authlogic
             self.attempted_record = search_for_record(find_by_login_method, send(login_field))
 
             if attempted_record.blank?
-              
-              errors.add(general_credentials_identifier || login_field, I18n.t('error_messages.login_not_found', :default => "is not valid"))
+              generalize_credentials_error_messages? ? add_general_credentials_error : errors.add(login_field, I18n.t('error_messages.login_not_found', :default => "is not valid"))
               return
             end
 
             if !attempted_record.send(verify_password_method, send("protected_#{password_field}"))
-              errors.add(general_credentials_identifier || password_field, I18n.t('error_messages.password_invalid', :default => "is not valid"))
+              generalize_credentials_error_messages? ? add_general_credentials_error : errors.add(password_field, I18n.t('error_messages.password_invalid', :default => "is not valid"))
               return
             end
           end
@@ -183,8 +182,8 @@ module Authlogic
             self.class.login_field
           end
           
-          def general_credentials_identifier
-            generalize_credentials_error_messages? && "#{login_field.to_s.humanize}/Password combination"
+          def add_general_credentials_error
+            errors.add_to_base(I18n.t('error_messages.general_credentials_error', :default => "#{login_field.to_s.humanize}/Password combination is not valid"))
           end
           
           def generalize_credentials_error_messages?
