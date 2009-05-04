@@ -19,6 +19,14 @@ module SessionTest
         assert_equal "valid_password?", UserSession.verify_password_method
       end
     
+      def test_generalize_credentials_error_messages
+        UserSession.generalize_credentials_error_messages = true
+        assert UserSession.generalize_credentials_error_messages
+    
+        UserSession.generalize_credentials_error_messages false
+        assert !UserSession.generalize_credentials_error_messages
+      end
+      
       def test_login_field
         UserSession.configured_password_methods = false
         UserSession.login_field = :saweet

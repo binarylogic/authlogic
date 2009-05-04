@@ -3,6 +3,7 @@
 * Added the ability to add a last_request_update_allowed? method in your controller to pragmatically tell Authlogic when and when not to update the last_request_at field in your database. This only takes effect if the method if present.
 * Extracted Authlogic's regular expressions into it's own module to allow easy use of them outside of Authlogic. See Authlogic::Regex for more info.
 * Made being_brute_force_protected? true for the Authlogic::Session::BruteForceProtection module.
+* Added the configuration option generalize_credentials_error_messages for the Authlogic::Session::Password module. This allows you to generalize your login / password errors messages as to not reveal was the problem was when authenticating. If enabled, when an invalid login is supplied it will use the same exact error message when an invalid password is supplied.
 
 == 2.0.11 release 2009-4-25
 

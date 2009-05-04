@@ -29,7 +29,7 @@ module Authlogic
         #     end
         #   end
         #
-        # Now just specifcy the name of this method for this configuration option and you are all set. You can do anything you want here. Maybe you allow users to have multiple logins
+        # Now just specify the name of this method for this configuration option and you are all set. You can do anything you want here. Maybe you allow users to have multiple logins
         # and you want to search a has_many relationship, etc. The sky is the limit.
         #
         # * <tt>Default:</tt> "find_by_smart_case_login_field"
@@ -38,6 +38,35 @@ module Authlogic
           config(:find_by_login_method, value, "find_by_smart_case_login_field")
         end
         alias_method :find_by_login_method=, :find_by_login_method
+        
+        # The text used to identify credentials (username/password) combination when a bad login attempt occurs.
+        # When you show error messages for a bad login, it's considered good security practice to hide which field
+        # the user has entered incorrectly (the login field or the password field). For a full explanation, see
+        # http://www.gnucitizen.org/blog/username-enumeration-vulnerabilities/
+        #
+        # Example of use:
+        #
+        #   class UserSession < Authlogic::Session::Base
+        #     generalize_credentials_error_messages true
+        #   end
+        #
+        # This would make the error message for bad logins and bad passwords look identical:
+        #
+        #   Login/Password combination is not valid
+        #
+        # The downside to enabling this is that is can be too vague for a user that has a hard time remembering
+        # their username and password combinations. It also disables the ability to to highlight the field
+        # with the error when you use form_for.
+        #
+        # If you are developing an app where security is an extreme priority (such as a financial application),
+        # then you should enable this. Otherwise, leaving this off is fine.
+        # 
+        # * <tt>Default</tt> false
+        # * <tt>Accepts:</tt> Boolean
+        def generalize_credentials_error_messages(value = nil)
+          config(:generalize_credentials_error_messages, value, false)
+        end
+        alias_method :generalize_credentials_error_messages=, :generalize_credentials_error_messages
         
         # The name of the method you want Authlogic to create for storing the login / username. Keep in mind this is just for your
         # Authlogic::Session, if you want it can be something completely different than the field in your model. So if you wanted people to
@@ -85,7 +114,7 @@ module Authlogic
 
               self.class.class_eval <<-"end_eval", __FILE__, __LINE__
                 private
-                  # The password should not be accessible publicly. This way forms using form_for don't fill the password with the attempted password. The prevent this we just create this method that is private.
+                  # The password should not be accessible publicly. This way forms using form_for don't fill the password with the attempted password. To prevent this we just create this method that is private.
                   def protected_#{password_field}
                     @#{password_field}
                   end
@@ -126,19 +155,20 @@ module Authlogic
           end
           
           def validate_by_password
-            errors.add(login_field, I18n.t('error_messages.login_blank', :default => "can not be blank")) if send(login_field).blank?
-            errors.add(password_field, I18n.t('error_messages.password_blank', :default => "can not be blank")) if send("protected_#{password_field}").blank?
+            errors.add(login_field, I18n.t('error_messages.login_blank', :default => "cannot be blank")) if send(login_field).blank?
+            errors.add(password_field, I18n.t('error_messages.password_blank', :default => "cannot be blank")) if send("protected_#{password_field}").blank?
             return if errors.count > 0
 
             self.attempted_record = search_for_record(find_by_login_method, send(login_field))
 
             if attempted_record.blank?
-              errors.add(login_field, I18n.t('error_messages.login_not_found', :default => "does not exist"))
+              
+              errors.add(general_credentials_identifier || login_field, I18n.t('error_messages.login_not_found', :default => "is not valid"))
               return
             end
 
             if !attempted_record.send(verify_password_method, send("protected_#{password_field}"))
-              errors.add(password_field, I18n.t('error_messages.password_invalid', :default => "is not valid"))
+              errors.add(general_credentials_identifier || password_field, I18n.t('error_messages.password_invalid', :default => "is not valid"))
               return
             end
           end
@@ -149,6 +179,14 @@ module Authlogic
           
           def login_field
             self.class.login_field
+          end
+          
+          def general_credentials_identifier
+            generalize_credentials_error_messages? && "#{login_field.to_s.humanize}/Password combination"
+          end
+          
+          def generalize_credentials_error_messages?
+            self.class.generalize_credentials_error_messages == true
           end
           
           def password_field

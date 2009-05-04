@@ -110,13 +110,13 @@ module Authlogic
         # A hash of options for the validates_confirmation_of call for the password field. Allows you to change this however you want.
         #
         # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
-        # merge options into it. Checkout the convenience function merge_validates_length_of_login_field_options to merge
+        # merge options into it. Checkout the convenience function merge_validates_length_of_password_field_options to merge
         # options.</b>
         #
-        # * <tt>Default:</tt> {:minimum => 4, :if => "#{password_salt_field}_changed?".to_sym}
+        # * <tt>Default:</tt> {:if => :require_password?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_confirmation_of
         def validates_confirmation_of_password_field_options(value = nil)
-          config(:validates_confirmation_of_password_field_options, value, {:minimum => 4, :if => :require_password?})
+          config(:validates_confirmation_of_password_field_options, value, {:if => :require_password?})
         end
         alias_method :validates_confirmation_of_password_field_options=, :validates_confirmation_of_password_field_options
         
@@ -128,7 +128,7 @@ module Authlogic
         # A hash of options for the validates_length_of call for the password_confirmation field. Allows you to change this however you want.
         #
         # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
-        # merge options into it. Checkout the convenience function merge_validates_length_of_login_field_options to merge
+        # merge options into it. Checkout the convenience function merge_validates_length_of_password_field_options to merge
         # options.</b>
         #
         # * <tt>Default:</tt> validates_length_of_password_field_options

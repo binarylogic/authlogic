@@ -62,7 +62,7 @@ module ActsAsAuthenticTest
     end
     
     def test_validates_confirmation_of_password_field_options_config
-      default = {:minimum => 4, :if => :require_password?}
+      default = {:if => :require_password?}
       assert_equal default, User.validates_confirmation_of_password_field_options
       assert_equal default, Employee.validates_confirmation_of_password_field_options
       
@@ -128,9 +128,6 @@ module ActsAsAuthenticTest
     
     def test_validates_length_of_password_confirmation
       u = User.new
-      
-      assert !u.valid?
-      assert u.errors.on(:password_confirmation)
       
       u.password = "test"
       u.password_confirmation = ""
