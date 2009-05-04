@@ -127,6 +127,7 @@ module Authlogic
           super
         end
         
+        # Returns the login_field / password_field credentials combination in hash form.
         def credentials
           if authenticating_with_password?
             details = {}
@@ -138,6 +139,7 @@ module Authlogic
           end
         end
         
+        # Accepts the login_field / password_field credentials combination in hash form.
         def credentials=(value)
           super
           values = value.is_a?(Array) ? value : [value]
