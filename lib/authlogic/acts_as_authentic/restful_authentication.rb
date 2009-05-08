@@ -26,7 +26,8 @@ module Authlogic
         
         # This works just like act_like_restful_authentication except that it will start transitioning your users to the algorithm you
         # specify with the crypto provider option. The next time they log in it will resave their password with the new algorithm
-        # and any new record will use the new algorithm as well.
+        # and any new record will use the new algorithm as well. Make sure to update your users table if you are using the default
+        # migration since it will set crypted_password and salt columns to a maximum width of 40 characters which is not enough. 
         def transition_from_restful_authentication(value = nil)
           r = config(:transition_from_restful_authentication, value, false)
           set_restful_authentication_config if value
