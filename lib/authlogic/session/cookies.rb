@@ -26,7 +26,7 @@ module Authlogic
         # * <tt>Default:</tt> "#{klass_name.underscore}_credentials"
         # * <tt>Accepts:</tt> String
         def cookie_key(value = nil)
-          config(:cookie_key, value, "#{klass_name.underscore}_credentials")
+          rw_config(:cookie_key, value, "#{klass_name.underscore}_credentials")
         end
         alias_method :cookie_key=, :cookie_key
         
@@ -35,7 +35,7 @@ module Authlogic
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
         def remember_me(value = nil)
-          config(:remember_me, value, false)
+          rw_config(:remember_me, value, false)
         end
         alias_method :remember_me=, :remember_me
         
@@ -44,7 +44,7 @@ module Authlogic
         # * <tt>Default:</tt> 3.months
         # * <tt>Accepts:</tt> Integer, length of time in seconds, such as 60 or 3.months
         def remember_me_for(value = :_read)
-          config(:remember_me_for, value, 3.months, :_read)
+          rw_config(:remember_me_for, value, 3.months, :_read)
         end
         alias_method :remember_me_for=, :remember_me_for
       end

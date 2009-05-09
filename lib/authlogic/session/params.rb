@@ -43,7 +43,7 @@ module Authlogic
         # * <tt>Default:</tt> cookie_key
         # * <tt>Accepts:</tt> String
         def params_key(value = nil)
-          config(:params_key, value, cookie_key)
+          rw_config(:params_key, value, cookie_key)
         end
         alias_method :params_key=, :params_key
         
@@ -53,7 +53,7 @@ module Authlogic
         # * <tt>Default:</tt> ["application/rss+xml", "application/atom+xml"]
         # * <tt>Accepts:</tt> String of a request type, or :all or :any to allow single access authentication for any and all request types
         def single_access_allowed_request_types(value = nil)
-          config(:single_access_allowed_request_types, value, ["application/rss+xml", "application/atom+xml"])
+          rw_config(:single_access_allowed_request_types, value, ["application/rss+xml", "application/atom+xml"])
         end
         alias_method :single_access_allowed_request_types=, :single_access_allowed_request_types
       end

@@ -35,7 +35,7 @@ module Authlogic
         # * <tt>Default:</tt> "find_by_smart_case_login_field"
         # * <tt>Accepts:</tt> Symbol or String
         def find_by_login_method(value = nil)
-          config(:find_by_login_method, value, "find_by_smart_case_login_field")
+          rw_config(:find_by_login_method, value, "find_by_smart_case_login_field")
         end
         alias_method :find_by_login_method=, :find_by_login_method
         
@@ -64,7 +64,7 @@ module Authlogic
         # * <tt>Default</tt> false
         # * <tt>Accepts:</tt> Boolean
         def generalize_credentials_error_messages(value = nil)
-          config(:generalize_credentials_error_messages, value, false)
+          rw_config(:generalize_credentials_error_messages, value, false)
         end
         alias_method :generalize_credentials_error_messages=, :generalize_credentials_error_messages
         
@@ -76,7 +76,7 @@ module Authlogic
         # * <tt>Default:</tt> klass.login_field || klass.email_field
         # * <tt>Accepts:</tt> Symbol or String
         def login_field(value = nil)
-          config(:login_field, value, klass.login_field || klass.email_field)
+          rw_config(:login_field, value, klass.login_field || klass.email_field)
         end
         alias_method :login_field=, :login_field
         
@@ -85,7 +85,7 @@ module Authlogic
         # * <tt>Default:</tt> :password
         # * <tt>Accepts:</tt> Symbol or String
         def password_field(value = nil)
-          config(:password_field, value, login_field && :password)
+          rw_config(:password_field, value, login_field && :password)
         end
         alias_method :password_field=, :password_field
         
@@ -94,7 +94,7 @@ module Authlogic
         # * <tt>Default:</tt> "valid_#{password_field}?"
         # * <tt>Accepts:</tt> Symbol or String
         def verify_password_method(value = nil)
-          config(:verify_password_method, value, "valid_#{password_field}?")
+          rw_config(:verify_password_method, value, "valid_#{password_field}?")
         end
         alias_method :verify_password_method=, :verify_password_method
       end

@@ -31,7 +31,7 @@ module Authlogic
         # * <tt>Default:</tt> 0
         # * <tt>Accepts:</tt> integer representing time in seconds
         def last_request_at_threshold(value = nil)
-          config(:last_request_at_threshold, value, 0)
+          rw_config(:last_request_at_threshold, value, 0)
         end
         alias_method :last_request_at_threshold=, :last_request_at_threshold
       end

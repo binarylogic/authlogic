@@ -20,7 +20,7 @@ module Authlogic
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
         def change_single_access_token_with_password(value = nil)
-          config(:change_single_access_token_with_password, value, false)
+          rw_config(:change_single_access_token_with_password, value, false)
         end
         alias_method :change_single_access_token_with_password=, :change_single_access_token_with_password
       end

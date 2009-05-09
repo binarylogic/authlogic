@@ -30,7 +30,7 @@ module Authlogic
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
         def disable_magic_states(value = nil)
-          config(:disable_magic_states, value, false)
+          rw_config(:disable_magic_states, value, false)
         end
         alias_method :disable_magic_states=, :disable_magic_states
       end

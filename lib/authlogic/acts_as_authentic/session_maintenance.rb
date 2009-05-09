@@ -33,7 +33,7 @@ module Authlogic
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
         def maintain_sessions(value = nil)
-          config(:maintain_sessions, value, true)
+          rw_config(:maintain_sessions, value, true)
         end
         alias_method :maintain_sessions=, :maintain_sessions
         
@@ -44,7 +44,7 @@ module Authlogic
         # * <tt>Default:</tt> [nil]
         # * <tt>Accepts:</tt> Array
         def session_ids(value = nil)
-          config(:session_ids, value, [nil])
+          rw_config(:session_ids, value, [nil])
         end
         alias_method :session_ids=, :session_ids
         
@@ -54,7 +54,7 @@ module Authlogic
         # * <tt>Accepts:</tt> Class
         def session_class(value = nil)
           const = "#{base_class.name}Session".constantize rescue nil
-          config(:session_class, value, const)
+          rw_config(:session_class, value, const)
         end
         alias_method :session_class=, :session_class
       end

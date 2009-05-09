@@ -18,7 +18,7 @@ module Authlogic
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
         def act_like_restful_authentication(value = nil)
-          r = config(:act_like_restful_authentication, value, false)
+          r = rw_config(:act_like_restful_authentication, value, false)
           set_restful_authentication_config if value
           r
         end
@@ -28,7 +28,7 @@ module Authlogic
         # specify with the crypto provider option. The next time they log in it will resave their password with the new algorithm
         # and any new record will use the new algorithm as well.
         def transition_from_restful_authentication(value = nil)
-          r = config(:transition_from_restful_authentication, value, false)
+          r = rw_config(:transition_from_restful_authentication, value, false)
           set_restful_authentication_config if value
           r
         end

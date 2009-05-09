@@ -37,7 +37,7 @@ module Authlogic
         # * <tt>Default:</tt> 50
         # * <tt>Accepts:</tt> Integer, set to 0 to disable
         def consecutive_failed_logins_limit(value = nil)
-          config(:consecutive_failed_logins_limit, value, 50)
+          rw_config(:consecutive_failed_logins_limit, value, 50)
         end
         alias_method :consecutive_failed_logins_limit=, :consecutive_failed_logins_limit
         
@@ -46,7 +46,7 @@ module Authlogic
         # * <tt>Default:</tt> 2.hours
         # * <tt>Accepts:</tt> Fixnum, set to 0 for permanent ban
         def failed_login_ban_for(value = nil)
-          config(:failed_login_ban_for, (!value.nil? && value) || value, 2.hours.to_i)
+          rw_config(:failed_login_ban_for, (!value.nil? && value) || value, 2.hours.to_i)
         end
         alias_method :failed_login_ban_for=, :failed_login_ban_for
       end

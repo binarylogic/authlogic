@@ -20,7 +20,7 @@ module Authlogic
         # * <tt>Default:</tt> cookie_key
         # * <tt>Accepts:</tt> Symbol or String
         def session_key(value = nil)
-          config(:session_key, value, cookie_key)
+          rw_config(:session_key, value, cookie_key)
         end
         alias_method :session_key=, :session_key
       end

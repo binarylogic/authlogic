@@ -48,7 +48,7 @@ module Authlogic
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
         def logout_on_timeout(value = nil)
-          config(:logout_on_timeout, value, false)
+          rw_config(:logout_on_timeout, value, false)
         end
         alias_method :logout_on_timeout=, :logout_on_timeout
       end

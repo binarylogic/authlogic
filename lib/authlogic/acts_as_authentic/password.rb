@@ -18,7 +18,7 @@ module Authlogic
         # * <tt>Default:</tt> :crypted_password, :encrypted_password, :password_hash, or :pw_hash
         # * <tt>Accepts:</tt> Symbol
         def crypted_password_field(value = nil)
-          config(:crypted_password_field, value, first_column_to_exist(nil, :crypted_password, :encrypted_password, :password_hash, :pw_hash))
+          rw_config(:crypted_password_field, value, first_column_to_exist(nil, :crypted_password, :encrypted_password, :password_hash, :pw_hash))
         end
         alias_method :crypted_password_field=, :crypted_password_field
         
@@ -27,7 +27,7 @@ module Authlogic
         # * <tt>Default:</tt> :password_salt, :pw_salt, :salt, nil if none exist
         # * <tt>Accepts:</tt> Symbol
         def password_salt_field(value = nil)
-          config(:password_salt_field, value, first_column_to_exist(nil, :password_salt, :pw_salt, :salt))
+          rw_config(:password_salt_field, value, first_column_to_exist(nil, :password_salt, :pw_salt, :salt))
         end
         alias_method :password_salt_field=, :password_salt_field
         
@@ -37,7 +37,7 @@ module Authlogic
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
         def require_password_confirmation(value = nil)
-          config(:require_password_confirmation, value, true)
+          rw_config(:require_password_confirmation, value, true)
         end
         alias_method :require_password_confirmation=, :require_password_confirmation
         
@@ -53,7 +53,7 @@ module Authlogic
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
         def ignore_blank_passwords(value = nil)
-          config(:ignore_blank_passwords, value, true)
+          rw_config(:ignore_blank_passwords, value, true)
         end
         alias_method :ignore_blank_passwords=, :ignore_blank_passwords
         
@@ -70,7 +70,7 @@ module Authlogic
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
         def check_passwords_against_database(value = nil)
-          config(:check_passwords_against_database, value, true)
+          rw_config(:check_passwords_against_database, value, true)
         end
         alias_method :check_passwords_against_database=, :check_passwords_against_database
         
@@ -79,7 +79,7 @@ module Authlogic
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
         def validate_password_field(value = nil)
-          config(:validate_password_field, value, true)
+          rw_config(:validate_password_field, value, true)
         end
         alias_method :validate_password_field=, :validate_password_field
         
@@ -92,7 +92,7 @@ module Authlogic
         # * <tt>Default:</tt> {:minimum => 4, :if => :require_password?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_password_field_options(value = nil)
-          config(:validates_length_of_password_field_options, value, {:minimum => 4, :if => :require_password?})
+          rw_config(:validates_length_of_password_field_options, value, {:minimum => 4, :if => :require_password?})
         end
         alias_method :validates_length_of_password_field_options=, :validates_length_of_password_field_options
         
@@ -116,7 +116,7 @@ module Authlogic
         # * <tt>Default:</tt> {:if => :require_password?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_confirmation_of
         def validates_confirmation_of_password_field_options(value = nil)
-          config(:validates_confirmation_of_password_field_options, value, {:if => :require_password?})
+          rw_config(:validates_confirmation_of_password_field_options, value, {:if => :require_password?})
         end
         alias_method :validates_confirmation_of_password_field_options=, :validates_confirmation_of_password_field_options
         
@@ -134,7 +134,7 @@ module Authlogic
         # * <tt>Default:</tt> validates_length_of_password_field_options
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_password_confirmation_field_options(value = nil)
-          config(:validates_length_of_password_confirmation_field_options, value, validates_length_of_password_field_options)
+          rw_config(:validates_length_of_password_confirmation_field_options, value, validates_length_of_password_field_options)
         end
         alias_method :validates_length_of_password_confirmation_field_options=, :validates_length_of_password_confirmation_field_options
         
@@ -149,7 +149,7 @@ module Authlogic
         # * <tt>Default:</tt> CryptoProviders::Sha512
         # * <tt>Accepts:</tt> Class
         def crypto_provider(value = nil)
-          config(:crypto_provider, value, CryptoProviders::Sha512)
+          rw_config(:crypto_provider, value, CryptoProviders::Sha512)
         end
         alias_method :crypto_provider=, :crypto_provider
         
@@ -165,7 +165,7 @@ module Authlogic
         # * <tt>Default:</tt> nil
         # * <tt>Accepts:</tt> Class or Array
         def transition_from_crypto_providers(value = nil)
-          config(:transition_from_crypto_providers, (!value.nil? && [value].flatten.compact) || value, [])
+          rw_config(:transition_from_crypto_providers, (!value.nil? && [value].flatten.compact) || value, [])
         end
         alias_method :transition_from_crypto_providers=, :transition_from_crypto_providers
       end

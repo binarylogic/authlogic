@@ -19,7 +19,7 @@ module Authlogic
         # * <tt>Default:</tt> :email, if it exists
         # * <tt>Accepts:</tt> Symbol
         def email_field(value = nil)
-          config(:email_field, value, first_column_to_exist(nil, :email, :email_address))
+          rw_config(:email_field, value, first_column_to_exist(nil, :email, :email_address))
         end
         alias_method :email_field=, :email_field
         
@@ -28,7 +28,7 @@ module Authlogic
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
         def validate_email_field(value = nil)
-          config(:validate_email_field, value, true)
+          rw_config(:validate_email_field, value, true)
         end
         alias_method :validate_email_field=, :validate_email_field
         
@@ -41,7 +41,7 @@ module Authlogic
         # * <tt>Default:</tt> {:within => 6..100}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_email_field_options(value = nil)
-          config(:validates_length_of_email_field_options, value, {:within => 6..100})
+          rw_config(:validates_length_of_email_field_options, value, {:within => 6..100})
         end
         alias_method :validates_length_of_email_field_options=, :validates_length_of_email_field_options
         
@@ -65,7 +65,7 @@ module Authlogic
         # * <tt>Default:</tt> {:with => Authlogic::Regex.email, :message => I18n.t('error_messages.email_invalid', :default => "should look like an email address.")}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_format_of
         def validates_format_of_email_field_options(value = nil)
-          config(:validates_format_of_email_field_options, value, {:with => Authlogic::Regex.email, :message => I18n.t('error_messages.email_invalid', :default => "should look like an email address.")})
+          rw_config(:validates_format_of_email_field_options, value, {:with => Authlogic::Regex.email, :message => I18n.t('error_messages.email_invalid', :default => "should look like an email address.")})
         end
         alias_method :validates_format_of_email_field_options=, :validates_format_of_email_field_options
         
@@ -83,7 +83,7 @@ module Authlogic
         # * <tt>Default:</tt> {:case_sensitive => false, :scope => validations_scope, :if => "#{email_field}_changed?".to_sym}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_uniqueness_of
         def validates_uniqueness_of_email_field_options(value = nil)
-          config(:validates_uniqueness_of_email_field_options, value, {:case_sensitive => false, :scope => validations_scope, :if => "#{email_field}_changed?".to_sym})
+          rw_config(:validates_uniqueness_of_email_field_options, value, {:case_sensitive => false, :scope => validations_scope, :if => "#{email_field}_changed?".to_sym})
         end
         alias_method :validates_uniqueness_of_email_field_options=, :validates_uniqueness_of_email_field_options
         
