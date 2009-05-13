@@ -1,4 +1,8 @@
-== 2.0.12 release 2009-5-13
+== 2.0.13 released 2009-5-13
+
+* Add authlogic/regex.rb to manifest
+
+== 2.0.12 released 2009-5-13
 
 * Added the ability to add a last_request_update_allowed? method in your controller to pragmatically tell Authlogic when and when not to update the last_request_at field in your database. This only takes effect if the method if present.
 * Extracted Authlogic's regular expressions into it's own module to allow easy use of them outside of Authlogic. See Authlogic::Regex for more info.
@@ -7,7 +11,7 @@
 * Update email regular expression to use A-Z0-9 instead of /w as to not allow for diacritical marks in an email address.
 * Changed config() convenience method to rw_config() to be more descriptive and less vague.
 
-== 2.0.11 release 2009-4-25
+== 2.0.11 released 2009-4-25
 
 * Fix bug when password is turned off and the SingleAccessToken module calls the after_password_set callback.
 * HTTP basic auth can now be toggled on or off. It also checks for the existence of a standard username and password before enabling itself.
@@ -17,14 +21,14 @@
 * Refactor params_enabled? so that the single_access_allowed? method in controllers takes precedence.
 * Added testing comments in the README and expanded on the documentation in Authlogic::TestCase
 
-== 2.0.10 release 2009-4-21
+== 2.0.10 released 2009-4-21
 
 * Mock request is now transparent to non existent methods. Since the methods calls really have no functional value when testing authlogic.
 * Allow password confirmation to be disabled.
 * Modified login format validation to allow for the + character since emails addresses allow that as a valid character.
 * Added merge_* configuration methods for acts_as_authentic to make merging options into configuration options that default to hashes. Just a few convenience methods.
 
-== 2.0.9 release 2009-4-9
+== 2.0.9 released 2009-4-9
 
 * Fixed bug where hooks provided by the password module were called when the password module was not being used due to the fact that the password field did not exist.
 * Fixed bug where the find_with_login method was not being aliased if you were using an alternate field besides login.
@@ -33,11 +37,11 @@
 
 * Dont reset the @password_changed instance variable to false because its halts the callback chain, instead reset it to nil.
 
-== 2.0.7 release 2009-4-9
+== 2.0.7 released 2009-4-9
 
 * Rename TestCase::ControllerAdapter to TestCase::RailsRequestAdapter to help clarify it's usage and fix a constant typo.
 
-== 2.0.6 release 2009-4-9
+== 2.0.6 released 2009-4-9
 
 * Don't use second, use [1] instead so older rails versions don't complain.
 * Update email regular expression to be less TLD specific: (?:[A-Z]{2,4}|museum|travel)

@@ -31,6 +31,7 @@ lib/authlogic/crypto_providers/sha1.rb
 lib/authlogic/crypto_providers/sha512.rb
 lib/authlogic/i18n.rb
 lib/authlogic/random.rb
+lib/authlogic/regex.rb
 lib/authlogic/session/activation.rb
 lib/authlogic/session/active_record_trickery.rb
 lib/authlogic/session/base.rb
@@ -61,6 +62,7 @@ lib/authlogic/test_case/mock_logger.rb
 lib/authlogic/test_case/mock_request.rb
 lib/authlogic/test_case/rails_request_adapter.rb
 lib/authlogic/version.rb
+rails/init.rb
 shoulda_macros/authlogic.rb
 test/acts_as_authentic_test/base_test.rb
 test/acts_as_authentic_test/email_test.rb
