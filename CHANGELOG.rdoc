@@ -1,4 +1,4 @@
-== 2.0.12
+== 2.0.12 release 2009-5-13
 
 * Added the ability to add a last_request_update_allowed? method in your controller to pragmatically tell Authlogic when and when not to update the last_request_at field in your database. This only takes effect if the method if present.
 * Extracted Authlogic's regular expressions into it's own module to allow easy use of them outside of Authlogic. See Authlogic::Regex for more info.
