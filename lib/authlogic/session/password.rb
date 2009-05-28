@@ -151,12 +151,18 @@ module Authlogic
           end
         end
         
+        def invalid_password?
+          invalid_password == true
+        end
+        
         private
           def authenticating_with_password?
             login_field && (!send(login_field).nil? || !send("protected_#{password_field}").nil?)
           end
           
           def validate_by_password
+            self.invalid_password = false
+            
             errors.add(login_field, I18n.t('error_messages.login_blank', :default => "cannot be blank")) if send(login_field).blank?
             errors.add(password_field, I18n.t('error_messages.password_blank', :default => "cannot be blank")) if send("protected_#{password_field}").blank?
             return if errors.count > 0
@@ -169,9 +175,18 @@ module Authlogic
             end
 
             if !attempted_record.send(verify_password_method, send("protected_#{password_field}"))
+              self.invalid_password = true
               generalize_credentials_error_messages? ? add_general_credentials_error : errors.add(password_field, I18n.t('error_messages.password_invalid', :default => "is not valid"))
               return
             end
+          end
+          
+          def invalid_password
+            @invalid_password
+          end
+          
+          def invalid_password=(value)
+            @invalid_password = value
           end
           
           def find_by_login_method
