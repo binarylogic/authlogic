@@ -40,7 +40,7 @@ module Authlogic
       module InstanceMethods
         private
           def increase_failed_login_count
-            if errors.on(password_field) && attempted_record.respond_to?(:failed_login_count)
+            if invalid_password? && attempted_record.respond_to?(:failed_login_count)
               attempted_record.failed_login_count ||= 0
               attempted_record.failed_login_count += 1
             end
