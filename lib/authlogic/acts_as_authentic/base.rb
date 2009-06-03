@@ -25,11 +25,7 @@ module Authlogic
         # See the various sub modules for the configuration they provide.
         def acts_as_authentic(unsupported_options = nil, &block)
           # Stop all configuration if the DB is not set up
-          begin
-            column_names
-          rescue Exception
-            return
-          end
+          return if !db_setup?
           
           raise ArgumentError.new("You are using the old v1.X.X configuration method for Authlogic. Instead of " +
             "passing a hash of configuration options to acts_as_authentic, pass a block: acts_as_authentic { |c| c.my_option = my_value }") if !unsupported_options.nil?
@@ -68,6 +64,15 @@ module Authlogic
             inheritable_attributes.include?(key) ? read_inheritable_attribute(key) : []
           end
           
+          def db_setup?
+            begin
+              column_names
+              true
+            rescue Exception
+              false
+            end
+          end
+          
           def rw_config(key, value, default_value = nil, read_value = nil)
             if value == read_value
               inheritable_attributes.include?(key) ? read_inheritable_attribute(key) : default_value
@@ -77,7 +82,9 @@ module Authlogic
           end
           
           def first_column_to_exist(*columns_to_check)
-            columns_to_check.each { |column_name| return column_name.to_sym if column_names.include?(column_name.to_s) }
+            if db_setup?
+              columns_to_check.each { |column_name| return column_name.to_sym if column_names.include?(column_name.to_s) }
+            end
             columns_to_check.first && columns_to_check.first.to_sym
           end
       end
