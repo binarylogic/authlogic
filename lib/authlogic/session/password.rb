@@ -198,7 +198,7 @@ module Authlogic
           end
           
           def add_general_credentials_error
-            errors.add_to_base(I18n.t('error_messages.general_credentials_error', :default => "#{login_field.to_s.humanize}/Password combination is not valid"))
+            errors.add(:base, I18n.t('error_messages.general_credentials_error', :default => "#{login_field.to_s.humanize}/Password combination is not valid"))
           end
           
           def generalize_credentials_error_messages?

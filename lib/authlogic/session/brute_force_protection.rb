@@ -76,7 +76,7 @@ module Authlogic
         
           def validate_failed_logins
             errors.clear # Clear all other error messages, as they are irrelevant at this point and can only provide additional information that is not needed
-            errors.add_to_base(I18n.t('error_messages.consecutive_failed_logins_limit_exceeded', :default => "Consecutive failed logins limit exceeded, account is disabled."))
+            errors.add(:base, I18n.t('error_messages.consecutive_failed_logins_limit_exceeded', :default => "Consecutive failed logins limit exceeded, account is disabled."))
           end
           
           def consecutive_failed_logins_limit

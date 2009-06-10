@@ -107,11 +107,11 @@ module ActsAsAuthenticTest
       u = User.new
       u.password_confirmation = "test2"
       assert !u.valid?
-      assert u.errors.on(:password)
+      assert u.errors[:password].size > 0
       
       u.password = "test"
       assert !u.valid?
-      assert !u.errors.on(:password_confirmation)
+      assert u.errors[:password_confirmation].size == 0
     end
     
     def test_validates_confirmation_of_password
@@ -119,11 +119,11 @@ module ActsAsAuthenticTest
       u.password = "test"
       u.password_confirmation = "test2"
       assert !u.valid?
-      assert u.errors.on(:password)
+      assert u.errors[:password].size > 0
       
       u.password_confirmation = "test"
       assert !u.valid?
-      assert !u.errors.on(:password)
+      assert u.errors[:password].size == 0
     end
     
     def test_validates_length_of_password_confirmation
@@ -132,18 +132,18 @@ module ActsAsAuthenticTest
       u.password = "test"
       u.password_confirmation = ""
       assert !u.valid?
-      assert u.errors.on(:password_confirmation)
+      assert u.errors[:password_confirmation].size > 0
       
       u.password_confirmation = "test"
       assert !u.valid?
-      assert !u.errors.on(:password_confirmation)
+      assert u.errors[:password_confirmation].size == 0
       
       ben = users(:ben)
       assert ben.valid?
       
       ben.password = "newpass"
       assert !ben.valid?
-      assert ben.errors.on(:password_confirmation)
+      assert ben.errors[:password_confirmation].size > 0
       
       ben.password_confirmation = "newpass"
       assert ben.valid?

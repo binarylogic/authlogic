@@ -45,13 +45,13 @@ module SessionTest
         2.times do |i|
           session = UserSession.new(:login => ben.login, :password => "badpassword1")
           assert !session.save
-          assert session.errors.on(:password)
+          assert session.errors[:password].size > 0
           assert_equal i + 1, ben.reload.failed_login_count
         end
         
         session = UserSession.new(:login => ben.login, :password => "badpassword2")
         assert !session.save
-        assert !session.errors.on(:password)
+        assert session.errors[:password].size == 0
         assert_equal 3, ben.reload.failed_login_count
       
         UserSession.consecutive_failed_logins_limit = 50
@@ -85,7 +85,7 @@ module SessionTest
         2.times do |i|
           session = UserSession.new(:login => ben.login, :password => "badpassword1")
           assert !session.save
-          assert session.errors.on(:password)
+          assert session.errors[:password].size > 0
           assert_equal i + 1, ben.reload.failed_login_count
         end
         

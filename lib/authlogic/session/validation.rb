@@ -10,10 +10,14 @@ module Authlogic
       #     private
       #       def check_if_awesome
       #         errors.add(:login, "must contain awesome") if login && !login.include?("awesome")
-      #         errors.add_to_base("You must be awesome to log in") unless attempted_record.awesome?
+      #         errors.add(:base, "You must be awesome to log in") unless attempted_record.awesome?
       #       end
       #   end
       class Errors < ::ActiveRecord::Errors
+        def [](key)
+          value = super
+          value.is_a?(Array) ? value : [value].compact
+        end
       end
       
       # You should use this as a place holder for any records that you find during validation. The main reason for this is to
@@ -39,7 +43,7 @@ module Authlogic
       #    private
       #      def check_if_awesome
       #        errors.add(:login, "must contain awesome") if login && !login.include?("awesome")
-      #        errors.add_to_base("You must be awesome to log in") unless attempted_record.awesome?
+      #        errors.add(:base, "You must be awesome to log in") unless attempted_record.awesome?
       #      end
       #  end
       def errors
@@ -58,18 +62,18 @@ module Authlogic
         validate
         ensure_authentication_attempted
                 
-        if errors.empty?
+        if errors.size == 0
           new_session? ? after_validation_on_create : after_validation_on_update
           after_validation
         end
         
         save_record(attempted_record)
-        errors.empty?
+        errors.size == 0
       end
       
       private
         def ensure_authentication_attempted
-          errors.add_to_base(I18n.t('error_messages.no_authentication_details', :default => "You did not provide any details for authentication.")) if errors.empty? && attempted_record.nil?
+          errors.add(:base, I18n.t('error_messages.no_authentication_details', :default => "You did not provide any details for authentication.")) if errors.empty? && attempted_record.nil?
         end
     end
   end
