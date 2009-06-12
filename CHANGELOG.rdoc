@@ -3,6 +3,7 @@
 * Fixed issue with using brute force protection AND generalize_credentials_error_messages. Brute force protection was looking to see if there were password errors, which generalize_credentials_error_messages was obfuscating. This is all fixed now though thanks to a handy article on Microsoft (http://support.microsoft.com/kb/168702), method #2, it works every time.
 * Added db_setup? method to avoid errors during rake tasks where the db might not be set up. Ex: migrations
 * Stop using errors.on(key) since that is now deprecated in Rails. Use errors[key] instead.
+* Use valid_password? for the method name to validate a password instead of valid_#{password_field}?.
 
 == 2.0.13 released 2009-5-13
 

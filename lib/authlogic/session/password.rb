@@ -91,10 +91,10 @@ module Authlogic
         
         # The name of the method in your model used to verify the password. This should be an instance method. It should also be prepared to accept a raw password and a crytped password.
         #
-        # * <tt>Default:</tt> "valid_#{password_field}?"
+        # * <tt>Default:</tt> "valid_password?"
         # * <tt>Accepts:</tt> Symbol or String
         def verify_password_method(value = nil)
-          rw_config(:verify_password_method, value, "valid_#{password_field}?")
+          rw_config(:verify_password_method, value, "valid_password?")
         end
         alias_method :verify_password_method=, :verify_password_method
       end
