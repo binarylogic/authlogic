@@ -1,4 +1,4 @@
-== 2.0.14
+== 2.0.14 released 2009-6-13
 
 * Fixed issue with using brute force protection AND generalize_credentials_error_messages. Brute force protection was looking to see if there were password errors, which generalize_credentials_error_messages was obfuscating. This is all fixed now though thanks to a handy article on Microsoft (http://support.microsoft.com/kb/168702), method #2, it works every time.
 * Added db_setup? method to avoid errors during rake tasks where the db might not be set up. Ex: migrations
