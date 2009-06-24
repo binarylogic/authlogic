@@ -226,7 +226,7 @@ module Authlogic
             before_password_set
             @password = pass
             send("#{password_salt_field}=", Authlogic::Random.friendly_token) if password_salt_field
-            send("#{crypted_password_field}=", crypto_provider.encrypt(*encrypt_arguments(@password, act_like_restful_authentication? ? :restful_authentication : nil)))
+            send("#{crypted_password_field}=", crypto_provider.encrypt(*encrypt_arguments(@password, false, act_like_restful_authentication? ? :restful_authentication : nil)))
             @password_changed = true
             after_password_set
           end
