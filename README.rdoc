@@ -49,7 +49,7 @@ Authlogic is very flexible, it has a strong public API and a plethora of hooks t
 
 == Helpful links
 
-* <b>Documentation:</b> http://authlogic.rubyforge.org
+* <b>Documentation:</b> http://rdoc.info/projects/binarylogic/authlogic
 * <b>Repository:</b> http://github.com/binarylogic/authlogic/tree/master
 * <b>Railscasts Screencast:</b> http://railscasts.com/episodes/160-authlogic
 * <b>Live example with OpenID "add on":</b> http://authlogicexample.binarylogic.com
@@ -207,10 +207,7 @@ OR from github:
 
   $ sudo gem install binarylogic-authlogic
 
-Now add the gem dependency in your config:
-
-  # config/environment.rb
-  config.gem "authlogic"
+Now just add the gem dependency in your projects configuration.
 
 Or you install this as a plugin (for older versions of rails)
 
