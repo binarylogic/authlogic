@@ -74,6 +74,11 @@ module Authlogic
             
             find(:first, :conditions => [conditions_sql, *conditions_subs])
           end
+          
+          # This method will raise ActiveRecord::NotFound if no record is found.
+          def find_using_perishable_token!(token, age = perishable_token_valid_for)
+            find_using_perishable_token(token, age) || raise(ActiveRecord::RecordNotFound)
+          end
         end
         
         # Instance level methods for the perishable token.
