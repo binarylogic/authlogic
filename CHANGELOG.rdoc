@@ -1,4 +1,4 @@
-== 2.0.15
+== 2.1.0 released 2009-6-27
 
 * Fixed bug when using act_like_restful_authentication and setting passwords, needed to add a 2nd parameter to tell if to check against the database or not.
 * Don't save record if they are read only.

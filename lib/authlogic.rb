@@ -1,6 +1,5 @@
 require "active_support"
 
-require File.dirname(__FILE__) + "/authlogic/version"
 require File.dirname(__FILE__) + "/authlogic/i18n"
 require File.dirname(__FILE__) + "/authlogic/random"
 require File.dirname(__FILE__) + "/authlogic/regex"
