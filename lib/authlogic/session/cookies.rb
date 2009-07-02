@@ -57,7 +57,7 @@ module Authlogic
           values = value.is_a?(Array) ? value : [value]
           case values.first
           when Hash
-            self.remember_me = values.first.with_indifferent_access[:remember_me]
+            self.remember_me = values.first.with_indifferent_access[:remember_me] if values.first.with_indifferent_access.key?(:remember_me)
           else
             r = values.find { |value| value.is_a?(TrueClass) || value.is_a?(FalseClass) }
             self.remember_me = r if !r.nil?

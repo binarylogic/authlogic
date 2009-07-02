@@ -1,3 +1,8 @@
+== 2.1.1 released 2009-6-27
+
+* Use mb_chars when downcasing the login string to support international characters.
+* Check for the existence of the :remember_me key before setting remember_me off of a hash.
+
 == 2.1.0 released 2009-6-27
 
 * Fixed bug when using act_like_restful_authentication and setting passwords, needed to add a 2nd parameter to tell if to check against the database or not.
