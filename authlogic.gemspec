@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION.yml",
+     "authlogic.gemspec",
      "generators/session/session_generator.rb",
      "generators/session/templates/session.rb",
      "init.rb",

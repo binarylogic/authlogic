@@ -203,13 +203,13 @@ From rubyforge:
 
   $ sudo gem install authlogic
 
-OR from github:
+Or from github:
 
   $ sudo gem install binarylogic-authlogic
 
 Now just add the gem dependency in your projects configuration.
 
-Or you install this as a plugin (for older versions of rails)
+Or you can install this as a plugin:
 
   script/plugin install git://github.com/binarylogic/authlogic.git
 
