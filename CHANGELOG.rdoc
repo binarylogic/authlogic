@@ -1,4 +1,4 @@
-== 2.1.1 released 2009-6-27
+== 2.1.1
 
 * Use mb_chars when downcasing the login string to support international characters.
 * Check for the existence of the :remember_me key before setting remember_me off of a hash.
