@@ -1,7 +1,8 @@
-== 2.1.1
+== 2.1.1 released 2009-7-04
 
 * Use mb_chars when downcasing the login string to support international characters.
 * Check for the existence of the :remember_me key before setting remember_me off of a hash.
+* Added check to make sure Authlogic is not loaded too late, causing a NotActivated error.
 
 == 2.1.0 released 2009-6-27
 
