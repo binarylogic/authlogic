@@ -28,12 +28,14 @@ module Authlogic
         def create(*args, &block)
           session = new(*args)
           session.save(&block)
+          session
         end
         
         # Same as create but calls create!, which raises an exception when validation fails.
         def create!(*args)
           session = new(*args)
           session.save!
+          session
         end
       end
       

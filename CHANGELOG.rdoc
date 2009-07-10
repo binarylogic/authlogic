@@ -1,3 +1,7 @@
+== 2.1.2
+
+* Return the newly create object for the class level create method, instead of a boolean
+
 == 2.1.1 released 2009-7-04
 
 * Use mb_chars when downcasing the login string to support international characters.

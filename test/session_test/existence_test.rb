@@ -5,10 +5,10 @@ module SessionTest
     class ClassMethodsTest < ActiveSupport::TestCase
       def test_create
         ben = users(:ben)
-        assert !UserSession.create(:login => "somelogin", :password => "badpw2")
-        assert UserSession.create(:login => ben.login, :password => "benrocks")
+        assert UserSession.create(:login => "somelogin", :password => "badpw2").new_session?
+        assert !UserSession.create(:login => ben.login, :password => "benrocks").new_session?
         assert_raise(Authlogic::Session::Existence::SessionInvalidError) { UserSession.create!(:login => ben.login, :password => "badpw") }
-        assert UserSession.create!(:login => ben.login, :password => "benrocks")
+        assert !UserSession.create!(:login => ben.login, :password => "benrocks").new_session?
       end
     end
     
