@@ -1,6 +1,7 @@
 == 2.1.2
 
 * Return the newly create object for the class level create method, instead of a boolean
+* Add a model_name class method for Authlogic::Session for rails 3 compatibility. Will be using ActiveModel eventually, but this should be a quick fix.
 
 == 2.1.1 released 2009-7-04
 
