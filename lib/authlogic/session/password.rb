@@ -50,9 +50,17 @@ module Authlogic
         #     generalize_credentials_error_messages true
         #   end
         #
-        # This would make the error message for bad logins and bad passwords look identical:
+        #   This would make the error message for bad logins and bad passwords look identical:
         #
         #   Login/Password combination is not valid
+        #  
+        #   Alternatively you may use a custom message:
+        # 
+        #   class UserSession < AuthLogic::Session::Base
+        #     generalize_credentials_error_messages "Your login information is invalid"
+        #   end
+        #
+        #   This will instead show your custom error message when the UserSession is invalid.
         #
         # The downside to enabling this is that is can be too vague for a user that has a hard time remembering
         # their username and password combinations. It also disables the ability to to highlight the field
@@ -168,7 +176,6 @@ module Authlogic
             return if errors.count > 0
 
             self.attempted_record = search_for_record(find_by_login_method, send(login_field))
-
             if attempted_record.blank?
               generalize_credentials_error_messages? ? add_general_credentials_error : errors.add(login_field, I18n.t('error_messages.login_not_found', :default => "is not valid"))
               return
@@ -198,11 +205,17 @@ module Authlogic
           end
           
           def add_general_credentials_error
-            errors.add(:base, I18n.t('error_messages.general_credentials_error', :default => "#{login_field.to_s.humanize}/Password combination is not valid"))
+            error_message = 
+            if self.class.generalize_credentials_error_messages.is_a? String
+              self.class.generalize_credentials_error_messages
+            else
+              "#{login_field.to_s.humanize}/Password combination is not valid"
+            end
+            errors.add(:base, I18n.t('error_messages.general_credentials_error', :default => error_message))
           end
           
           def generalize_credentials_error_messages?
-            self.class.generalize_credentials_error_messages == true
+            self.class.generalize_credentials_error_messages
           end
           
           def password_field
