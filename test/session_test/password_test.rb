@@ -19,13 +19,27 @@ module SessionTest
         assert_equal "valid_password?", UserSession.verify_password_method
       end
     
-      def test_generalize_credentials_error_messages
-        UserSession.generalize_credentials_error_messages = true
-        assert UserSession.generalize_credentials_error_messages
-    
+      def test_generalize_credentials_error_mesages_set_to_false
         UserSession.generalize_credentials_error_messages false
         assert !UserSession.generalize_credentials_error_messages
+        session = UserSession.create(:login => users(:ben).login, :password => "invalud-password")
+        assert_equal ["Password is not valid"], session.errors.full_messages
       end
+      
+      def test_generalize_credentials_error_messages_set_to_true
+        UserSession.generalize_credentials_error_messages true
+        assert UserSession.generalize_credentials_error_messages
+        session = UserSession.create(:login => users(:ben).login, :password => "invalud-password")
+        assert_equal ["Login/Password combination is not valid"], session.errors.full_messages
+      end
+
+      def test_generalize_credentials_error_messages_set_to_string
+        UserSession.generalize_credentials_error_messages= "Custom Error Message"
+        assert UserSession.generalize_credentials_error_messages
+        session = UserSession.create(:login => users(:ben).login, :password => "invalud-password")
+        assert_equal ["Custom Error Message"], session.errors.full_messages
+      end
+
       
       def test_login_field
         UserSession.configured_password_methods = false
