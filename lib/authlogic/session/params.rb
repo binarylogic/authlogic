@@ -47,8 +47,9 @@ module Authlogic
         end
         alias_method :params_key=, :params_key
         
-        # Authentication is allowed via a single access token, but maybe this is something you don't want for your application as a whole. Maybe this is something you only want for specific request types.
-        # Specify a list of allowed request types and single access authentication will only be allowed for the ones you specify.
+        # Authentication is allowed via a single access token, but maybe this is something you don't want for your application as a whole. Maybe this is
+        # something you only want for specific request types. Specify a list of allowed request types and single access authentication will only be
+        # allowed for the ones you specify.
         #
         # * <tt>Default:</tt> ["application/rss+xml", "application/atom+xml"]
         # * <tt>Accepts:</tt> String of a request type, or :all or :any to allow single access authentication for any and all request types

@@ -69,12 +69,12 @@ module Authlogic
           return @remember_me if defined?(@remember_me)
           @remember_me = self.class.remember_me
         end
-      
+        
         # Accepts a boolean as a flag to remember the session or not. Basically to expire the cookie at the end of the session or keep it for "remember_me_until".
         def remember_me=(value)
           @remember_me = value
         end
-      
+        
         # See remember_me
         def remember_me?
           remember_me == true || remember_me == "true" || remember_me == "1"
@@ -85,7 +85,7 @@ module Authlogic
           return unless remember_me?
           self.class.remember_me_for
         end
-      
+        
         # When to expire the cookie. See remember_me_for configuration option to change this.
         def remember_me_until
           return unless remember_me?
@@ -112,7 +112,7 @@ module Authlogic
               false
             end
           end
-        
+          
           def save_cookie
             controller.cookies[cookie_key] = {
               :value => "#{record.persistence_token}::#{record.send(record.class.primary_key)}",
@@ -120,7 +120,7 @@ module Authlogic
               :domain => controller.cookie_domain
             }
           end
-        
+          
           def destroy_cookie
             controller.cookies.delete cookie_key, :domain => controller.cookie_domain
           end

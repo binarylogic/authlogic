@@ -55,12 +55,12 @@ Authlogic is very flexible, it has a strong public API and a plethora of hooks t
 * <b>Live example with OpenID "add on":</b> http://authlogicexample.binarylogic.com
 * <b>Live example repository with tutorial in README:</b> http://github.com/binarylogic/authlogic_example/tree/master
 * <b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
-* <b>Bugs / feature suggestions:</b> http://binarylogic.lighthouseapp.com/projects/18752-authlogic
+* <b>Issues:</b> http://github.com/binarylogic/authlogic/issues
 * <b>Google group:</b> http://groups.google.com/group/authlogic
 
 <b>Before contacting me directly, please read:</b>
 
-If you find a bug or a problem please post it on lighthouse. If you need help with something, please use google groups. I check both regularly and get emails when anything happens, so that is the best place to get help. This also benefits other people in the future with the same questions / problems. Thank you.
+If you find a bug or a problem please post it in the issues section. If you need help with something, please use google groups. I check both regularly and get emails when anything happens, so that is the best place to get help. This also benefits other people in the future with the same questions / problems. Thank you.
 
 == Authlogic "add ons"
 

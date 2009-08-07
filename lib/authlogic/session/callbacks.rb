@@ -55,7 +55,8 @@ module Authlogic
     module Callbacks
       METHODS = [
         "before_persisting", "persist", "after_persisting",
-        "before_validation", "before_validation_on_create", "before_validation_on_update", "validate", "after_validation_on_update", "after_validation_on_create", "after_validation",
+        "before_validation", "before_validation_on_create", "before_validation_on_update", "validate",
+        "after_validation_on_update", "after_validation_on_create", "after_validation",
         "before_save", "before_create", "before_update", "after_update", "after_create", "after_save",
         "before_destroy", "after_destroy"
       ]

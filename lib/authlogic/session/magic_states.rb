@@ -9,7 +9,8 @@ module Authlogic
     #
     # Authlogic does nothing to define these methods for you, its up to you to define what they mean. If your object responds to these methods Authlogic will use them, otherwise they are ignored.
     #
-    # What's neat about this is that these are checked upon any type of login. When logging in explicitly, by cookie, session, or basic http auth. So if you mark a user inactive in the middle of their session they wont be logged back in next time they refresh the page. Giving you complete control.
+    # What's neat about this is that these are checked upon any type of login. When logging in explicitly, by cookie, session, or basic http auth.
+    # So if you mark a user inactive in the middle of their session they wont be logged back in next time they refresh the page. Giving you complete control.
     #
     # Need Authlogic to check your own "state"? No problem, check out the hooks section below. Add in a before_validation to do your own checking. The sky is the limit.
     module MagicStates

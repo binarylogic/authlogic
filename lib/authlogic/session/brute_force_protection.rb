@@ -57,7 +57,8 @@ module Authlogic
         # Notice the word temporary, the user will not be permanently banned unless you choose to do so with configuration.
         # By default they will be banned for 2 hours. During that 2 hour period this method will return true.
         def being_brute_force_protected?
-          exceeded_failed_logins_limit? && (failed_login_ban_for <= 0 || (attempted_record.respond_to?(:updated_at) && attempted_record.updated_at >= failed_login_ban_for.seconds.ago))
+          exceeded_failed_logins_limit? && (failed_login_ban_for <= 0 ||
+            (attempted_record.respond_to?(:updated_at) && attempted_record.updated_at >= failed_login_ban_for.seconds.ago))
         end
         
         private
@@ -76,7 +77,10 @@ module Authlogic
         
           def validate_failed_logins
             errors.clear # Clear all other error messages, as they are irrelevant at this point and can only provide additional information that is not needed
-            errors.add(:base, I18n.t('error_messages.consecutive_failed_logins_limit_exceeded', :default => "Consecutive failed logins limit exceeded, account is disabled."))
+            errors.add(:base, I18n.t(
+              'error_messages.consecutive_failed_logins_limit_exceeded', 
+              :default => "Consecutive failed logins limit exceeded, account has been" + (failed_login_ban_for == 0 ? "" : " temporarily") + " disabled."
+            ))
           end
           
           def consecutive_failed_logins_limit
