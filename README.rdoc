@@ -223,7 +223,7 @@ I think one of the best aspects of Authlogic is testing. For one, it cuts out <b
 
 For example, think about ActiveRecord. You don't test the internals of ActiveRecord, because the creators of ActiveRecord have already tested the internals for you. It wouldn't make sense for ActiveRecord to copy it's hundreds of tests into your applications. The same concept applies to Authlogic. You only need to test code you write that is specific to your application, just like everything else in your application.
 
-That being said, testing your code that uses Authlogic is easy. Since everyone uses different testing suites, I created a helpful module called Authlogic::TestCase, which is basically a set of tools for testing code using Authlogic. I explain testing Authlogic thoroughly in the {Authlogic::TestCase section of the documentation}[http://authlogic.rubyforge.org/classes/Authlogic/TestCase.html]. It should answer any questions you have in regards to testing Authlogic.
+That being said, testing your code that uses Authlogic is easy. Since everyone uses different testing suites, I created a helpful module called Authlogic::TestCase, which is basically a set of tools for testing code using Authlogic. I explain testing Authlogic thoroughly in the {Authlogic::TestCase section of the documentation}[http://rdoc.info/rdoc/binarylogic/authlogic/blob/f2f6988d3b97e11770b00b72a7a9733df69ffa5b/Authlogic/TestCase.html]. It should answer any questions you have in regards to testing Authlogic.
 
 == Tell me quickly how Authlogic works
 

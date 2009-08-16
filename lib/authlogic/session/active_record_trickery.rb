@@ -39,7 +39,7 @@ module Authlogic
         end
         
         # For rails >3.0
-        def self.model_name
+        def model_name
           ActiveModel::Name.new(self.to_s)
         end
       end
