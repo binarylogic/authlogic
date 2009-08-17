@@ -1,6 +1,7 @@
 begin
   require "bcrypt"
 rescue LoadError
+  "sudo gem install bcrypt-ruby"
 end
 
 module Authlogic
