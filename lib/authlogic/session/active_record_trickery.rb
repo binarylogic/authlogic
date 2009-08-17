@@ -40,7 +40,8 @@ module Authlogic
         
         # For rails >3.0
         def model_name
-          ActiveModel::Name.new(self.to_s)
+          clazz = defined?(ActiveModel) ? ActiveModel::Name : ActiveSupport::ModelName
+          clazz.new(self.to_s)
         end
       end
       
