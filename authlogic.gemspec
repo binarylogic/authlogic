@@ -48,6 +48,7 @@ Gem::Specification.new do |s|
      "lib/authlogic/crypto_providers/sha1.rb",
      "lib/authlogic/crypto_providers/sha512.rb",
      "lib/authlogic/i18n.rb",
+     "lib/authlogic/i18n/translator.rb",
      "lib/authlogic/random.rb",
      "lib/authlogic/regex.rb",
      "lib/authlogic/session/activation.rb",
@@ -141,7 +142,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.4}
   s.summary = %q{A clean, simple, and unobtrusive ruby authentication solution.}
   s.test_files = [
-    "test/acts_as_authentic_test/base_test.rb",
+     "test/acts_as_authentic_test/base_test.rb",
      "test/acts_as_authentic_test/email_test.rb",
      "test/acts_as_authentic_test/logged_in_status_test.rb",
      "test/acts_as_authentic_test/login_test.rb",
@@ -157,6 +158,7 @@ Gem::Specification.new do |s|
      "test/crypto_provider_test/bcrypt_test.rb",
      "test/crypto_provider_test/sha1_test.rb",
      "test/crypto_provider_test/sha512_test.rb",
+     "test/i18n_test.rb",
      "test/libs/affiliate.rb",
      "test/libs/company.rb",
      "test/libs/employee.rb",
