@@ -1,3 +1,5 @@
+require "authlogic/i18n/translator"
+
 module Authlogic
   # This class allows any message in Authlogic to use internationalization. In earlier versions of Authlogic each message was translated via configuration.
   # This cluttered up the configuration and cluttered up Authlogic. So all translation has been extracted out into this class. Now all messages pass through
@@ -11,18 +13,17 @@ module Authlogic
   #
   #   Authlogic::I18n.t('error_messages.password_invalid', :default => "is invalid")
   #
-  # If you use a different I18n library or plugin just redefine the t method in the Authlogic::I18n class to do whatever you want with those options. For example:
+  # If you use a different I18n library just replace the build-in I18n::Translator class with your own. For example:
   #
-  #   # config/initializers/authlogic.rb
-  #   module MyAuthlogicI18nAdapter
-  #     def t(key, options = {})
+  #   class MyAuthlogicI18nTranslator
+  #     def translate(key, options = {})
   #       # you will have key which will be something like: "error_messages.password_invalid"
   #       # you will also have options[:default], which will be the default english version of the message
   #       # do whatever you want here with the arguments passed to you.
   #     end
   #   end
   #   
-  #   Authlogic::I18n.extend MyAuthlogicI18nAdapter
+  #   Authlogic::I18n.translator = MyAuthlogicI18nTranslator.new
   #
   # That it's! Here is a complete list of the keys that are passed. Just define these however you wish:
   #
@@ -49,6 +50,7 @@ module Authlogic
   #         remember_me: remember me
   module I18n
     @@scope = :authlogic
+    @@translator = nil
     
     class << self
       # Returns the current scope. Defaults to :authlogic
@@ -60,16 +62,22 @@ module Authlogic
       def scope=(scope)
         @@scope = scope
       end
+      
+      # Returns the current translator. Defaults to +Translator+.
+      def translator
+        @@translator ||= Translator.new
+      end
+      
+      # Sets the current translator. Used to set a custom translator.
+      def translator=(translator)
+        @@translator = translator
+      end
     
       # All message translation is passed to this method. The first argument is the key for the message. The second is options, see the rails I18n library for a list of options used.
-      def t(key, options = {})
-        if defined?(::I18n)
-          ::I18n.t(key, options.merge(:scope => I18n.scope))
-        else
-          options[:default]
-        end
+      def translate(key, options = {})
+        translator.translate key, { :scope => I18n.scope }.merge(options)
       end
-      alias_method :translate, :t
+      alias :t :translate
     end
   end
 end
