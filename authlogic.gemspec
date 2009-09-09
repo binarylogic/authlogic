@@ -41,6 +41,7 @@ Gem::Specification.new do |s|
      "lib/authlogic/controller_adapters/abstract_adapter.rb",
      "lib/authlogic/controller_adapters/merb_adapter.rb",
      "lib/authlogic/controller_adapters/rails_adapter.rb",
+     "lib/authlogic/controller_adapters/sinatra_adapter.rb",
      "lib/authlogic/crypto_providers/aes256.rb",
      "lib/authlogic/crypto_providers/bcrypt.rb",
      "lib/authlogic/crypto_providers/md5.rb",
