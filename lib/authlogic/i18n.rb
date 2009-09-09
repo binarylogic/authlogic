@@ -47,12 +47,24 @@ module Authlogic
   #         email: email
   #         password: password
   #         remember_me: remember me
-  class I18n
+  module I18n
+    @@scope = :authlogic
+    
     class << self
+      # Returns the current scope. Defaults to :authlogic
+      def scope
+        @@scope
+      end
+   
+      # Sets the current scope. Used to set a custom scope.
+      def scope=(scope)
+        @@scope = scope
+      end
+    
       # All message translation is passed to this method. The first argument is the key for the message. The second is options, see the rails I18n library for a list of options used.
       def t(key, options = {})
         if defined?(::I18n)
-          ::I18n.t(key, options.merge(:scope => :authlogic))
+          ::I18n.t(key, options.merge(:scope => I18n.scope))
         else
           options[:default]
         end
