@@ -92,21 +92,16 @@ module Authlogic
   end
 end
 
-if defined?(::ActiveRecord)
-  module ::ActiveRecord
-    class Base
-      include Authlogic::ActsAsAuthentic::Base
-      include Authlogic::ActsAsAuthentic::Email
-      include Authlogic::ActsAsAuthentic::LoggedInStatus
-      include Authlogic::ActsAsAuthentic::Login
-      include Authlogic::ActsAsAuthentic::MagicColumns
-      include Authlogic::ActsAsAuthentic::Password
-      include Authlogic::ActsAsAuthentic::PerishableToken
-      include Authlogic::ActsAsAuthentic::PersistenceToken
-      include Authlogic::ActsAsAuthentic::RestfulAuthentication
-      include Authlogic::ActsAsAuthentic::SessionMaintenance
-      include Authlogic::ActsAsAuthentic::SingleAccessToken
-      include Authlogic::ActsAsAuthentic::ValidationsScope
-    end
-  end
-end
+::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::Base
+::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::Email
+::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::LoggedInStatus
+::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::Login
+::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::MagicColumns
+::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::Password
+::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::PerishableToken
+::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::PersistenceToken
+::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::RestfulAuthentication
+::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::SessionMaintenance
+::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::SingleAccessToken
+::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::ValidationsScope
+

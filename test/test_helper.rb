@@ -6,16 +6,24 @@ require "active_record/fixtures"
 
 # A temporary fix to bring active record errors up to speed with rails edge.
 # I need to remove this once the new gem is released. This is only here so my tests pass.
-class ActiveRecord::Errors
-  def [](key)
-    value = on(key)
-    value.is_a?(Array) ? value : [value].compact
+unless defined?(::ActiveModel)
+  class ActiveRecord::Errors
+    def [](key)
+      value = on(key)
+      value.is_a?(Array) ? value : [value].compact
+    end
   end
 end
 
 
 ActiveRecord::Schema.verbose = false
-ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :dbfile => ":memory:")
+
+begin
+  ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
+rescue ArgumentError
+  ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :dbfile => ":memory:")
+end
+
 ActiveRecord::Base.configurations = true
 ActiveRecord::Schema.define(:version => 1) do
   create_table :companies do |t|

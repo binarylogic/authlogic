@@ -1,4 +1,4 @@
-require "active_support"
+require "active_record"
 
 require File.dirname(__FILE__) + "/authlogic/i18n"
 require File.dirname(__FILE__) + "/authlogic/random"
