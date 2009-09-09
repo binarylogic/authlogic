@@ -50,6 +50,11 @@ module Authlogic
         def new_record?
           new_session?
         end
+        
+        # For rails >= 3.0
+        def to_model
+          self
+        end
       end
     end
   end
