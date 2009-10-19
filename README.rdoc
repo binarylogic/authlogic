@@ -68,6 +68,7 @@ If you find a bug or a problem please post it in the issues section. If you need
 * <b>Authlogic LDAP addon:</b> http://github.com/binarylogic/authlogic_ldap
 * <b>Authlogic Facebook Connect:</b> http://github.com/kalasjocke/authlogic_facebook_connect
 * <b>Authlogic OAuth (Twitter):</b> http://github.com/jrallison/authlogic_oauth
+* <b>Authlogic PAM:</b> http://github.com/nbudin/authlogic_pam
 
 If you create one of your own, please let me know about it so I can add it to this list. Or just fork the project, add your link, and send me a pull request.
 
