@@ -20,6 +20,11 @@ module SessionTest
       def test_klass_name
         assert_equal "User", UserSession.klass_name
       end
+      
+      def test_guessed_klass_name
+        assert_equal "User", UserSession.guessed_klass_name
+        assert_equal "BackOfficeUser", BackOfficeUserSession.guessed_klass_name
+      end
     end
     
     class InstanceMethodsTest < ActiveSupport::TestCase

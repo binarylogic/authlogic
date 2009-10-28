@@ -26,7 +26,7 @@ module Authlogic
         # * <tt>Default:</tt> "#{klass_name.underscore}_credentials"
         # * <tt>Accepts:</tt> String
         def cookie_key(value = nil)
-          rw_config(:cookie_key, value, "#{klass_name.underscore}_credentials")
+          rw_config(:cookie_key, value, "#{guessed_klass_name.underscore}_credentials")
         end
         alias_method :cookie_key=, :cookie_key
         

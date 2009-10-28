@@ -38,10 +38,13 @@ module Authlogic
         
         # Same as klass, just returns a string instead of the actual constant.
         def klass_name
-          @klass_name ||= 
-            if guessed_name = name.scan(/(.*)Session/)[0]
-              @klass_name = guessed_name[0]
-            end
+          @klass_name ||= guessed_klass_name
+        end
+        
+        # The string of the model name class guessed from the actual session class name.
+        def guessed_klass_name
+          guessed_name = name.scan(/(.*)Session/)[0]
+          guessed_name[0] if guessed_name
         end
       end
       
