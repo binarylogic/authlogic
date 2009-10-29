@@ -49,6 +49,7 @@ Gem::Specification.new do |s|
      "lib/authlogic/crypto_providers/bcrypt.rb",
      "lib/authlogic/crypto_providers/md5.rb",
      "lib/authlogic/crypto_providers/sha1.rb",
+     "lib/authlogic/crypto_providers/sha256.rb",
      "lib/authlogic/crypto_providers/sha512.rb",
      "lib/authlogic/i18n.rb",
      "lib/authlogic/i18n/translator.rb",
