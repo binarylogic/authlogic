@@ -67,15 +67,15 @@ module ActsAsAuthenticTest
     def test_validates_format_of_email_field
       u = User.new
       u.email = "aaaaaaaaaaaaa"
-      assert !u.valid?
+      u.valid?
       assert u.errors[:email].size > 0 
       
       u.email = "a@a.com"
-      assert !u.valid?
+      u.valid?
       assert u.errors[:email].size == 0
       
       u.email = "dakota.dux+1@gmail.com"
-      assert !u.valid?
+      u.valid?
       assert u.errors[:email].size == 0
     end
     
