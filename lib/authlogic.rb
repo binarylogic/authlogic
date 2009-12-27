@@ -1,57 +1,64 @@
 require "active_record"
 
-require File.dirname(__FILE__) + "/authlogic/i18n"
-require File.dirname(__FILE__) + "/authlogic/random"
-require File.dirname(__FILE__) + "/authlogic/regex"
+AUTHLOGIC_PATH = File.dirname(__FILE__) + "/authlogic/"
 
-require File.dirname(__FILE__) + "/authlogic/controller_adapters/abstract_adapter"
-require File.dirname(__FILE__) + "/authlogic/controller_adapters/rails_adapter" if defined?(Rails)
-require File.dirname(__FILE__) + "/authlogic/controller_adapters/merb_adapter" if defined?(Merb)
-require File.dirname(__FILE__) + "/authlogic/controller_adapters/sinatra_adapter" if defined?(Sinatra)
+[
+ "i18n",
+ "random",
+ "regex",
+ 
+ "controller_adapters/abstract_adapter",
+ 
+ "crypto_providers/md5",
+ "crypto_providers/sha1",
+ "crypto_providers/sha256",
+ "crypto_providers/sha512",
+ "crypto_providers/bcrypt",
+ "crypto_providers/aes256",
+ 
+ "authenticates_many/base",
+ "authenticates_many/association",
+ 
+ "acts_as_authentic/email",
+ "acts_as_authentic/logged_in_status",
+ "acts_as_authentic/login",
+ "acts_as_authentic/magic_columns",
+ "acts_as_authentic/password",
+ "acts_as_authentic/perishable_token",
+ "acts_as_authentic/persistence_token",
+ "acts_as_authentic/restful_authentication",
+ "acts_as_authentic/session_maintenance",
+ "acts_as_authentic/single_access_token",
+ "acts_as_authentic/validations_scope",
+ "acts_as_authentic/base",
+ 
+ "session/activation",
+ "session/active_record_trickery",
+ "session/brute_force_protection",
+ "session/callbacks",
+ "session/cookies",
+ "session/existence",
+ "session/foundation",
+ "session/http_auth",
+ "session/id",
+ "session/klass",
+ "session/magic_columns",
+ "session/magic_states",
+ "session/params",
+ "session/password",
+ "session/perishable_token",
+ "session/persistence",
+ "session/priority_record",
+ "session/scopes",
+ "session/session",
+ "session/timeout",
+ "session/unauthorized_record",
+ "session/validation",
+ "session/base"
+].each do |library|
+   require AUTHLOGIC_PATH + library
+ end
 
-require File.dirname(__FILE__) + "/authlogic/crypto_providers/md5"
-require File.dirname(__FILE__) + "/authlogic/crypto_providers/sha1"
-require File.dirname(__FILE__) + "/authlogic/crypto_providers/sha256"
-require File.dirname(__FILE__) + "/authlogic/crypto_providers/sha512"
-require File.dirname(__FILE__) + "/authlogic/crypto_providers/bcrypt"
-require File.dirname(__FILE__) + "/authlogic/crypto_providers/aes256"
-
-require File.dirname(__FILE__) + "/authlogic/authenticates_many/base"
-require File.dirname(__FILE__) + "/authlogic/authenticates_many/association"
-
-require File.dirname(__FILE__) + "/authlogic/acts_as_authentic/email"
-require File.dirname(__FILE__) + "/authlogic/acts_as_authentic/logged_in_status"
-require File.dirname(__FILE__) + "/authlogic/acts_as_authentic/login"
-require File.dirname(__FILE__) + "/authlogic/acts_as_authentic/magic_columns"
-require File.dirname(__FILE__) + "/authlogic/acts_as_authentic/password"
-require File.dirname(__FILE__) + "/authlogic/acts_as_authentic/perishable_token"
-require File.dirname(__FILE__) + "/authlogic/acts_as_authentic/persistence_token"
-require File.dirname(__FILE__) + "/authlogic/acts_as_authentic/restful_authentication"
-require File.dirname(__FILE__) + "/authlogic/acts_as_authentic/session_maintenance"
-require File.dirname(__FILE__) + "/authlogic/acts_as_authentic/single_access_token"
-require File.dirname(__FILE__) + "/authlogic/acts_as_authentic/validations_scope"
-require File.dirname(__FILE__) + "/authlogic/acts_as_authentic/base"
-
-require File.dirname(__FILE__) + "/authlogic/session/activation"
-require File.dirname(__FILE__) + "/authlogic/session/active_record_trickery"
-require File.dirname(__FILE__) + "/authlogic/session/brute_force_protection"
-require File.dirname(__FILE__) + "/authlogic/session/callbacks"
-require File.dirname(__FILE__) + "/authlogic/session/cookies"
-require File.dirname(__FILE__) + "/authlogic/session/existence"
-require File.dirname(__FILE__) + "/authlogic/session/foundation"
-require File.dirname(__FILE__) + "/authlogic/session/http_auth"
-require File.dirname(__FILE__) + "/authlogic/session/id"
-require File.dirname(__FILE__) + "/authlogic/session/klass"
-require File.dirname(__FILE__) + "/authlogic/session/magic_columns"
-require File.dirname(__FILE__) + "/authlogic/session/magic_states"
-require File.dirname(__FILE__) + "/authlogic/session/params"
-require File.dirname(__FILE__) + "/authlogic/session/password"
-require File.dirname(__FILE__) + "/authlogic/session/perishable_token"
-require File.dirname(__FILE__) + "/authlogic/session/persistence"
-require File.dirname(__FILE__) + "/authlogic/session/priority_record"
-require File.dirname(__FILE__) + "/authlogic/session/scopes"
-require File.dirname(__FILE__) + "/authlogic/session/session"
-require File.dirname(__FILE__) + "/authlogic/session/timeout"
-require File.dirname(__FILE__) + "/authlogic/session/unauthorized_record"
-require File.dirname(__FILE__) + "/authlogic/session/validation"
-require File.dirname(__FILE__) + "/authlogic/session/base"
+require AUTHLOGIC_PATH + "controller_adapters/rails_adapter"   if defined?( Rails   )
+require AUTHLOGIC_PATH + "controller_adapters/merb_adapter"    if defined?( Merb    )
+require AUTHLOGIC_PATH + "controller_adapters/sinatra_adapter" if defined?( Sinatra )
