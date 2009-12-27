@@ -64,8 +64,8 @@ module Authlogic
         #   u.password = "new pass"
         #   u.valid_password?("old pass")
         #
-        # Should the last line above return true or false? The record hasn't been saved yet, so most would assume yes.
-        # Other would assume no. So I let you decide by giving you this option.
+        # Should the last line above return true or false? The record hasn't been saved yet, so most would assume true.
+        # Other would assume false. So I let you decide by giving you this option.
         #
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
