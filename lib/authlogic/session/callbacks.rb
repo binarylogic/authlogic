@@ -64,6 +64,17 @@ module Authlogic
       def self.included(base) #:nodoc:
         base.send :include, ActiveSupport::Callbacks
         base.define_callbacks *METHODS
+        
+        # If Rails 3, support the new callback syntax
+        if base.metaclass.method_defined?(:set_callback)
+          METHODS.each do |method|
+            base.class_eval <<-"end_eval", __FILE__, __LINE__
+              def self.#{method}(*methods, &block)
+                set_callback :#{method}, *methods, &block
+              end
+            end_eval
+          end
+        end
       end
       
       private

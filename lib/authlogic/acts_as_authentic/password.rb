@@ -180,6 +180,17 @@ module Authlogic
         def self.included(klass)
           return if klass.crypted_password_field.nil?
           klass.define_callbacks *METHODS
+          
+          # If Rails 3, support the new callback syntax
+          if klass.metaclass.method_defined?(:set_callback)
+            METHODS.each do |method|
+              klass.class_eval <<-"end_eval", __FILE__, __LINE__
+                def self.#{method}(*methods, &block)
+                  set_callback :#{method}, *methods, &block
+                end
+              end_eval
+            end
+          end
         end
         
         private
