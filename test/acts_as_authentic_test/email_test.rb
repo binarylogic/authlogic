@@ -74,6 +74,10 @@ module ActsAsAuthenticTest
       u.valid?
       assert u.errors[:email].size == 0
       
+      u.email = "damien+test1...etc..@mydomain.com"
+      u.valid?
+      assert u.errors[:email].size == 0
+      
       u.email = "dakota.dux+1@gmail.com"
       u.valid?
       assert u.errors[:email].size == 0
