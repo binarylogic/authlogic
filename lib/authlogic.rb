@@ -62,3 +62,5 @@ AUTHLOGIC_PATH = File.dirname(__FILE__) + "/authlogic/"
 require AUTHLOGIC_PATH + "controller_adapters/rails_adapter"   if defined?( Rails   )
 require AUTHLOGIC_PATH + "controller_adapters/merb_adapter"    if defined?( Merb    )
 require AUTHLOGIC_PATH + "controller_adapters/sinatra_adapter" if defined?( Sinatra )
+
+require AUTHLOGIC_PATH + "rails3_engine/railtie" if defined?(Rails) && defined?(Rails::Railtie)
