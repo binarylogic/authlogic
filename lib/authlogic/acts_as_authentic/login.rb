@@ -118,7 +118,8 @@ module Authlogic
             if sensitivity
               send("find_by_#{field}", value)
             else
-              first(:conditions => ["LOWER(#{quoted_table_name}.#{field}) = ?", value.mb_chars.downcase])
+              # first(:conditions => ["LOWER(#{quoted_table_name}.#{field}) = ?", value.mb_chars.downcase])
+              where("LOWER(#{quoted_table_name}.#{field}) = ?", value.mb_chars.downcase).first
             end
           end
       end
