@@ -58,6 +58,11 @@ module Authlogic
         def to_model
           self
         end
+        
+        # For rails >= 3.0
+        def to_key
+          new_record? ? nil : [self.send(self.class.primary_key)]
+        end
       end
     end
   end
