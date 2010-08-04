@@ -13,7 +13,7 @@ module Authlogic
       
       def friendly_token
         # use base64url as defined by RFC4648
-        SecureRandom.base64(15).tr('+/=', '-_ ').strip.delete("\n")
+        SecureRandom.base64(15).tr('+/=', '').strip.delete("\n")
       end
     else
       def hex_token

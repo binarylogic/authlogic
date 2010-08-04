@@ -1,13 +1,6 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
 
 class RandomTest < ActiveSupport::TestCase
-  def test_random_tokens_have_consisten_length
-    with_any_random do
-      assert_equal 128, Authlogic::Random.hex_token.length
-      assert_equal 20,  Authlogic::Random.friendly_token.length
-    end
-  end
-  
   def test_random_tokens_are_indeed_random
     # this might fail if you are *really* unlucky :)
     with_any_random do
