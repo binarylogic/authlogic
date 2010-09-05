@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper.rb'
+require 'test_helper'
 
 module SessionTest
   module ActiveRecordTrickeryTest
@@ -29,7 +29,7 @@ module SessionTest
       
       def test_to_model
         session = UserSession.new
-        assert session, session.to_model
+        assert_equal session, session.to_model
       end
     end
   end
