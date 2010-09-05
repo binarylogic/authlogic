@@ -53,6 +53,10 @@ module Authlogic
           "#<#{self.class.name}: #{credentials.blank? ? "no credentials provided" : credentials.inspect}>"
         end
         
+        def persisted?
+          !(new_record? || destroyed?)
+        end
+        
         def to_key
           new_record? ? nil : [ self.send(self.class.primary_key) ]
         end
