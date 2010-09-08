@@ -72,7 +72,7 @@ module Authlogic
               conditions_subs << age.seconds.ago
             end
             
-            find(:first, :conditions => [conditions_sql, *conditions_subs])
+            where(conditions_sql, *conditions_subs).first
           end
           
           # This method will raise ActiveRecord::NotFound if no record is found.

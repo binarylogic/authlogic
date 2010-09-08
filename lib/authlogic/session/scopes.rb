@@ -34,11 +34,11 @@ module Authlogic
         #
         # Eseentially what the above does is scope the searching of the object with the sql you provided. So instead of:
         #
-        #   User.find(:first, :conditions => "login = 'ben'")
+        #   User.where("login = 'ben'").first
         #
         # it would be:
         #
-        #   User.find(:first, :conditions => "login = 'ben' and account_id = 2")
+        #   User.where("login = 'ben' and account_id = 2")
         #
         # You will also notice the :id option. This works just like the id method. It scopes your cookies. So the name of your cookie will be:
         #
