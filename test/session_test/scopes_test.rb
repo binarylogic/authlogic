@@ -27,17 +27,17 @@ module SessionTest
     def test_with_scope_method
       assert_raise(ArgumentError) { UserSession.with_scope }
       
-      UserSession.with_scope(:find_options => {:conditions => "awesome = 1"}, :id => "some_id") do
-        assert_equal({:find_options => {:conditions => "awesome = 1"}, :id => "some_id"}, UserSession.scope)
+      UserSession.with_scope(:where => "awesome = 1", :id => "some_id") do
+        assert_equal({:where => "awesome = 1", :id => "some_id"}, UserSession.scope)
       end
       
       assert_nil UserSession.scope
     end
   
     def test_initialize
-      UserSession.with_scope(:find_options => {:conditions => "awesome = 1"}, :id => "some_id") do
+      UserSession.with_scope(:where => "awesome = 1", :id => "some_id") do
         session = UserSession.new
-        assert_equal({:find_options => {:conditions => "awesome = 1"}, :id => "some_id"}, session.scope)
+        assert_equal({:where => "awesome = 1", :id => "some_id"}, session.scope)
         session.id = :another_id
         assert_equal "another_id_some_id_test", session.send(:build_key, "test")
       end
@@ -51,7 +51,7 @@ module SessionTest
       session = UserSession.new
       assert_equal zack, session.send(:search_for_record, "find_by_login", zack.login)
       
-      session.scope = {:find_options => {:conditions => ["company_id = ?", binary_logic.id]}}
+      session.scope = {:where => ["company_id = ?", binary_logic.id]}
       assert_nil session.send(:search_for_record, "find_by_login", zack.login)
       
       assert_equal ben, session.send(:search_for_record, "find_by_login", ben.login)

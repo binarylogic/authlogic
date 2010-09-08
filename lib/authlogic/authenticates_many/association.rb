@@ -14,11 +14,11 @@ module Authlogic
     #     authenticates_many :user_sessions
     #   end
     class Association
-      attr_accessor :klass, :find_options, :id
+      attr_accessor :klass, :where, :id
       
-      def initialize(klass, find_options, id)
+      def initialize(klass, where, id)
         self.klass = klass
-        self.find_options = find_options
+        self.where = where
         self.id = id
       end
       
@@ -35,7 +35,7 @@ module Authlogic
     
       private
         def scope_options
-          {:find_options => find_options, :id => id}
+          {:where => where, :id => id}
         end
     end
   end

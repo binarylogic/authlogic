@@ -23,12 +23,12 @@ module Authlogic
         # What with_scopes focuses on is scoping the query when finding the object and the name of the cookie / session. It works very similar to
         # ActiveRecord::Base#with_scopes. It accepts a hash with any of the following options:
         #
-        # * <tt>find_options:</tt> any options you can pass into ActiveRecord::Base.find. This is used when trying to find the record.
+        # * <tt>where:</tt> any options you can pass into ActiveRecord::Base.find. This is used when trying to find the record.
         # * <tt>id:</tt> The id of the session, this gets merged with the real id. For information ids see the id method.
         #
         # Here is how you use it:
         #
-        #   UserSession.with_scope(:find_options => {:conditions => "account_id = 2"}, :id => "account_2") do
+        #   UserSession.with_scope(:where => "account_id = 2", :id => "account_2") do
         #     UserSession.find
         #   end
         #
@@ -50,7 +50,7 @@ module Authlogic
         #
         # What is also nifty about scoping with an :id is that it merges your id's. So if you do:
         #
-        #   UserSession.with_scope(:find_options => {:conditions => "account_id = 2"}, :id => "account_2") do
+        #   UserSession.with_scope(:where => "account_id = 2", :id => "account_2") do
         #     session = UserSession.new
         #     session.id = :secure
         #   end
@@ -91,7 +91,9 @@ module Authlogic
           end
           
           def search_for_record(*args)
-            klass.send(:with_scope, :find => (scope[:find_options] || {})) do
+            where = {}
+            where = (scope[:where].instance_of?(ActiveRecord::Relation)) ? scope[:where] : klass.send(:where, *scope[:where]) if scope[:where]
+            klass.send(:with_scope, :find => where) do
               klass.send(*args)
             end
           end

@@ -29,9 +29,9 @@ module Authlogic
       #   called :users that you defined with a has_many. The reason we use the relationship is so you don't have to repeat yourself. The relatonship
       #   could have all kinds of custom options. So instead of repeating yourself we essentially use the scope that the relationship creates.
       #
-      # * <tt>find_options:</tt> default: nil,
+      # * <tt>where:</tt> default: nil,
       #   By default the find options are created from the relationship you specify with :relationship_name. But if you want to override this and
-      #   manually specify find_options you can do it here. Specify options just as you would in ActiveRecord::Base.find.
+      #   manually specify where you can do it here. Specify options just as you would in ActiveRecord::Base.find.
       #
       # * <tt>scope_cookies:</tt> default: false
       #   By the nature of cookies they scope theirself if you are using subdomains to access accounts. If you aren't using subdomains you need to have
@@ -42,8 +42,8 @@ module Authlogic
         options[:relationship_name] ||= options[:session_class].klass_name.underscore.pluralize
         class_eval <<-"end_eval", __FILE__, __LINE__
           def #{name}
-            find_options = #{options[:find_options].inspect} || #{options[:relationship_name]}.scoped
-            @#{name} ||= Authlogic::AuthenticatesMany::Association.new(#{options[:session_class]}, find_options, #{options[:scope_cookies] ? "self.class.model_name.underscore + '_' + self.send(self.class.primary_key).to_s" : "nil"})
+            where = #{options[:where].inspect} || #{options[:relationship_name]}.scoped
+            @#{name} ||= Authlogic::AuthenticatesMany::Association.new(#{options[:session_class]}, where, #{options[:scope_cookies] ? "self.class.model_name.underscore + '_' + self.send(self.class.primary_key).to_s" : "nil"})
           end
         end_eval
       end
