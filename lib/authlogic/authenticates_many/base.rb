@@ -38,11 +38,13 @@ module Authlogic
       #   separate cookies for each account, assuming a user is logging into mroe than one account. Authlogic can take care of this for you by
       #   prefixing the name of the cookie and sessin with the model id. You just need to tell Authlogic to do this by passing this option.
       def authenticates_many(name, options = {})
-        options[:session_class] ||= name.to_s.classify.constantize
+        options[:session_class]     ||= name.to_s.classify.constantize
         options[:relationship_name] ||= options[:session_class].klass_name.underscore.pluralize
         class_eval <<-"end_eval", __FILE__, __LINE__
           def #{name}
-            find_options = #{options[:find_options].inspect} || #{options[:relationship_name]}.scope(:find)
+            relation_sql = #{options[:relationship_name]}.scoped.to_sql
+            default_find_options = {:conditions => relation_sql[(relation_sql.rindex("WHERE")+5)..relation_sql.length].lstrip!}
+            find_options = #{options[:find_options].inspect} || default_find_options
             find_options.delete_if { |key, value| ![:conditions, :include, :joins].include?(key.to_sym) || value.nil? }
             @#{name} ||= Authlogic::AuthenticatesMany::Association.new(#{options[:session_class]}, find_options, #{options[:scope_cookies] ? "self.class.model_name.underscore + '_' + self.send(self.class.primary_key).to_s" : "nil"})
           end
