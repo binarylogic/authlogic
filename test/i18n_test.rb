@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/test_helper.rb'
+require 'test_helper'
 
 class I18nTest < ActiveSupport::TestCase
   def test_uses_authlogic_as_scope_by_default

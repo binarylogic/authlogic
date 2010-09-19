@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper.rb'
+require 'test_helper'
 
 module CryptoProviderTest
   class Sha512Test < ActiveSupport::TestCase
