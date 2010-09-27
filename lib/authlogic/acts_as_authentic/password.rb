@@ -314,7 +314,7 @@ module Authlogic
             
             def transition_password(attempted_password)
               self.password = attempted_password
-              save(false)
+              save(ActiveRecord::VERSION::MAJOR < 3 ? false : { :validate => false })
             end
           
             def require_password?
