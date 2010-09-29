@@ -85,7 +85,6 @@ Gem::Specification.new do |s|
      "lib/authlogic/test_case/mock_logger.rb",
      "lib/authlogic/test_case/mock_request.rb",
      "lib/authlogic/test_case/rails_request_adapter.rb",
-     "rails/init.rb",
      "shoulda_macros/authlogic.rb",
      "test/acts_as_authentic_test/base_test.rb",
      "test/acts_as_authentic_test/email_test.rb",
