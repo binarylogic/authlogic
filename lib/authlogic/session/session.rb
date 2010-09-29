@@ -27,6 +27,7 @@ module Authlogic
       
       # Instance methods for the session feature.
       module InstanceMethods
+        def to_key; nil; end
         private
           # Tries to validate the session from information in the session
           def persist_by_session
