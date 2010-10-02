@@ -38,10 +38,12 @@ module Authlogic
         # merge options into it. Checkout the convenience function merge_validates_length_of_email_field_options to merge
         # options.</b>
         #
-        # * <tt>Default:</tt> {:within => 6..100}
+        # The minimum-length validation is not necessary, because of the email-format-regex-validation
+        #
+        # * <tt>Default:</tt> {:maximum => 100}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_email_field_options(value = nil)
-          rw_config(:validates_length_of_email_field_options, value, {:within => 6..100})
+          rw_config(:validates_length_of_email_field_options, value, {:maximum => 100})
         end
         alias_method :validates_length_of_email_field_options=, :validates_length_of_email_field_options
         
