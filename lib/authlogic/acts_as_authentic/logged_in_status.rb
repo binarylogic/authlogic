@@ -31,7 +31,7 @@ module Authlogic
           
           klass.class_eval do
             include InstanceMethods
-            if Rails::VERSION::MAJOR >= 3
+            if ActiveRecord::VERSION::MAJOR >= 3
               scope :logged_in, where("last_request_at > ?", logged_in_timeout.seconds.ago)
               scope :logged_out, where("last_request_at is NULL or last_request_at <= ?", logged_in_timeout.seconds.ago)
             else
