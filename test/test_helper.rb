@@ -144,7 +144,7 @@ class ActiveSupport::TestCase
         controller.http_password = password_for(user)
       end
       yield
-      controller.http_user = controller.http_password = nil
+      controller.http_user = controller.http_password = controller.realm = nil
     end
     
     def set_cookie_for(user, id = nil)
