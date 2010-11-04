@@ -47,6 +47,15 @@ module Authlogic
           rw_config(:remember_me_for, value, 3.months, :_read)
         end
         alias_method :remember_me_for=, :remember_me_for
+
+        # Should the cookie be set as secure?  If true, the cookie will only be sent over SSL connections
+        #
+        # * <tt>Default:</tt> false
+        # * <tt>Accepts:</tt> Boolean
+        def secure(value = nil)
+          rw_config(:secure, value, false)
+        end
+        alias_method :secure=, :secure
       end
       
       # The methods available for an Authlogic::Session::Base object that make up the cookie feature set.
@@ -91,7 +100,23 @@ module Authlogic
           return unless remember_me?
           remember_me_for.from_now
         end
-        
+
+        # If the cookie should be marked as secure (SSL only)
+        def secure
+          return @secure if defined?(@secure)
+          @secure = self.class.secure
+        end
+
+        # Accepts a boolean as to whether the cookie should be marked as secure.  If true the cookie will only ever be sent over an SSL connection.
+        def secure=(value)
+          @secure = value
+        end
+
+        # See secure
+        def secure?
+          secure == true || secure == "true" || secure == "1"
+        end
+
         private
           def cookie_key
             build_key(self.class.cookie_key)
@@ -117,6 +142,7 @@ module Authlogic
             controller.cookies[cookie_key] = {
               :value => "#{record.persistence_token}::#{record.send(record.class.primary_key)}",
               :expires => remember_me_until,
+              :secure => secure,
               :domain => controller.cookie_domain
             }
           end
