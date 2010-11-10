@@ -53,6 +53,18 @@ module SessionTest
         session = UserSession.new
         assert_equal false, session.secure
       end
+
+      def test_httponly
+        UserSession.httponly = true
+        assert_equal true, UserSession.httponly
+        session = UserSession.new
+        assert_equal true, session.httponly
+
+        UserSession.httponly false
+        assert_equal false, UserSession.httponly
+        session = UserSession.new
+        assert_equal false, session.httponly
+      end
     end
     
     class InstanceMethodsTest < ActiveSupport::TestCase
