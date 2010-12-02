@@ -32,8 +32,13 @@ module Authlogic
           klass.class_eval do
             include InstanceMethods
             
-            named_scope :logged_in, lambda { {:conditions => ["last_request_at > ?", logged_in_timeout.seconds.ago]} }
-            named_scope :logged_out, lambda { {:conditions => ["last_request_at is NULL or last_request_at <= ?", logged_in_timeout.seconds.ago]} }
+            if Rails::VERSION::STRING > '3.0.0'
+              scope :logged_in, lambda { {:conditions => ["last_request_at > ?", logged_in_timeout.seconds.ago]} }
+              scope :logged_out, lambda { {:conditions => ["last_request_at is NULL or last_request_at <= ?", logged_in_timeout.seconds.ago]} }
+            else
+              named_scope :logged_in, lambda { {:conditions => ["last_request_at > ?", logged_in_timeout.seconds.ago]} }
+              named_scope :logged_out, lambda { {:conditions => ["last_request_at is NULL or last_request_at <= ?", logged_in_timeout.seconds.ago]} }
+            end
           end
         end
         
