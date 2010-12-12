@@ -70,7 +70,11 @@ module Authlogic
         # Save the record and skip session maintenance all together.
         def save_without_session_maintenance(*args)
           self.skip_session_maintenance = true
-          result = save(*args)
+          if ('3.0.0' <= Rails::VERSION::STRING)
+            result = save(:validate => false) unless args[0]
+          else
+            result = save(*args)
+          end
           self.skip_session_maintenance = false
           result
         end
