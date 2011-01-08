@@ -16,7 +16,6 @@ unless defined?(::ActiveModel)
 end
 
 
-ActiveRecord::Schema.verbose = false
 
 begin
   ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
