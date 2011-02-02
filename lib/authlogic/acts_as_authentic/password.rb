@@ -312,9 +312,28 @@ module Authlogic
                 (!check_against_database || !send("#{crypted_password_field}_changed?"))
             end
             
+            def skip_validation
+              if @skip_validation.nil?
+                @skip_validation = 
+                if defined? Rails
+                  rails = Object.const_get("Rails")
+                  version = rails.version rescue "too early"
+                  case version
+                  when /^(1|2)/
+                    false
+                  else
+                    {:validation => false}
+                  end
+                else
+                  false
+                end
+              end
+              @skip_validation
+            end
+            
             def transition_password(attempted_password)
               self.password = attempted_password
-              save(false)
+              save(skip_validation)
             end
           
             def require_password?
