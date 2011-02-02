@@ -92,7 +92,7 @@ module Authlogic
         
         def save_record(alternate_record = nil)
           r = alternate_record || record
-          r.save_without_session_maintenance(false) if r && r.changed? && !r.readonly?
+          r.save_without_session_maintenance(Authlogic.skip_validation) if r && r.changed? && !r.readonly?
         end
     end
   end

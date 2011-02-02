@@ -277,7 +277,7 @@ module Authlogic
           # Resets the password to a random friendly token and then saves the record.
           def reset_password!
             reset_password
-            save_without_session_maintenance(false)
+            save_without_session_maintenance(Authlogic.skip_validation)
           end
           alias_method :randomize_password!, :reset_password!
         
@@ -312,28 +312,10 @@ module Authlogic
                 (!check_against_database || !send("#{crypted_password_field}_changed?"))
             end
             
-            def skip_validation
-              if @skip_validation.nil?
-                @skip_validation = 
-                if defined? Rails
-                  rails = Object.const_get("Rails")
-                  version = rails.version rescue "too early"
-                  case version
-                  when /^(1|2)/
-                    false
-                  else
-                    {:validation => false}
-                  end
-                else
-                  false
-                end
-              end
-              @skip_validation
-            end
             
             def transition_password(attempted_password)
               self.password = attempted_password
-              save(skip_validation)
+              save(AuthLogic.skip_validation)
             end
           
             def require_password?

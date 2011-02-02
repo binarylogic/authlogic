@@ -53,7 +53,7 @@ module Authlogic
           # Same as reset_persistence_token, but then saves the record.
           def reset_persistence_token!
             reset_persistence_token
-            save_without_session_maintenance(false)
+            save_without_session_maintenance(Authlogic.skip_validation)
           end
           alias_method :forget!, :reset_persistence_token!
           

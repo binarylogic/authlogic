@@ -91,7 +91,7 @@ module Authlogic
           # Same as reset_perishable_token, but then saves the record afterwards.
           def reset_perishable_token!
             reset_perishable_token
-            save_without_session_maintenance(false)
+            save_without_session_maintenance(Authlogic.skip_validation)
           end
           
           # A convenience method based on the disable_perishable_token_maintenance configuration option.

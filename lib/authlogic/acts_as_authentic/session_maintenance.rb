@@ -1,4 +1,23 @@
 module Authlogic
+  def self.skip_validation
+    if @skip_validation.nil?
+      @skip_validation = 
+      if defined? Rails
+        rails = Object.const_get("Rails")
+        version = rails.version rescue "too early"
+        case version
+        when /^(1|2)/
+          false
+        else
+          {:validation => false}
+        end
+      else
+        false
+      end
+    end
+    @skip_validation
+  end
+  
   module ActsAsAuthentic
     # This is one of my favorite features that I think is pretty cool. It's things like this that make a library great
     # and let you know you are on the right track.
