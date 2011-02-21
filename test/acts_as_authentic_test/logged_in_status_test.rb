@@ -12,13 +12,13 @@ module ActsAsAuthenticTest
       assert_equal 10.minutes.to_i, User.logged_in_timeout
     end
     
-    def test_named_scope_logged_in
+    def test_scope_logged_in
       assert_equal 0, User.logged_in.count
       User.first.update_attribute(:last_request_at, Time.now)
       assert_equal 1, User.logged_in.count
     end
     
-    def test_named_scope_logged_out
+    def test_scope_logged_out
       assert_equal 2, User.logged_out.count
       User.first.update_attribute(:last_request_at, Time.now)
       assert_equal 1, User.logged_out.count
