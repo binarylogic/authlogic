@@ -18,13 +18,10 @@ class AuthenticatesManyTest < ActiveSupport::TestCase
   
   def test_scoping
     
-    #puts @zack.inspect
-    #set_session_for(@zack)
-    
-    puts @binary_logic.user_sessions.inspect
+    set_session_for(@zack)
     assert !@binary_logic.user_sessions.find
     
-    #set_session_for(@ben)
+    set_session_for(@ben)
     assert @binary_logic.user_sessions.find
   end
 end
