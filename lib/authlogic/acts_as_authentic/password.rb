@@ -277,11 +277,7 @@ module Authlogic
           # Resets the password to a random friendly token and then saves the record.
           def reset_password!
             reset_password
-<<<<<<< HEAD
             save_without_session_maintenance(ActiveRecord::VERSION::MAJOR >= 3 ? {:validate => false} : false)
-=======
-            save_without_session_maintenance(:validate => false)
->>>>>>> authmany/master
           end
           alias_method :randomize_password!, :reset_password!
         
@@ -318,11 +314,7 @@ module Authlogic
             
             def transition_password(attempted_password)
               self.password = attempted_password
-<<<<<<< HEAD
               save(ActiveRecord::VERSION::MAJOR >= 3 ? {:validate => false} : false)
-=======
-              save(:validate => false)
->>>>>>> authmany/master
             end
           
             def require_password?

@@ -53,11 +53,7 @@ module Authlogic
           # Same as reset_persistence_token, but then saves the record.
           def reset_persistence_token!
             reset_persistence_token
-<<<<<<< HEAD
             save_without_session_maintenance(ActiveRecord::VERSION::MAJOR >= 3 ? {:validate => false} : false)
-=======
-            save_without_session_maintenance(:validate => false)
->>>>>>> authmany/master
           end
           alias_method :forget!, :reset_persistence_token!
           

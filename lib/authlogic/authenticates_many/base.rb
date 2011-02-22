@@ -42,14 +42,13 @@ module Authlogic
         options[:relationship_name] ||= options[:session_class].klass_name.underscore.pluralize
         class_eval <<-"end_eval", __FILE__, __LINE__
           def #{name}
-<<<<<<< HEAD
-            find_options = #{options[:find_options].inspect} || #{options[:relationship_name]}.scope(:find)
-            find_options.delete_if { |key, value| ![:conditions, :include, :joins].include?(key.to_sym) || value.nil? } unless find_options.nil?
-=======
-            find_options = #{options[:find_options].inspect} || #{options[:relationship_name]}.scoped
-            # find_options.delete_if { |key, value| ![:conditions, :include, :joins].include?(key.to_sym) || value.nil? }
-            
->>>>>>> authmany/master
+	    if ActiveRecord::VERSION::MAJOR < 3
+             find_options = #{options[:find_options].inspect} || #{options[:relationship_name]}.scope(:find)
+             find_options.delete_if { |key, value| ![:conditions, :include, :joins].include?(key.to_sym) || value.nil? } unless find_options.nil?
+	    else
+             find_options = #{options[:find_options].inspect} || #{options[:relationship_name]}.scoped
+             # find_options.delete_if { |key, value| ![:conditions, :include, :joins].include?(key.to_sym) || value.nil? }
+	    end
             @#{name} ||= Authlogic::AuthenticatesMany::Association.new(#{options[:session_class]}, find_options, #{options[:scope_cookies] ? "self.class.model_name.underscore + '_' + self.send(self.class.primary_key).to_s" : "nil"})
           end
         end_eval

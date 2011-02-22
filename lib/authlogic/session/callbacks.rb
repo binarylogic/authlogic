@@ -92,11 +92,7 @@ module Authlogic
         
         def save_record(alternate_record = nil)
           r = alternate_record || record
-<<<<<<< HEAD
           r.save_without_session_maintenance(ActiveRecord::VERSION::MAJOR >= 3 ? {:validate => false} : false) if r && r.changed? && !r.readonly?
-=======
-          r.save_without_session_maintenance(:validate => false) if r && r.changed? && !r.readonly?
->>>>>>> authmany/master
         end
     end
   end
