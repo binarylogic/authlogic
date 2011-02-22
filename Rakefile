@@ -2,6 +2,12 @@ require 'rubygems'
 require 'rake'
 
 begin
+  require 'bcrypt'
+rescue LoadError
+  raise "sudo gem install bcrypt-ruby"
+end
+
+begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "authlogic"
