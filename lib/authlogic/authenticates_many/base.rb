@@ -23,7 +23,7 @@ module Authlogic
       #
       # * <tt>session_class:</tt> default: "#{name}Session",
       #   This is the related session class.
-      #   
+      #
       # * <tt>relationship_name:</tt> default: options[:session_class].klass_name.underscore.pluralize,
       #   This is the name of the relationship you want to use to scope everything. For example an Account has many Users. There should be a relationship
       #   called :users that you defined with a has_many. The reason we use the relationship is so you don't have to repeat yourself. The relatonship
@@ -42,14 +42,13 @@ module Authlogic
         options[:relationship_name] ||= options[:session_class].klass_name.underscore.pluralize
         class_eval <<-"end_eval", __FILE__, __LINE__
           def #{name}
-            find_options = #{options[:find_options].inspect} || #{options[:relationship_name]}.scope(:find)
-            find_options.delete_if { |key, value| ![:conditions, :include, :joins].include?(key.to_sym) || value.nil? }
+            find_options = #{options[:find_options].inspect} || #{options[:relationship_name]}.scoped
             @#{name} ||= Authlogic::AuthenticatesMany::Association.new(#{options[:session_class]}, find_options, #{options[:scope_cookies] ? "self.class.model_name.underscore + '_' + self.send(self.class.primary_key).to_s" : "nil"})
           end
         end_eval
       end
     end
-    
+
     ::ActiveRecord::Base.extend(Base) if defined?(::ActiveRecord)
   end
 end
