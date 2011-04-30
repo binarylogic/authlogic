@@ -1,5 +1,8 @@
 require 'rubygems'
 require 'rake'
+require 'bundler'
+
+Bundler.setup
 
 begin
   require 'jeweler'
@@ -9,7 +12,7 @@ begin
     gem.email = "bjohnson@binarylogic.com"
     gem.homepage = "http://github.com/binarylogic/authlogic"
     gem.authors = ["Ben Johnson of Binary Logic"]
-    gem.add_dependency "activesupport"
+    gem.add_bundler_dependencies
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
@@ -35,7 +38,5 @@ rescue LoadError
     abort "RCov is not available. In order to run rcov, you must: sudo gem install spicycode-rcov"
   end
 end
-
-task :test => :check_dependencies
 
 task :default => :test
