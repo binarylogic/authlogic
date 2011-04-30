@@ -10,7 +10,7 @@ module Authlogic
     # for regular expressions.
     def self.email
       return @email_regex if @email_regex
-      email_name_regex  = '[A-Z0-9_\.%\+\-]+'
+      email_name_regex  = '[A-Z0-9_\.%\+\-\']+'
       domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
       domain_tld_regex  = '(?:[A-Z]{2,4}|museum|travel)'
       @email_regex = /^#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}$/i
