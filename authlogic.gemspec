@@ -5,18 +5,19 @@
 
 Gem::Specification.new do |s|
   s.name = %q{authlogic}
-  s.version = "2.1.6"
+  s.version = "3.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ben Johnson of Binary Logic"]
-  s.date = %q{2011-02-13}
+  s.date = %q{2011-04-30}
   s.email = %q{bjohnson@binarylogic.com}
   s.extra_rdoc_files = [
     "LICENSE",
     "README.rdoc"
   ]
   s.files = [
-    "CHANGELOG.rdoc",
+    "Gemfile",
+    "Gemfile.lock",
     "LICENSE",
     "README.rdoc",
     "Rakefile",
@@ -146,7 +147,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = %q{http://github.com/binarylogic/authlogic}
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.4.1}
+  s.rubygems_version = %q{1.5.2}
   s.summary = %q{A clean, simple, and unobtrusive ruby authentication solution.}
   s.test_files = [
     "test/acts_as_authentic_test/base_test.rb",
@@ -205,12 +206,15 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<activesupport>, [">= 0"])
+      s.add_runtime_dependency(%q<activerecord>, ["~> 3.0.7"])
+      s.add_runtime_dependency(%q<activerecord>, ["~> 3.0.7"])
     else
-      s.add_dependency(%q<activesupport>, [">= 0"])
+      s.add_dependency(%q<activerecord>, ["~> 3.0.7"])
+      s.add_dependency(%q<activerecord>, ["~> 3.0.7"])
     end
   else
-    s.add_dependency(%q<activesupport>, [">= 0"])
+    s.add_dependency(%q<activerecord>, ["~> 3.0.7"])
+    s.add_dependency(%q<activerecord>, ["~> 3.0.7"])
   end
 end
 
