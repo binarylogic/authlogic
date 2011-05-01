@@ -118,7 +118,8 @@ module Authlogic
             if sensitivity
               send("find_by_#{field}", value)
             else
-              where("LOWER(#{quoted_table_name}.#{field}) = ?", value.mb_chars.downcase).first
+              like_word = ::ActiveRecord::Base.connection.adapter_name == "PostgreSQL" ? "ILIKE" : "LIKE"
+              where("#{quoted_table_name}.#{field} #{like_word} ?", value.mb_chars).first
             end
           end
       end
