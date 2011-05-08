@@ -6,6 +6,9 @@ require "active_record/fixtures"
 
 #ActiveRecord::Schema.verbose = false
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
+logger = Logger.new(STDOUT)
+logger.level= Logger::FATAL
+ActiveRecord::Base.logger = logger
 
 ActiveRecord::Base.configurations = true
 ActiveRecord::Schema.define(:version => 1) do

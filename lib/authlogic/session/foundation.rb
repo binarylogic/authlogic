@@ -6,6 +6,9 @@ module Authlogic
     module Foundation
       def self.included(klass)
         klass.class_eval do
+          class_attribute :acts_as_authentic_config
+          self.acts_as_authentic_config  ||= {}
+          
           extend ClassMethods
           include InstanceMethods
         end
@@ -15,10 +18,13 @@ module Authlogic
         private
           def rw_config(key, value, default_value = nil, read_value = nil)
             if value == read_value
-              return read_inheritable_attribute(key) if inheritable_attributes.include?(key)
-              write_inheritable_attribute(key, default_value)
+              return acts_as_authentic_config[key] if acts_as_authentic_config.include?(key)
+              rw_config(key, default_value)
             else
-              write_inheritable_attribute(key, value)
+              config = acts_as_authentic_config.clone
+              config[key] = value
+              self.acts_as_authentic_config = config
+              value
             end
           end
       end
