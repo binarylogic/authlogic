@@ -9,7 +9,7 @@ module Authlogic
         end
       end
 
-      # Confguration for the login field.
+      # Configuration for the login field.
       module Config
         # The name of the login field in the database.
         #
@@ -20,7 +20,7 @@ module Authlogic
         end
         alias_method :login_field=, :login_field
 
-        # Whether or not the validate the login field
+        # Whether or not to validate the login field
         #
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
@@ -42,7 +42,7 @@ module Authlogic
         end
         alias_method :validates_length_of_login_field_options=, :validates_length_of_login_field_options
 
-        # A convenience function to merge options into the validates_length_of_login_field_options. So intead of:
+        # A convenience function to merge options into the validates_length_of_login_field_options. So instead of:
         #
         #   self.validates_length_of_login_field_options = validates_length_of_login_field_options.merge(:my_option => my_value)
         #
@@ -89,7 +89,7 @@ module Authlogic
           self.validates_uniqueness_of_login_field_options = validates_uniqueness_of_login_field_options.merge(options)
         end
 
-        # This method allows you to find a record with the given login. If you notice, with ActiveRecord you have the
+        # This method allows you to find a record with the given login. If you notice, with Active Record you have the
         # validates_uniqueness_of validation function. They give you a :case_sensitive option. I handle this in the same
         # manner that they handle that. If you are using the login field and set false for the :case_sensitive option in
         # validates_uniqueness_of_login_field_options this method will modify the query to look something like:
