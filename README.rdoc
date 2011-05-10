@@ -72,6 +72,7 @@ If you find a bug or a problem please post it in the issues section. If you need
 * <b>Authlogic Facebook Connect (New JS API):</b> http://github.com/studybyte/authlogic_facebook_connect
 * <b>Authlogic Facebook Shim</b> http://github.com/james2m/authlogic_facebook_shim
 * <b>Authlogic OAuth (Twitter):</b> http://github.com/jrallison/authlogic_oauth
+* <b>Authlogic Oauth and OpenID:</b> http://github.com/viatropos/authlogic-connect
 * <b>Authlogic PAM:</b> http://github.com/nbudin/authlogic_pam
 
 If you create one of your own, please let me know about it so I can add it to this list. Or just fork the project, add your link, and send me a pull request.
