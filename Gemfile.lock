@@ -42,7 +42,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord (~> 3.0.7)
+  activerecord (>= 3.0.7)
   bcrypt-ruby
   jeweler
   ruby-debug19
