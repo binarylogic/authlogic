@@ -28,6 +28,41 @@ module Authlogic
           rw_config(:allow_http_basic_auth, value, true)
         end
         alias_method :allow_http_basic_auth=, :allow_http_basic_auth
+
+        # Whether or not to request HTTP authentication
+        #
+        # If set to true and no HTTP authentication credentials are sent with
+        # the request, the Rails controller method
+        # authenticate_or_request_with_http_basic will be used and a '401
+        # Authorization Required' header will be sent with the response.  In
+        # most cases, this will cause the classic HTTP authentication popup to
+        # appear in the users browser.
+        #
+        # If set to false, the Rails controller method
+        # authenticate_with_http_basic is used and no 401 header is sent.
+        #
+        # Note: This parameter has no effect unless allow_http_basic_auth is
+        # true
+        #
+        # * <tt>Default:</tt> false
+        # * <tt>Accepts:</tt> Boolean
+        def request_http_basic_auth(value = nil)
+          rw_config(:request_http_basic_auth, value, false)
+        end
+        alias_method :request_http_basic_auth=, :request_http_basic_auth
+
+        # HTTP authentication realm
+        #
+        # Sets the HTTP authentication realm.
+        #
+        # Note: This option has no effect unless request_http_basic_auth is true
+        #
+        # * <tt>Default:</tt> 'Application'
+        # * <tt>Accepts:</tt> String
+        def http_basic_auth_realm(value = nil)
+          rw_config(:http_basic_auth_realm, value, 'Application')
+        end
+        alias_method :http_basic_auth_realm=, :http_basic_auth_realm
       end
       
       # Instance methods for the HTTP basic auth feature of authlogic.
@@ -38,12 +73,18 @@ module Authlogic
           end
         
           def persist_by_http_auth
-            controller.authenticate_with_http_basic do |login, password|
+            login_proc = Proc.new do |login, password|
               if !login.blank? && !password.blank?
                 send("#{login_field}=", login)
                 send("#{password_field}=", password)
                 return valid?
               end
+            end
+
+            if self.class.request_http_basic_auth
+              controller.authenticate_or_request_with_http_basic(self.class.http_basic_auth_realm, &login_proc)
+            else
+              controller.authenticate_with_http_basic(&login_proc)
             end
         
             false
