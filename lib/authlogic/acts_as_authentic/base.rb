@@ -4,6 +4,9 @@ module Authlogic
     module Base
       def self.included(klass)
         klass.class_eval do
+          class_attribute :acts_as_authentic_modules, :acts_as_authentic_config
+          self.acts_as_authentic_modules ||= []
+          self.acts_as_authentic_config  ||= {}
           extend Config
         end
       end
@@ -41,7 +44,7 @@ module Authlogic
         #
         # That being said, this is your tool for extending Authlogic and "hooking" into the acts_as_authentic call.
         def add_acts_as_authentic_module(mod, action = :append)
-          modules = acts_as_authentic_modules
+          modules = acts_as_authentic_modules.clone
           case action
           when :append
             modules << mod
@@ -49,21 +52,17 @@ module Authlogic
             modules = [mod] + modules
           end
           modules.uniq!
-          write_inheritable_attribute(:acts_as_authentic_modules, modules)
+          self.acts_as_authentic_modules = modules
         end
         
         # This is the same as add_acts_as_authentic_module, except that it removes the module from the list.
         def remove_acts_as_authentic_module(mod)
-          acts_as_authentic_modules.delete(mod)
-          acts_as_authentic_modules
+          modules = acts_as_authentic_modules.clone
+          modules.delete(mod)
+          self.acts_as_authentic_modules = modules
         end
-        
+
         private
-          def acts_as_authentic_modules
-            key = :acts_as_authentic_modules
-            inheritable_attributes.include?(key) ? read_inheritable_attribute(key) : []
-          end
-          
           def db_setup?
             begin
               column_names
@@ -75,9 +74,12 @@ module Authlogic
           
           def rw_config(key, value, default_value = nil, read_value = nil)
             if value == read_value
-              inheritable_attributes.include?(key) ? read_inheritable_attribute(key) : default_value
+              acts_as_authentic_config.include?(key) ? acts_as_authentic_config[key] : default_value
             else
-              write_inheritable_attribute(key, value)
+              config = acts_as_authentic_config.clone
+              config[key] = value
+              self.acts_as_authentic_config = config
+              value
             end
           end
           
