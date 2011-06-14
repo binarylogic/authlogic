@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper.rb'
+require 'test_helper'
 
 module SessionTest
   module CookiesTest
@@ -40,6 +40,30 @@ module SessionTest
         session = UserSession.new
         session.remember_me = true
         assert_equal 3.months, session.remember_me_for
+      end
+
+      def test_secure
+        UserSession.secure = true
+        assert_equal true, UserSession.secure
+        session = UserSession.new
+        assert_equal true, session.secure
+
+        UserSession.secure false
+        assert_equal false, UserSession.secure
+        session = UserSession.new
+        assert_equal false, session.secure
+      end
+
+      def test_httponly
+        UserSession.httponly = true
+        assert_equal true, UserSession.httponly
+        session = UserSession.new
+        assert_equal true, session.httponly
+
+        UserSession.httponly false
+        assert_equal false, UserSession.httponly
+        session = UserSession.new
+        assert_equal false, session.httponly
       end
     end
     

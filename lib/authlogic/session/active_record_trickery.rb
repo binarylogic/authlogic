@@ -46,6 +46,14 @@ module Authlogic
             ::ActiveSupport::ModelName.new(self.to_s)
           end
         end
+
+        def i18n_scope
+          I18n.scope
+        end
+
+        def lookup_ancestors
+          ancestors.select { |x| x.respond_to?(:model_name) }
+        end
       end
       
       module InstanceMethods

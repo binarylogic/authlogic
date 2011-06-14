@@ -11,7 +11,7 @@ module Authlogic
           add_acts_as_authentic_module(Methods)
         end
       end
-      
+
       # Change how the perishable token works.
       module Config
         # When using the find_using_perishable_token method the token can expire. If the token is expired, no
@@ -23,7 +23,7 @@ module Authlogic
           rw_config(:perishable_token_valid_for, (!value.nil? && value.to_i) || value, 10.minutes.to_i)
         end
         alias_method :perishable_token_valid_for=, :perishable_token_valid_for
-        
+
         # Authlogic tries to expire and change the perishable token as much as possible, without comprising
         # it's purpose. This is for security reasons. If you want to manage it yourself, you can stop
         # Authlogic from getting your in way by setting this to true.
@@ -35,21 +35,21 @@ module Authlogic
         end
         alias_method :disable_perishable_token_maintenance=, :disable_perishable_token_maintenance
       end
-      
+
       # All methods relating to the perishable token.
       module Methods
         def self.included(klass)
           return if !klass.column_names.include?("perishable_token")
-          
+
           klass.class_eval do
             extend ClassMethods
             include InstanceMethods
-            
+
             validates_uniqueness_of :perishable_token, :if => :perishable_token_changed?
             before_save :reset_perishable_token, :unless => :disable_perishable_token_maintenance?
           end
         end
-        
+
         # Class level methods for the perishable token
         module ClassMethods
           # Use this methdo to find a record with a perishable token. This method does 2 things for you:
@@ -63,37 +63,37 @@ module Authlogic
           def find_using_perishable_token(token, age = self.perishable_token_valid_for)
             return if token.blank?
             age = age.to_i
-            
+
             conditions_sql = "perishable_token = ?"
             conditions_subs = [token]
-            
+
             if column_names.include?("updated_at") && age > 0
               conditions_sql += " and updated_at > ?"
               conditions_subs << age.seconds.ago
             end
-            
-            find(:first, :conditions => [conditions_sql, *conditions_subs])
+
+            where(conditions_sql, *conditions_subs).first
           end
-          
+
           # This method will raise ActiveRecord::NotFound if no record is found.
           def find_using_perishable_token!(token, age = perishable_token_valid_for)
             find_using_perishable_token(token, age) || raise(ActiveRecord::RecordNotFound)
           end
         end
-        
+
         # Instance level methods for the perishable token.
         module InstanceMethods
           # Resets the perishable token to a random friendly token.
           def reset_perishable_token
             self.perishable_token = Random.friendly_token
           end
-          
+
           # Same as reset_perishable_token, but then saves the record afterwards.
           def reset_perishable_token!
             reset_perishable_token
-            save_without_session_maintenance(false)
+            save_without_session_maintenance(:validate => false)
           end
-          
+
           # A convenience method based on the disable_perishable_token_maintenance configuration option.
           def disable_perishable_token_maintenance?
             self.class.disable_perishable_token_maintenance == true

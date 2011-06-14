@@ -8,8 +8,8 @@ module Authlogic
           add_acts_as_authentic_module(Methods)
         end
       end
-      
-      # Confguration for the login field.
+
+      # Configuration for the login field.
       module Config
         # The name of the login field in the database.
         #
@@ -19,8 +19,8 @@ module Authlogic
           rw_config(:login_field, value, first_column_to_exist(nil, :login, :username))
         end
         alias_method :login_field=, :login_field
-        
-        # Whether or not the validate the login field
+
+        # Whether or not to validate the login field
         #
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
@@ -28,7 +28,7 @@ module Authlogic
           rw_config(:validate_login_field, value, true)
         end
         alias_method :validate_login_field=, :validate_login_field
-        
+
         # A hash of options for the validates_length_of call for the login field. Allows you to change this however you want.
         #
         # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
@@ -41,8 +41,8 @@ module Authlogic
           rw_config(:validates_length_of_login_field_options, value, {:within => 3..100})
         end
         alias_method :validates_length_of_login_field_options=, :validates_length_of_login_field_options
-        
-        # A convenience function to merge options into the validates_length_of_login_field_options. So intead of:
+
+        # A convenience function to merge options into the validates_length_of_login_field_options. So instead of:
         #
         #   self.validates_length_of_login_field_options = validates_length_of_login_field_options.merge(:my_option => my_value)
         #
@@ -52,25 +52,25 @@ module Authlogic
         def merge_validates_length_of_login_field_options(options = {})
           self.validates_length_of_login_field_options = validates_length_of_login_field_options.merge(options)
         end
-        
+
         # A hash of options for the validates_format_of call for the login field. Allows you to change this however you want.
         #
         # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
         # merge options into it. Checkout the convenience function merge_validates_format_of_login_field_options to merge
         # options.</b>
         #
-        # * <tt>Default:</tt> {:with => Authlogic::Regex.login, :message => I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")}
+        # * <tt>Default:</tt> {:with => Authlogic::Regex.login, :message => lambda {I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")}}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_format_of
         def validates_format_of_login_field_options(value = nil)
           rw_config(:validates_format_of_login_field_options, value, {:with => Authlogic::Regex.login, :message => I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")})
         end
         alias_method :validates_format_of_login_field_options=, :validates_format_of_login_field_options
-        
+
         # See merge_validates_length_of_login_field_options. The same thing, except for validates_format_of_login_field_options
         def merge_validates_format_of_login_field_options(options = {})
           self.validates_format_of_login_field_options = validates_format_of_login_field_options.merge(options)
         end
-        
+
         # A hash of options for the validates_uniqueness_of call for the login field. Allows you to change this however you want.
         #
         # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
@@ -83,18 +83,18 @@ module Authlogic
           rw_config(:validates_uniqueness_of_login_field_options, value, {:case_sensitive => false, :scope => validations_scope, :if => "#{login_field}_changed?".to_sym})
         end
         alias_method :validates_uniqueness_of_login_field_options=, :validates_uniqueness_of_login_field_options
-        
+
         # See merge_validates_length_of_login_field_options. The same thing, except for validates_uniqueness_of_login_field_options
         def merge_validates_uniqueness_of_login_field_options(options = {})
           self.validates_uniqueness_of_login_field_options = validates_uniqueness_of_login_field_options.merge(options)
         end
-        
-        # This method allows you to find a record with the given login. If you notice, with ActiveRecord you have the
+
+        # This method allows you to find a record with the given login. If you notice, with Active Record you have the
         # validates_uniqueness_of validation function. They give you a :case_sensitive option. I handle this in the same
         # manner that they handle that. If you are using the login field and set false for the :case_sensitive option in
         # validates_uniqueness_of_login_field_options this method will modify the query to look something like:
         #
-        #   first(:conditions => ["LOWER(#{quoted_table_name}.#{login_field}) = ?", login.downcase])
+        #   where("LOWER(#{quoted_table_name}.#{login_field}) = ?", login.downcase).first
         #
         # If you don't specify this it calls the good old find_by_* method:
         #
@@ -112,17 +112,18 @@ module Authlogic
             find_with_case(email_field, login, validates_uniqueness_of_email_field_options[:case_sensitive] != false)
           end
         end
-        
+
         private
           def find_with_case(field, value, sensitivity = true)
             if sensitivity
               send("find_by_#{field}", value)
             else
-              first(:conditions => ["LOWER(#{quoted_table_name}.#{field}) = ?", value.mb_chars.downcase])
+              like_word = ::ActiveRecord::Base.connection.adapter_name == "PostgreSQL" ? "ILIKE" : "LIKE"
+              where("#{quoted_table_name}.#{field} #{like_word} ?", value.mb_chars).first
             end
           end
       end
-      
+
       # All methods relating to the login field
       module Methods
         # Adds in various validations, modules, etc.
