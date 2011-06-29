@@ -77,7 +77,7 @@ module Authlogic
               if !login.blank? && !password.blank?
                 send("#{login_field}=", login)
                 send("#{password_field}=", password)
-                return valid?
+                valid?
               end
             end
 
