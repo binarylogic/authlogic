@@ -2,6 +2,15 @@ require 'test_helper'
 
 module ActsAsAuthenticTest
   class PasswordTest < ActiveSupport::TestCase
+    def test_password_field_config
+      User.password_field = :nope
+      assert_equal :nope, User.password_field
+      assert_equal :nope_confirmation, User.password_confirmation_field
+      User.password_field :password
+      assert_equal :password, User.password_field
+      assert_equal :password_confirmation, User.password_confirmation_field
+    end
+    
     def test_crypted_password_field_config
       assert_equal :crypted_password, User.crypted_password_field
       assert_equal :crypted_password, Employee.crypted_password_field
@@ -105,47 +114,47 @@ module ActsAsAuthenticTest
     
     def test_validates_length_of_password
       u = User.new
-      u.password_confirmation = "test2"
+      u.send("#{User.password_confirmation_field}=", "test2")
       assert !u.valid?
-      assert u.errors[:password].size > 0
+      assert u.errors[User.password_field].size > 0
       
-      u.password = "test"
+      u.send("#{User.password_field}=", "test")
       assert !u.valid?
-      assert u.errors[:password_confirmation].size == 0
+      assert u.errors[User.password_confirmation_field].size == 0
     end
     
     def test_validates_confirmation_of_password
       u = User.new
-      u.password = "test"
-      u.password_confirmation = "test2"
+      u.send("#{User.password_field}=", "test")
+      u.send("#{User.password_confirmation_field}=", "test2")
       assert !u.valid?
-      assert u.errors[:password].size > 0
+      assert u.errors[User.password_field].size > 0
       
       u.password_confirmation = "test"
       assert !u.valid?
-      assert u.errors[:password].size == 0
+      assert u.errors[User.password_field].size == 0
     end
     
     def test_validates_length_of_password_confirmation
       u = User.new
       
-      u.password = "test"
-      u.password_confirmation = ""
+      u.send("#{User.password_field}=", "test")
+      u.send("#{User.password_confirmation_field}=", "")
       assert !u.valid?
-      assert u.errors[:password_confirmation].size > 0
+      assert u.errors[User.password_confirmation_field].size > 0
       
       u.password_confirmation = "test"
       assert !u.valid?
-      assert u.errors[:password_confirmation].size == 0
+      assert u.errors[User.password_confirmation_field].size == 0
       
       ben = users(:ben)
       assert ben.valid?
       
-      ben.password = "newpass"
+      ben.send("#{User.password_field}=", "newpass")
       assert !ben.valid?
-      assert ben.errors[:password_confirmation].size > 0
+      assert ben.errors[User.password_confirmation_field].size > 0
       
-      ben.password_confirmation = "newpass"
+      ben.send("#{User.password_confirmation_field}=", "newpass")
       assert ben.valid?
     end
     
@@ -153,7 +162,7 @@ module ActsAsAuthenticTest
       u = User.new
       old_password_salt = u.password_salt
       old_crypted_password = u.crypted_password
-      u.password = "test"
+      u.send("#{User.password_field}=", "test")
       assert_not_equal old_password_salt, u.password_salt
       assert_not_equal old_crypted_password, u.crypted_password
     end
@@ -167,20 +176,20 @@ module ActsAsAuthenticTest
     
     def test_checks_password_against_database
       ben = users(:ben)
-      ben.password = "new pass"
+      ben.send("#{User.password_field}=", "new pass")
       assert !ben.valid_password?("new pass")
       assert ben.valid_password?("benrocks")
     end
     
     def test_checks_password_against_database_and_always_fails_on_new_records
       user = User.new
-      user.password = "new pass"
+      user.send("#{User.password_field}=", "new pass")
       assert !user.valid_password?("new pass")
     end
     
     def test_checks_password_against_object
       ben = users(:ben)
-      ben.password = "new pass"
+      ben.send("#{User.password_field}=", "new pass")
       assert ben.valid_password?("new pass", false)
       assert !ben.valid_password?("benrocks", false)
     end
