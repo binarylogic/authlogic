@@ -40,6 +40,7 @@ module SessionTest
           assert_equal "benrocks", session.send(:protected_password)
           assert !controller.http_auth_requested?
         end
+        unset_session
         UserSession.request_http_basic_auth = true
         UserSession.http_basic_auth_realm = 'PersistTestRealm'
         http_basic_auth_for(ben) do
