@@ -63,7 +63,7 @@ module Authlogic
       
       def self.included(base) #:nodoc:
         base.send :include, ActiveSupport::Callbacks
-        base.define_callbacks *(METHODS - ["persist"]), :terminator => 'result == false'
+        base.define_callbacks *METHODS, :terminator => 'result == false'
         base.define_callbacks 'persist', :terminator => 'result == true'
 
         # If Rails 3, support the new callback syntax
