@@ -40,6 +40,7 @@ module Authlogic
   #       not_confirmed: Your account is not confirmed
   #       not_approved: Your account is not approved
   #       no_authentication_details: You did not provide any details for authentication.
+  #       general_credentials_error: Login/Password combination is not valid
   #     models:
   #       user_session: UserSession (or whatever name you are using)
   #     attributes:
