@@ -1,6 +1,10 @@
 require "test/unit"
 require "rubygems"
-require "ruby-debug"
+
+unless ENV["TRAVIS"]
+  require "ruby-debug"
+end
+
 require "active_record"
 require "active_record/fixtures"
 
