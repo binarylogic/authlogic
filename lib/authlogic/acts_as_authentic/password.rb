@@ -13,6 +13,23 @@ module Authlogic
       
       # All configuration for the password aspect of acts_as_authentic.
       module Config
+        # The name of the virtual password field, used for setting the password.
+        #
+        # * <tt>Default:</tt> :password
+        # * <tt>Accepts:</tt> Symbol
+        def password_field(value = nil)
+          rw_config(:password_field, value, :password)
+        end
+        alias_method :password_field=, :password_field
+        
+        # The name of the virtual password confirmation field, used for setting the password.
+        # The value of this field is "#{password_field}_confirmation", and is not configurable.
+        #
+        # * <tt>Default:</tt> :password_confirmation
+        def password_confirmation_field()
+          rw_config(:password_confirmation_field, nil, "#{password_field}_confirmation".to_sym)
+        end
+        
         # The name of the crypted_password field in the database.
         #
         # * <tt>Default:</tt> :crypted_password, :encrypted_password, :password_hash, or :pw_hash
@@ -212,36 +229,36 @@ module Authlogic
             include InstanceMethods
             
             if validate_password_field
-              validates_length_of :password, validates_length_of_password_field_options
+              validates_length_of password_field, validates_length_of_password_field_options
               
               if require_password_confirmation
-                validates_confirmation_of :password, validates_confirmation_of_password_field_options
-                validates_length_of :password_confirmation, validates_length_of_password_confirmation_field_options
+                validates_confirmation_of password_field, validates_confirmation_of_password_field_options
+                validates_length_of "#{password_confirmation_field}", validates_length_of_password_confirmation_field_options
               end
             end
             
             after_save :reset_password_changed
+
+            # The password
+            define_method password_field do
+              @password
+            end
+        
+            # This is a virtual method. Once a password is passed to it, it will create new password salt as well as encrypt
+            # the password.
+            define_method "#{password_field}=" do |pass|
+              return if ignore_blank_passwords? && pass.blank?
+              before_password_set
+              @password = pass
+              send("#{password_salt_field}=", Authlogic::Random.friendly_token) if password_salt_field
+              send("#{crypted_password_field}=", crypto_provider.encrypt(*encrypt_arguments(@password, false, act_like_restful_authentication? ? :restful_authentication : nil)))
+              @password_changed = true
+              after_password_set
+            end
           end
         end
         
         module InstanceMethods
-          # The password
-          def password
-            @password
-          end
-        
-          # This is a virtual method. Once a password is passed to it, it will create new password salt as well as encrypt
-          # the password.
-          def password=(pass)
-            return if ignore_blank_passwords? && pass.blank?
-            before_password_set
-            @password = pass
-            send("#{password_salt_field}=", Authlogic::Random.friendly_token) if password_salt_field
-            send("#{crypted_password_field}=", crypto_provider.encrypt(*encrypt_arguments(@password, false, act_like_restful_authentication? ? :restful_authentication : nil)))
-            @password_changed = true
-            after_password_set
-          end
-        
           # Accepts a raw password to determine if it is the correct password or not. Notice the second argument. That defaults to the value of
           # check_passwords_against_database. See that method for more information, but basically it just tells Authlogic to check the password
           # against the value in the database or the value in the object.
@@ -269,8 +286,8 @@ module Authlogic
           # Resets the password to a random friendly token.
           def reset_password
             friendly_token = Authlogic::Random.friendly_token
-            self.password = friendly_token
-            self.password_confirmation = friendly_token
+            self.send("#{password_field}=", friendly_token)
+            self.send("#{password_confirmation_field}=", friendly_token)
           end
           alias_method :randomize_password, :reset_password
         
@@ -313,7 +330,7 @@ module Authlogic
             end
             
             def transition_password(attempted_password)
-              self.password = attempted_password
+              self.send("#{password_field}=", attempted_password)
               save(:validate => false)
             end
           
@@ -331,6 +348,14 @@ module Authlogic
             
             def reset_password_changed
               @password_changed = nil
+            end
+          
+            def password_field
+              self.class.password_field
+            end
+          
+            def password_confirmation_field
+              self.class.password_confirmation_field
             end
           
             def crypted_password_field
