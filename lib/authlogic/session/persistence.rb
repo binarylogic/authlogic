@@ -46,7 +46,7 @@ module Authlogic
       
       module InstanceMethods
         # Let's you know if the session is being persisted or not, meaning the user does not have to explicitly log in
-        # in order to be logged in. If the session has no associated record, it will try to find a record and persis
+        # in order to be logged in. If the session has no associated record, it will try to find a record and persist
         # the session. This is the method that the class level method find uses to ultimately persist the session.
         def persisting?
           return true if !record.nil?
