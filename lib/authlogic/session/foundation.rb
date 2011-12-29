@@ -19,7 +19,7 @@ module Authlogic
           def rw_config(key, value, default_value = nil, read_value = nil)
             if value == read_value
               return acts_as_authentic_config[key] if acts_as_authentic_config.include?(key)
-              rw_config(key, default_value)
+              rw_config(key, default_value) unless default_value.nil?
             else
               config = acts_as_authentic_config.clone
               config[key] = value
