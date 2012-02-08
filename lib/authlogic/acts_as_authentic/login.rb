@@ -94,7 +94,7 @@ module Authlogic
         # manner that they handle that. If you are using the login field and set false for the :case_sensitive option in
         # validates_uniqueness_of_login_field_options this method will modify the query to look something like:
         #
-        #   where("LOWER(#{quoted_table_name}.#{login_field}) = ?", login.downcase).first
+        #   where("#{quoted_table_name}.#{field} LIKE ?", login).first
         #
         # If you don't specify this it calls the good old find_by_* method:
         #
