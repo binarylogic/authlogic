@@ -177,7 +177,7 @@ As you can see, this fits nicely into the RESTful development pattern. What abou
   <%= form_for @user_session do |f| %>
     <% if @user_session.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@user_session.errors.count, "error") %> prohibited this post from being saved:</h2>
+      <h2><%= pluralize(@user_session.errors.count, "error") %> prohibited:</h2>
       <ul>
         <% @user_session.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
