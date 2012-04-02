@@ -58,4 +58,4 @@ module Authlogic
   end
 end
 
-Sinatra::Request.send(:include, Authlogic::ControllerAdapters::SinatraAdapter::Adapter::Implementation)
+Sinatra::Base.send(:include, Authlogic::ControllerAdapters::SinatraAdapter::Adapter::Implementation)
