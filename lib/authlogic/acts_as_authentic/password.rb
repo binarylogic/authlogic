@@ -58,7 +58,7 @@ module Authlogic
         alias_method :ignore_blank_passwords=, :ignore_blank_passwords
         
         # When calling valid_password?("some pass") do you want to check that password against what's in that object or whats in
-        # the datbase. Take this example:
+        # the database. Take this example:
         #
         #   u = User.first
         #   u.password = "new pass"
