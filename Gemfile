@@ -8,4 +8,5 @@ group :test do
   gem 'rake'
   gem 'ruby-debug19'
   gem 'sqlite3'
+  gem 'timecop'
 end
