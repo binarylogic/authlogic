@@ -38,6 +38,34 @@ module SessionTest
       
         UserSession.logout_on_timeout = false
       end
+
+      def test_should_be_stale_with_expired_remember_date
+        UserSession.logout_on_timeout = true
+        UserSession.remember_me = true
+        UserSession.remember_me_for = 3.months
+        ben = users(:ben)
+        assert ben.save
+        session = UserSession.new(ben)
+        assert session.save
+        Timecop.freeze(Time.now + 4.month)
+        assert session.persisting?
+        assert session.stale?
+        UserSession.remember_me = false
+      end
+
+      def test_should_not_be_stale_with_valid_remember_date
+        UserSession.logout_on_timeout = true # Default is 10.minutes
+        UserSession.remember_me = true
+        UserSession.remember_me_for = 3.months
+        ben = users(:ben)
+        assert ben.save
+        session = UserSession.new(ben)
+        assert session.save
+        Timecop.freeze(Time.now + 2.months)
+        assert session.persisting?
+        assert !session.stale?
+        UserSession.remember_me = false
+      end
       
       def test_successful_login
         UserSession.logout_on_timeout = true

@@ -58,7 +58,11 @@ module Authlogic
         # Tells you if the record is stale or not. Meaning the record has timed out. This will only return true if you set logout_on_timeout to true in your configuration.
         # Basically how a bank website works. If you aren't active over a certain period of time your session becomes stale and requires you to log back in.
         def stale?
-          !stale_record.nil? || (logout_on_timeout? && record && record.logged_out?)
+          if remember_me?
+            remember_me_expired?
+          else
+            !stale_record.nil? || (logout_on_timeout? && record && record.logged_out?)
+          end
         end
     
         private

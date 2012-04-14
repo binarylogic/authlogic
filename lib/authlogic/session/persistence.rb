@@ -51,6 +51,7 @@ module Authlogic
         def persisting?
           return true if !record.nil?
           self.attempted_record = nil
+          self.remember_me = !cookie_credentials.nil? && !cookie_credentials[2].nil?
           before_persisting
           persist
           ensure_authentication_attempted
