@@ -31,15 +31,15 @@ module Authlogic
   #     error_messages:
   #       login_blank: can not be blank
   #       login_not_found: is not valid
-  #       login_invalid: should use only letters, numbers, spaces, and .-_@ please.
-  #       consecutive_failed_logins_limit_exceeded: Consecutive failed logins limit exceeded, account is disabled.
-  #       email_invalid: should look like an email address.
+  #       login_invalid: should use only letters, numbers, spaces, and .-_@ please
+  #       consecutive_failed_logins_limit_exceeded: Consecutive failed logins limit exceeded, account has been temporarily disabled (the word "temporarily" does not appear if Authlogic::Session::BruteForceProtection::Config#failed_login_ban_for is passed 0)
+  #       email_invalid: should look like an email address
   #       password_blank: can not be blank
   #       password_invalid: is not valid
   #       not_active: Your account is not active
   #       not_confirmed: Your account is not confirmed
   #       not_approved: Your account is not approved
-  #       no_authentication_details: You did not provide any details for authentication.
+  #       no_authentication_details: You did not provide any details for authentication
   #       general_credentials_error: Login/Password combination is not valid
   #     models:
   #       user_session: UserSession (or whatever name you are using)
