@@ -9,17 +9,18 @@ module Authlogic
     # by reading this website: http://www.regular-expressions.info/email.html, which is an excellent resource
     # for regular expressions.
     def self.email
-      return @email_regex if @email_regex
-      email_name_regex  = '[A-Z0-9_\.%\+\-\']+'
-      domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
-      domain_tld_regex  = '(?:[A-Z]{2,4}|museum|travel)'
-      @email_regex = /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
+      @email_regex ||= begin
+        email_name_regex  = '[A-Z0-9_\.%\+\-\']+'
+        domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
+        domain_tld_regex  = '(?:[A-Z]{2,4}|museum|travel)'
+        /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
+      end
     end
     
     # A simple regular expression that only allows for letters, numbers, spaces, and .-_@. Just a standard login / username
     # regular expression.
     def self.login
-      /\A\w[\w\.+\-_@ ]+$/
+      /\A\w[\w\.+\-_@ ]+\z/
     end
   end
 end
