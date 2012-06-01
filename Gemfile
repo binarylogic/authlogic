@@ -1,12 +1,12 @@
 source :rubygems
 
-gem 'activesupport', '>= 3.0.0'
-gem 'activerecord', '>= 3.0.0'
+gem 'activesupport', '>= 3.0.7'
+gem 'activerecord', '>= 3.0.7'
 
 group :test do
   gem 'bcrypt-ruby'
   gem 'jeweler'
   gem 'rake'
-  gem 'ruby-debug19'
+  gem 'debugger'
   gem 'sqlite3'
 end
