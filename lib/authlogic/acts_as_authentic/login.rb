@@ -62,7 +62,7 @@ module Authlogic
         # * <tt>Default:</tt> {:with => Authlogic::Regex.login, :message => lambda {I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")}}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_format_of
         def validates_format_of_login_field_options(value = nil)
-          rw_config(:validates_format_of_login_field_options, value, {:with => Authlogic::Regex.login, :message => I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")})
+          rw_config(:validates_format_of_login_field_options, value, {:with => Authlogic::Regex.login, :message => lambda {I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")}})
         end
         alias_method :validates_format_of_login_field_options=, :validates_format_of_login_field_options
 
