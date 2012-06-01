@@ -1,24 +1,7 @@
 require 'rubygems'
 require 'rake'
-require 'bundler'
 
 Bundler.setup
-
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "authlogic"
-    gem.summary = "A clean, simple, and unobtrusive ruby authentication solution."
-    gem.email = "bjohnson@binarylogic.com"
-    gem.homepage = "http://github.com/binarylogic/authlogic"
-    gem.authors = ["Ben Johnson of Binary Logic"]
-    gem.add_dependency "activesupport", ">= 3.0.0"
-    gem.add_dependency "activerecord", ">= 3.0.0"
-  end
-  Jeweler::GemcutterTasks.new
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
-end
 
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
