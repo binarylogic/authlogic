@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "authlogic"
-  s.version     = "2.1.7"
+  s.version     = "2.1.8"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Ben Johnson"]
   s.email       = ["bjohnson@binarylogic.com"]
@@ -13,6 +13,9 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'activerecord', '~> 2.3.0'
   s.add_dependency 'activesupport', '~> 2.3.0'
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'bcrypt-ruby'
+  s.add_development_dependency 'sqlite3'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
