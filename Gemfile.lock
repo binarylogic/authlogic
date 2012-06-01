@@ -48,7 +48,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord (>= 3.0.7)
+  activerecord (>= 3.0.0)
+  activesupport (>= 3.0.0)
   bcrypt-ruby
   jeweler
   rake

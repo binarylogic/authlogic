@@ -12,7 +12,8 @@ begin
     gem.email = "bjohnson@binarylogic.com"
     gem.homepage = "http://github.com/binarylogic/authlogic"
     gem.authors = ["Ben Johnson of Binary Logic"]
-    gem.add_bundler_dependencies
+    gem.add_dependency "activesupport", ">= 3.0.0"
+    gem.add_dependency "activerecord", ">= 3.0.0"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
