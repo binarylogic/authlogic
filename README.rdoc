@@ -1,6 +1,6 @@
 = Authlogic
 
-** Please note the latest version is compatible with rails 3 only. Rails 2 should use version 2.X.X **
+** Please note the latest version is compatible with rails 3 only. Please see the rails2 branch for Rails 2 compatibility.
 
 Authlogic is a clean, simple, and unobtrusive ruby authentication solution.
 
@@ -204,19 +204,9 @@ Or how about persisting the session...
 
 == Install & Use
 
-Install the gem / plugin (recommended)
+Install the gem
 
-Rails 3:
-
-  $ sudo gem install authlogic
-
-Rails 2:
-
-  $ sudo gem install authlogic --version=2.1.6
-
-Or install as a plugin:
-
-  script/plugin install git://github.com/binarylogic/authlogic.git
+  $ gem 'authlogic'
 
 == Detailed Setup Tutorial
 
