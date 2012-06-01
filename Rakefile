@@ -20,6 +20,4 @@ rescue LoadError
   end
 end
 
-task :test => :check_dependencies
-
 task :default => :test
