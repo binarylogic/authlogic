@@ -1,2 +1,2 @@
-class <%= session_class_name %> < Authlogic::Session::Base
+class <%= session_class_name.camelcase %> < Authlogic::Session::Base
 end
