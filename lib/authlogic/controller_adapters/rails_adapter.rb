@@ -1,3 +1,5 @@
+require 'action_controller'
+
 module Authlogic
   module ControllerAdapters
     # Adapts authlogic to work with rails. The point is to close the gap between what authlogic expects and what the rails controller object

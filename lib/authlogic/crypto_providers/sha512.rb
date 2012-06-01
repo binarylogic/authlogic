@@ -27,7 +27,7 @@ module Authlogic
       class << self
         attr_accessor :join_token
         
-        # The number of times to loop through the encryption. This is ten because that is what restful_authentication defaults to.
+        # The number of times to loop through the encryption. This is twenty because that is what restful_authentication defaults to.
         def stretches
           @stretches ||= 20
         end
