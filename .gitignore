@@ -2,6 +2,7 @@
 .swp
 *.log
 *.sqlite3
+*.gem
 pkg/*
 coverage/*
 doc/*
