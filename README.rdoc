@@ -213,9 +213,9 @@ Or how about persisting the session...
 
 == Install & Use
 
-Install the gem
+Add to your gem file
 
-  $ gem 'authlogic'
+  gem 'authlogic'
 
 == Detailed Setup Tutorial
 
@@ -246,4 +246,4 @@ What inspired me to create Authlogic was the messiness of the current authentica
 6. <b>Easily extendable.</b> One of the distinct advantages of using a library is the ability to use its API, assuming it has one. Authlogic has an *excellent* public API, meaning it can easily be extended and grow beyond the core library. Checkout the "add ons" list above to see what I mean.
 
 
-Copyright (c) 2009 {Ben Johnson of Binary Logic}[http://www.binarylogic.com], released under the MIT license
+Copyright (c) 2012 {Ben Johnson of Binary Logic}[http://www.binarylogic.com], released under the MIT license
