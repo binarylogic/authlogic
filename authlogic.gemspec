@@ -11,8 +11,8 @@ Gem::Specification.new do |s|
   s.summary     = %q{A clean, simple, and unobtrusive ruby authentication solution.}
   s.description = %q{A clean, simple, and unobtrusive ruby authentication solution.}
 
-  s.add_dependency 'activerecord', '~> 3.0.0'
-  s.add_dependency 'activesupport', '~> 3.0.0'
+  s.add_dependency 'activerecord', '>= 3.0.0'
+  s.add_dependency 'activesupport', '>= 3.0.0'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'bcrypt-ruby'
   s.add_development_dependency 'sqlite3'
