@@ -110,6 +110,12 @@ module Authlogic
           remember_me_for.from_now
         end
 
+        # Has the cookie expired due to current time being greater than remember_me_until.
+        def remember_me_expired?
+          return unless remember_me?
+          (Time.parse(cookie_credentials[2]) < Time.now)
+        end
+
         # If the cookie should be marked as secure (SSL only)
         def secure
           return @secure if defined?(@secure)
@@ -164,8 +170,9 @@ module Authlogic
           end
           
           def save_cookie
+            remember_me_until_value = "::#{remember_me_until}" if remember_me?
             controller.cookies[cookie_key] = {
-              :value => "#{record.persistence_token}::#{record.send(record.class.primary_key)}",
+              :value => "#{record.persistence_token}::#{record.send(record.class.primary_key)}#{remember_me_until_value}",
               :expires => remember_me_until,
               :secure => secure,
               :httponly => httponly,
