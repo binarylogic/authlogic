@@ -48,12 +48,25 @@ module Authlogic
         end
         alias_method :session_ids=, :session_ids
         
+        # As you may know, authlogic sessions can be separate by id (See Authlogic::Session::Base#id). You can
+        # specify here what session ids you want auto maintained. By default it is the main session, which has
+        # an id of nil.
+        #
+        # * <tt>Default:</tt> [nil]
+        # * <tt>Accepts:</tt> Array
+        def session_namespace(value = nil)
+          rw_config(:session_namespace, value, nil)
+        end
+        alias_method :session_namespace=, :session_namespace
+        
         # The name of the associated session class. This is inferred by the name of the model.
         #
         # * <tt>Default:</tt> "#{klass.name}Session".constantize
         # * <tt>Accepts:</tt> Class
         def session_class(value = nil)
-          const = "#{base_class.name}Session".constantize rescue nil
+          namespace = read_inheritable_attribute(:session_namespace)
+
+          const = namespace.nil? ? "#{base_class.name}Session".constantize : "#{namespace}::#{base_class.name}Session".constantize rescue nil
           rw_config(:session_class, value, const)
         end
         alias_method :session_class=, :session_class
