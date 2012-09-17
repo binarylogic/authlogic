@@ -30,7 +30,7 @@ module Authlogic
     #
     # You can play around with the cost to get that perfect balance between performance and security.
     #
-    # Decided BCrypt is for you? Just insall the bcrypt gem:
+    # Decided BCrypt is for you? Just install the bcrypt gem:
     #
     #   gem install bcrypt-ruby
     #
