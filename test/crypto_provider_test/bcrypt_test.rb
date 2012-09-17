@@ -1,7 +1,7 @@
 require 'test_helper'
 
 module CryptoProviderTest
-  class BCrpytTest < ActiveSupport::TestCase
+  class BCryptTest < ActiveSupport::TestCase
     def test_encrypt
       assert Authlogic::CryptoProviders::BCrypt.encrypt("mypass")
     end
