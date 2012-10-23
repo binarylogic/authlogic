@@ -168,7 +168,7 @@ module Authlogic
               :value => "#{record.persistence_token}::#{record.send(record.class.primary_key)}",
               :expires => remember_me_until,
               :secure => secure,
-              :http_only => httponly,
+              :httponly => httponly,
               :domain => controller.cookie_domain
             }
           end
