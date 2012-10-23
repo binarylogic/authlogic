@@ -48,12 +48,25 @@ module Authlogic
         end
         alias_method :session_ids=, :session_ids
         
+        # In some cases, you can use a different namespace for the session class. If you want to use a model
+        # to control access in a namespace and edit it in another namespace, you can define the session class
+        # namespace here so authlogic knows where to find it without problems.
+        #
+        # * <tt>Default:</tt> nil
+        # * <tt>Accepts:</tt> Strings
+        def session_class_namespace(value = nil)
+          rw_config(:session_class_namespace, value, nil)
+        end
+        alias_method :session_class_namespace=, :session_class_namespace
+        
         # The name of the associated session class. This is inferred by the name of the model.
         #
         # * <tt>Default:</tt> "#{klass.name}Session".constantize
         # * <tt>Accepts:</tt> Class
         def session_class(value = nil)
-          const = "#{base_class.name}Session".constantize rescue nil
+          namespace = rw_config(:session_class_namespace, nil)
+
+          const = ((namespace.nil? ? "" : "#{namespace}::") + "#{base_class.name}Session").constantize rescue nil
           rw_config(:session_class, value, const)
         end
         alias_method :session_class=, :session_class
