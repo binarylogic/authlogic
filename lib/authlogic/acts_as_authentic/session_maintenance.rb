@@ -57,6 +57,17 @@ module Authlogic
           rw_config(:session_class, value, const)
         end
         alias_method :session_class=, :session_class
+
+        # This method allows you to change the record's primary_key in the
+        # context of Authlogic.
+        #
+        # * <tt>Default:</tt> :id
+        # * <tt>Accepts:</tt> Symbol
+        def authlogic_record_primary_key(value = nil)
+          rw_config(:authlogic_record_primary_key, value,
+                    base_class.primary_key.to_sym)
+        end
+        alias_method :authlogic_record_primary_key=, :authlogic_record_primary_key
       end
       
       module Methods
@@ -64,6 +75,7 @@ module Authlogic
           klass.class_eval do
             before_save :get_session_information, :if => :update_sessions?
             before_save :maintain_sessions, :if => :update_sessions?
+            authlogic_record_primary_key
           end
         end
         

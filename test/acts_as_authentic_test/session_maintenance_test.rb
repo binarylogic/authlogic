@@ -10,6 +10,14 @@ module ActsAsAuthenticTest
       assert User.maintain_sessions
     end
     
+    def test_authlogic_record_primary_key_config
+      assert_equal User.authlogic_record_primary_key, :id
+      User.authlogic_record_primary_key = :login
+      assert_equal User.authlogic_record_primary_key, :login
+      User.authlogic_record_primary_key = :id
+      assert_equal User.authlogic_record_primary_key, :id
+    end
+
     def test_login_after_create
       assert User.create(:login => "awesome", :password => "saweet", :password_confirmation => "saweet", :email => "awesome@awesome.com")
       assert UserSession.find
