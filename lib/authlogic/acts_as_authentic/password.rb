@@ -306,7 +306,7 @@ module Authlogic
             # If the index > 0 then we are using an "transition from" crypto provider.
             # If the encryptor has a cost and the cost it outdated.
             # If we aren't using database values
-            # If we are using database values, only if the password hasnt change so we don't overwrite any changes
+            # If we are using database values, only if the password hasn't changed so we don't overwrite any changes
             def transition_password?(index, encryptor, crypted, check_against_database)
               (index > 0 || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(send(crypted_password_field)))) &&
                 (!check_against_database || !send("#{crypted_password_field}_changed?"))
