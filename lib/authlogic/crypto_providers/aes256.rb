@@ -7,7 +7,7 @@ module Authlogic
     #
     #   Authlogic::CryptoProviders::AES256.key = "my really long and unique key, preferrably a bunch of random characters"
     #
-    # My final comment is that this is a strong encryption method, but its main weakness is that its reversible. If you do not need to reverse the hash
+    # My final comment is that this is a strong encryption method, but its main weakness is that it's reversible. If you do not need to reverse the hash
     # then you should consider Sha512 or BCrypt instead.
     #
     # Keep your key in a safe place, some even say the key should be stored on a separate server.

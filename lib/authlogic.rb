@@ -15,6 +15,7 @@ AUTHLOGIC_PATH = File.dirname(__FILE__) + "/authlogic/"
  "crypto_providers/sha512",
  "crypto_providers/bcrypt",
  "crypto_providers/aes256",
+ "crypto_providers/scrypt",
  
  "authenticates_many/base",
  "authenticates_many/association",
