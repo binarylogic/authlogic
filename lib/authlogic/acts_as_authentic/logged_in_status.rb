@@ -31,7 +31,7 @@ module Authlogic
 
           klass.class_eval do
             include InstanceMethods
-            scope :logged_in, lambda{ where("last_request_at > ? and last_login_at IS NOT NULL", logged_in_timeout.seconds.ago) }
+            scope :logged_in, lambda{ where("last_request_at > ? and current_login_at IS NOT NULL", logged_in_timeout.seconds.ago) }
             scope :logged_out, lambda{ where("last_request_at is NULL or last_request_at <= ?", logged_in_timeout.seconds.ago) }
           end
         end
