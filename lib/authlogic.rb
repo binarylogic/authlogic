@@ -6,9 +6,9 @@ AUTHLOGIC_PATH = File.dirname(__FILE__) + "/authlogic/"
  "i18n",
  "random",
  "regex",
- 
+
  "controller_adapters/abstract_adapter",
- 
+
  "crypto_providers/md5",
  "crypto_providers/sha1",
  "crypto_providers/sha256",
@@ -16,10 +16,10 @@ AUTHLOGIC_PATH = File.dirname(__FILE__) + "/authlogic/"
  "crypto_providers/bcrypt",
  "crypto_providers/aes256",
  "crypto_providers/scrypt",
- 
+
  "authenticates_many/base",
  "authenticates_many/association",
- 
+
  "acts_as_authentic/email",
  "acts_as_authentic/logged_in_status",
  "acts_as_authentic/login",
@@ -32,7 +32,7 @@ AUTHLOGIC_PATH = File.dirname(__FILE__) + "/authlogic/"
  "acts_as_authentic/single_access_token",
  "acts_as_authentic/validations_scope",
  "acts_as_authentic/base",
- 
+
  "session/activation",
  "session/active_record_trickery",
  "session/brute_force_protection",
@@ -61,5 +61,4 @@ AUTHLOGIC_PATH = File.dirname(__FILE__) + "/authlogic/"
  end
 
 require AUTHLOGIC_PATH + "controller_adapters/rails_adapter"   if defined?( Rails   )
-require AUTHLOGIC_PATH + "controller_adapters/merb_adapter"    if defined?( Merb    )
 require AUTHLOGIC_PATH + "controller_adapters/sinatra_adapter" if defined?( Sinatra )
