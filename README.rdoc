@@ -152,12 +152,6 @@ Or how about persisting the session...
       end
   end
 
-== Install & Use
-
-Add to your gem file
-
-  gem 'authlogic'
-
 == Testing
 
 See Authlogic::TestCase
