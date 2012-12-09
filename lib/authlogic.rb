@@ -1,6 +1,6 @@
 require "active_record"
 
-AUTHLOGIC_PATH = File.dirname(__FILE__) + "/authlogic/"
+path = File.dirname(__FILE__) + "/authlogic/"
 
 [
  "i18n",
@@ -57,8 +57,8 @@ AUTHLOGIC_PATH = File.dirname(__FILE__) + "/authlogic/"
  "session/validation",
  "session/base"
 ].each do |library|
-   require AUTHLOGIC_PATH + library
+   require path + library
  end
 
-require AUTHLOGIC_PATH + "controller_adapters/rails_adapter"   if defined?( Rails   )
-require AUTHLOGIC_PATH + "controller_adapters/sinatra_adapter" if defined?( Sinatra )
+require path + "controller_adapters/rails_adapter"   if defined?( Rails   )
+require path + "controller_adapters/sinatra_adapter" if defined?( Sinatra )
