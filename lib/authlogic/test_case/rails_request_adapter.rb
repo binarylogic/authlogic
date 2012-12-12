@@ -9,7 +9,7 @@ module Authlogic
       def cookies
         new_cookies = MockCookieJar.new
         super.each do |key, value|
-          new_cookies[key] = value[:value]
+          new_cookies[key] = { :value => value[:value] }
         end
         new_cookies
       end
