@@ -1,3 +1,5 @@
+require 'request_store'
+
 module Authlogic
   module Session
     # Activating Authlogic requires that you pass it an Authlogic::ControllerAdapters::AbstractAdapter object, or a class that extends it.
@@ -32,12 +34,12 @@ module Authlogic
         #
         # Lastly, this is thread safe.
         def controller=(value)
-          Thread.current[:authlogic_controller] = value
+          RequestStore.store[:authlogic_controller] = value
         end
         
         # The current controller object
         def controller
-          Thread.current[:authlogic_controller]
+          RequestStore.store[:authlogic_controller]
         end
       end
       
