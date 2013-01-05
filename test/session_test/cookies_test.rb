@@ -65,6 +65,18 @@ module SessionTest
         session = UserSession.new
         assert_equal false, session.httponly
       end
+
+      def test_sign_cookie
+        UserSession.sign_cookie = true
+        assert_equal true, UserSession.sign_cookie
+        session = UserSession.new
+        assert_equal true, session.sign_cookie
+
+        UserSession.sign_cookie false
+        assert_equal false, UserSession.sign_cookie
+        session = UserSession.new
+        assert_equal false, session.sign_cookie
+      end
     end
 
     class InstanceMethodsTest < ActiveSupport::TestCase
@@ -134,6 +146,19 @@ module SessionTest
         session = UserSession.new(ben)
         assert session.save
         assert_equal "#{ben.persistence_token}::#{ben.id}", controller.cookies["user_credentials"]
+      end
+
+      def test_after_save_save_cookie_signed
+        ben = users(:ben)
+
+        assert_nil controller.cookies["user_credentials"]
+        payload = "#{ben.persistence_token}::#{ben.id}"
+
+        session = UserSession.new(ben)
+        session.sign_cookie = true
+        assert session.save
+        assert_equal payload, controller.cookies.signed["user_credentials"]
+        assert_equal "#{payload}--#{Digest::SHA1.hexdigest payload}", controller.cookies.signed.parent_jar["user_credentials"]
       end
 
       def test_after_save_save_cookie_with_remember_me

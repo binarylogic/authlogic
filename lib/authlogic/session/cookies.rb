@@ -65,6 +65,15 @@ module Authlogic
           rw_config(:httponly, value, false)
         end
         alias_method :httponly=, :httponly
+
+        # Should the cookie be signed? If the controller adapter supports it, this is a measure against cookie tampering.
+        def sign_cookie(value = nil)
+          if value && !controller.cookies.respond_to?(:signed)
+            raise "Signed cookies not supported with #{controller.class}!"
+          end
+          rw_config(:sign_cookie, value, false)
+        end
+        alias_method :sign_cookie=, :sign_cookie
       end
       
       # The methods available for an Authlogic::Session::Base object that make up the cookie feature set.
@@ -148,13 +157,33 @@ module Authlogic
           httponly == true || httponly == "true" || httponly == "1"
         end
 
+        # If the cookie should be signed
+        def sign_cookie
+          return @sign_cookie if defined?(@sign_cookie)
+          @sign_cookie = self.class.sign_cookie
+        end
+
+        # Accepts a boolean as to whether the cookie should be signed.  If true the cookie will be saved and verified using a signature.
+        def sign_cookie=(value)
+          @sign_cookie = value
+        end
+
+        # See sign_cookie
+        def sign_cookie?
+          sign_cookie == true || sign_cookie == "true" || sign_cookie == "1"
+        end
+
         private
           def cookie_key
             build_key(self.class.cookie_key)
           end
           
           def cookie_credentials
-            controller.cookies[cookie_key] && controller.cookies[cookie_key].split("::")
+            if self.class.sign_cookie
+              controller.cookies.signed[cookie_key] && controller.cookies.signed[cookie_key].split("::")
+            else
+              controller.cookies[cookie_key] && controller.cookies[cookie_key].split("::")
+            end
           end
           
           # Tries to validate the session from information in the cookie
@@ -171,13 +200,20 @@ module Authlogic
           
           def save_cookie
             remember_me_until_value = "::#{remember_me_until}" if remember_me?
-            controller.cookies[cookie_key] = {
+
+            cookie = {
               :value => "#{record.persistence_token}::#{record.send(record.class.primary_key)}#{remember_me_until_value}",
               :expires => remember_me_until,
               :secure => secure,
               :httponly => httponly,
               :domain => controller.cookie_domain
             }
+
+            if sign_cookie?
+              controller.cookies.signed[cookie_key] = cookie
+            else
+              controller.cookies[cookie_key] = cookie
+            end
           end
           
           def destroy_cookie
