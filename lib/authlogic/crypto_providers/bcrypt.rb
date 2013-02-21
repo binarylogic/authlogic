@@ -23,10 +23,10 @@ module Authlogic
     #   end
     #
     #                            user     system      total        real
-    #   BCrypt (cost = 10:  37.360000   0.020000  37.380000 ( 37.558943)
-    #   BCrypt (cost = 4:    0.680000   0.000000   0.680000 (  0.677460)
-    #   Sha512:              0.000000   0.000000   0.000000 (  0.000672)
-    #   Sha1:                0.000000   0.000000   0.000000 (  0.000454)
+    #   BCrypt (cost = 10):  37.360000   0.020000  37.380000 ( 37.558943)
+    #   BCrypt (cost = 4):    0.680000   0.000000   0.680000 (  0.677460)
+    #   Sha512:               0.000000   0.000000   0.000000 (  0.000672)
+    #   Sha1:                 0.000000   0.000000   0.000000 (  0.000454)
     #
     # You can play around with the cost to get that perfect balance between performance and security.
     #
