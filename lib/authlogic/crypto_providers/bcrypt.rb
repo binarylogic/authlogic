@@ -44,7 +44,7 @@ module Authlogic
     class BCrypt
       class << self
         # This is the :cost option for the BCrpyt library. The higher the cost the more secure it is and the longer is take the generate a hash. By default this is 10.
-        # Set this to any value above the engine's minimum (currently 4), play around with it to get that perfect balance between security and performance.
+        # Set this to any value >= the engine's minimum (currently 4), play around with it to get that perfect balance between security and performance.
         def cost
           @cost ||= 10
         end
