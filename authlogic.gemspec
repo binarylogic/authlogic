@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'scrypt'
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'timecop'
+  s.add_development_dependency 'i18n'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
