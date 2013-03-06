@@ -81,7 +81,7 @@ module Authlogic
   # that looks like a controller, acts like a controller, but isn't a "real" controller. You are essentially connecting
   # Authlogic to your "mock" controller, then you can test off of the mock controller to make sure everything is functioning
   # properly.
-  # 
+  #
   # I use a mock controller to test Authlogic myself. It's part of the Authlogic library that you can easily use. It's as simple
   # as functional and integration tests. Just do the following:
   #
@@ -108,13 +108,13 @@ module Authlogic
 
       Authlogic::Session::Base.controller = (@request && Authlogic::TestCase::RailsRequestAdapter.new(@request)) || controller
     end
-    
+
     # The Authlogic::TestCase::MockController object passed to Authlogic to activate it. You can access this in your test.
     # See the module description for an example.
     def controller
       @controller ||= Authlogic::TestCase::MockController.new
     end
   end
-  
-  ::Test::Unit::TestCase.send(:include, TestCase) if defined?(::Test::Unit::TestCase)
+
+  ::MiniTest::Unit::TestCase.send(:include, ::Authlogic::TestCase) if defined?(::MiniTest::Unit::TestCase)
 end
