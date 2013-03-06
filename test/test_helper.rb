@@ -166,3 +166,6 @@ class ActiveSupport::TestCase
       controller.session["user_credentials"] = controller.session["user_credentials_id"] = nil
     end
 end
+
+# Set a standard timezone to avoid perishable_token timestamp conflicts
+Time.zone = 'UTC'
