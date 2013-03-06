@@ -12,7 +12,8 @@ module Authlogic
 
 				
 				def matches?(crypted, *tokens)
-					# The first 12 characters of an existing hash are its setting string.        
+					# The first 12 characters of an existing hash are its setting string.   
+					crypted_password = crypted     
 					crypted = crypted[0..11]
 				
 					if(crypted[0] != '$' || crypted[2] != '$')
@@ -32,6 +33,7 @@ module Authlogic
 
 					# Convert the base 2 logarithm into an integer. (check if it not have -1 somewhere)
 					count = 1 << count_log2
+					# Plain = introduced password
 					plain, not_used_salt = *tokens
 					digest = salt + plain
 					hash = Digest::SHA512.digest(digest)
@@ -45,7 +47,8 @@ module Authlogic
 					len = hash.length
 					output = crypted + encode_64(hash,len)
 					expected = 12+ ((8*len).to_f/6).ceil 
-					return (output.length == expected) ? output[0,DRUPAL_HASH_LENGTH] : false
+					# return (output.length == expected) ? output[0,DRUPAL_HASH_LENGTH] : false
+					return (output[0,DRUPAL_HASH_LENGTH] == crypted_password ) if output.length == expected
 				end
         def encode_64(input, length)
           output = "" 
