@@ -69,6 +69,7 @@ Authlogic is very flexible, it has a strong public API and a plethora of hooks t
 * <b>Authlogic Oauth and OpenID:</b> http://github.com/viatropos/authlogic-connect
 * <b>Authlogic PAM:</b> http://github.com/nbudin/authlogic_pam
 * <b>Authlogic x509:</b> http://github.com/auth-scc/authlogic_x509
+* <b>Authlogic Drupal</b> https://github.com/Sikian/authlogic/tree/drupal
 
 If you create one of your own, please let me know about it so I can add it to this list. Or just fork the project, add your link, and send me a pull request.
 
