@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "authlogic"
-  s.version     = "3.2.1"
+  s.version     = "3.3.0"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Ben Johnson"]
   s.email       = ["bjohnson@binarylogic.com"]
@@ -11,8 +11,8 @@ Gem::Specification.new do |s|
   s.summary     = %q{A clean, simple, and unobtrusive ruby authentication solution.}
   s.description = %q{A clean, simple, and unobtrusive ruby authentication solution.}
 
-  s.add_dependency 'activerecord', '>= 3.0.0'
-  s.add_dependency 'activesupport', '>= 3.0.0'
+  s.add_dependency 'activerecord', '>= 3.2'
+  s.add_dependency 'activesupport', '>= 3.2'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'bcrypt-ruby'
   s.add_development_dependency 'scrypt'

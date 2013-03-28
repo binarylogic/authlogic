@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    authlogic (3.2.1)
-      activerecord (>= 3.0.0)
-      activesupport (>= 3.0.0)
+    authlogic (3.3.0)
+      activerecord (>= 3.2)
+      activesupport (>= 3.2)
 
 GEM
   remote: http://rubygems.org/
