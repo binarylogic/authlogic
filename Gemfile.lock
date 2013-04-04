@@ -36,6 +36,7 @@ PLATFORMS
 DEPENDENCIES
   authlogic!
   bcrypt-ruby
+  i18n
   rake
   scrypt
   sqlite3

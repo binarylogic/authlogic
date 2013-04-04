@@ -1,0 +1,4 @@
+lol:
+  authlogic:
+    error_messages:
+      email_invalid: LOL email should be valid.
