@@ -1,6 +1,6 @@
 = Authlogic
 
-** Please note the latest version is compatible with rails 3 only. Please see the rails2 branch for Rails 2 compatibility.
+** Please note the latest version is compatible with rails 3.2 only. Please see the rails2 branch for Rails 2 compatibility.
 
 Authlogic is a clean, simple, and unobtrusive ruby authentication solution.
 
