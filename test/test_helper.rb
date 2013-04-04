@@ -3,6 +3,9 @@ require "rubygems"
 require "active_record"
 require "active_record/fixtures"
 require "timecop"
+require "i18n"
+
+I18n.load_path << File.dirname(__FILE__) + '/i18n/lol.yml'
 
 #ActiveRecord::Schema.verbose = false
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
