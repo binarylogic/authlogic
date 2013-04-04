@@ -12,14 +12,6 @@ module SessionTest
         assert_equal "Usersession", UserSession.human_name
       end
     
-      def test_self_and_descendents_from_active_record
-        assert_equal [UserSession], UserSession.self_and_descendents_from_active_record
-      end
-    
-      def test_self_and_descendants_from_active_record
-        assert_equal [UserSession], UserSession.self_and_descendants_from_active_record
-      end
-
       def test_i18n_of_human_name
         I18n.backend.store_translations 'en', :authlogic => {:models => {:user_session => "MySession" } }
         assert_equal "MySession", UserSession.human_name
