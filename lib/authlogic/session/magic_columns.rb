@@ -8,7 +8,7 @@ module Authlogic
     #   last_request_at       Updates every time the user logs in, either by explicitly logging in, or logging in by cookie, session, or http auth
     #   current_login_at      Updates with the current time when an explicit login is made.
     #   last_login_at         Updates with the value of current_login_at before it is reset.
-    #   current_login_ip      Updates with the request remote_ip when an explicit login is made.
+    #   current_login_ip      Updates with the request ip when an explicit login is made.
     #   last_login_ip         Updates with the value of current_login_ip before it is reset.
     module MagicColumns
       def self.included(klass)
@@ -58,7 +58,7 @@ module Authlogic
           
             if record.respond_to?(:current_login_ip)
               record.last_login_ip = record.current_login_ip if record.respond_to?(:last_login_ip)
-              record.current_login_ip = controller.request.remote_ip
+              record.current_login_ip = controller.request.ip
             end
           end
           
