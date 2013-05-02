@@ -56,7 +56,6 @@ module Authlogic
           !(new_record? || destroyed?)
         end
 
-        # Don't use this yourself, this is to just trick some of the helpers since this is the method it calls.
         def destroyed?
           record.nil?
         end
