@@ -28,7 +28,36 @@ module SessionTest
         session = UserSession.new
         assert session.new_record?
       end
+
+      def test_to_key
+        ben = users(:ben)
+        session = UserSession.new(ben)
+        assert_nil session.to_key
+
+        session.save
+        assert_not_nil session.to_key
+        assert_equal ben.to_key, session.to_key
+      end
+
+      def test_persisted
+        session = UserSession.new(users(:ben))
+        assert ! session.persisted?
+
+        session.save
+        assert session.persisted?
+
+        session.destroy
+        assert ! session.persisted?
+      end
       
+      def test_destroyed?
+        session = UserSession.create(users(:ben))
+        assert ! session.destroyed?
+
+        session.destroy
+        assert session.destroyed?
+      end
+
       def test_to_model
         session = UserSession.new
         assert_equal session, session.to_model
