@@ -72,7 +72,7 @@ module Authlogic
           # So you can do something like this in your controller:
           #
           #   def last_request_update_allowed?
-          #     action_name =! "update_session_time_left"
+          #     action_name != "update_session_time_left"
           #   end
           #
           # You can do whatever you want with that method.
