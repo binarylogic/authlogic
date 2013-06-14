@@ -91,7 +91,18 @@ module Authlogic
           end
 
           def search_for_record(*args)
-            klass.send(:with_scope, :find => (scope[:find_options] || {})) do
+            where_content = nil
+            current_scope = nil
+
+            if scope.has_key?(:find_options)
+              if scope[:find_options].is_a?(Hash) and scope[:find_options].has_key?(:conditions)
+                where_content = scope[:find_options][:conditions]
+              elsif scope[:find_options].is_a?(ActiveRecord::Relation)
+                current_scope = scope[:find_options]
+              end
+            end
+
+            klass.send(:where, where_content).merge(current_scope).send(:scoping) do
               klass.send(*args)
             end
           end
