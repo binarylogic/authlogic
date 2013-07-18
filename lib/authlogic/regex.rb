@@ -12,11 +12,11 @@ module Authlogic
       @email_regex ||= begin
         email_name_regex  = '[A-Z0-9_\.%\+\-\']+'
         domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
-        domain_tld_regex  = '(?:[A-Z]{2,4}|museum|travel)'
+        domain_tld_regex  = '(?:[A-Z]{2,4}|museum|travel|онлайн)'
         /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
       end
     end
-    
+
     # A simple regular expression that only allows for letters, numbers, spaces, and .-_@. Just a standard login / username
     # regular expression.
     def self.login
