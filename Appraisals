@@ -1,6 +1,6 @@
 appraise "rails3" do
-  gem "activerecord", "3.2.13"
-  gem "activesupport", "3.2.13"
+  gem "activerecord", "3.2.14"
+  gem "activesupport", "3.2.14"
 end
 
 appraise "rails4" do
