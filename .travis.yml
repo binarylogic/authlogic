@@ -1,0 +1,17 @@
+rvm:
+  - 1.8.7
+  - 1.9.3
+  - 2.0.0
+  - ree
+  - jruby
+
+gemfile:
+  - gemfiles/rails3.gemfile
+  - gemfiles/rails4.gemfile
+
+matrix:
+  exclude:
+    - rvm: 1.8.7
+      gemfile: gemfiles/rails4.gemfile
+    - rvm: ree
+      gemfile: gemfiles/rails4.gemfile
