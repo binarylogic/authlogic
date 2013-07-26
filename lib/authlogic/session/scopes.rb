@@ -91,7 +91,12 @@ module Authlogic
           end
 
           def search_for_record(*args)
-            klass.send(:with_scope, :find => (scope[:find_options] || {})) do
+            session_scope = if scope[:find_options].is_a?(ActiveRecord::Relation)
+              scope[:find_options]
+            else
+              klass.send(:where, scope[:find_options] && scope[:find_options][:conditions] || {})
+            end
+            session_scope.scoping do
               klass.send(*args)
             end
           end
