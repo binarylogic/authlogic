@@ -51,7 +51,19 @@ module Authlogic
         def new_record?
           new_session?
         end
+
+        def persisted?
+          !(new_record? || destroyed?)
+        end
+
+        def destroyed?
+          record.nil?
+        end
         
+        def to_key
+          new_record? ? nil : record.to_key
+        end
+
         # For rails >= 3.0
         def to_model
           self
