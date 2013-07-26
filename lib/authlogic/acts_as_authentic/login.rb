@@ -90,19 +90,21 @@ module Authlogic
         end
 
         # This method allows you to find a record with the given login. If you notice, with Active Record you have the
-        # UniquenessValidator class. They give you a :case_sensitive option. I handle this in the same
-        # manner that they handle that. If you are using the login field, set false for the :case_sensitive option in
-        # validates_uniqueness_of_login_field_options and the column doesn't have a case-insensitive collation,
-        # this method will modify the query to look something like:
+        # validates_uniqueness_of validation function. They give you a :case_sensitive option. I handle this in the same
+        # manner that they handle that. If you are using the login field and set false for the :case_sensitive option in
+        # validates_uniqueness_of_login_field_options this method will modify the query to look something like:
         #
-        #   "LOWER(#{quoted_table_name}.#{login_field}) = LOWER(#{login})"
+        #   where("LOWER(#{quoted_table_name}.#{login_field}) = ?", login.downcase).first
         #
-        # If you don't specify this it just uses a regular case-sensitive search (with the binary modifier if necessary):
+        # If you don't specify this it calls the good old find_by_* method:
         #
-        #   "BINARY #{login_field} = #{login}"
+        #   find_by_login(login)
         #
         # The above also applies for using email as your login, except that you need to set the :case_sensitive in
         # validates_uniqueness_of_email_field_options to false.
+        #
+        # The only reason I need to do the above is for Postgres and SQLite since they perform case sensitive searches with the
+        # find_by_* methods.
         def find_by_smart_case_login_field(login)
           if login_field
             find_with_case(login_field, login, validates_uniqueness_of_login_field_options[:case_sensitive] != false)
@@ -113,14 +115,11 @@ module Authlogic
 
         private
           def find_with_case(field, value, sensitivity = true)
-            relation = if not sensitivity
-              connection.case_insensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
+            if sensitivity
+              send("find_by_#{field}", value)
             else
-              value    = connection.case_sensitive_modifier(value) if value
-              relation = arel_table[field.to_s].eq(value)
+              where("LOWER(#{quoted_table_name}.#{field}) = ?", value.mb_chars.downcase).first
             end
-
-            where(relation).first
           end
       end
 

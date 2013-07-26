@@ -17,16 +17,16 @@ module Authlogic
     #
     #   Benchmark.bm(18) do |x|
     #     x.report("BCrypt (cost = 10:") { 100.times { BCrypt::Password.create("mypass", :cost => 10) } }
-    #     x.report("BCrypt (cost = 4:") { 100.times { BCrypt::Password.create("mypass", :cost => 4) } }
+    #     x.report("BCrypt (cost = 2:") { 100.times { BCrypt::Password.create("mypass", :cost => 2) } }
     #     x.report("Sha512:") { 100.times { Digest::SHA512.hexdigest("mypass") } }
     #     x.report("Sha1:") { 100.times { Digest::SHA1.hexdigest("mypass") } }
     #   end
     #
-    #                            user     system      total        real
-    #   BCrypt (cost = 10):  37.360000   0.020000  37.380000 ( 37.558943)
-    #   BCrypt (cost = 4):    0.680000   0.000000   0.680000 (  0.677460)
-    #   Sha512:               0.000000   0.000000   0.000000 (  0.000672)
-    #   Sha1:                 0.000000   0.000000   0.000000 (  0.000454)
+    #                           user     system      total        real
+    #   BCrypt (cost = 10): 10.780000   0.060000  10.840000 ( 11.100289)
+    #   BCrypt (cost = 2):  0.180000   0.000000   0.180000 (  0.181914)
+    #   Sha512:             0.000000   0.000000   0.000000 (  0.000829)
+    #   Sha1:               0.000000   0.000000   0.000000 (  0.000395)
     #
     # You can play around with the cost to get that perfect balance between performance and security.
     #
@@ -44,16 +44,11 @@ module Authlogic
     class BCrypt
       class << self
         # This is the :cost option for the BCrpyt library. The higher the cost the more secure it is and the longer is take the generate a hash. By default this is 10.
-        # Set this to any value >= the engine's minimum (currently 4), play around with it to get that perfect balance between security and performance.
+        # Set this to whatever you want, play around with it to get that perfect balance between security and performance.
         def cost
           @cost ||= 10
         end
-        def cost=(val)
-          if val < ::BCrypt::Engine::MIN_COST
-            raise ArgumentError.new("Authlogic's bcrypt cost cannot be set below the engine's min cost (#{::BCrypt::Engine::MIN_COST})")
-          end
-          @cost = val
-        end
+        attr_writer :cost
         
         # Creates a BCrypt hash for the password passed.
         def encrypt(*tokens)

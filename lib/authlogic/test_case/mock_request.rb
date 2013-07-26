@@ -7,7 +7,7 @@ module Authlogic
         self.controller = controller
       end
       
-      def ip
+      def remote_ip
         (controller && controller.respond_to?(:env) && controller.env.is_a?(Hash) && controller.env['REMOTE_ADDR']) || "1.1.1.1"
       end
       
