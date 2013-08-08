@@ -98,7 +98,7 @@ module SessionTest
         assert session.save
         debugger
         assert_equal "#{ben.persistence_token}::#{ben.id}", controller.cookies["user_credentials"]
-        assert_equal false, controller.cookies["httponly"]
+        assert_equal nil, controller.cookies["httponly"]
       end
 
       def test_after_destroy_destroy_cookie
