@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport', '>= 3.2'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'bcrypt-ruby'
-  s.add_development_dependency 'scrypt'
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'timecop'
   s.add_development_dependency 'i18n'
