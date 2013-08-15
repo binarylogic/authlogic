@@ -44,13 +44,14 @@ GEM
     sqlite3 (1.3.7)
     thread_safe (0.1.2)
       atomic
-    timecop (0.6.3)
+    timecop (0.6.1)
     tzinfo (0.3.37)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-jdbcsqlite3-adapter
   appraisal
   authlogic!
   bcrypt-ruby
@@ -58,4 +59,4 @@ DEPENDENCIES
   rake
   scrypt
   sqlite3
-  timecop
+  timecop (<= 0.6.1)
