@@ -71,14 +71,14 @@ module Authlogic
           # session before it times out. Obviously you would want to ignore this request, because then the user would never time out.
           # So you can do something like this in your controller:
           #
-          #   def last_request_update_allowed?
+          #   def last_request_update_allowed?(session)
           #     action_name =! "update_session_time_left"
           #   end
           #
           # You can do whatever you want with that method.
           def set_last_request_at? # :doc:
             return false if !record || !klass.column_names.include?("last_request_at")
-            return controller.last_request_update_allowed? if controller.responds_to_last_request_update_allowed?
+            return controller.last_request_update_allowed?(self) if controller.responds_to_last_request_update_allowed?
             record.last_request_at.blank? || last_request_at_threshold.to_i.seconds.ago >= record.last_request_at
           end
         
