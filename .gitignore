@@ -8,3 +8,4 @@ doc/*
 benchmarks/*
 .specification
 .rvmrc
+gemfiles/*.gemfile.lock
