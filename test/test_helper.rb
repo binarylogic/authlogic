@@ -5,6 +5,7 @@ require "active_record/fixtures"
 require "timecop"
 require "i18n"
 
+
 I18n.load_path << File.dirname(__FILE__) + '/i18n/lol.yml'
 
 #ActiveRecord::Schema.verbose = false
@@ -14,6 +15,7 @@ logger.level= Logger::FATAL
 ActiveRecord::Base.logger = logger
 
 ActiveRecord::Base.configurations = true
+ActiveRecord::Base.default_timezone = :local
 ActiveRecord::Schema.define(:version => 1) do
   create_table :companies do |t|
     t.datetime  :created_at
