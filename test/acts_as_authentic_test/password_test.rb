@@ -84,7 +84,7 @@ module ActsAsAuthenticTest
     end
     
     def test_crypto_provider_config
-      assert_equal Authlogic::CryptoProviders::Sha512, User.crypto_provider
+      assert_equal Authlogic::CryptoProviders::SCrypt, User.crypto_provider
       assert_equal Authlogic::CryptoProviders::AES256, Employee.crypto_provider
       
       User.crypto_provider = Authlogic::CryptoProviders::BCrypt
@@ -166,10 +166,10 @@ module ActsAsAuthenticTest
     end
     
     def test_checks_password_against_database
-      ben = users(:ben)
+      ben = users(:aaron)
       ben.password = "new pass"
       assert !ben.valid_password?("new pass")
-      assert ben.valid_password?("benrocks")
+      assert ben.valid_password?("aaronrocks")
     end
     
     def test_checks_password_against_database_and_always_fails_on_new_records

@@ -22,3 +22,15 @@ zack:
   email: zham@ziggityzack.com
   first_name: Zack
   last_name: Ham
+
+aaron:
+  company: cigital
+  projects: web_services
+  login: abedra
+  crypted_password: <%= Authlogic::CryptoProviders::SCrypt.encrypt("aaronrocks") %>
+  persistence_token: 6cde0674657a8a313ce952df979de2830309aa4c11ca65805dd00bfdc65dbcc2f5e36718660a1d2e68c1a08c276d996763985d2f06fd3d076eb7bc4d97b1e317
+  single_access_token: <%= Authlogic::Random.friendly_token %>
+  perishable_token: <%= Authlogic::Random.friendly_token %>
+  email: abedra@cigital.com
+  first_name: Aaron
+  last_name: Bedra
