@@ -117,4 +117,5 @@ module Authlogic
   end
   
   ::Test::Unit::TestCase.send(:include, TestCase) if defined?(::Test::Unit::TestCase)
+  ::MiniTest::Unit::TestCase.send(:include, TestCase) if defined?(::MiniTest::Unit::TestCase)
 end
