@@ -6,12 +6,13 @@ end
 
 module Authlogic
   module CryptoProviders
-    # If you want a stronger hashing algorithm, but would prefer not to use BCrypt, SCrypt is another option.
-    # SCrypt is newer and less popular (and so less-tested), but it's designed specifically to avoid a theoretical
-    # hardware attack against BCrypt. Just as with BCrypt, you are sacrificing performance relative to SHA2 algorithms,
-    # but the increased security may well be worth it. (That performance sacrifice is the exact reason it's much, much
-    # harder for an attacker to brute-force your paswords).
-    # Decided SCrypt is for you? Just install the bcrypt gem:
+    # SCrypt is the default provider for Authlogic. It is the only
+    # choice in the adaptive hash family that accounts for hardware
+    # based attacks by compensating with memory bound as well as cpu
+    # bound computational constraints. It offers the same guarantees
+    # as BCrypt in the way of one-way, unique and slow.
+    #
+    # Decided SCrypt is for you? Just install the scrypt gem:
     #
     #   gem install scrypt
     #

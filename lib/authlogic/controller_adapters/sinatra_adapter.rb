@@ -11,7 +11,7 @@ module Authlogic
         end
 
         def delete(key, options = {})
-          @request.cookies.delete(key)
+          @response.delete_cookie(key, options)
         end
 
         def []=(key, options)

@@ -36,9 +36,9 @@ module ActsAsAuthenticTest
       # test happens so fast that the test fails... I just don't know a better way to test it!
       assert User.logged_in.where_values != User.logged_out.where_values, ERROR_MSG % '#logged_out'
 
-      assert_equal 2, User.logged_out.count
+      assert_equal 3, User.logged_out.count
       User.first.update_attribute(:last_request_at, Time.now)
-      assert_equal 1, User.logged_out.count
+      assert_equal 2, User.logged_out.count
     end
 
     def test_logged_in_logged_out

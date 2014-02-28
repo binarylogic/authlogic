@@ -149,7 +149,7 @@ module Authlogic
         # * <tt>Default:</tt> CryptoProviders::Sha512
         # * <tt>Accepts:</tt> Class
         def crypto_provider(value = nil)
-          rw_config(:crypto_provider, value, CryptoProviders::Sha512)
+          rw_config(:crypto_provider, value, CryptoProviders::SCrypt)
         end
         alias_method :crypto_provider=, :crypto_provider
         

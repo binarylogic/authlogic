@@ -162,3 +162,5 @@ Interested in how all of this all works? Think about an ActiveRecord model. A da
 
 
 Copyright (c) 2012 {Ben Johnson of Binary Logic}[http://www.binarylogic.com], released under the MIT license
+
+{<img src="https://codeclimate.com/github/binarylogic/authlogic.png" />}[https://codeclimate.com/github/binarylogic/authlogic]
