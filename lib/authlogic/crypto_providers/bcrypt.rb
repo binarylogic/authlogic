@@ -6,10 +6,14 @@ end
 
 module Authlogic
   module CryptoProviders
-    # For most apps Sha512 is plenty secure, but if you are building an app that stores nuclear launch codes you might want to consier BCrypt. This is an extremely
-    # secure hashing algorithm, mainly because it is slow. A brute force attack on a BCrypt encrypted password would take much longer than a brute force attack on a
-    # password encrypted with a Sha algorithm. Keep in mind you are sacrificing performance by using this, generating a password takes exponentially longer than any
-    # of the Sha algorithms. I did some benchmarking to save you some time with your decision:
+    # The family of adaptive hash functions (BCrypt, SCrypt, PBKDF2)
+    # is the best choice for password storage today. They have the
+    # three properties of password hashing that are desirable. They
+    # are one-way, unique, and slow. While a salted SHA or MD5 hash is
+    # one-way and unique, preventing rainbow table attacks, they are
+    # still lightning fast and attacks on the stored passwords are
+    # much more effective. This benchmark demonstrates the effective
+    # slowdown that BCrypt provides:
     #
     #   require "bcrypt"
     #   require "digest"
@@ -28,7 +32,9 @@ module Authlogic
     #   Sha512:               0.000000   0.000000   0.000000 (  0.000672)
     #   Sha1:                 0.000000   0.000000   0.000000 (  0.000454)
     #
-    # You can play around with the cost to get that perfect balance between performance and security.
+    # You can play around with the cost to get that perfect balance
+    # between performance and security. A default cost of 10 is the
+    # best place to start.
     #
     # Decided BCrypt is for you? Just install the bcrypt gem:
     #
