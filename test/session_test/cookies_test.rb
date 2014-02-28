@@ -141,7 +141,7 @@ module SessionTest
         session = UserSession.new(ben)
         session.remember_me = true
         assert session.save
-        assert_equal "#{ben.persistence_token}::#{ben.id}::#{session.remember_me_until}", controller.cookies["user_credentials"]
+        assert_equal "#{ben.persistence_token}::#{ben.id}::#{session.remember_me_until.iso8601}", controller.cookies["user_credentials"]
       end
 
       def test_after_destroy_destroy_cookie

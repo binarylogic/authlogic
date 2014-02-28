@@ -11,7 +11,7 @@ module Authlogic
           after_destroy :destroy_cookie
         end
       end
-      
+
       # Configuration for the cookie feature set.
       module Config
         # The name of the cookie or the key in the cookies hash. Be sure and use a unique name. If you have multiple sessions and they use the same cookie it will cause problems.
@@ -19,7 +19,7 @@ module Authlogic
         #
         #   session = UserSession.new
         #   session.cookie_key => "user_credentials"
-        #   
+        #
         #   session = UserSession.new(:super_high_secret)
         #   session.cookie_key => "super_high_secret_user_credentials"
         #
@@ -29,7 +29,7 @@ module Authlogic
           rw_config(:cookie_key, value, "#{klass_name.underscore}_credentials")
         end
         alias_method :cookie_key=, :cookie_key
-        
+
         # If sessions should be remembered by default or not.
         #
         # * <tt>Default:</tt> false
@@ -38,7 +38,7 @@ module Authlogic
           rw_config(:remember_me, value, false)
         end
         alias_method :remember_me=, :remember_me
-        
+
         # The length of time until the cookie expires.
         #
         # * <tt>Default:</tt> 3.months
@@ -66,7 +66,7 @@ module Authlogic
         end
         alias_method :httponly=, :httponly
       end
-      
+
       # The methods available for an Authlogic::Session::Base object that make up the cookie feature set.
       module InstanceMethods
         # Allows you to set the remember_me option when passing credentials.
@@ -81,29 +81,29 @@ module Authlogic
             self.remember_me = r if !r.nil?
           end
         end
-        
+
         # Is the cookie going to expire after the session is over, or will it stick around?
         def remember_me
           return @remember_me if defined?(@remember_me)
           @remember_me = self.class.remember_me
         end
-        
+
         # Accepts a boolean as a flag to remember the session or not. Basically to expire the cookie at the end of the session or keep it for "remember_me_until".
         def remember_me=(value)
           @remember_me = value
         end
-        
+
         # See remember_me
         def remember_me?
           remember_me == true || remember_me == "true" || remember_me == "1"
         end
-        
+
         # How long to remember the user if remember_me is true. This is based on the class level configuration: remember_me_for
         def remember_me_for
           return unless remember_me?
           self.class.remember_me_for
         end
-        
+
         # When to expire the cookie. See remember_me_for configuration option to change this.
         def remember_me_until
           return unless remember_me?
@@ -152,11 +152,11 @@ module Authlogic
           def cookie_key
             build_key(self.class.cookie_key)
           end
-          
+
           def cookie_credentials
             controller.cookies[cookie_key] && controller.cookies[cookie_key].split("::")
           end
-          
+
           # Tries to validate the session from information in the cookie
           def persist_by_cookie
             persistence_token, record_id = cookie_credentials
@@ -168,9 +168,9 @@ module Authlogic
               false
             end
           end
-          
+
           def save_cookie
-            remember_me_until_value = "::#{remember_me_until}" if remember_me?
+            remember_me_until_value = "::#{remember_me_until.iso8601}" if remember_me?
             controller.cookies[cookie_key] = {
               :value => "#{record.persistence_token}::#{record.send(record.class.primary_key)}#{remember_me_until_value}",
               :expires => remember_me_until,
@@ -179,7 +179,7 @@ module Authlogic
               :domain => controller.cookie_domain
             }
           end
-          
+
           def destroy_cookie
             controller.cookies.delete cookie_key, :domain => controller.cookie_domain
           end
