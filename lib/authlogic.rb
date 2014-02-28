@@ -16,6 +16,7 @@ path = File.dirname(__FILE__) + "/authlogic/"
  "crypto_providers/bcrypt",
  "crypto_providers/aes256",
  "crypto_providers/scrypt",
+ "crypto_providers/drupal",
 
  "authenticates_many/base",
  "authenticates_many/association",
