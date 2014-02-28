@@ -5,7 +5,7 @@ require "active_record/fixtures"
 
 # A temporary fix to bring active record errors up to speed with rails edge.
 # I need to remove this once the new gem is released. This is only here so my tests pass.
-unless defined?(::ActiveModel)
+unless defined?(::ActiveModel.version)
   class ActiveRecord::Errors
     def [](key)
       value = on(key)

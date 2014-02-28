@@ -40,7 +40,7 @@ module Authlogic
         
         # For rails >= 3.0
         def model_name
-          if defined?(::ActiveModel)
+          if defined?(::ActiveModel.version)
             ::ActiveModel::Name.new(self)
           else
             ::ActiveSupport::ModelName.new(self.to_s)
