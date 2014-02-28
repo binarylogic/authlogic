@@ -1,3 +1,4 @@
+language: ruby
 rvm:
   - 1.8.7
   - 1.9.3
@@ -7,12 +8,20 @@ rvm:
   - jruby
 
 gemfile:
-  - gemfiles/rails3.gemfile
-  - gemfiles/rails4.gemfile
+  - test/gemfiles/Gemfile.rails-3.2.x
+  - test/gemfiles/Gemfile.rails-4.0.x
+  - test/gemfiles/Gemfile.rails-4.1.x
 
 matrix:
   exclude:
     - rvm: 1.8.7
-      gemfile: gemfiles/rails4.gemfile
+      gemfile: test/gemfiles/Gemfile.rails-4.0.x
     - rvm: ree
-      gemfile: gemfiles/rails4.gemfile
+      gemfile: test/gemfiles/Gemfile.rails-4.0.x
+    - rvm: 1.8.7
+      gemfile: test/gemfiles/Gemfile.rails-4.1.x
+    - rvm: ree
+      gemfile: test/gemfiles/Gemfile.rails-4.1.x
+  allow_failures:
+    - gemfile: test/gemfiles/Gemfile.rails-4.1.x
+  fast_finish: true
