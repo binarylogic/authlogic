@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'request_store', '~> 1.0'
   s.add_development_dependency 'bcrypt-ruby', '~> 3.1'
   s.add_development_dependency 'scrypt', '~> 1.2'
-  s.add_development_dependency 'sqlite3', '~> 1.3'
   s.add_development_dependency 'timecop', '~> 0.7'
 
   s.files         = `git ls-files`.split("\n")

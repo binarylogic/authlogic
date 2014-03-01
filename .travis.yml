@@ -22,6 +22,8 @@ matrix:
       gemfile: test/gemfiles/Gemfile.rails-4.1.x
     - rvm: ree
       gemfile: test/gemfiles/Gemfile.rails-4.1.x
+    - rvm: 1.9.3
+      gemfile: test/gemfiles/Gemfile.rails-4.1.x
   allow_failures:
     - gemfile: test/gemfiles/Gemfile.rails-4.1.x
   fast_finish: true
