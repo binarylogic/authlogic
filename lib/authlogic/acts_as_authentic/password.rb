@@ -144,13 +144,12 @@ module Authlogic
         end
 
         # The class you want to use to encrypt and verify your encrypted passwords. See the Authlogic::CryptoProviders module for more info
-        # on the available methods and how to create your own. It is strongly recommended that you use SCrpyt or BCrypt. The default is Sah512 to
-        # support backwards compatibility.
+        # on the available methods and how to create your own.
         #
-        # * <tt>Default:</tt> CryptoProviders::Sha512
+        # * <tt>Default:</tt> CryptoProviders::SCrypt
         # * <tt>Accepts:</tt> Class
         def crypto_provider(value = nil)
-          rw_config(:crypto_provider, value, CryptoProviders::Sha512)
+          rw_config(:crypto_provider, value, CryptoProviders::SCrypt)
         end
         alias_method :crypto_provider=, :crypto_provider
 
