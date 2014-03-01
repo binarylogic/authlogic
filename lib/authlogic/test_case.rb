@@ -56,7 +56,7 @@ module Authlogic
   #
   #   setup :activate_authlogic
   #
-  # For those of you unfamiliar with TestUnit, the setup method bascially just executes a method before any test is ran.
+  # For those of you unfamiliar with TestUnit, the setup method basically just executes a method before any test is ran.
   # It is essentially "setting up" your tests.
   #
   # Once you have done this, just log users in like usual:
@@ -69,7 +69,7 @@ module Authlogic
   # === Integration tests
   #
   # Again, just like functional tests, you don't have to do anything. As soon as you make a request, Authlogic will be
-  # conntected. If you want to activate Authlogic before making a request follow the same steps described in the
+  # connected. If you want to activate Authlogic before making a request follow the same steps described in the
   # "functional tests" section above. It works in the same manner.
   #
   # === Unit tests
@@ -81,7 +81,7 @@ module Authlogic
   # that looks like a controller, acts like a controller, but isn't a "real" controller. You are essentially connecting
   # Authlogic to your "mock" controller, then you can test off of the mock controller to make sure everything is functioning
   # properly.
-  # 
+  #
   # I use a mock controller to test Authlogic myself. It's part of the Authlogic library that you can easily use. It's as simple
   # as functional and integration tests. Just do the following:
   #
@@ -108,14 +108,15 @@ module Authlogic
 
       Authlogic::Session::Base.controller = (@request && Authlogic::TestCase::RailsRequestAdapter.new(@request)) || controller
     end
-    
+
     # The Authlogic::TestCase::MockController object passed to Authlogic to activate it. You can access this in your test.
     # See the module description for an example.
     def controller
       @controller ||= Authlogic::TestCase::MockController.new
     end
   end
-  
+
   ::Test::Unit::TestCase.send(:include, TestCase) if defined?(::Test::Unit::TestCase)
   ::MiniTest::Unit::TestCase.send(:include, TestCase) if defined?(::MiniTest::Unit::TestCase)
+  ::MiniTest::Test.send(:include, TestCase) if defined?(::MiniTest::Test)
 end

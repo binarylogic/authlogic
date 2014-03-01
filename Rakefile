@@ -3,8 +3,6 @@ require 'bundler'
 
 Bundler.setup
 
-require 'appraisal'
-
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
   test.libs << 'test'

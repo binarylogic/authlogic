@@ -1,5 +1,5 @@
-require "test/unit"
 require "rubygems"
+require "minitest/autorun"
 require "active_record"
 require "active_record/fixtures"
 require "timecop"
