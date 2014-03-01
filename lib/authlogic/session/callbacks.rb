@@ -65,7 +65,7 @@ module Authlogic
         base.send :include, ActiveSupport::Callbacks
         if ActiveSupport::VERSION::STRING >= '4.1'
           base.define_callbacks *METHODS + [{:terminator => ->(target, result){ result == false } }]
-          base.define_callbacks *['persist', {:terminator => ->(target, result){ result == false } }]
+          base.define_callbacks *['persist', {:terminator => ->(target, result){ result == true } }]
         else
           base.define_callbacks *METHODS + [{:terminator => 'result == false'}]
           base.define_callbacks *['persist', {:terminator => 'result == true'}]
