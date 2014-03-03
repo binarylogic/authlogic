@@ -4,6 +4,7 @@ PATH
     authlogic (3.3.0)
       activerecord (>= 3.2)
       activesupport (>= 3.2)
+      request_store (~> 1.0.5)
 
 GEM
   remote: https://rubygems.org/
@@ -37,6 +38,7 @@ GEM
     minitest (4.7.5)
     multi_json (1.8.4)
     rake (10.1.1)
+    request_store (1.0.5)
     scrypt (1.2.0)
       ffi-compiler (>= 0.0.2)
       rake
