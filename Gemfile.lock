@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    authlogic (3.3.0)
+    authlogic (3.4.0)
       activerecord (>= 3.2)
       activesupport (>= 3.2)
       request_store (~> 1.0.5)
@@ -53,9 +53,9 @@ PLATFORMS
 
 DEPENDENCIES
   authlogic!
-  bcrypt-ruby
-  i18n
-  rake
-  scrypt
-  sqlite3
-  timecop
+  bcrypt-ruby (>= 3.1.5)
+  i18n (>= 0.6.9)
+  rake (>= 10.1.1)
+  scrypt (>= 1.2.0)
+  sqlite3 (>= 1.3.9)
+  timecop (>= 0.7.1)
