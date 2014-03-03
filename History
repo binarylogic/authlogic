@@ -1,0 +1,10 @@
+== 3.4.0 2014-03-03
+
+* new
+  * added cookie signing
+  * added request store for better concurency for threaded environments
+
+* changes
+  * made SCrpyt the default crypto provider from SHA512
+  * ditched appraisal
+  * officially support rails 4 (still supporting rails 3)
