@@ -1,8 +1,4 @@
-begin
-  require "scrypt"
-rescue LoadError
-  "sudo gem install scrypt"
-end
+require "scrypt"
 
 module Authlogic
   module CryptoProviders
@@ -67,7 +63,7 @@ module Authlogic
           def join_tokens(tokens)
             tokens.flatten.join
           end
-          
+
           def new_from_hash(hash)
             begin
               ::SCrypt::Password.new(hash)
