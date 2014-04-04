@@ -52,7 +52,7 @@ module Authlogic
 
         # Class level methods for the perishable token
         module ClassMethods
-          # Use this methdo to find a record with a perishable token. This method does 2 things for you:
+          # Use this method to find a record with a perishable token. This method does 2 things for you:
           #
           # 1. It ignores blank tokens
           # 2. It enforces the perishable_token_valid_for configuration option.
