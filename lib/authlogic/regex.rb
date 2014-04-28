@@ -5,15 +5,15 @@ module Authlogic
   #
   #   validates_format_of :my_email_field, :with => Authlogic::Regex.email
   module Regex
-    # A general email regular expression. It allows top level domains (TLD) to be from 2 - 4 in length, any
-    # TLD longer than that must be manually specified. The decisions behind this regular expression were made
-    # by reading this website: http://www.regular-expressions.info/email.html, which is an excellent resource
-    # for regular expressions.
+    # A general email regular expression. It allows top level domains (TLD) to be from 2 - 13 in length.
+    # The decisions behind this regular expression were made by analyzing the list of top-level domains
+    # maintained by IANA and by reading this website: http://www.regular-expressions.info/email.html,
+    # which is an excellent resource for regular expressions.
     def self.email
       @email_regex ||= begin
         email_name_regex  = '[A-Z0-9_\.%\+\-\']+'
         domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
-        domain_tld_regex  = '(?:[A-Z]{2,4}|museum|travel|онлайн)'
+        domain_tld_regex  = '(?:[A-Z]{2,13})'
         /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
       end
     end
