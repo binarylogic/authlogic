@@ -14,7 +14,7 @@ logger = Logger.new(STDOUT)
 logger.level= Logger::FATAL
 ActiveRecord::Base.logger = logger
 
-ActiveRecord::Base.configurations = true
+#ActiveRecord::Base.configurations = true
 ActiveRecord::Base.default_timezone = :local
 ActiveRecord::Schema.define(:version => 1) do
   create_table :companies do |t|
