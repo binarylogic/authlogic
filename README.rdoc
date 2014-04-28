@@ -1,6 +1,6 @@
 = Authlogic
 
-** Authlogic plans to support rails 3 and 4 for the foreseeable future
+** Authlogic supports both rails 3 and 4. For rails 2, see the rail2 branch,
 
 Authlogic is a clean, simple, and unobtrusive ruby authentication solution.
 
