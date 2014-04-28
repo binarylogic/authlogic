@@ -149,7 +149,11 @@ module Authlogic
         # * <tt>Default:</tt> CryptoProviders::SCrypt
         # * <tt>Accepts:</tt> Class
         def crypto_provider(value = nil)
-          rw_config(:crypto_provider, value, CryptoProviders::SCrypt)
+          if value.nil? and !acts_as_authentic_config.include?(:crypto_provider)
+            rw_config(:crypto_provider, CryptoProviders::SCrypt)
+          else
+            rw_config(:crypto_provider, value)
+          end
         end
         alias_method :crypto_provider=, :crypto_provider
 
