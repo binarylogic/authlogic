@@ -1,6 +1,10 @@
 = Authlogic
 
-** Authlogic supports both rails 3 and 4. For rails 2, see the rail2 branch,
+** Authlogic supports both rails 3 and 4. For rails 2, see the rail2 branch
+
+{<img src="https://travis-ci.org/binarylogic/authlogic.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/binarylogic/authlogic]
+
+{<img src="https://codeclimate.com/github/binarylogic/authlogic.png" />}[https://codeclimate.com/github/binarylogic/authlogic]
 
 Authlogic is a clean, simple, and unobtrusive ruby authentication solution.
 
@@ -162,5 +166,3 @@ Interested in how all of this all works? Think about an ActiveRecord model. A da
 
 
 Copyright (c) 2012 {Ben Johnson of Binary Logic}[http://www.binarylogic.com], released under the MIT license
-
-{<img src="https://codeclimate.com/github/binarylogic/authlogic.png" />}[https://codeclimate.com/github/binarylogic/authlogic]
