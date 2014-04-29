@@ -49,8 +49,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-jdbcsqlite3-adapter
   authlogic!
   bcrypt-ruby (~> 3.1)
   scrypt (~> 1.2)
-  sqlite3 (~> 1.3)
+  sqlite3
   timecop (~> 0.7)

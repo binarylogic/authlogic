@@ -14,7 +14,9 @@ logger = Logger.new(STDOUT)
 logger.level= Logger::FATAL
 ActiveRecord::Base.logger = logger
 
-#ActiveRecord::Base.configurations = true
+if (ActiveRecord::VERSION::STRING < '4.1')
+  ActiveRecord::Base.configurations = true
+end
 ActiveRecord::Base.default_timezone = :local
 ActiveRecord::Schema.define(:version => 1) do
   create_table :companies do |t|
