@@ -57,7 +57,7 @@ module ActsAsAuthenticTest
       assert_equal default, Employee.validates_length_of_password_field_options
 
       User.validates_length_of_password_field_options = { :yes => "no" }
-      assert_equal({ :yes => "no" }, User.validates_length_of_password_field_options)
+      assert_equal({:yes => "no"}, User.validates_length_of_password_field_options)
       User.validates_length_of_password_field_options default
       assert_equal default, User.validates_length_of_password_field_options
     end
@@ -107,6 +107,7 @@ module ActsAsAuthenticTest
     def test_validates_length_of_password
       u = User.new(login: "abcde", email: "abcde@test.com", password: "abcdefgh", password_confirmation: "abcdefgh")
       assert u.valid?
+      assert u.errors[:password].size > 0
 
       u.password = u.password_confirmation = "abcdef"
       refute u.valid?

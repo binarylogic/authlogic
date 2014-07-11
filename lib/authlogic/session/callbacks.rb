@@ -78,9 +78,9 @@ module Authlogic
         if base.singleton_class.method_defined?(:set_callback)
           METHODS.each do |method|
             base.class_eval <<-"end_eval", __FILE__, __LINE__
-              def self.#{method}(*methods, &block)
-                set_callback :#{method}, *methods, &block
-              end
+              def self.#{method}(*methods, &block)                              # def self.before_persisting(*methods, block)
+                set_callback :#{method}, *methods, &block                       #   set_callback :before_persisting, *methods, &block
+              end                                                               # end
             end_eval
           end
         end
