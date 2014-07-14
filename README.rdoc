@@ -45,6 +45,12 @@ To get all of the nice authentication functionality in your model just do this:
 
 This handles validations, etc. It is also "smart" in the sense that it if a login field is present it will use that to authenticate, if not it will look for an email field, etc. This is all configurable, but for 99% of cases that above is all you will need to do.
 
+You may specify how passwords are cryptographically hashed (or encrypted) by setting the Authlogic::CryptoProvider option:
+
+  c.crypto_provider = Authlogic::CryptoProviders::BCrypt
+
+NOTE: the default provider was changed from **Sha512** to **SCrypt** in version 3.4.0.
+
 Also, sessions are automatically maintained. You can switch this on and off with configuration, but the following will automatically log a user in after a successful registration:
 
   User.create(params[:user])

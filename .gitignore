@@ -10,3 +10,4 @@ benchmarks/*
 .rvmrc
 test/gemfiles/Gemfile*.lock
 .bundle
+Gemfile.lock
