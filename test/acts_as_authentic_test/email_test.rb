@@ -3,56 +3,67 @@ require 'test_helper'
 module ActsAsAuthenticTest
   class EmailTest < ActiveSupport::TestCase
     def test_email_field_config
+      klass = testable_user_class
+
+      assert_equal :email, klass.email_field
       assert_equal :email, User.email_field
       assert_equal :email, Employee.email_field
 
-      User.email_field = :nope
-      assert_equal :nope, User.email_field
-      User.email_field :email
-      assert_equal :email, User.email_field
+      klass.email_field = :nope
+      assert_equal :nope, klass.email_field
+      klass.email_field :email
+      assert_equal :email, klass.email_field
     end
 
     def test_validate_email_field_config
+      klass = testable_user_class
+
+      assert klass.validate_email_field
       assert User.validate_email_field
       assert Employee.validate_email_field
 
-      User.validate_email_field = false
-      assert !User.validate_email_field
-      User.validate_email_field true
-      assert User.validate_email_field
+      klass.validate_email_field = false
+      assert !klass.validate_email_field
+      klass.validate_email_field true
+      assert klass.validate_email_field
     end
 
     def test_validates_length_of_email_field_options_config
+      klass = testable_user_class
+
+      assert_equal({:maximum => 100}, klass.validates_length_of_email_field_options)
       assert_equal({:maximum => 100}, User.validates_length_of_email_field_options)
       assert_equal({:maximum => 100}, Employee.validates_length_of_email_field_options)
 
-      User.validates_length_of_email_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_length_of_email_field_options)
-      User.validates_length_of_email_field_options({:within => 6..100})
-      assert_equal({:within => 6..100}, User.validates_length_of_email_field_options)
+      klass.validates_length_of_email_field_options = {:yes => "no"}
+      assert_equal({:yes => "no"}, klass.validates_length_of_email_field_options)
+      klass.validates_length_of_email_field_options({:within => 6..100})
+      assert_equal({:within => 6..100}, klass.validates_length_of_email_field_options)
     end
 
     def test_validates_format_of_email_field_options_config
+      klass = testable_user_class
+
       default = {:with => Authlogic::Regex.email, :message => Proc.new{I18n.t('error_messages.email_invalid', :default => "should look like an email address.")}}
       dmessage = default.delete(:message).call
 
       options = User.validates_format_of_email_field_options
       message = options.delete(:message)
-      assert message.kind_of?(Proc)     
+      assert message.kind_of?(Proc)
       assert_equal dmessage, message.call
       assert_equal default, options
 
       options = Employee.validates_format_of_email_field_options
       message = options.delete(:message)
-      assert message.kind_of?(Proc)     
+      assert message.kind_of?(Proc)
       assert_equal dmessage, message.call
       assert_equal default, options
 
 
-      User.validates_format_of_email_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_format_of_email_field_options)
-      User.validates_format_of_email_field_options default
-      assert_equal default, User.validates_format_of_email_field_options
+      klass.validates_format_of_email_field_options = {:yes => "no"}
+      assert_equal({:yes => "no"}, klass.validates_format_of_email_field_options)
+      klass.validates_format_of_email_field_options default
+      assert_equal default, klass.validates_format_of_email_field_options
     end
 
     def test_deferred_error_message_translation
@@ -81,13 +92,16 @@ module ActsAsAuthenticTest
     end
 
     def test_validates_uniqueness_of_email_field_options_config
+      klass = Class.new(Employee)
+
       default = {:case_sensitive => false, :scope => Employee.validations_scope, :if => "#{Employee.email_field}_changed?".to_sym}
+      assert_equal default, klass.validates_uniqueness_of_email_field_options
       assert_equal default, Employee.validates_uniqueness_of_email_field_options
 
-      Employee.validates_uniqueness_of_email_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, Employee.validates_uniqueness_of_email_field_options)
-      Employee.validates_uniqueness_of_email_field_options default
-      assert_equal default, Employee.validates_uniqueness_of_email_field_options
+      klass.validates_uniqueness_of_email_field_options = {:yes => "no"}
+      assert_equal({:yes => "no"}, klass.validates_uniqueness_of_email_field_options)
+      klass.validates_uniqueness_of_email_field_options default
+      assert_equal default, klass.validates_uniqueness_of_email_field_options
     end
 
     def test_validates_length_of_email_field
@@ -122,7 +136,7 @@ module ActsAsAuthenticTest
       u.email = "dakota.d'ux@gmail.com"
       u.valid?
       assert u.errors[:email].size == 0
-      
+
       u.email = "<script>alert(123);</script>\nnobody@example.com"
       assert !u.valid?
       assert u.errors[:email].size > 0

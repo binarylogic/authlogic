@@ -3,7 +3,7 @@ require 'test_helper'
 module ActsAsAuthenticTest
   class BaseTest < ActiveSupport::TestCase
     def setup
-      @klass = Class.new(User)
+      @klass = testable_user_class
     end
 
     def test_acts_as_authentic

@@ -4,13 +4,15 @@ module SessionTest
   module KlassTest
     class ConfigTest < ActiveSupport::TestCase
       def test_authenticate_with
-        UserSession.authenticate_with = Employee
-        assert_equal "Employee", UserSession.klass_name
-        assert_equal Employee, UserSession.klass
+        klass = testable_user_session_class
 
-        UserSession.authenticate_with User
-        assert_equal "User", UserSession.klass_name
-        assert_equal User, UserSession.klass
+        klass.authenticate_with = Employee
+        assert_equal "Employee", klass.klass_name
+        assert_equal Employee, klass.klass
+
+        klass.authenticate_with User
+        assert_equal "User", klass.klass_name
+        assert_equal User, klass.klass
       end
 
       def test_klass

@@ -3,104 +3,140 @@ require 'test_helper'
 module ActsAsAuthenticTest
   class PasswordTest < ActiveSupport::TestCase
     def test_crypted_password_field_config
+      klass = testable_user_class
+
+      assert_equal :crypted_password, klass.crypted_password_field
       assert_equal :crypted_password, User.crypted_password_field
       assert_equal :crypted_password, Employee.crypted_password_field
 
-      User.crypted_password_field = :nope
-      assert_equal :nope, User.crypted_password_field
-      User.crypted_password_field :crypted_password
-      assert_equal :crypted_password, User.crypted_password_field
+      klass.crypted_password_field = :nope
+      assert_equal :nope, klass.crypted_password_field
+      klass.crypted_password_field :crypted_password
+      assert_equal :crypted_password, klass.crypted_password_field
     end
 
     def test_password_salt_field_config
+      klass = testable_user_class
+
+      assert_equal :password_salt, klass.password_salt_field
       assert_equal :password_salt, User.password_salt_field
       assert_equal :password_salt, Employee.password_salt_field
 
-      User.password_salt_field = :nope
-      assert_equal :nope, User.password_salt_field
-      User.password_salt_field :password_salt
-      assert_equal :password_salt, User.password_salt_field
+      klass.password_salt_field = :nope
+      assert_equal :nope, klass.password_salt_field
+
+      klass.password_salt_field :password_salt
+      assert_equal :password_salt, klass.password_salt_field
     end
 
     def test_ignore_blank_passwords_config
+      klass = testable_user_class
+
+      assert klass.ignore_blank_passwords
       assert User.ignore_blank_passwords
       assert Employee.ignore_blank_passwords
 
-      User.ignore_blank_passwords = false
-      assert !User.ignore_blank_passwords
-      User.ignore_blank_passwords true
-      assert User.ignore_blank_passwords
+      klass.ignore_blank_passwords = false
+      assert !klass.ignore_blank_passwords
+
+      klass.ignore_blank_passwords true
+      assert klass.ignore_blank_passwords
     end
 
     def test_check_passwords_against_database
-      assert User.check_passwords_against_database
-      User.check_passwords_against_database = false
-      assert !User.check_passwords_against_database
-      User.check_passwords_against_database true
-      assert User.check_passwords_against_database
+      klass = testable_user_class
+
+      assert klass.check_passwords_against_database
+
+      klass.check_passwords_against_database = false
+      assert !klass.check_passwords_against_database
+
+      klass.check_passwords_against_database true
+      assert klass.check_passwords_against_database
     end
 
     def test_validate_password_field_config
+      klass = testable_user_class
+
+      assert klass.validate_password_field
       assert User.validate_password_field
       assert Employee.validate_password_field
 
-      User.validate_password_field = false
-      assert !User.validate_password_field
-      User.validate_password_field true
-      assert User.validate_password_field
+      klass.validate_password_field = false
+      assert !klass.validate_password_field
+
+      klass.validate_password_field true
+      assert klass.validate_password_field
     end
 
     def test_validates_length_of_password_field_options_config
+      klass = testable_user_class
+
       default = {:minimum => 4, :if => :require_password?}
+      assert_equal default, klass.validates_length_of_password_field_options
       assert_equal default, User.validates_length_of_password_field_options
       assert_equal default, Employee.validates_length_of_password_field_options
 
-      User.validates_length_of_password_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_length_of_password_field_options)
-      User.validates_length_of_password_field_options default
-      assert_equal default, User.validates_length_of_password_field_options
+      klass.validates_length_of_password_field_options = {:yes => "no"}
+      assert_equal({:yes => "no"}, klass.validates_length_of_password_field_options)
+
+      klass.validates_length_of_password_field_options default
+      assert_equal default, klass.validates_length_of_password_field_options
     end
 
     def test_validates_confirmation_of_password_field_options_config
+      klass = testable_user_class
+
       default = {:if => :require_password?}
+      assert_equal default, klass.validates_confirmation_of_password_field_options
       assert_equal default, User.validates_confirmation_of_password_field_options
       assert_equal default, Employee.validates_confirmation_of_password_field_options
 
-      User.validates_confirmation_of_password_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_confirmation_of_password_field_options)
-      User.validates_confirmation_of_password_field_options default
-      assert_equal default, User.validates_confirmation_of_password_field_options
+      klass.validates_confirmation_of_password_field_options = {:yes => "no"}
+      assert_equal({:yes => "no"}, klass.validates_confirmation_of_password_field_options)
+
+      klass.validates_confirmation_of_password_field_options default
+      assert_equal default, klass.validates_confirmation_of_password_field_options
     end
 
     def test_validates_length_of_password_confirmation_field_options_config
+      klass = testable_user_class
+
       default = {:minimum => 4, :if => :require_password?}
+      assert_equal default, klass.validates_length_of_password_confirmation_field_options
       assert_equal default, User.validates_length_of_password_confirmation_field_options
       assert_equal default, Employee.validates_length_of_password_confirmation_field_options
 
-      User.validates_length_of_password_confirmation_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_length_of_password_confirmation_field_options)
-      User.validates_length_of_password_confirmation_field_options default
-      assert_equal default, User.validates_length_of_password_confirmation_field_options
+      klass.validates_length_of_password_confirmation_field_options = {:yes => "no"}
+      assert_equal({:yes => "no"}, klass.validates_length_of_password_confirmation_field_options)
+      klass.validates_length_of_password_confirmation_field_options default
+      assert_equal default, klass.validates_length_of_password_confirmation_field_options
     end
 
     def test_crypto_provider_config
+      klass = testable_user_class
+
+      assert_equal Authlogic::CryptoProviders::SCrypt, klass.crypto_provider
       assert_equal Authlogic::CryptoProviders::SCrypt, User.crypto_provider
       assert_equal Authlogic::CryptoProviders::AES256, Employee.crypto_provider
 
-      User.crypto_provider = Authlogic::CryptoProviders::BCrypt
-      assert_equal Authlogic::CryptoProviders::BCrypt, User.crypto_provider
-      User.crypto_provider Authlogic::CryptoProviders::Sha512
-      assert_equal Authlogic::CryptoProviders::Sha512, User.crypto_provider
+      klass.crypto_provider = Authlogic::CryptoProviders::BCrypt
+      assert_equal Authlogic::CryptoProviders::BCrypt, klass.crypto_provider
+      klass.crypto_provider Authlogic::CryptoProviders::Sha512
+      assert_equal Authlogic::CryptoProviders::Sha512, klass.crypto_provider
     end
 
     def test_transition_from_crypto_providers_config
+      klass = testable_user_class
+
+      assert_equal [Authlogic::CryptoProviders::Sha512], klass.transition_from_crypto_providers
       assert_equal [Authlogic::CryptoProviders::Sha512], User.transition_from_crypto_providers
       assert_equal [], Employee.transition_from_crypto_providers
 
-      User.transition_from_crypto_providers = [Authlogic::CryptoProviders::BCrypt]
-      assert_equal [Authlogic::CryptoProviders::BCrypt], User.transition_from_crypto_providers
-      User.transition_from_crypto_providers []
-      assert_equal [], User.transition_from_crypto_providers
+      klass.transition_from_crypto_providers = [Authlogic::CryptoProviders::BCrypt]
+      assert_equal [Authlogic::CryptoProviders::BCrypt], klass.transition_from_crypto_providers
+      klass.transition_from_crypto_providers []
+      assert_equal [], klass.transition_from_crypto_providers
     end
 
     def test_validates_length_of_password
@@ -216,6 +252,9 @@ module ActsAsAuthenticTest
       def transition_password_to(crypto_provider, records, from_crypto_providers = Authlogic::CryptoProviders::Sha512)
         records = [records] unless records.is_a?(Array)
 
+        original_crypto_provider = User.crypto_provider
+        original_transition_from_crypto_providers = User.transition_from_crypto_providers
+
         User.crypto_provider = crypto_provider
         User.transition_from_crypto_providers = from_crypto_providers
 
@@ -232,6 +271,9 @@ module ActsAsAuthenticTest
           assert_equal old_hash.to_s, record.crypted_password.to_s
           assert_equal old_persistence_token.to_s, record.persistence_token.to_s
         end
+      ensure
+        User.crypto_provider = original_crypto_provider
+        User.transition_from_crypto_providers = original_transition_from_crypto_providers
       end
   end
 end

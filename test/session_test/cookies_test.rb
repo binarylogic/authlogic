@@ -2,79 +2,94 @@ require 'test_helper'
 
 module SessionTest
   module CookiesTest
-    class ConfiTest < ActiveSupport::TestCase
+    class ConfigTest < ActiveSupport::TestCase
       def test_cookie_key
-        UserSession.cookie_key = "my_cookie_key"
-        assert_equal "my_cookie_key", UserSession.cookie_key
+        klass = testable_user_session_class
 
-        UserSession.cookie_key "user_credentials"
-        assert_equal "user_credentials", UserSession.cookie_key
+        klass.cookie_key = "my_cookie_key"
+        assert_equal "my_cookie_key", klass.cookie_key
+
+        klass.cookie_key "user_credentials"
+        assert_equal "user_credentials", klass.cookie_key
       end
 
       def test_default_cookie_key
+        klass = testable_user_session_class
+
+        assert_equal "user_credentials", klass.cookie_key
         assert_equal "user_credentials", UserSession.cookie_key
         assert_equal "back_office_user_credentials", BackOfficeUserSession.cookie_key
       end
 
       def test_remember_me
-        UserSession.remember_me = true
-        assert_equal true, UserSession.remember_me
-        session = UserSession.new
+        klass = testable_user_session_class
+
+        klass.remember_me = true
+        assert_equal true, klass.remember_me
+        session = klass.new
         assert_equal true, session.remember_me
 
-        UserSession.remember_me false
-        assert_equal false, UserSession.remember_me
-        session = UserSession.new
+        klass.remember_me false
+        assert_equal false, klass.remember_me
+        session = klass.new
         assert_equal false, session.remember_me
       end
 
       def test_remember_me_for
-        UserSession.remember_me_for = 3.years
-        assert_equal 3.years, UserSession.remember_me_for
-        session = UserSession.new
+        klass = testable_user_session_class
+
+        klass.remember_me_for = 3.years
+        assert_equal 3.years, klass.remember_me_for
+        session = klass.new
         session.remember_me = true
         assert_equal 3.years, session.remember_me_for
 
-        UserSession.remember_me_for 3.months
-        assert_equal 3.months, UserSession.remember_me_for
-        session = UserSession.new
+        klass.remember_me_for 3.months
+        assert_equal 3.months, klass.remember_me_for
+        session = klass.new
         session.remember_me = true
         assert_equal 3.months, session.remember_me_for
       end
 
       def test_secure
-        UserSession.secure = true
-        assert_equal true, UserSession.secure
-        session = UserSession.new
+        klass = testable_user_session_class
+
+        klass.secure = true
+        assert_equal true, klass.secure
+        session = klass.new
         assert_equal true, session.secure
 
-        UserSession.secure false
-        assert_equal false, UserSession.secure
-        session = UserSession.new
+        klass.secure false
+        assert_equal false, klass.secure
+        session = klass.new
         assert_equal false, session.secure
       end
 
       def test_httponly
-        UserSession.httponly = true
-        assert_equal true, UserSession.httponly
-        session = UserSession.new
+        klass = testable_user_session_class
+
+        klass.httponly = true
+        assert_equal true, klass.httponly
+        session = klass.new
         assert_equal true, session.httponly
 
-        UserSession.httponly false
-        assert_equal false, UserSession.httponly
-        session = UserSession.new
+        klass.httponly false
+        assert_equal false, klass.httponly
+        session = klass.new
         assert_equal false, session.httponly
       end
 
       def test_sign_cookie
-        UserSession.sign_cookie = true
-        assert_equal true, UserSession.sign_cookie
-        session = UserSession.new
+        klass = testable_user_session_class
+
+        klass.sign_cookie = true
+        assert_equal true, klass.sign_cookie
+        session = klass.new
         assert_equal true, session.sign_cookie
 
-        UserSession.sign_cookie false
-        assert_equal false, UserSession.sign_cookie
-        session = UserSession.new
+        klass.sign_cookie false
+        assert_equal false, klass.sign_cookie
+        session = klass.new
         assert_equal false, session.sign_cookie
       end
     end

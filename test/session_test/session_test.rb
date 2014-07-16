@@ -4,11 +4,13 @@ module SessionTest
   module SessionTest
     class ConfigTest < ActiveSupport::TestCase
       def test_session_key
-        UserSession.session_key = "my_session_key"
-        assert_equal "my_session_key", UserSession.session_key
+        klass = testable_user_session_class
 
-        UserSession.session_key "user_credentials"
-        assert_equal "user_credentials", UserSession.session_key
+        klass.session_key = "my_session_key"
+        assert_equal "my_session_key", klass.session_key
+
+        klass.session_key "user_credentials"
+        assert_equal "user_credentials", klass.session_key
       end
     end
 

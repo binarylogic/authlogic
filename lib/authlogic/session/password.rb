@@ -7,13 +7,13 @@ module Authlogic
           extend Config
           include InstanceMethods
           validate :validate_by_password, :if => :authenticating_with_password?
-          
+
           class << self
             attr_accessor :configured_password_methods
           end
         end
       end
-      
+
       # Password configuration
       module Config
         # Authlogic tries to validate the credentials passed to it. One part of validation is actually finding the user and
@@ -41,7 +41,7 @@ module Authlogic
           rw_config(:find_by_login_method, value, "find_by_smart_case_login_field")
         end
         alias_method :find_by_login_method=, :find_by_login_method
-        
+
         # The text used to identify credentials (username/password) combination when a bad login attempt occurs.
         # When you show error messages for a bad login, it's considered good security practice to hide which field
         # the user has entered incorrectly (the login field or the password field). For a full explanation, see
@@ -56,9 +56,9 @@ module Authlogic
         #   This would make the error message for bad logins and bad passwords look identical:
         #
         #   Login/Password combination is not valid
-        #  
+        #
         #   Alternatively you may use a custom message:
-        # 
+        #
         #   class UserSession < AuthLogic::Session::Base
         #     generalize_credentials_error_messages "Your login information is invalid"
         #   end
@@ -71,14 +71,14 @@ module Authlogic
         #
         # If you are developing an app where security is an extreme priority (such as a financial application),
         # then you should enable this. Otherwise, leaving this off is fine.
-        # 
+        #
         # * <tt>Default</tt> false
         # * <tt>Accepts:</tt> Boolean
         def generalize_credentials_error_messages(value = nil)
           rw_config(:generalize_credentials_error_messages, value, false)
         end
         alias_method :generalize_credentials_error_messages=, :generalize_credentials_error_messages
-        
+
         # The name of the method you want Authlogic to create for storing the login / username. Keep in mind this is just for your
         # Authlogic::Session, if you want it can be something completely different than the field in your model. So if you wanted people to
         # login with a field called "login" and then find users by email this is compeltely doable. See the find_by_login_method configuration
@@ -90,7 +90,7 @@ module Authlogic
           rw_config(:login_field, value, klass.login_field || klass.email_field)
         end
         alias_method :login_field=, :login_field
-        
+
         # Works exactly like login_field, but for the password instead. Returns :password if a login_field exists.
         #
         # * <tt>Default:</tt> :password
@@ -99,7 +99,7 @@ module Authlogic
           rw_config(:password_field, value, login_field && :password)
         end
         alias_method :password_field=, :password_field
-        
+
         # The name of the method in your model used to verify the password. This should be an instance method. It should also
         # be prepared to accept a raw password and a crytped password.
         #
@@ -110,7 +110,7 @@ module Authlogic
         end
         alias_method :verify_password_method=, :verify_password_method
       end
-      
+
       # Password related instance methods
       module InstanceMethods
         def initialize(*args)
@@ -119,7 +119,7 @@ module Authlogic
               self.class.send(:attr_writer, login_field) if !respond_to?("#{login_field}=")
               self.class.send(:attr_reader, login_field) if !respond_to?(login_field)
             end
-            
+
             if password_field
               self.class.send(:attr_writer, password_field) if !respond_to?("#{password_field}=")
               self.class.send(:define_method, password_field) {} if !respond_to?(password_field)
@@ -136,10 +136,10 @@ module Authlogic
 
             self.class.configured_password_methods = true
           end
-          
+
           super
         end
-        
+
         # Returns the login_field / password_field credentials combination in hash form.
         def credentials
           if authenticating_with_password?
@@ -151,7 +151,7 @@ module Authlogic
             super
           end
         end
-        
+
         # Accepts the login_field / password_field credentials combination in hash form.
         def credentials=(value)
           super
@@ -163,19 +163,19 @@ module Authlogic
             end
           end
         end
-        
+
         def invalid_password?
           invalid_password == true
         end
-        
+
         private
           def authenticating_with_password?
             login_field && (!send(login_field).nil? || !send("protected_#{password_field}").nil?)
           end
-          
+
           def validate_by_password
             self.invalid_password = false
-            
+
             errors.add(login_field, I18n.t('error_messages.login_blank', :default => "cannot be blank")) if send(login_field).blank?
             errors.add(password_field, I18n.t('error_messages.password_blank', :default => "cannot be blank")) if send("protected_#{password_field}").blank?
             return if errors.count > 0
@@ -196,25 +196,25 @@ module Authlogic
               return
             end
           end
-          
+
           def invalid_password
             @invalid_password
           end
-          
+
           def invalid_password=(value)
             @invalid_password = value
           end
-          
+
           def find_by_login_method
             self.class.find_by_login_method
           end
-          
+
           def login_field
             self.class.login_field
           end
-          
+
           def add_general_credentials_error
-            error_message = 
+            error_message =
             if self.class.generalize_credentials_error_messages.is_a? String
               self.class.generalize_credentials_error_messages
             else
@@ -222,15 +222,15 @@ module Authlogic
             end
             errors.add(:base, I18n.t('error_messages.general_credentials_error', :default => error_message))
           end
-          
+
           def generalize_credentials_error_messages?
             self.class.generalize_credentials_error_messages
           end
-          
+
           def password_field
             self.class.password_field
           end
-          
+
           def verify_password_method
             self.class.verify_password_method
           end
