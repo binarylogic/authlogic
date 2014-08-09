@@ -34,7 +34,7 @@ module Authlogic
     #
     # Decided BCrypt is for you? Just install the bcrypt gem:
     #
-    #   gem install bcrypt-ruby
+    #   gem install bcrypt
     #
     # Tell acts_as_authentic to use it:
     #
