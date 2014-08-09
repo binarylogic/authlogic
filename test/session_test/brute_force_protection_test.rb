@@ -20,7 +20,7 @@ module SessionTest
       end
     end
     
-    class InstaceMethodsTest < ActiveSupport::TestCase
+    class InstanceMethodsTest < ActiveSupport::TestCase
       def test_under_limit
         ben = users(:ben)
         ben.failed_login_count = UserSession.consecutive_failed_logins_limit - 1
