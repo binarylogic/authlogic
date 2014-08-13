@@ -117,6 +117,22 @@ module ActsAsAuthenticTest
       u.valid?
       assert u.errors[:email].size == 0
 
+      u.email = "dakota@my-.com"
+      u.valid?
+      assert u.errors[:email].size > 0
+
+      u.email = "dakota@my-domain.com"
+      u.valid?
+      assert u.errors[:email].size == 0
+
+      u.email = "dakota@sub.my-.com"
+      u.valid?
+      assert u.errors[:email].size > 0
+
+      u.email = "dakota@sub.my-domain.com"
+      u.valid?
+      assert u.errors[:email].size == 0
+
       u.email = "<script>alert(123);</script>\nnobody@example.com"
       assert !u.valid?
       assert u.errors[:email].size > 0
