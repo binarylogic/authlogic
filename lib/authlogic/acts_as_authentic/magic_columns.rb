@@ -14,8 +14,8 @@ module Authlogic
       module Methods
         def self.included(klass)
           klass.class_eval do
-            validates_numericality_of :login_count, :only_integer => :true, :greater_than_or_equal_to => 0, :allow_nil => true if column_names.include?("login_count")
-            validates_numericality_of :failed_login_count, :only_integer => :true, :greater_than_or_equal_to => 0, :allow_nil => true if column_names.include?("failed_login_count")
+            validates_numericality_of :login_count, :only_integer => true, :greater_than_or_equal_to => 0, :allow_nil => true if column_names.include?("login_count")
+            validates_numericality_of :failed_login_count, :only_integer => true, :greater_than_or_equal_to => 0, :allow_nil => true if column_names.include?("failed_login_count")
           end
         end
       end
