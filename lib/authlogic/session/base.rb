@@ -9,7 +9,7 @@ module Authlogic
       end
 
       def name
-        "UserSession"
+        self.class.name
       end
 
       include Foundation
