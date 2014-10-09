@@ -4,9 +4,9 @@ module Authlogic
     module Base
       def self.included(klass)
         klass.class_eval do
-          class_attribute :acts_as_authentic_modules, :acts_as_authentic_config
+          class_attribute :acts_as_authentic_modules
           self.acts_as_authentic_modules ||= []
-          self.acts_as_authentic_config  ||= {}
+          extend Authlogic::Config
           extend Config
         end
       end
@@ -73,17 +73,6 @@ module Authlogic
               true
             rescue Exception
               false
-            end
-          end
-
-          def rw_config(key, value, default_value = nil, read_value = nil)
-            if value == read_value
-              acts_as_authentic_config.include?(key) ? acts_as_authentic_config[key] : default_value
-            else
-              config = acts_as_authentic_config.clone
-              config[key] = value
-              self.acts_as_authentic_config = config
-              value
             end
           end
 
