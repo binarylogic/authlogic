@@ -6,34 +6,16 @@ module Authlogic
     module Foundation
       def self.included(klass)
         klass.class_eval do
-          class_attribute :acts_as_authentic_config
-          self.acts_as_authentic_config  ||= {}
-          
-          extend ClassMethods
+          extend Authlogic::Config
           include InstanceMethods
         end
       end
-      
-      module ClassMethods
-        private
-          def rw_config(key, value, default_value = nil, read_value = nil)
-            if value == read_value
-              return acts_as_authentic_config[key] if acts_as_authentic_config.include?(key)
-              rw_config(key, default_value) unless default_value.nil?
-            else
-              config = acts_as_authentic_config.clone
-              config[key] = value
-              self.acts_as_authentic_config = config
-              value
-            end
-          end
-      end
-      
+
       module InstanceMethods
         def initialize(*args)
           self.credentials = args
         end
-        
+
         # The credentials you passed to create your session. See credentials= for more info.
         def credentials
           []
@@ -54,11 +36,11 @@ module Authlogic
         #   session.credentials = [my_user_object, true, :my_id]
         def credentials=(values)
         end
-        
+
         def inspect
           "#<#{self.class.name}: #{credentials.blank? ? "no credentials provided" : credentials.inspect}>"
         end
-                
+
         private
           def build_key(last_part)
             last_part

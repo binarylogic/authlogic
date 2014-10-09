@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.4.3 2014-10-08
+
+* changes
+  * backfill CHANGELOG
+  * better compatibility with jruby (thx @petergoldstein)
+  * added scrypt as a dependency
+  * cleanup some code (thx @roryokane)
+  * reference 'bcrypt' gem instead of 'bcrypt-ruby' (thx @roryokane)
+  * fixed typo (thx @chamini2)
+  * fixed magic column validations for Rails 4.2 (thx @tom-kuca)
+
 ## 3.4.2 2014-04-28
 
 * changes

@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "authlogic"
-  s.version     = "3.4.2"
+  s.version     = "3.4.3"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Ben Johnson"]
   s.email       = ["bjohnson@binarylogic.com"]
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport', '>= 3.2'
   s.add_dependency 'request_store', '~> 1.0'
   s.add_dependency 'scrypt', '~> 1.2'
-  s.add_development_dependency 'bcrypt-ruby', '~> 3.1'
+  s.add_development_dependency 'bcrypt', '~> 3.1'
   s.add_development_dependency 'timecop', '~> 0.7'
 
   s.files         = `git ls-files`.split("\n")

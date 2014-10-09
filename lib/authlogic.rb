@@ -6,6 +6,7 @@ path = File.dirname(__FILE__) + "/authlogic/"
  "i18n",
  "random",
  "regex",
+ "config",
 
  "controller_adapters/abstract_adapter",
 

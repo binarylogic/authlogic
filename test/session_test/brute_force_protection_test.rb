@@ -23,8 +23,8 @@ module SessionTest
         assert_equal 2.hours.to_i, klass.failed_login_ban_for
       end
     end
-
-    class InstaceMethodsTest < ActiveSupport::TestCase
+    
+    class InstanceMethodsTest < ActiveSupport::TestCase
       def test_under_limit
         ben = users(:ben)
         ben.failed_login_count = UserSession.consecutive_failed_logins_limit - 1
