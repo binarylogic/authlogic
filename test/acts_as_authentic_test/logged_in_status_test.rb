@@ -5,13 +5,16 @@ module ActsAsAuthenticTest
     ERROR_MSG = 'Multiple calls to %s should result in different relations'
 
     def test_logged_in_timeout_config
+      klass = testable_user_class
+
+      assert_equal 10.minutes.to_i, klass.logged_in_timeout
       assert_equal 10.minutes.to_i, User.logged_in_timeout
       assert_equal 10.minutes.to_i, Employee.logged_in_timeout
 
-      User.logged_in_timeout = 1.hour
-      assert_equal 1.hour.to_i, User.logged_in_timeout
-      User.logged_in_timeout 10.minutes
-      assert_equal 10.minutes.to_i, User.logged_in_timeout
+      klass.logged_in_timeout = 1.hour
+      assert_equal 1.hour.to_i, klass.logged_in_timeout
+      klass.logged_in_timeout 10.minutes
+      assert_equal 10.minutes.to_i, klass.logged_in_timeout
     end
 
     def test_named_scope_logged_in
@@ -19,7 +22,11 @@ module ActsAsAuthenticTest
       # slightly different. This is an attempt to make sure the scope is lambda wrapped
       # so that it is re-evaluated every time its called. My biggest concern is that the
       # test happens so fast that the test fails... I just don't know a better way to test it!
-      assert User.logged_in.where_values != User.logged_in.where_values, ERROR_MSG % '#logged_in'
+      scope_1 = User.logged_in.where_values
+      Timecop.freeze(1.second.from_now)
+      scope_2 = User.logged_in.where_values
+
+      assert scope_1 != scope_2, ERROR_MSG % '#logged_in'
 
       assert_equal 0, User.logged_in.count
       user = User.first

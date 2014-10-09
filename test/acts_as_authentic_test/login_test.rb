@@ -3,54 +3,69 @@ require 'test_helper'
 module ActsAsAuthenticTest
   class LoginTest < ActiveSupport::TestCase
     def test_login_field_config
+      klass = testable_user_class
+
+      assert_equal :login, klass.login_field
       assert_equal :login, User.login_field
       assert_nil Employee.login_field
 
-      User.login_field = :nope
-      assert_equal :nope, User.login_field
-      User.login_field :login
-      assert_equal :login, User.login_field
+      klass.login_field = :nope
+      assert_equal :nope, klass.login_field
+      klass.login_field :login
+      assert_equal :login, klass.login_field
     end
 
     def test_validate_login_field_config
+      klass = testable_user_class
+
+      assert klass.validate_login_field
       assert User.validate_login_field
       assert Employee.validate_login_field
 
-      User.validate_login_field = false
-      assert !User.validate_login_field
-      User.validate_login_field true
-      assert User.validate_login_field
+      klass.validate_login_field = false
+      assert !klass.validate_login_field
+      klass.validate_login_field true
+      assert klass.validate_login_field
     end
 
     def test_validates_length_of_login_field_options_config
+      klass = testable_user_class
+
+      assert_equal({:within => 3..100}, klass.validates_length_of_login_field_options)
       assert_equal({:within => 3..100}, User.validates_length_of_login_field_options)
       assert_equal({:within => 3..100}, Employee.validates_length_of_login_field_options)
 
-      User.validates_length_of_login_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_length_of_login_field_options)
-      User.validates_length_of_login_field_options({:within => 3..100})
-      assert_equal({:within => 3..100}, User.validates_length_of_login_field_options)
+      klass.validates_length_of_login_field_options = {:yes => "no"}
+      assert_equal({:yes => "no"}, klass.validates_length_of_login_field_options)
+      klass.validates_length_of_login_field_options({:within => 3..100})
+      assert_equal({:within => 3..100}, klass.validates_length_of_login_field_options)
     end
 
     def test_validates_format_of_login_field_options_config
+      klass = testable_user_class
+
       default = {:with => /\A\w[\w\.+\-_@ ]+\z/, :message => I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")}
+      assert_equal default, klass.validates_format_of_login_field_options
       assert_equal default, User.validates_format_of_login_field_options
       assert_equal default, Employee.validates_format_of_login_field_options
 
-      User.validates_format_of_login_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_format_of_login_field_options)
-      User.validates_format_of_login_field_options default
-      assert_equal default, User.validates_format_of_login_field_options
+      klass.validates_format_of_login_field_options = {:yes => "no"}
+      assert_equal({:yes => "no"}, klass.validates_format_of_login_field_options)
+      klass.validates_format_of_login_field_options default
+      assert_equal default, klass.validates_format_of_login_field_options
     end
 
     def test_validates_uniqueness_of_login_field_options_config
+      klass = testable_user_class
+
       default = {:case_sensitive => false, :scope => User.validations_scope, :if => "#{User.login_field}_changed?".to_sym}
+      assert_equal default, klass.validates_uniqueness_of_login_field_options
       assert_equal default, User.validates_uniqueness_of_login_field_options
 
-      User.validates_uniqueness_of_login_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_uniqueness_of_login_field_options)
-      User.validates_uniqueness_of_login_field_options default
-      assert_equal default, User.validates_uniqueness_of_login_field_options
+      klass.validates_uniqueness_of_login_field_options = {:yes => "no"}
+      assert_equal({:yes => "no"}, klass.validates_uniqueness_of_login_field_options)
+      klass.validates_uniqueness_of_login_field_options default
+      assert_equal default, klass.validates_uniqueness_of_login_field_options
     end
 
     def test_validates_length_of_login_field

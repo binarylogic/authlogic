@@ -2,18 +2,25 @@ require 'test_helper'
 
 module SessionTest
   class PersistenceTest < ActiveSupport::TestCase
-    def test_find
+    def test_find_by_http_auth
       ben = users(:ben)
       assert !UserSession.find
       http_basic_auth_for(ben) { assert UserSession.find }
+    end
+
+    def test_find_by_cookie
+      ben = users(:ben)
       set_cookie_for(ben)
       assert UserSession.find
-      unset_cookie
+    end
+
+    def test_find_by_session
+      ben = users(:ben)
       set_session_for(ben)
       session = UserSession.find
       assert session
     end
-    
+
     def test_persisting
       # tested thoroughly in test_find
     end

@@ -3,18 +3,20 @@ require 'test_helper'
 module ActsAsAuthenticTest
   class SessionMaintenanceTest < ActiveSupport::TestCase
     def test_maintain_sessions_config
-      assert User.maintain_sessions
-      User.maintain_sessions = false
-      assert !User.maintain_sessions
-      User.maintain_sessions true
-      assert User.maintain_sessions
+      klass = testable_user_class
+
+      assert klass.maintain_sessions
+      klass.maintain_sessions = false
+      assert !klass.maintain_sessions
+      klass.maintain_sessions true
+      assert klass.maintain_sessions
     end
-    
+
     def test_login_after_create
       assert User.create(:login => "awesome", :password => "saweet", :password_confirmation => "saweet", :email => "awesome@awesome.com")
       assert UserSession.find
     end
-    
+
     def test_updating_session_with_failed_magic_state
       ben = users(:ben)
       ben.confirmed = false
@@ -47,7 +49,7 @@ module ActsAsAuthenticTest
       assert_equal controller.session["user_credentials"], old_session_key
       assert_equal controller.cookies["user_credentials"], old_cookie_key
     end
-    
+
     def test_creating_other_user
       ben = users(:ben)
       UserSession.create(ben)
