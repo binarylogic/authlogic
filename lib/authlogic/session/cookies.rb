@@ -43,8 +43,8 @@ module Authlogic
         #
         # * <tt>Default:</tt> 3.months
         # * <tt>Accepts:</tt> Integer, length of time in seconds, such as 60 or 3.months
-        def remember_me_for(value = :_read)
-          rw_config(:remember_me_for, value, 3.months, :_read)
+        def remember_me_for(value = nil)
+          rw_config(:remember_me_for, value, 3.months)
         end
         alias_method :remember_me_for=, :remember_me_for
 
@@ -206,7 +206,7 @@ module Authlogic
               controller.cookies[cookie_key] = generate_cookie_for_saving
             end
           end
-          
+
           def generate_cookie_for_saving
             remember_me_until_value = "::#{remember_me_until.iso8601}" if remember_me?
             {
