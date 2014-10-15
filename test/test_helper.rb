@@ -99,16 +99,16 @@ ActiveRecord::Schema.define(:version => 1) do
   end
 end
 
-require File.dirname(__FILE__) + '/../lib/authlogic' unless defined?(Authlogic)
-require File.dirname(__FILE__) + '/../lib/authlogic/test_case'
-require File.dirname(__FILE__) + '/libs/project'
-require File.dirname(__FILE__) + '/libs/affiliate'
-require File.dirname(__FILE__) + '/libs/employee'
-require File.dirname(__FILE__) + '/libs/employee_session'
-require File.dirname(__FILE__) + '/libs/ldaper'
-require File.dirname(__FILE__) + '/libs/user'
-require File.dirname(__FILE__) + '/libs/user_session'
-require File.dirname(__FILE__) + '/libs/company'
+require_relative '../lib/authlogic' unless defined?(Authlogic)
+require_relative '../lib/authlogic/test_case'
+require_relative 'libs/project'
+require_relative 'libs/affiliate'
+require_relative 'libs/employee'
+require_relative 'libs/employee_session'
+require_relative 'libs/ldaper'
+require_relative 'libs/user'
+require_relative 'libs/user_session'
+require_relative 'libs/company'
 
 Authlogic::CryptoProviders::AES256.key = "myafdsfddddddddddddddddddddddddddddddddddddddddddddddd"
 
@@ -120,6 +120,7 @@ class ActiveSupport::TestCase
   self.pre_loaded_fixtures = false
   fixtures :all
   setup :activate_authlogic
+  teardown { Timecop.return } # for tests that need to freeze the time
 
   private
     def password_for(user)
@@ -128,6 +129,8 @@ class ActiveSupport::TestCase
         "benrocks"
       when users(:zack)
         "zackrocks"
+      when users(:aaron)
+        "aaronrocks"
       end
     end
 
