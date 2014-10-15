@@ -120,9 +120,29 @@ class ActiveSupport::TestCase
   self.pre_loaded_fixtures = false
   fixtures :all
   setup :activate_authlogic
+  setup :config_setup
+  teardown :config_teardown
   teardown { Timecop.return } # for tests that need to freeze the time
 
+
   private
+    # Many of the tests change Authlogic config for the test models. Some tests
+    # were not resetting the config after tests, which didn't surface as broken
+    # tests until Rails 4.1 was added for testing. This ensures that all the
+    # models start tests with their original config.
+    def config_setup
+      [Project, Affiliate, Employee, EmployeeSession, Ldaper, User, UserSession, Company].each do |model|
+        model.class_attribute :original_acts_as_authentic_config unless model.respond_to?(:original_acts_as_authentic_config)
+        model.original_acts_as_authentic_config = model.acts_as_authentic_config
+      end
+    end
+
+    def config_teardown
+      [Project, Affiliate, Employee, EmployeeSession, Ldaper, User, UserSession, Company].each do |model|
+        model.acts_as_authentic_config = model.original_acts_as_authentic_config
+      end
+    end
+
     def password_for(user)
       case user
       when users(:ben)

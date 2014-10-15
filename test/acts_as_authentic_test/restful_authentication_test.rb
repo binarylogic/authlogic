@@ -3,9 +3,6 @@ require 'test_helper'
 module ActsAsAuthenticTest
   class RestfulAuthenticationTest < ActiveSupport::TestCase
     def test_act_like_restful_authentication_config
-      original_crypto_provider = User.crypto_provider
-      original_transition_from_crypto_providers = User.transition_from_crypto_providers
-
       assert !User.act_like_restful_authentication
       assert !Employee.act_like_restful_authentication
 
@@ -21,15 +18,9 @@ module ActsAsAuthenticTest
 
       User.crypto_provider = Authlogic::CryptoProviders::Sha512
       User.transition_from_crypto_providers = []
-    ensure
-      User.crypto_provider = original_crypto_provider
-      User.transition_from_crypto_providers = original_transition_from_crypto_providers
     end
 
     def test_transition_from_restful_authentication_config
-      original_crypto_provider = User.crypto_provider
-      original_transition_from_crypto_providers = User.transition_from_crypto_providers
-
       assert !User.transition_from_restful_authentication
       assert !Employee.transition_from_restful_authentication
 
@@ -41,9 +32,6 @@ module ActsAsAuthenticTest
 
       User.transition_from_restful_authentication false
       assert !User.transition_from_restful_authentication
-    ensure
-      User.crypto_provider = original_crypto_provider
-      User.transition_from_crypto_providers = original_transition_from_crypto_providers
     end
   end
 end

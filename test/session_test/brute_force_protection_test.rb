@@ -4,27 +4,19 @@ module SessionTest
   module BruteForceProtectionTest
     class ConfigTest < ActiveSupport::TestCase
       def test_consecutive_failed_logins_limit
-        original_consecutive_failed_logins_limit = UserSession.consecutive_failed_logins_limit
-
         UserSession.consecutive_failed_logins_limit = 10
         assert_equal 10, UserSession.consecutive_failed_logins_limit
 
         UserSession.consecutive_failed_logins_limit 50
         assert_equal 50, UserSession.consecutive_failed_logins_limit
-      ensure
-        UserSession.consecutive_failed_logins_limit = original_consecutive_failed_logins_limit
       end
 
       def test_failed_login_ban_for
-        original_failed_login_ban_for = UserSession.failed_login_ban_for
-
         UserSession.failed_login_ban_for = 10
         assert_equal 10, UserSession.failed_login_ban_for
 
         UserSession.failed_login_ban_for 2.hours
         assert_equal 2.hours.to_i, UserSession.failed_login_ban_for
-      ensure
-        UserSession.failed_login_ban_for = original_failed_login_ban_for
       end
     end
 

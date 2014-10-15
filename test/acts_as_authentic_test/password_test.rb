@@ -84,9 +84,6 @@ module ActsAsAuthenticTest
     end
 
     def test_crypto_provider_config
-      original_crypto_provider = User.crypto_provider
-      original_transition_from_crypto_providers = User.transition_from_crypto_providers
-
       assert_equal Authlogic::CryptoProviders::SCrypt, User.crypto_provider
       assert_equal Authlogic::CryptoProviders::AES256, Employee.crypto_provider
 
@@ -94,14 +91,9 @@ module ActsAsAuthenticTest
       assert_equal Authlogic::CryptoProviders::BCrypt, User.crypto_provider
       User.crypto_provider Authlogic::CryptoProviders::Sha512
       assert_equal Authlogic::CryptoProviders::Sha512, User.crypto_provider
-    ensure
-      User.crypto_provider = original_crypto_provider
-      User.transition_from_crypto_providers = original_transition_from_crypto_providers
     end
 
     def test_transition_from_crypto_providers_config
-      original_transition_from_crypto_providers = User.transition_from_crypto_providers
-
       assert_equal [Authlogic::CryptoProviders::Sha512], User.transition_from_crypto_providers
       assert_equal [], Employee.transition_from_crypto_providers
 
@@ -109,8 +101,6 @@ module ActsAsAuthenticTest
       assert_equal [Authlogic::CryptoProviders::BCrypt], User.transition_from_crypto_providers
       User.transition_from_crypto_providers []
       assert_equal [], User.transition_from_crypto_providers
-    ensure
-      User.transition_from_crypto_providers = original_transition_from_crypto_providers
     end
 
     def test_validates_length_of_password
@@ -171,17 +161,11 @@ module ActsAsAuthenticTest
     end
 
     def test_transitioning_password
-      original_crypto_provider = User.crypto_provider
-      original_transition_from_crypto_providers = User.transition_from_crypto_providers
-
       ben = users(:ben)
 
       transition_password_to(Authlogic::CryptoProviders::BCrypt, ben)
       transition_password_to(Authlogic::CryptoProviders::Sha1, ben, [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::BCrypt])
       transition_password_to(Authlogic::CryptoProviders::Sha512, ben, [Authlogic::CryptoProviders::Sha1, Authlogic::CryptoProviders::BCrypt])
-    ensure
-      User.crypto_provider = original_crypto_provider
-      User.transition_from_crypto_providers = original_transition_from_crypto_providers
     end
 
     def test_checks_password_against_database
