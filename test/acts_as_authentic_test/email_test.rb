@@ -38,13 +38,13 @@ module ActsAsAuthenticTest
 
       options = User.validates_format_of_email_field_options
       message = options.delete(:message)
-      assert message.kind_of?(Proc)     
+      assert message.kind_of?(Proc)
       assert_equal dmessage, message.call
       assert_equal default, options
 
       options = Employee.validates_format_of_email_field_options
       message = options.delete(:message)
-      assert message.kind_of?(Proc)     
+      assert message.kind_of?(Proc)
       assert_equal dmessage, message.call
       assert_equal default, options
 
@@ -56,15 +56,12 @@ module ActsAsAuthenticTest
     end
 
     def test_deferred_error_message_translation
-
       # ensure we successfully loaded the test locale
       assert I18n.available_locales.include?(:lol), "Test locale failed to load"
 
-      original_locale = I18n.locale
-      I18n.locale = 'lol'
-      message = I18n.t("authlogic.error_messages.email_invalid")
+      I18n.with_locale('lol') do
+        message = I18n.t("authlogic.error_messages.email_invalid")
 
-      begin
         cat = User.new
         cat.email = 'meow'
         cat.valid?
@@ -74,9 +71,6 @@ module ActsAsAuthenticTest
         error = error.first if error.is_a?(Array)
 
         assert_equal message, error
-
-      ensure
-        I18n.locale = original_locale
       end
     end
 
@@ -122,7 +116,7 @@ module ActsAsAuthenticTest
       u.email = "dakota.d'ux@gmail.com"
       u.valid?
       assert u.errors[:email].size == 0
-      
+
       u.email = "<script>alert(123);</script>\nnobody@example.com"
       assert !u.valid?
       assert u.errors[:email].size > 0

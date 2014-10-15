@@ -26,8 +26,6 @@ module SessionTest
 
         UserSession.http_basic_auth_realm = 'TestRealm'
         assert_equal 'TestRealm', UserSession.http_basic_auth_realm
-      ensure
-        UserSession.http_basic_auth_realm = original_http_basic_auth_realm
       end
     end
 
