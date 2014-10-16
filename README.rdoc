@@ -49,8 +49,6 @@ You may specify how passwords are cryptographically hashed (or encrypted) by set
 
   c.crypto_provider = Authlogic::CryptoProviders::BCrypt
 
-NOTE: the default provider was changed from **Sha512** to **SCrypt** in version 3.4.0.
-
 Also, sessions are automatically maintained. You can switch this on and off with configuration, but the following will automatically log a user in after a successful registration:
 
   User.create(params[:user])
@@ -58,6 +56,19 @@ Also, sessions are automatically maintained. You can switch this on and off with
 This also updates the session when the user changes his/her password.
 
 Authlogic is very flexible, it has a strong public API and a plethora of hooks to allow you to modify behavior and extend it. Check out the helpful links below to dig deeper.
+
+== Upgrading to Authlogic 3.4.0
+
+In version 3.4.0, the default crypto_provider was changed from *Sha512* to *SCrypt*.
+
+If you never set a crypto_provider and are upgrading, your passwords will break unless you set the original:
+
+  c.crypto_provider = Authlogic::CryptoProviders::Sha512
+
+And if you want to automatically upgrade from *Sha512* to *SCrypt* as users login:
+
+  c.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512]
+  c.crypto_provider = Authlogic::CryptoProviders::SCrypt
 
 == Helpful links
 
