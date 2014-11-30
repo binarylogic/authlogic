@@ -116,7 +116,7 @@ module Authlogic
             relation = if not sensitivity
               connection.case_insensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
             else
-              value    = connection.case_sensitive_modifier(value) if value
+              value    = connection.case_sensitive_modifier(value, field) if value
               relation = arel_table[field.to_s].eq(value)
             end
 
