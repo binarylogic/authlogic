@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.4.4 2014-12-23
+
+* changes
+  * extract rw_config into an Authlogic::Config module
+  * improved the way config changes are made in tests
+  * fix for Rails 4.2 by extending ActiveModel
+  
 ## 3.4.3 2014-10-08
 
 * changes
