@@ -65,7 +65,7 @@ module Authlogic
             age = age.to_i
 
             conditions_sql = "perishable_token = ?"
-            conditions_subs = [token]
+            conditions_subs = [token.to_s]
 
             if column_names.include?("updated_at") && age > 0
               conditions_sql += " and updated_at > ?"
