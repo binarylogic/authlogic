@@ -163,15 +163,15 @@ class ActiveSupport::TestCase
       controller.http_user = controller.http_password = controller.realm = nil
     end
 
-    def set_cookie_for(user, id = nil)
-      controller.cookies["user_credentials"] = {:value => user.persistence_token, :expires => nil}
+    def set_cookie_for(user)
+      controller.cookies["user_credentials"] = {:value => "#{user.persistence_token}::#{user.id}", :expires => nil}
     end
 
     def unset_cookie
       controller.cookies["user_credentials"] = nil
     end
 
-    def set_params_for(user, id = nil)
+    def set_params_for(user)
       controller.params["user_credentials"] = user.single_access_token
     end
 
@@ -187,7 +187,7 @@ class ActiveSupport::TestCase
       controller.request_content_type = nil
     end
 
-    def set_session_for(user, id = nil)
+    def set_session_for(user)
       controller.session["user_credentials"] = user.persistence_token
       controller.session["user_credentials_id"] = user.id
     end

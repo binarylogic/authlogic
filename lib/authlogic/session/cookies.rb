@@ -190,8 +190,8 @@ module Authlogic
           # Tries to validate the session from information in the cookie
           def persist_by_cookie
             persistence_token, record_id = cookie_credentials
-            if !persistence_token.nil?
-              record = record_id.nil? ? search_for_record("find_by_persistence_token", persistence_token) : search_for_record("find_by_#{klass.primary_key}", record_id)
+            if persistence_token.present?
+              record = search_for_record("find_by_#{klass.primary_key}", record_id)
               self.unauthorized_record = record if record && record.persistence_token == persistence_token
               valid?
             else
