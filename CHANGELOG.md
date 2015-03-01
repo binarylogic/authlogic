@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.4.5 2015-03-01
+
+* changes
+  * security-hardening fix and cleanup in persistence_token lookup
+  * security-hardening fix in perishable_token lookup (thx @tomekr)
+
 ## 3.4.4 2014-12-23
 
 * changes
