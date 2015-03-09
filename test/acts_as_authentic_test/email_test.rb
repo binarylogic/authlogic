@@ -120,6 +120,10 @@ module ActsAsAuthenticTest
       u.email = "<script>alert(123);</script>\nnobody@example.com"
       assert !u.valid?
       assert u.errors[:email].size > 0
+
+      u.email = "a&b@c.com"
+      u.valid?
+      assert u.errors[:email].size == 0
     end
 
     def test_validates_uniqueness_of_email_field
