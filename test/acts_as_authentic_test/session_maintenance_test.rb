@@ -9,12 +9,12 @@ module ActsAsAuthenticTest
       User.maintain_sessions true
       assert User.maintain_sessions
     end
-    
+
     def test_login_after_create
       assert User.create(:login => "awesome", :password => "saweet", :password_confirmation => "saweet", :email => "awesome@awesome.com")
       assert UserSession.find
     end
-    
+
     def test_updating_session_with_failed_magic_state
       ben = users(:ben)
       ben.confirmed = false
@@ -47,7 +47,7 @@ module ActsAsAuthenticTest
       assert_equal controller.session["user_credentials"], old_session_key
       assert_equal controller.cookies["user_credentials"], old_cookie_key
     end
-    
+
     def test_creating_other_user
       ben = users(:ben)
       UserSession.create(ben)
@@ -69,6 +69,13 @@ module ActsAsAuthenticTest
       assert zack.save
       assert_equal controller.session["user_credentials"], old_session_key
       assert_equal controller.cookies["user_credentials"], old_cookie_key
+    end
+
+    def test_with_invalid_user
+      invalid_john = User.new(:login => "invalid_johnny", :password => "missing_stuff_dude", :password_confirmation => "missing_stuff_dude")
+      assert_raises ActiveRecord::RecordInvalid do
+        UserSession.create(invalid_john)
+      end
     end
 
     def test_resetting_password_when_logged_out

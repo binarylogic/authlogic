@@ -7,7 +7,7 @@ module Authlogic
           super("Your session is invalid and has the following errors: #{session.errors.full_messages.to_sentence}")
         end
       end
-      
+
       def self.included(klass)
         klass.class_eval do
           extend ClassMethods
@@ -15,7 +15,7 @@ module Authlogic
           attr_accessor :new_session, :record
         end
       end
-      
+
       module ClassMethods
         # A convenince method. The same as:
         #
@@ -30,7 +30,7 @@ module Authlogic
           session.save(&block)
           session
         end
-        
+
         # Same as create but calls create!, which raises an exception when validation fails.
         def create!(*args)
           session = new(*args)
@@ -38,7 +38,7 @@ module Authlogic
           session
         end
       end
-      
+
       module InstanceMethods
         # Clears all errors and the associated record, you should call this terminate a session, thus requring
         # the user to authenticate again if it is needed.
@@ -50,13 +50,13 @@ module Authlogic
           after_destroy
           true
         end
-        
+
         # Returns true if the session is new, meaning no action has been taken on it and a successful save
         # has not taken place.
         def new_session?
           new_session != false
         end
-        
+
         # After you have specified all of the details for your session you can try to save it. This will
         # run validation checks and find the associated record, if all validation passes. If validation
         # does not pass, the save will fail and the erorrs will be stored in the errors object.
