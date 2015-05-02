@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+* changes
+  * allow scrypt 2.x (@jaredbeck)
+
 ## 3.4.5 2015-03-01
 
 * changes
