@@ -8,13 +8,13 @@ module ActsAsAuthenticTest
         end
       end
     end
-    
+
     def test_acts_as_authentic_with_old_config
       assert_raise(ArgumentError) do
         User.acts_as_authentic({})
       end
     end
-    
+
     def test_acts_as_authentic_with_no_table
       klass = Class.new(ActiveRecord::Base)
       assert_nothing_raised do

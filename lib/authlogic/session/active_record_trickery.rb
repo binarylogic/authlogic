@@ -6,21 +6,21 @@ module Authlogic
     # advantage of the many ActiveRecord tools.
     module ActiveRecordTrickery
       def self.included(klass)
+        klass.extend ActiveModel::Naming
+        klass.extend ActiveModel::Translation
+
+        # Support ActiveModel::Name#name for Rails versions before 4.0.
+        if !klass.model_name.respond_to?(:name)
+          ActiveModel::Name.module_eval do
+            alias_method :name, :to_s
+          end
+        end
+
         klass.extend ClassMethods
         klass.send(:include, InstanceMethods)
       end
 
       module ClassMethods
-        # How to name the attributes of Authlogic, works JUST LIKE ActiveRecord, but instead it uses the following
-        # namespace:
-        #
-        #   authlogic.attributes.user_session.login
-        def human_attribute_name(attribute_key_name, options = {})
-          options[:count] ||= 1
-          options[:default] ||= attribute_key_name.to_s.humanize
-          I18n.t("attributes.#{name.underscore}.#{attribute_key_name}", options)
-        end
-
         # How to name the class, works JUST LIKE ActiveRecord, except it uses the following namespace:
         #
         #   authlogic.models.user_session
@@ -28,22 +28,10 @@ module Authlogic
           I18n.t("models.#{name.underscore}", {:count => 1, :default => name.humanize})
         end
 
-        # For rails >= 3.0
-        def model_name
-          if defined?(::ActiveModel)
-            ::ActiveModel::Name.new(self)
-          else
-            ::ActiveSupport::ModelName.new(self.to_s)
-          end
-        end
-
         def i18n_scope
           I18n.scope
         end
 
-        def lookup_ancestors
-          ancestors.select { |x| x.respond_to?(:model_name) }
-        end
       end
 
       module InstanceMethods

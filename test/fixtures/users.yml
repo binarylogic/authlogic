@@ -1,3 +1,8 @@
+# NB :ben and :zack use the legacy crypto provider (Sha512) ... when they're
+# tested for valid_password?() it will transition their password
+# (re: test/libs/user.rb). This could have unintended side-effects (like auto-
+# resetting their persistence token when checking password) -- one solution
+# is to just switch in users(:aaron) for those tests.
 ben:
   company: binary_logic
   projects: web_services
@@ -10,7 +15,7 @@ ben:
   email: bjohnson@binarylogic.com
   first_name: Ben
   last_name: Johnson
-  
+
 zack:
   company: logic_over_data
   projects: web_services
@@ -28,7 +33,7 @@ aaron:
   projects: web_services
   login: abedra
   crypted_password: <%= Authlogic::CryptoProviders::SCrypt.encrypt("aaronrocks") %>
-  persistence_token: 6cde0674657a8a313ce952df979de2830309aa4c11ca65805dd00bfdc65dbcc2f5e36718660a1d2e68c1a08c276d996763985d2f06fd3d076eb7bc4d97b1e317
+  persistence_token: e3d853f5aa0dacac5c257d03c4e097a3a7f51b182a8fc4f62096d05e939b019855aff0290157ac854e4195f13284ff5223f1996d0fd073e7e360171de54db278
   single_access_token: <%= Authlogic::Random.friendly_token %>
   perishable_token: <%= Authlogic::Random.friendly_token %>
   email: abedra@cigital.com

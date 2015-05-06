@@ -24,7 +24,7 @@ module Authlogic
         end
         alias_method :perishable_token_valid_for=, :perishable_token_valid_for
 
-        # Authlogic tries to expire and change the perishable token as much as possible, without comprising
+        # Authlogic tries to expire and change the perishable token as much as possible, without compromising
         # it's purpose. This is for security reasons. If you want to manage it yourself, you can stop
         # Authlogic from getting your in way by setting this to true.
         #
@@ -65,7 +65,7 @@ module Authlogic
             age = age.to_i
 
             conditions_sql = "perishable_token = ?"
-            conditions_subs = [token]
+            conditions_subs = [token.to_s]
 
             if column_names.include?("updated_at") && age > 0
               conditions_sql += " and updated_at > ?"

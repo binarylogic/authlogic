@@ -99,16 +99,16 @@ ActiveRecord::Schema.define(:version => 1) do
   end
 end
 
-require File.dirname(__FILE__) + '/../lib/authlogic' unless defined?(Authlogic)
-require File.dirname(__FILE__) + '/../lib/authlogic/test_case'
-require File.dirname(__FILE__) + '/libs/project'
-require File.dirname(__FILE__) + '/libs/affiliate'
-require File.dirname(__FILE__) + '/libs/employee'
-require File.dirname(__FILE__) + '/libs/employee_session'
-require File.dirname(__FILE__) + '/libs/ldaper'
-require File.dirname(__FILE__) + '/libs/user'
-require File.dirname(__FILE__) + '/libs/user_session'
-require File.dirname(__FILE__) + '/libs/company'
+require_relative '../lib/authlogic' unless defined?(Authlogic)
+require_relative '../lib/authlogic/test_case'
+require_relative 'libs/project'
+require_relative 'libs/affiliate'
+require_relative 'libs/employee'
+require_relative 'libs/employee_session'
+require_relative 'libs/ldaper'
+require_relative 'libs/user'
+require_relative 'libs/user_session'
+require_relative 'libs/company'
 
 Authlogic::CryptoProviders::AES256.key = "myafdsfddddddddddddddddddddddddddddddddddddddddddddddd"
 
@@ -120,14 +120,37 @@ class ActiveSupport::TestCase
   self.pre_loaded_fixtures = false
   fixtures :all
   setup :activate_authlogic
+  setup :config_setup
+  teardown :config_teardown
+  teardown { Timecop.return } # for tests that need to freeze the time
+
 
   private
+    # Many of the tests change Authlogic config for the test models. Some tests
+    # were not resetting the config after tests, which didn't surface as broken
+    # tests until Rails 4.1 was added for testing. This ensures that all the
+    # models start tests with their original config.
+    def config_setup
+      [Project, Affiliate, Employee, EmployeeSession, Ldaper, User, UserSession, Company].each do |model|
+        model.class_attribute :original_acts_as_authentic_config unless model.respond_to?(:original_acts_as_authentic_config)
+        model.original_acts_as_authentic_config = model.acts_as_authentic_config
+      end
+    end
+
+    def config_teardown
+      [Project, Affiliate, Employee, EmployeeSession, Ldaper, User, UserSession, Company].each do |model|
+        model.acts_as_authentic_config = model.original_acts_as_authentic_config
+      end
+    end
+
     def password_for(user)
       case user
       when users(:ben)
         "benrocks"
       when users(:zack)
         "zackrocks"
+      when users(:aaron)
+        "aaronrocks"
       end
     end
 
@@ -140,15 +163,15 @@ class ActiveSupport::TestCase
       controller.http_user = controller.http_password = controller.realm = nil
     end
 
-    def set_cookie_for(user, id = nil)
-      controller.cookies["user_credentials"] = {:value => user.persistence_token, :expires => nil}
+    def set_cookie_for(user)
+      controller.cookies["user_credentials"] = {:value => "#{user.persistence_token}::#{user.id}", :expires => nil}
     end
 
     def unset_cookie
       controller.cookies["user_credentials"] = nil
     end
 
-    def set_params_for(user, id = nil)
+    def set_params_for(user)
       controller.params["user_credentials"] = user.single_access_token
     end
 
@@ -164,7 +187,7 @@ class ActiveSupport::TestCase
       controller.request_content_type = nil
     end
 
-    def set_session_for(user, id = nil)
+    def set_session_for(user)
       controller.session["user_credentials"] = user.persistence_token
       controller.session["user_credentials_id"] = user.id
     end

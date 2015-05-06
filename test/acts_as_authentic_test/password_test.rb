@@ -94,7 +94,7 @@ module ActsAsAuthenticTest
     end
 
     def test_transition_from_crypto_providers_config
-      assert_equal [], User.transition_from_crypto_providers
+      assert_equal [Authlogic::CryptoProviders::Sha512], User.transition_from_crypto_providers
       assert_equal [], Employee.transition_from_crypto_providers
 
       User.transition_from_crypto_providers = [Authlogic::CryptoProviders::BCrypt]
@@ -104,35 +104,32 @@ module ActsAsAuthenticTest
     end
 
     def test_validates_length_of_password
-      u = User.new
-      u.password_confirmation = "test2"
+      u = User.new(login: "abcde", email: "abcde@test.com", password: "abcde", password_confirmation: "abcde")
+      assert u.valid?
+
+      u.password = u.password_confirmation = "abc"
       assert !u.valid?
       assert u.errors[:password].size > 0
 
       u.password = "test"
       assert !u.valid?
 
-      if ActiveModel.respond_to?(:version) and ActiveModel.version.segments.first >= 4
-        assert u.errors[:password_confirmation].size == 5
-      else
-        assert u.errors[:password_confirmation].size == 0
-      end
+      assert u.errors[:password].include?("is too short (minimum is 4 characters)")
+      assert u.errors[:password_confirmation].include?("is too short (minimum is 4 characters)")
     end
 
     def test_validates_confirmation_of_password
-      u = User.new
-      u.password = "test"
-      u.password_confirmation = "test2"
+      u = User.new(login: "abcde", email: "abcde@test.com", password: "abcde", password_confirmation: "abcde")
+      assert u.valid?
+
+      u.password_confirmation = "abcdefgh"
       assert !u.valid?
-#      assert u.errors[:password].size > 0
+
       if ActiveModel.respond_to?(:version) and ActiveModel.version.segments.first >= 4
-        assert u.errors[:password_confirmation].size > 0
+        assert u.errors[:password_confirmation].include?("doesn't match Password")
       else
-        assert u.errors[:password].size > 0
+        assert u.errors[:password].include?("doesn't match confirmation")
       end
-      u.password_confirmation = "test"
-      assert !u.valid?
-      assert u.errors[:password].size == 0
     end
 
     def test_validates_length_of_password_confirmation
@@ -169,6 +166,7 @@ module ActsAsAuthenticTest
 
     def test_transitioning_password
       ben = users(:ben)
+
       transition_password_to(Authlogic::CryptoProviders::BCrypt, ben)
       transition_password_to(Authlogic::CryptoProviders::Sha1, ben, [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::BCrypt])
       transition_password_to(Authlogic::CryptoProviders::Sha512, ben, [Authlogic::CryptoProviders::Sha1, Authlogic::CryptoProviders::BCrypt])

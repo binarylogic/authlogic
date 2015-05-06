@@ -115,28 +115,9 @@ module Authlogic
       module InstanceMethods
         def initialize(*args)
           if !self.class.configured_password_methods
-            if login_field
-              self.class.send(:attr_writer, login_field) if !respond_to?("#{login_field}=")
-              self.class.send(:attr_reader, login_field) if !respond_to?(login_field)
-            end
-            
-            if password_field
-              self.class.send(:attr_writer, password_field) if !respond_to?("#{password_field}=")
-              self.class.send(:define_method, password_field) {} if !respond_to?(password_field)
-
-              self.class.class_eval <<-"end_eval", __FILE__, __LINE__
-                private
-                  # The password should not be accessible publicly. This way forms using form_for don't fill the password with the
-                  # attempted password. To prevent this we just create this method that is private.
-                  def protected_#{password_field}
-                    @#{password_field}
-                  end
-              end_eval
-            end
-
+            configure_password_methods
             self.class.configured_password_methods = true
           end
-          
           super
         end
         
@@ -169,6 +150,27 @@ module Authlogic
         end
         
         private
+          def configure_password_methods
+            if login_field
+              self.class.send(:attr_writer, login_field) if !respond_to?("#{login_field}=")
+              self.class.send(:attr_reader, login_field) if !respond_to?(login_field)
+            end
+            
+            if password_field
+              self.class.send(:attr_writer, password_field) if !respond_to?("#{password_field}=")
+              self.class.send(:define_method, password_field) {} if !respond_to?(password_field)
+
+              self.class.class_eval <<-"end_eval", __FILE__, __LINE__
+                private
+                  # The password should not be accessible publicly. This way forms using form_for don't fill the password with the
+                  # attempted password. To prevent this we just create this method that is private.
+                  def protected_#{password_field}
+                    @#{password_field}
+                  end
+              end_eval
+            end
+          end
+
           def authenticating_with_password?
             login_field && (!send(login_field).nil? || !send("protected_#{password_field}").nil?)
           end
@@ -176,10 +178,12 @@ module Authlogic
           def validate_by_password
             self.invalid_password = false
             
+            # check for blank fields
             errors.add(login_field, I18n.t('error_messages.login_blank', :default => "cannot be blank")) if send(login_field).blank?
             errors.add(password_field, I18n.t('error_messages.password_blank', :default => "cannot be blank")) if send("protected_#{password_field}").blank?
             return if errors.count > 0
 
+            # check for unknown login
             self.attempted_record = search_for_record(find_by_login_method, send(login_field))
             if attempted_record.blank?
               generalize_credentials_error_messages? ?
@@ -188,6 +192,7 @@ module Authlogic
               return
             end
 
+            # check for invalid password
             if !attempted_record.send(verify_password_method, send("protected_#{password_field}"))
               self.invalid_password = true
               generalize_credentials_error_messages? ?
@@ -197,13 +202,7 @@ module Authlogic
             end
           end
           
-          def invalid_password
-            @invalid_password
-          end
-          
-          def invalid_password=(value)
-            @invalid_password = value
-          end
+          attr_accessor :invalid_password
           
           def find_by_login_method
             self.class.find_by_login_method

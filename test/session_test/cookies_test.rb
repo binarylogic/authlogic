@@ -128,6 +128,14 @@ module SessionTest
         assert_equal ben, session.record
       end
 
+      def test_persist_persist_by_cookie_with_blank_persistence_token
+        ben = users(:ben)
+        ben.update_column(:persistence_token, "")
+        assert !UserSession.find
+        set_cookie_for(ben)
+        assert !UserSession.find
+      end
+
       def test_remember_me_expired
         ben = users(:ben)
         session = UserSession.new(ben)

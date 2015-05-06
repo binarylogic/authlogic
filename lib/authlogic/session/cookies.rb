@@ -43,8 +43,8 @@ module Authlogic
         #
         # * <tt>Default:</tt> 3.months
         # * <tt>Accepts:</tt> Integer, length of time in seconds, such as 60 or 3.months
-        def remember_me_for(value = :_read)
-          rw_config(:remember_me_for, value, 3.months, :_read)
+        def remember_me_for(value = nil)
+          rw_config(:remember_me_for, value, 3.months)
         end
         alias_method :remember_me_for=, :remember_me_for
 
@@ -180,17 +180,18 @@ module Authlogic
 
           def cookie_credentials
             if self.class.sign_cookie
-              controller.cookies.signed[cookie_key] && controller.cookies.signed[cookie_key].split("::")
+              cookie = controller.cookies.signed[cookie_key]
             else
-              controller.cookies[cookie_key] && controller.cookies[cookie_key].split("::")
+              cookie = controller.cookies[cookie_key]
             end
+            cookie && cookie.split("::")
           end
 
           # Tries to validate the session from information in the cookie
           def persist_by_cookie
             persistence_token, record_id = cookie_credentials
-            if !persistence_token.nil?
-              record = record_id.nil? ? search_for_record("find_by_persistence_token", persistence_token) : search_for_record("find_by_#{klass.primary_key}", record_id)
+            if persistence_token.present?
+              record = search_for_record("find_by_#{klass.primary_key}", record_id)
               self.unauthorized_record = record if record && record.persistence_token == persistence_token
               valid?
             else
@@ -199,20 +200,22 @@ module Authlogic
           end
 
           def save_cookie
+            if sign_cookie?
+              controller.cookies.signed[cookie_key] = generate_cookie_for_saving
+            else
+              controller.cookies[cookie_key] = generate_cookie_for_saving
+            end
+          end
+
+          def generate_cookie_for_saving
             remember_me_until_value = "::#{remember_me_until.iso8601}" if remember_me?
-            cookie = {
+            {
               :value => "#{record.persistence_token}::#{record.send(record.class.primary_key)}#{remember_me_until_value}",
               :expires => remember_me_until,
               :secure => secure,
               :httponly => httponly,
               :domain => controller.cookie_domain
             }
-
-            if sign_cookie?
-              controller.cookies.signed[cookie_key] = cookie
-            else
-              controller.cookies[cookie_key] = cookie
-            end
           end
 
           def destroy_cookie

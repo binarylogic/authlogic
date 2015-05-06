@@ -7,11 +7,11 @@ module SessionTest
         assert_equal "Some attribute", UserSession.human_attribute_name("some_attribute")
         assert_equal "Some attribute", UserSession.human_attribute_name(:some_attribute)
       end
-    
+
       def test_human_name
         assert_equal "Usersession", UserSession.human_name
       end
-    
+
       def test_i18n_of_human_name
         I18n.backend.store_translations 'en', :authlogic => {:models => {:user_session => "MySession" } }
         assert_equal "MySession", UserSession.human_name
@@ -21,8 +21,14 @@ module SessionTest
         I18n.backend.store_translations 'en', :authlogic => {:models => {:user_session => "MySession" } }
         assert_equal "MySession", UserSession.model_name.human
       end
+
+      def test_model_name
+        assert_equal "UserSession", UserSession.model_name.name
+        assert_equal "user_session", UserSession.model_name.singular
+        assert_equal "user_sessions", UserSession.model_name.plural
+      end
     end
-    
+
     class InstanceMethodsTest < ActiveSupport::TestCase
       def test_new_record
         session = UserSession.new
@@ -49,7 +55,7 @@ module SessionTest
         session.destroy
         assert ! session.persisted?
       end
-      
+
       def test_destroyed?
         session = UserSession.create(users(:ben))
         assert ! session.destroyed?
