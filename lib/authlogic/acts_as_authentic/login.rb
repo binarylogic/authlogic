@@ -116,10 +116,13 @@ module Authlogic
             relation = if not sensitivity
               connection.case_insensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
             else
-              value    = connection.case_sensitive_modifier(value) if value
+              if Gem::Version.new(Rails.version) < Gem::Version.new('4.2')
+                value = connection.case_sensitive_modifier(value)
+              else
+                value = connection.case_sensitive_modifier(value, field.to_s)
+              end
               relation = arel_table[field.to_s].eq(value)
             end
-
             where(relation).first
           end
       end
