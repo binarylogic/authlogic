@@ -126,6 +126,11 @@ module ActsAsAuthenticTest
       assert u.errors[:email].size == 0
     end
 
+    def test_validates_format_of_nonascii_email_field
+      email_containing_ampersand = "a&b@c.com"
+      assert email_containing_ampersand =~  Authlogic::Regex.email_nonascii
+    end
+
     def test_validates_uniqueness_of_email_field
       u = User.new
       u.email = "bjohnson@binarylogic.com"
