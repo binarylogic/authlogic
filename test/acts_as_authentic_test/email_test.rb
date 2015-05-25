@@ -194,11 +194,11 @@ module ActsAsAuthenticTest
     def test_validates_format_of_nonascii_email_field
 
       (GOOD_ASCII_EMAILS + GOOD_ISO88591_EMAILS + GOOD_UTF8_EMAILS).each do |e|
-        assert e =~  Authlogic::Regex.email_nonascii
+        assert e =~  Authlogic::Regex.email_nonascii, "Good email should validate: #{e}"
       end
 
       (BAD_ASCII_EMAILS + BAD_ISO88591_EMAILS + BAD_UTF8_EMAILS).each do |e|
-        assert e !~  Authlogic::Regex.email_nonascii
+        assert e !~  Authlogic::Regex.email_nonascii, "Bad email should not validate: #{e}"
       end
 
     end
