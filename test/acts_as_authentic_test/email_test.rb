@@ -14,6 +14,8 @@ module ActsAsAuthenticTest
     BAD_ASCII_EMAILS = [
       "",
       "aaaaaaaaaaaaa",
+      "question?mark@gmail.com",
+      "backslash@g\\mail.com",
       "<script>alert(123);</script>\nnobody@example.com",
     ]
 
@@ -28,6 +30,8 @@ module ActsAsAuthenticTest
       "öm(@ava.fi",      # L paren
       "é)@domain.com",   # R paren
       "é[@example.com",  # L bracket
+      "question?mark@gmail.com",  # question mark
+      "back\\slash@gmail.com",    # backslash
     ]
 
     GOOD_UTF8_EMAILS = [
@@ -52,6 +56,8 @@ module ActsAsAuthenticTest
       "斐,.みんな",                                           #  comma
       "香<.香港",                    # less than
       "我>.香港",                    # greater than
+      "我?本@屋企.香港",              # question mark
+      "чебурша@ьн\\ами.рф",         # backslash
       "user@domain.com%0A<script>alert('hello')</script>",
     ]
 

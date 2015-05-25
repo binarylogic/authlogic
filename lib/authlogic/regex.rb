@@ -21,7 +21,7 @@ module Authlogic
     # A draft regular expression for internationalized email addresses.
     # Given that the standard may be in flux, this simply emulates @email_regex but rather than
     # allowing specific characters for each part, it instead disallows the complement set of characters:
-    # - email_name_regex disallows: @[]^ !"#$()*,/:;<=>\?`{|}~\ and control characters
+    # - email_name_regex disallows: @[]^ !"#$()*,/:;<=>?`{|}~\ and control characters
     # - domain_head_regex disallows: _%+ and all characters in email_name_regex
     # - domain_tld_regex disallows: 0123456789- and all characters in domain_head_regex
     # http://en.wikipedia.org/wiki/Email_address#Internationalization
