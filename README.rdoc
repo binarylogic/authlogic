@@ -49,6 +49,10 @@ You may specify how passwords are cryptographically hashed (or encrypted) by set
 
   c.crypto_provider = Authlogic::CryptoProviders::BCrypt
 
+You may validate international email addresses by enabling the provided alternate regex:
+
+  c.validates_format_of_email_field_options = {:with => Authlogic::Regex.email_nonascii}
+
 Also, sessions are automatically maintained. You can switch this on and off with configuration, but the following will automatically log a user in after a successful registration:
 
   User.create(params[:user])
