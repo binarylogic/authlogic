@@ -78,10 +78,10 @@ module Authlogic
             value,
             {
               :with => Authlogic::Regex.login,
-              :message => I18n.t(
+              :message => Proc.new { I18n.t(
                 'error_messages.login_invalid',
                 :default => "should use only letters, numbers, spaces, and .-_@+ please."
-              )
+              ) }
             }
           )
         end

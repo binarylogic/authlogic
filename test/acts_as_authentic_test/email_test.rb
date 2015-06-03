@@ -101,18 +101,18 @@ module ActsAsAuthenticTest
           )
         end
       }
-      dmessage = default.delete(:message).call
+      default_message = default.delete(:message).call
 
       options = User.validates_format_of_email_field_options
       message = options.delete(:message)
       assert message.kind_of?(Proc)
-      assert_equal dmessage, message.call
+      assert_equal default_message, message.call
       assert_equal default, options
 
       options = Employee.validates_format_of_email_field_options
       message = options.delete(:message)
       assert message.kind_of?(Proc)
-      assert_equal dmessage, message.call
+      assert_equal default_message, message.call
       assert_equal default, options
 
       User.validates_format_of_email_field_options = { :yes => "no" }
