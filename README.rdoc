@@ -110,6 +110,49 @@ Each of the above has its various sub modules that contain common logic. The sub
 
 For example, if you want to timeout users after a certain period of inactivity, you would look in <b>Authlogic::Session::Timeout</b>. To help you out, I listed the following publicly relevant modules with short descriptions. For the sake of brevity, there are more modules than listed here, the ones not listed are more for internal use, but you can easily read up on them in the {documentation}[http://rdoc.info/projects/binarylogic/authlogic].
 
+== Example migration
+
+If you want to enable all the features of Authlogic, a migration to create a
++User+ model, for example, might look like this:
+
+  class CreateUser < ActiveRecord::Migration
+    def change
+      create_table :users do |t|
+        # Authlogic::ActsAsAuthentic::Email
+        t.string    :email
+
+        # Authlogic::ActsAsAuthentic::Password
+        t.string    :crypted_password
+        t.string    :password_salt
+
+        # Authlogic::ActsAsAuthentic::PersistenceToken
+        t.string    :persistence_token
+
+        # Authlogic::ActsAsAuthentic::SingleAccessToken
+        t.string    :single_access_token
+
+        # Authlogic::ActsAsAuthentic::PerishableToken
+        t.string    :perishable_token
+
+        # Authlogic::Session::MagicColumns
+        t.integer   :login_count, default: 0, null: false
+        t.integer   :failed_login_count, default: 0, null: false
+        t.datetime  :last_request_at
+        t.datetime  :current_login_at
+        t.datetime  :last_login_at
+        t.string    :current_login_ip
+        t.string    :last_login_ip
+
+        # Authlogic::Session::MagicStates
+        t.boolean   :active, default: false
+        t.boolean   :approved, default: false
+        t.boolean   :confirmed, default: false
+
+        t.timestamps
+      end
+    end
+  end
+
 == Quick Rails example
 
 What if creating sessions worked like an ORM library on the surface...
