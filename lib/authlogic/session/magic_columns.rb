@@ -24,9 +24,9 @@ module Authlogic
 
       # Configuration for the magic columns feature.
       module Config
-        # Every time a session is found the last_request_at field for that record is updatd with the current time, if that field exists.
+        # Every time a session is found the last_request_at field for that record is updated with the current time, if that field exists.
         # If you want to limit how frequent that field is updated specify the threshold here. For example, if your user is making a
-        # request every 5 seconds, and you feel this is too frequent, and feel a minute is a good threashold. Set this to 1.minute.
+        # request every 5 seconds, and you feel this is too frequent, and feel a minute is a good threshold. Set this to 1.minute.
         # Once a minute has passed in between requests the field will be updated.
         #
         # * <tt>Default:</tt> 0
