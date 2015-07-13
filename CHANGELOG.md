@@ -3,6 +3,12 @@
 ## Unreleased
 
 * changes
+  * ...
+
+## 3.4.6 2015
+
+* changes
+  * add Regex.email_nonascii for validation of emails w/unicode (@rchekaluk)
   * allow scrypt 2.x (@jaredbeck)
 
 ## 3.4.5 2015-03-01
