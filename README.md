@@ -1,6 +1,6 @@
 # Authlogic
 
-**Authlogic supports both rails 3 and 4. For rails 2, see the rail2 branch**
+**Authlogic supports both rails 3 and 4. For rails 2, see the [rails2 branch](https://github.com/binarylogic/authlogic/tree/rails2).**
 
 [![Gem Version](https://badge.fury.io/rb/authlogic.png)](http://badge.fury.io/rb/authlogic)
 [![Build Status](https://travis-ci.org/binarylogic/authlogic.png?branch=master)](https://travis-ci.org/binarylogic/authlogic)
@@ -45,7 +45,9 @@ session.destroy
 
 After a session has been created, you can persist it across requests. Thus keeping the user logged in:
 
-  session = UserSession.find
+``` ruby
+session = UserSession.find
+```
 
 To get all of the nice authentication functionality in your model just do this:
 
