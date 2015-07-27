@@ -44,7 +44,7 @@ You can also log out (i.e. **destroying** the session):
 session.destroy
 ```
 
-After a session has been created, you can persist it across requests. Thus keeping the user logged in:
+After a session has been created, you can persist it (i.e. **finding** the record) across requests. Thus keeping the user logged in:
 
 ``` ruby
 session = UserSession.find
