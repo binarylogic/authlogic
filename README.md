@@ -12,18 +12,28 @@ A code example can replace a thousand words...
 
 Authlogic introduces a new type of model. You can have as many as you want, and name them whatever you want, just like your other models. In this example, we want to authenticate with the User model, which is inferred by the name:
 
-  class UserSession < Authlogic::Session::Base
-    # specify configuration here, such as:
-    # logout_on_timeout true
-    # ...many more options in the documentation
-  end
+```ruby
+class UserSession < Authlogic::Session::Base
+  # specify configuration here, such as:
+  # logout_on_timeout true
+  # ...many more options in the documentation
+end
+```
 
 Log in with any of the following. Create a UserSessionsController and use it just like your other models:
 
-  UserSession.create(:login => "bjohnson", :password => "my password", :remember_me => true)
-  session = UserSession.new(:login => "bjohnson", :password => "my password", :remember_me => true); session.save
-  UserSession.create(:openid_identifier => "identifier", :remember_me => true) # requires the authlogic-oid "add on" gem
-  UserSession.create(my_user_object, true) # skip authentication and log the user in directly, the true means "remember me"
+```ruby
+UserSession.create(:login => "bjohnson", :password => "my password", :remember_me => true)
+
+session = UserSession.new(:login => "bjohnson", :password => "my password", :remember_me => true)
+session.save
+
+# requires the authlogic-oid "add on" gem
+UserSession.create(:openid_identifier => "identifier", :remember_me => true)
+
+# skip authentication and log the user in directly, the true means "remember me"
+UserSession.create(my_user_object, true)
+```
 
 The above handles the entire authentication process for you. It first authenticates, then it sets up the proper session values and cookies to persist the session. Just like you would if you rolled your own authentication solution.
 
@@ -37,11 +47,13 @@ After a session has been created, you can persist it across requests. Thus keepi
 
 To get all of the nice authentication functionality in your model just do this:
 
-  class User < ActiveRecord::Base
-    acts_as_authentic do |c|
-      c.my_config_option = my_value
-    end # the configuration block is optional
-  end
+```ruby
+class User < ActiveRecord::Base
+  acts_as_authentic do |c|
+    c.my_config_option = my_value
+  end # the configuration block is optional
+end
+```
 
 This handles validations, etc. It is also "smart" in the sense that it if a login field is present it will use that to authenticate, if not it will look for an email field, etc. This is all configurable, but for 99% of cases that above is all you will need to do.
 
@@ -71,8 +83,10 @@ If you never set a crypto_provider and are upgrading, your passwords will break 
 
 And if you want to automatically upgrade from *Sha512* to *SCrypt* as users login:
 
-  c.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512]
-  c.crypto_provider = Authlogic::CryptoProviders::SCrypt
+```ruby
+c.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512]
+c.crypto_provider = Authlogic::CryptoProviders::SCrypt
+```
 
 == Helpful links
 
@@ -161,64 +175,70 @@ What if creating sessions worked like an ORM library on the surface...
 
 What if your user sessions controller could look just like your other controllers...
 
-  class UserSessionsController < ApplicationController
-    def new
-      @user_session = UserSession.new
-    end
+```ruby
+class UserSessionsController < ApplicationController
+  def new
+    @user_session = UserSession.new
+  end
 
-    def create
-      @user_session = UserSession.new(params[:user_session])
-      if @user_session.save
-        redirect_to account_url
-      else
-        render :action => :new
-      end
-    end
-
-    def destroy
-      current_user_session.destroy
-      redirect_to new_user_session_url
+  def create
+    @user_session = UserSession.new(params[:user_session])
+    if @user_session.save
+      redirect_to account_url
+    else
+      render :action => :new
     end
   end
+
+  def destroy
+    current_user_session.destroy
+    redirect_to new_user_session_url
+  end
+end
+```
 
 As you can see, this fits nicely into the RESTful development pattern. What about the view...
 
-  <%= form_for @user_session do |f| %>
-    <% if @user_session.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user_session.errors.count, "error") %> prohibited:</h2>
-      <ul>
-        <% @user_session.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-    <% end %>
-    <%= f.label :login %><br />
-    <%= f.text_field :login %><br />
-    <br />
-    <%= f.label :password %><br />
-    <%= f.password_field :password %><br />
-    <br />
-    <%= f.submit "Login" %>
+```erb
+<%= form_for @user_session do |f| %>
+  <% if @user_session.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@user_session.errors.count, "error") %> prohibited:</h2>
+    <ul>
+      <% @user_session.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
   <% end %>
+  <%= f.label :login %><br />
+  <%= f.text_field :login %><br />
+  <br />
+  <%= f.label :password %><br />
+  <%= f.password_field :password %><br />
+  <br />
+  <%= f.submit "Login" %>
+<% end %>
+```
 
 Or how about persisting the session...
 
-  class ApplicationController
-    helper_method :current_user_session, :current_user
+```ruby
+class ApplicationController
+  helper_method :current_user_session, :current_user
 
-    private
-      def current_user_session
-        return @current_user_session if defined?(@current_user_session)
-        @current_user_session = UserSession.find
-      end
+  private
+    def current_user_session
+      return @current_user_session if defined?(@current_user_session)
+      @current_user_session = UserSession.find
+    end
 
-      def current_user
-        return @current_user if defined?(@current_user)
-        @current_user = current_user_session && current_user_session.user
-      end
-  end
+    def current_user
+      return @current_user if defined?(@current_user)
+      @current_user = current_user_session && current_user_session.user
+    end
+end
+```
 
 == Testing
 
