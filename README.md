@@ -1,11 +1,9 @@
-= Authlogic
+# Authlogic
 
-** Authlogic supports both rails 3 and 4. For rails 2, see the rail2 branch
+**Authlogic supports both rails 3 and 4. For rails 2, see the rail2 branch**
 
 [![Gem Version](https://badge.fury.io/rb/authlogic.png)](http://badge.fury.io/rb/authlogic)
-
 [![Build Status](https://travis-ci.org/binarylogic/authlogic.png?branch=master)](https://travis-ci.org/binarylogic/authlogic)
-
 [![Code Climate](https://codeclimate.com/github/binarylogic/authlogic.png)](https://codeclimate.com/github/binarylogic/authlogic)
 
 Authlogic is a clean, simple, and unobtrusive ruby authentication solution.
@@ -41,7 +39,9 @@ The above handles the entire authentication process for you. It first authentica
 
 You can also log out / destroy the session:
 
-  session.destroy
+``` ruby
+session.destroy
+```
 
 After a session has been created, you can persist it across requests. Thus keeping the user logged in:
 
@@ -61,15 +61,21 @@ This handles validations, etc. It is also "smart" in the sense that it if a logi
 
 You may specify how passwords are cryptographically hashed (or encrypted) by setting the Authlogic::CryptoProvider option:
 
-  c.crypto_provider = Authlogic::CryptoProviders::BCrypt
+``` ruby
+c.crypto_provider = Authlogic::CryptoProviders::BCrypt
+```
 
 You may validate international email addresses by enabling the provided alternate regex:
 
-  c.validates_format_of_email_field_options = {:with => Authlogic::Regex.email_nonascii}
+``` ruby
+c.validates_format_of_email_field_options = {:with => Authlogic::Regex.email_nonascii}
+```
 
 Also, sessions are automatically maintained. You can switch this on and off with configuration, but the following will automatically log a user in after a successful registration:
 
-  User.create(params[:user])
+``` ruby
+User.create(params[:user])
+```
 
 This also updates the session when the user changes his/her password.
 
@@ -81,7 +87,9 @@ In version 3.4.0, the default crypto_provider was changed from *Sha512* to *SCry
 
 If you never set a crypto_provider and are upgrading, your passwords will break unless you set the original:
 
-  c.crypto_provider = Authlogic::CryptoProviders::Sha512
+``` ruby
+c.crypto_provider = Authlogic::CryptoProviders::Sha512
+```
 
 And if you want to automatically upgrade from *Sha512* to *SCrypt* as users login:
 
@@ -131,49 +139,53 @@ For example, if you want to timeout users after a certain period of inactivity, 
 If you want to enable all the features of Authlogic, a migration to create a
 +User+ model, for example, might look like this:
 
-  class CreateUser < ActiveRecord::Migration
-    def change
-      create_table :users do |t|
-        # Authlogic::ActsAsAuthentic::Email
-        t.string    :email
+``` ruby
+class CreateUser < ActiveRecord::Migration
+  def change
+    create_table :users do |t|
+      # Authlogic::ActsAsAuthentic::Email
+      t.string    :email
 
-        # Authlogic::ActsAsAuthentic::Password
-        t.string    :crypted_password
-        t.string    :password_salt
+      # Authlogic::ActsAsAuthentic::Password
+      t.string    :crypted_password
+      t.string    :password_salt
 
-        # Authlogic::ActsAsAuthentic::PersistenceToken
-        t.string    :persistence_token
+      # Authlogic::ActsAsAuthentic::PersistenceToken
+      t.string    :persistence_token
 
-        # Authlogic::ActsAsAuthentic::SingleAccessToken
-        t.string    :single_access_token
+      # Authlogic::ActsAsAuthentic::SingleAccessToken
+      t.string    :single_access_token
 
-        # Authlogic::ActsAsAuthentic::PerishableToken
-        t.string    :perishable_token
+      # Authlogic::ActsAsAuthentic::PerishableToken
+      t.string    :perishable_token
 
-        # Authlogic::Session::MagicColumns
-        t.integer   :login_count, default: 0, null: false
-        t.integer   :failed_login_count, default: 0, null: false
-        t.datetime  :last_request_at
-        t.datetime  :current_login_at
-        t.datetime  :last_login_at
-        t.string    :current_login_ip
-        t.string    :last_login_ip
+      # Authlogic::Session::MagicColumns
+      t.integer   :login_count, default: 0, null: false
+      t.integer   :failed_login_count, default: 0, null: false
+      t.datetime  :last_request_at
+      t.datetime  :current_login_at
+      t.datetime  :last_login_at
+      t.string    :current_login_ip
+      t.string    :last_login_ip
 
-        # Authlogic::Session::MagicStates
-        t.boolean   :active, default: false
-        t.boolean   :approved, default: false
-        t.boolean   :confirmed, default: false
+      # Authlogic::Session::MagicStates
+      t.boolean   :active, default: false
+      t.boolean   :approved, default: false
+      t.boolean   :confirmed, default: false
 
-        t.timestamps
-      end
+      t.timestamps
     end
   end
+end
+```
 
 ## Quick Rails example
 
 What if creating sessions worked like an ORM library on the surface...
 
-  UserSession.create(params[:user_session])
+``` ruby
+UserSession.create(params[:user_session])
+```
 
 What if your user sessions controller could look just like your other controllers...
 
@@ -244,7 +256,7 @@ end
 
 ## Testing
 
-See Authlogic::TestCase
+See [Authlogic::TestCase](https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/test_case.rb)
 
 ## Tell me quickly how Authlogic works
 
