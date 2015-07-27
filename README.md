@@ -2,9 +2,11 @@
 
 ** Authlogic supports both rails 3 and 4. For rails 2, see the rail2 branch
 
-{<img src="https://travis-ci.org/binarylogic/authlogic.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/binarylogic/authlogic]
+[![Gem Version](https://badge.fury.io/rb/authlogic.png)](http://badge.fury.io/rb/authlogic)
 
-{<img src="https://codeclimate.com/github/binarylogic/authlogic.png" />}[https://codeclimate.com/github/binarylogic/authlogic]
+[![Build Status](https://travis-ci.org/binarylogic/authlogic.png?branch=master)](https://travis-ci.org/binarylogic/authlogic)
+
+[![Code Climate](https://codeclimate.com/github/binarylogic/authlogic.png)](https://codeclimate.com/github/binarylogic/authlogic)
 
 Authlogic is a clean, simple, and unobtrusive ruby authentication solution.
 
@@ -73,7 +75,7 @@ This also updates the session when the user changes his/her password.
 
 Authlogic is very flexible, it has a strong public API and a plethora of hooks to allow you to modify behavior and extend it. Check out the helpful links below to dig deeper.
 
-== Upgrading to Authlogic 3.4.0
+## Upgrading to Authlogic 3.4.0
 
 In version 3.4.0, the default crypto_provider was changed from *Sha512* to *SCrypt*.
 
@@ -88,7 +90,7 @@ c.transition_from_crypto_providers = [Authlogic::CryptoProviders::Sha512]
 c.crypto_provider = Authlogic::CryptoProviders::SCrypt
 ```
 
-== Helpful links
+## Helpful links
 
 * <b>Documentation:</b> http://rdoc.info/projects/binarylogic/authlogic
 * <b>Repository:</b> http://github.com/binarylogic/authlogic/tree/master
@@ -97,7 +99,7 @@ c.crypto_provider = Authlogic::CryptoProviders::SCrypt
 * <b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
 * <b>Issues:</b> http://github.com/binarylogic/authlogic/issues
 
-== Authlogic "add ons"
+## Authlogic "add ons"
 
 * <b>Authlogic OpenID addon:</b> http://github.com/binarylogic/authlogic_openid
 * <b>Authlogic LDAP addon:</b> http://github.com/binarylogic/authlogic_ldap
@@ -111,7 +113,7 @@ c.crypto_provider = Authlogic::CryptoProviders::SCrypt
 
 If you create one of your own, please let me know about it so I can add it to this list. Or just fork the project, add your link, and send me a pull request.
 
-== Documentation explanation
+## Documentation explanation
 
 You can find anything you want about Authlogic in the {documentation}[http://rdoc.info/projects/binarylogic/authlogic], all that you need to do is understand the basic design behind it.
 
@@ -124,7 +126,7 @@ Each of the above has its various sub modules that contain common logic. The sub
 
 For example, if you want to timeout users after a certain period of inactivity, you would look in <b>Authlogic::Session::Timeout</b>. To help you out, I listed the following publicly relevant modules with short descriptions. For the sake of brevity, there are more modules than listed here, the ones not listed are more for internal use, but you can easily read up on them in the {documentation}[http://rdoc.info/projects/binarylogic/authlogic].
 
-== Example migration
+## Example migration
 
 If you want to enable all the features of Authlogic, a migration to create a
 +User+ model, for example, might look like this:
@@ -167,7 +169,7 @@ If you want to enable all the features of Authlogic, a migration to create a
     end
   end
 
-== Quick Rails example
+## Quick Rails example
 
 What if creating sessions worked like an ORM library on the surface...
 
@@ -240,13 +242,13 @@ class ApplicationController
 end
 ```
 
-== Testing
+## Testing
 
 See Authlogic::TestCase
 
-== Tell me quickly how Authlogic works
+## Tell me quickly how Authlogic works
 
 Interested in how all of this all works? Think about an ActiveRecord model. A database connection must be established before you can use it. In the case of Authlogic, a controller connection must be established before you can use it. It uses that controller connection to modify cookies, the current session, login with HTTP basic, etc. It connects to the controller through a before filter that is automatically set in your controller which lets Authlogic know about the current controller object. Then Authlogic leverages that to do everything, it's a pretty simple design. Nothing crazy going on, Authlogic is just leveraging the tools your framework provides in the controller object.
 
 
-Copyright (c) 2012 {Ben Johnson of Binary Logic}[http://www.binarylogic.com], released under the MIT license
+Copyright (c) 2012 [Ben Johnson of Binary Logic](http://www.binarylogic.com), released under the MIT license
