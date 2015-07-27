@@ -8,9 +8,7 @@
 
 Authlogic is a clean, simple, and unobtrusive ruby authentication solution.
 
-A code example can replace a thousand words...
-
-Authlogic introduces a new type of model. You can have as many as you want, and name them whatever you want, just like your other models. In this example, we want to authenticate with the User model, which is inferred by the name:
+It introduces a new type of model. You can have as many as you want, and name them whatever you want, just like your other models. In this example, we want to authenticate with the User model, which is inferred by the name:
 
 ```ruby
 class UserSession < Authlogic::Session::Base
@@ -20,7 +18,7 @@ class UserSession < Authlogic::Session::Base
 end
 ```
 
-Log in with any of the following. Create a UserSessionsController and use it just like your other models:
+In a `UserSessionsController`, login the user by using it just like your other models:
 
 ```ruby
 UserSession.create(:login => "bjohnson", :password => "my password", :remember_me => true)
@@ -35,9 +33,12 @@ UserSession.create(:openid_identifier => "identifier", :remember_me => true)
 UserSession.create(my_user_object, true)
 ```
 
-The above handles the entire authentication process for you. It first authenticates, then it sets up the proper session values and cookies to persist the session. Just like you would if you rolled your own authentication solution.
+The above handles the entire authentication process for you by:
 
-You can also log out / destroy the session:
+1. authenticating (i.e. **validating** the record)
+2. sets up the proper session values and cookies to persist the session (i.e. **saving** the record).
+
+You can also log out (i.e. **destroying** the session):
 
 ``` ruby
 session.destroy
@@ -125,7 +126,7 @@ If you create one of your own, please let me know about it so I can add it to th
 
 ## Documentation explanation
 
-You can find anything you want about Authlogic in the {documentation}[http://rdoc.info/projects/binarylogic/authlogic], all that you need to do is understand the basic design behind it.
+You can find anything you want about Authlogic in the [documentation](http://rdoc.info/projects/binarylogic/authlogic), all that you need to do is understand the basic design behind it.
 
 That being said, there are 2 models involved during authentication. Your Authlogic model and your ActiveRecord model:
 
@@ -134,7 +135,7 @@ That being said, there are 2 models involved during authentication. Your Authlog
 
 Each of the above has its various sub modules that contain common logic. The sub modules are responsible for including *everything* related to it: configuration, class methods, instance methods, etc.
 
-For example, if you want to timeout users after a certain period of inactivity, you would look in <b>Authlogic::Session::Timeout</b>. To help you out, I listed the following publicly relevant modules with short descriptions. For the sake of brevity, there are more modules than listed here, the ones not listed are more for internal use, but you can easily read up on them in the {documentation}[http://rdoc.info/projects/binarylogic/authlogic].
+For example, if you want to timeout users after a certain period of inactivity, you would look in <b>Authlogic::Session::Timeout</b>. To help you out, I listed the following publicly relevant modules with short descriptions. For the sake of brevity, there are more modules than listed here, the ones not listed are more for internal use, but you can easily read up on them in the [documentation](http://rdoc.info/projects/binarylogic/authlogic).
 
 ## Example migration
 
