@@ -108,6 +108,7 @@ c.crypto_provider = Authlogic::CryptoProviders::SCrypt
 * <b>Railscasts Screencast:</b> http://railscasts.com/episodes/160-authlogic
 * <b>Example repository with tutorial in README:</b> http://github.com/binarylogic/authlogic_example/tree/master
 * <b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
+* <b>Tutorial</b>: Rails Authentication with Authlogic http://www.sitepoint.com/rails-authentication-with-authlogic
 * <b>Issues:</b> http://github.com/binarylogic/authlogic/issues
 
 ## Authlogic "add ons"
