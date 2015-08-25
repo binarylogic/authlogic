@@ -170,11 +170,13 @@ module SessionTest
       end
 
       def test_after_save_save_cookie_with_remember_me
-        ben = users(:ben)
-        session = UserSession.new(ben)
-        session.remember_me = true
-        assert session.save
-        assert_equal "#{ben.persistence_token}::#{ben.id}::#{session.remember_me_until.iso8601}", controller.cookies["user_credentials"]
+        Timecop.freeze do
+          ben = users(:ben)
+          session = UserSession.new(ben)
+          session.remember_me = true
+          assert session.save
+          assert_equal "#{ben.persistence_token}::#{ben.id}::#{session.remember_me_until.iso8601}", controller.cookies["user_credentials"]
+        end
       end
 
       def test_after_destroy_destroy_cookie
