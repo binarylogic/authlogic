@@ -5,7 +5,7 @@ module Authlogic
     #   Method name           Description
     #   active?               Is the record marked as active?
     #   approved?             Has the record been approved?
-    #   confirmed?            Has the record been conirmed?
+    #   confirmed?            Has the record been confirmed?
     #
     # Authlogic does nothing to define these methods for you, its up to you to define what they mean. If your object responds to these methods Authlogic will use them, otherwise they are ignored.
     #
