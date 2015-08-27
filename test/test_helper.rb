@@ -19,7 +19,7 @@ if (ActiveRecord::VERSION::STRING < '4.1')
 end
 
 if ActiveSupport.respond_to?(:test_order)
-  ActiveSupport.test_order = :random
+  ActiveSupport.test_order = :sorted
 end
 
 ActiveRecord::Base.default_timezone = :local
