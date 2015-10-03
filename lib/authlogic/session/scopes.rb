@@ -34,7 +34,7 @@ module Authlogic
         #     UserSession.find
         #   end
         #
-        # Eseentially what the above does is scope the searching of the object with the sql you provided. So instead of:
+        # Essentially what the above does is scope the searching of the object with the sql you provided. So instead of:
         #
         #   User.where("login = 'ben'").first
         #

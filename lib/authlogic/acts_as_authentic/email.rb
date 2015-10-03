@@ -45,7 +45,7 @@ module Authlogic
         end
         alias_method :validates_length_of_email_field_options=, :validates_length_of_email_field_options
 
-        # A convenience function to merge options into the validates_length_of_email_field_options. So intead of:
+        # A convenience function to merge options into the validates_length_of_email_field_options. So instead of:
         #
         #   self.validates_length_of_email_field_options = validates_length_of_email_field_options.merge(:my_option => my_value)
         #

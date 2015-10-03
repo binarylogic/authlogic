@@ -1,6 +1,6 @@
 module Authlogic
   module Session # :nodoc:
-    # This is the base class Authlogic, where all modules are included. For information on functiionality see the various
+    # This is the base class Authlogic, where all modules are included. For information on functionality see the various
     # sub modules.
     class Base
       include Foundation
