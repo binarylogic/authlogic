@@ -26,7 +26,7 @@ module Authlogic
       #
       # * <tt>relationship_name:</tt> default: options[:session_class].klass_name.underscore.pluralize,
       #   This is the name of the relationship you want to use to scope everything. For example an Account has many Users. There should be a relationship
-      #   called :users that you defined with a has_many. The reason we use the relationship is so you don't have to repeat yourself. The relatonship
+      #   called :users that you defined with a has_many. The reason we use the relationship is so you don't have to repeat yourself. The relationship
       #   could have all kinds of custom options. So instead of repeating yourself we essentially use the scope that the relationship creates.
       #
       # * <tt>find_options:</tt> default: nil,
@@ -34,7 +34,7 @@ module Authlogic
       #   manually specify find_options you can do it here. Specify options just as you would in ActiveRecord::Base.find.
       #
       # * <tt>scope_cookies:</tt> default: false
-      #   By the nature of cookies they scope theirself if you are using subdomains to access accounts. If you aren't using subdomains you need to have
+      #   By the nature of cookies they scope themselves if you are using subdomains to access accounts. If you aren't using subdomains you need to have
       #   separate cookies for each account, assuming a user is logging into mroe than one account. Authlogic can take care of this for you by
       #   prefixing the name of the cookie and sessin with the model id. You just need to tell Authlogic to do this by passing this option.
       def authenticates_many(name, options = {})

@@ -1,7 +1,7 @@
 module Authlogic
   module Session
     # A brute force attacks is executed by hammering a login with as many password combinations as possible, until one works. A brute force attacked is
-    # generally combated with a slow hasing algorithm such as BCrypt. You can increase the cost, which makes the hash generation slower, and ultimately
+    # generally combated with a slow hashing algorithm such as BCrypt. You can increase the cost, which makes the hash generation slower, and ultimately
     # increases the time it takes to execute a brute force attack. Just to put this into perspective, if a hacker was to gain access to your server
     # and execute a brute force attack locally, meaning there is no network lag, it would probably take decades to complete. Now throw in network lag
     # and it would take MUCH longer.

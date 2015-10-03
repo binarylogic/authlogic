@@ -17,7 +17,7 @@ module Authlogic
       end
       
       module ClassMethods
-        # A convenince method. The same as:
+        # A convenience method. The same as:
         #
         #   session = UserSession.new(*args)
         #   session.save
@@ -40,7 +40,7 @@ module Authlogic
       end
       
       module InstanceMethods
-        # Clears all errors and the associated record, you should call this terminate a session, thus requring
+        # Clears all errors and the associated record, you should call this terminate a session, thus requiring
         # the user to authenticate again if it is needed.
         def destroy
           before_destroy
@@ -59,7 +59,7 @@ module Authlogic
         
         # After you have specified all of the details for your session you can try to save it. This will
         # run validation checks and find the associated record, if all validation passes. If validation
-        # does not pass, the save will fail and the erorrs will be stored in the errors object.
+        # does not pass, the save will fail and the errors will be stored in the errors object.
         def save(&block)
           result = nil
           if valid?

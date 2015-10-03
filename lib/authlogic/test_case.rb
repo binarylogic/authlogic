@@ -31,7 +31,7 @@ module Authlogic
   # Now that everything is ready to go, let's move onto actually testing. Here is the basic idea behind testing:
   #
   # Authlogic requires a "connection" to your controller to activate it. In the same manner that ActiveRecord requires a connection to
-  # your database. It can't do anything until it gets connnected. That being said, Authlogic will raise an
+  # your database. It can't do anything until it gets connected. That being said, Authlogic will raise an
   # Authlogic::Session::Activation::NotActivatedError any time you try to instantiate an object without a "connection".
   # So before you do anything with Authlogic, you need to activate / connect Authlogic. Let's walk through how to do this in tests:
   #

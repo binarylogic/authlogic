@@ -81,7 +81,7 @@ module Authlogic
         
         # The name of the method you want Authlogic to create for storing the login / username. Keep in mind this is just for your
         # Authlogic::Session, if you want it can be something completely different than the field in your model. So if you wanted people to
-        # login with a field called "login" and then find users by email this is compeltely doable. See the find_by_login_method configuration
+        # login with a field called "login" and then find users by email this is completely doable. See the find_by_login_method configuration
         # option for more details.
         #
         # * <tt>Default:</tt> klass.login_field || klass.email_field

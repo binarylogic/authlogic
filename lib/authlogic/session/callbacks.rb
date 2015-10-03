@@ -1,6 +1,6 @@
 module Authlogic
   module Session
-    # Between these callsbacks and the configuration, this is the contract between me and you to safely
+    # Between these callbacks and the configuration, this is the contract between me and you to safely
     # modify Authlogic's behavior. I will do everything I can to make sure these do not change.
     #
     # Check out the sub modules of Authlogic::Session. They are very concise, clear, and to the point. More

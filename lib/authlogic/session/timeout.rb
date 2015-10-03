@@ -39,7 +39,7 @@ module Authlogic
         # Think about a user that logs in and doesn't log out. There is no action that tells you that the user isn't technically still logged in and
         # active.
         #
-        # That being said, you can use that feature to require a new login if their session timesout. Similar to how financial sites work. Just set this option to
+        # That being said, you can use that feature to require a new login if their session times out. Similar to how financial sites work. Just set this option to
         # true and if your record returns true for stale? then they will be required to log back in.
         #
         # Lastly, UserSession.find will still return a object is the session is stale, but you will not get a record. This allows you to determine if the

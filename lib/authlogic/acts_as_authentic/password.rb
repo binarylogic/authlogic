@@ -96,7 +96,7 @@ module Authlogic
         end
         alias_method :validates_length_of_password_field_options=, :validates_length_of_password_field_options
 
-        # A convenience function to merge options into the validates_length_of_login_field_options. So intead of:
+        # A convenience function to merge options into the validates_length_of_login_field_options. So instead of:
         #
         #   self.validates_length_of_password_field_options = validates_length_of_password_field_options.merge(:my_option => my_value)
         #
@@ -302,7 +302,7 @@ module Authlogic
               end
             end
 
-            # Determines if we need to tranisiton the password.
+            # Determines if we need to transition the password.
             # If the index > 0 then we are using an "transition from" crypto provider.
             # If the encryptor has a cost and the cost it outdated.
             # If we aren't using database values

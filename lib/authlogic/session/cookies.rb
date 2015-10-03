@@ -15,7 +15,7 @@ module Authlogic
       # Configuration for the cookie feature set.
       module Config
         # The name of the cookie or the key in the cookies hash. Be sure and use a unique name. If you have multiple sessions and they use the same cookie it will cause problems.
-        # Also, if a id is set it will be inserted into the beginning of the string. Exmaple:
+        # Also, if a id is set it will be inserted into the beginning of the string. Example:
         #
         #   session = UserSession.new
         #   session.cookie_key => "user_credentials"
@@ -57,7 +57,7 @@ module Authlogic
         end
         alias_method :secure=, :secure
 
-        # Should the cookie be set as httponly?  If true, the cookie will not be accessable from javascript
+        # Should the cookie be set as httponly?  If true, the cookie will not be accessible from javascript
         #
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
@@ -141,13 +141,13 @@ module Authlogic
           secure == true || secure == "true" || secure == "1"
         end
 
-        # If the cookie should be marked as httponly (not accessable via javascript)
+        # If the cookie should be marked as httponly (not accessible via javascript)
         def httponly
           return @httponly if defined?(@httponly)
           @httponly = self.class.httponly
         end
 
-        # Accepts a boolean as to whether the cookie should be marked as httponly.  If true, the cookie will not be accessable from javascript
+        # Accepts a boolean as to whether the cookie should be marked as httponly.  If true, the cookie will not be accessible from javascript
         def httponly=(value)
           @httponly = value
         end
