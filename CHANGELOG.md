@@ -3,7 +3,7 @@
 ## Unreleased
 
 * changes
-  * ...
+  * increased default minimum password length to 8 (@iainbeeston)
 
 ## 3.4.6 2015
 
