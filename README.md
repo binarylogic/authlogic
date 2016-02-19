@@ -258,6 +258,31 @@ class ApplicationController
 end
 ```
 
+## CSRF Protection
+
+Because Authlogic introduces its own methods for storing user sessions, the CSRF (Cross Site Request Forgery) protection that is built into Rails will not work out of the box.
+
+No generally applicable mitigation by the authlogic library is possible, because the instance variable you use to store a reference to the user session in `def current_user_session` will not be known to authlogic.
+
+You will need to override `ActionController::Base#handle_unverified_request` to do something appropriate to how your app handles user sessions, e.g.:
+
+```ruby
+class ApplicationController < ActionController::Base
+  ...
+  protected
+
+  def handle_unverified_request
+    # raise an exception
+    fail ActionController::InvalidAuthenticityToken
+    # or destroy session, redirect
+    if current_user_session
+      current_user_session.destroy
+    end
+    redirect_to root_url
+  end
+end
+```
+
 ## Testing
 
 See [Authlogic::TestCase](https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/test_case.rb)
