@@ -135,8 +135,10 @@ module Authlogic
         
         # Accepts the login_field / password_field credentials combination in hash form.
         def credentials=(value)
+          
           super
-          values = value.is_a?(Array) ? value : [value]
+          values = parse_param_val(value) # add strong parameters check
+
           if values.first.is_a?(Hash)
             values.first.with_indifferent_access.slice(login_field, password_field).each do |field, value|
               next if value.blank?
@@ -183,7 +185,6 @@ module Authlogic
             errors.add(password_field, I18n.t('error_messages.password_blank', :default => "cannot be blank")) if send("protected_#{password_field}").blank?
             return if errors.count > 0
 
-            # check for unknown login
             self.attempted_record = search_for_record(find_by_login_method, send(login_field))
             if attempted_record.blank?
               generalize_credentials_error_messages? ?
@@ -232,6 +233,17 @@ module Authlogic
           
           def verify_password_method
             self.class.verify_password_method
+          end
+          
+          # In Rails 5 the ActionController::Parameters no longer inherits from HashWithIndifferentAccess.
+          # See: http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#actioncontroller-parameters-no-longer-inherits-from-hashwithindifferentaccess
+          # This method converts the ActionController::Parameters to a Hash
+          def parse_param_val(value)
+            if value.first.class.name == "ActionController::Parameters"
+              [value.first.to_h]
+            else
+              value.is_a?(Array) ? value : [value]
+            end 
           end
       end
     end

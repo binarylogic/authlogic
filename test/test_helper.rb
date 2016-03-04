@@ -5,7 +5,6 @@ require "active_record/fixtures"
 require "timecop"
 require "i18n"
 
-
 I18n.load_path << File.dirname(__FILE__) + '/i18n/lol.yml'
 
 #ActiveRecord::Schema.verbose = false

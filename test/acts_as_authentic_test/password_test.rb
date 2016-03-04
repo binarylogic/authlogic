@@ -2,6 +2,7 @@ require 'test_helper'
 
 module ActsAsAuthenticTest
   class PasswordTest < ActiveSupport::TestCase
+    i_suck_and_my_tests_are_order_dependent! # If test_human_name is executed after test_i18n_of_human_name the test will fail.
     def test_crypted_password_field_config
       assert_equal :crypted_password, User.crypted_password_field
       assert_equal :crypted_password, Employee.crypted_password_field
