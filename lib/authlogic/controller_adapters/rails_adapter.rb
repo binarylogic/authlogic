@@ -35,7 +35,7 @@ module Authlogic
               " authlogic first to get rid of this error.")
           end
           
-          klass.prepend_before_filter :activate_authlogic
+          klass.prepend_before_action :activate_authlogic
         end
         
         private
