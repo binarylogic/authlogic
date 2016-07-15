@@ -1,9 +1,13 @@
 language: ruby
+
+before_install:
+  - gem update bundler
+
 rvm:
   - 1.9.3
-  - 2.0.0
-  - 2.1.0
-  - jruby
+  - 2.1.9
+  - 2.2.5
+  - 2.3.1
 
 gemfile:
   - test/gemfiles/Gemfile.rails-3.2.x
@@ -15,4 +19,8 @@ matrix:
   exclude:
     - rvm: 1.9.3
       gemfile: test/gemfiles/Gemfile.rails-4.1.x
+    - rvm: 2.2.5
+      gemfile: test/gemfiles/Gemfile.rails-3.2.x
+    - rvm: 2.3.1
+      gemfile: test/gemfiles/Gemfile.rails-3.2.x
   fast_finish: true
