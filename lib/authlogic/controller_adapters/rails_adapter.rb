@@ -41,7 +41,12 @@ module Authlogic
             )
           end
 
-          klass.prepend_before_filter :activate_authlogic
+          # In Rails 4.0.2, the *_filter methods were renamed to *_action.
+          if klass.respond_to? :prepend_before_action
+            klass.prepend_before_action :activate_authlogic
+          else
+            klass.prepend_before_filter :activate_authlogic
+          end
         end
 
         private
