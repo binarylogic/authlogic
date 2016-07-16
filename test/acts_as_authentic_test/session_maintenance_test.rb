@@ -11,15 +11,15 @@ module ActsAsAuthenticTest
     end
     
     def test_login_after_create
-      assert User.create(:login => "awesome", :password => "saweet", :password_confirmation => "saweet", :email => "awesome@awesome.com")
+      assert User.create(:login => "awesome", :password => "saweeeet", :password_confirmation => "saweeeet", :email => "awesome@awesome.com")
       assert UserSession.find
     end
     
     def test_updating_session_with_failed_magic_state
       ben = users(:ben)
       ben.confirmed = false
-      ben.password = "newpass"
-      ben.password_confirmation = "newpass"
+      ben.password = "newpasswd"
+      ben.password_confirmation = "newpasswd"
       assert ben.save
     end
 
@@ -28,8 +28,8 @@ module ActsAsAuthenticTest
       UserSession.create(ben)
       old_session_key = controller.session["user_credentials"]
       old_cookie_key = controller.cookies["user_credentials"]
-      ben.password = "newpass"
-      ben.password_confirmation = "newpass"
+      ben.password = "newpasswd"
+      ben.password_confirmation = "newpasswd"
       assert ben.save
       assert controller.session["user_credentials"]
       assert controller.cookies["user_credentials"]
@@ -64,8 +64,8 @@ module ActsAsAuthenticTest
       old_session_key = controller.session["user_credentials"]
       old_cookie_key = controller.cookies["user_credentials"]
       zack = users(:zack)
-      zack.password = "newpass"
-      zack.password_confirmation = "newpass"
+      zack.password = "newpasswd"
+      zack.password_confirmation = "newpasswd"
       assert zack.save
       assert_equal controller.session["user_credentials"], old_session_key
       assert_equal controller.cookies["user_credentials"], old_cookie_key
@@ -74,8 +74,8 @@ module ActsAsAuthenticTest
     def test_resetting_password_when_logged_out
       ben = users(:ben)
       assert !UserSession.find
-      ben.password = "newpass"
-      ben.password_confirmation = "newpass"
+      ben.password = "newpasswd"
+      ben.password_confirmation = "newpasswd"
       assert ben.save
       assert UserSession.find
       assert_equal ben, UserSession.find.record
