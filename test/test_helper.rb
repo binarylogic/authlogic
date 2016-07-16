@@ -16,6 +16,11 @@ ActiveRecord::Base.logger = logger
 if (ActiveRecord::VERSION::STRING < '4.1')
   ActiveRecord::Base.configurations = true
 end
+
+if ActiveSupport.respond_to?(:test_order)
+  ActiveSupport.test_order = :sorted
+end
+
 ActiveRecord::Base.default_timezone = :local
 ActiveRecord::Schema.define(:version => 1) do
   create_table :companies do |t|
