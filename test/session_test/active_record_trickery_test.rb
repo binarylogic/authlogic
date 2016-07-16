@@ -3,6 +3,8 @@ require 'test_helper'
 module SessionTest
   module ActiveRecordTrickeryTest
     class ClassMethodsTest < ActiveSupport::TestCase
+      i_suck_and_my_tests_are_order_dependent! # If test_human_name is executed after test_i18n_of_human_name the test will fail.
+
       def test_human_attribute_name
         assert_equal "Some attribute", UserSession.human_attribute_name("some_attribute")
         assert_equal "Some attribute", UserSession.human_attribute_name(:some_attribute)

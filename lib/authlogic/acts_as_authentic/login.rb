@@ -123,7 +123,14 @@ module Authlogic
               end
               relation = arel_table[field.to_s].eq(value)
             end
-            where(relation).first
+            
+            # bind value in rails 5
+            if Gem::Version.new(ActiveRecord::VERSION::STRING) >= Gem::Version.new('5')
+              bind = ActiveRecord::Relation::QueryAttribute.new(field.to_s, value, ActiveRecord::Type::Value.new)
+              where(relation, bind).first
+            else
+              where(relation).first
+            end
           end
       end
 

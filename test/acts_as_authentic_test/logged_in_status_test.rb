@@ -19,9 +19,12 @@ module ActsAsAuthenticTest
       # slightly different. This is an attempt to make sure the scope is lambda wrapped
       # so that it is re-evaluated every time its called. My biggest concern is that the
       # test happens so fast that the test fails... I just don't know a better way to test it!
-      query1 = User.logged_in.where_values
+
+      # for rails 5 I've changed the where_values to to_sql to compare
+
+      query1 = User.logged_in.to_sql
       sleep 0.1
-      query2 = User.logged_in.where_values
+      query2 = User.logged_in.to_sql
       assert query1 != query2, ERROR_MSG % '#logged_in'
 
       assert_equal 0, User.logged_in.count
@@ -37,7 +40,10 @@ module ActsAsAuthenticTest
       # slightly different. This is an attempt to make sure the scope is lambda wrapped
       # so that it is re-evaluated every time its called. My biggest concern is that the
       # test happens so fast that the test fails... I just don't know a better way to test it!
-      assert User.logged_in.where_values != User.logged_out.where_values, ERROR_MSG % '#logged_out'
+
+      # for rails 5 I've changed the where_values to to_sql to compare
+      
+      assert User.logged_in.to_sql != User.logged_out.to_sql, ERROR_MSG % '#logged_out'
 
       assert_equal 3, User.logged_out.count
       User.first.update_attribute(:last_request_at, Time.now)
