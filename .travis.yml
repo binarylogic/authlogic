@@ -24,3 +24,5 @@ matrix:
     - rvm: 2.3.1
       gemfile: test/gemfiles/Gemfile.rails-3.2.x
   fast_finish: true
+
+sudo: false
