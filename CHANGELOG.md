@@ -4,6 +4,10 @@
 
 * changes
   * increased default minimum password length to 8 (@iainbeeston)
+  
+  * Bind parameters in where statement for rails 5 support
+  * Change callback for rails 5 support
+  * Converts the ActionController::Parameters to a Hash for rails 5 support
 
 ## 3.4.6 2015
 
