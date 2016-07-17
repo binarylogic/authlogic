@@ -110,6 +110,10 @@ module ActsAsAuthenticTest
 
       u.password = u.password_confirmation = "abcdef"
       assert !u.valid?
+      assert u.errors[:password].size > 0
+
+      u.password = "test"
+      assert !u.valid?
 
       assert u.errors[:password].include?("is too short (minimum is 8 characters)")
       assert u.errors[:password_confirmation].include?("is too short (minimum is 8 characters)")
