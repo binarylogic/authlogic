@@ -15,13 +15,13 @@ module Authlogic
     #   end
     class Association
       attr_accessor :klass, :find_options, :id
-      
+
       def initialize(klass, find_options, id)
         self.klass = klass
         self.find_options = find_options
         self.id = id
       end
-      
+
       [:create, :create!, :find, :new].each do |method|
         class_eval <<-"end_eval", __FILE__, __LINE__
           def #{method}(*args)
@@ -32,7 +32,7 @@ module Authlogic
         end_eval
       end
       alias_method :build, :new
-    
+
       private
         def scope_options
           {:find_options => find_options, :id => id}

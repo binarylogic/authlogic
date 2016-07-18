@@ -28,7 +28,7 @@ module Authlogic
           attr_accessor :stale_record
         end
       end
-      
+
       # Configuration for the timeout feature.
       module Config
         # With acts_as_authentic you get a :logged_in_timeout configuration option. If this is set, after this amount of time has passed the user
@@ -52,7 +52,7 @@ module Authlogic
         end
         alias_method :logout_on_timeout=, :logout_on_timeout
       end
-      
+
       # Instance methods for the timeout feature.
       module InstanceMethods
         # Tells you if the record is stale or not. Meaning the record has timed out. This will only return true if you set logout_on_timeout to true in your configuration.
@@ -64,19 +64,19 @@ module Authlogic
             !stale_record.nil? || (logout_on_timeout? && record && record.logged_out?)
           end
         end
-    
+
         private
           def reset_stale_state
             self.stale_record = nil
           end
-          
+
           def enforce_timeout
             if stale?
               self.stale_record = record
               self.record = nil
             end
           end
-          
+
           def logout_on_timeout?
             self.class.logout_on_timeout == true
           end

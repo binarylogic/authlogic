@@ -18,7 +18,7 @@ module Authlogic
           validate :validate_by_unauthorized_record, :if => :authenticating_with_unauthorized_record?
         end
       end
-      
+
       # Returning meaningful credentials
       def credentials
         if authenticating_with_unauthorized_record?
@@ -29,19 +29,19 @@ module Authlogic
           super
         end
       end
-      
+
       # Setting the unauthorized record if it exists in the credentials passed.
       def credentials=(value)
         super
         values = value.is_a?(Array) ? value : [value]
         self.unauthorized_record = values.first if values.first.class < ::ActiveRecord::Base
       end
-      
+
       private
         def authenticating_with_unauthorized_record?
           !unauthorized_record.nil?
         end
-        
+
         def validate_by_unauthorized_record
           self.attempted_record = unauthorized_record
         end

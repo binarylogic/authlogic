@@ -15,7 +15,7 @@ module Authlogic
     #   persist
     #   after_persisting
     #   [save record if record.changed?]
-    #   
+    #
     #   before_validation
     #   before_validation_on_create
     #   before_validation_on_update
@@ -24,7 +24,7 @@ module Authlogic
     #   after_validation_on_create
     #   after_validation
     #   [save record if record.changed?]
-    #   
+    #
     #   before_save
     #   before_create
     #   before_update
@@ -32,7 +32,7 @@ module Authlogic
     #   after_create
     #   after_save
     #   [save record if record.changed?]
-    #   
+    #
     #   before_destroy
     #   [save record if record.changed?]
     #   destroy
@@ -60,13 +60,13 @@ module Authlogic
         "before_save", "before_create", "before_update", "after_update", "after_create", "after_save",
         "before_destroy", "after_destroy"
       ]
-      
+
       def self.included(base) #:nodoc:
         base.send :include, ActiveSupport::Callbacks
         if Gem::Version.new(ActiveSupport::VERSION::STRING) >= Gem::Version.new('5')
           base.define_callbacks *METHODS + [{:terminator => ->(target, result_lambda){ result_lambda.call == false } }]
           base.define_callbacks *['persist', {:terminator => ->(target, result_lambda){ result_lambda.call == true } }]
-        elsif Gem::Version.new(ActiveSupport::VERSION::STRING) >= Gem::Version.new('4.1') 
+        elsif Gem::Version.new(ActiveSupport::VERSION::STRING) >= Gem::Version.new('4.1')
           base.define_callbacks *METHODS + [{:terminator => ->(target, result){ result == false } }]
           base.define_callbacks *['persist', {:terminator => ->(target, result){ result == true } }]
         else
@@ -85,7 +85,7 @@ module Authlogic
           end
         end
       end
-      
+
       private
         METHODS.each do |method|
           class_eval <<-"end_eval", __FILE__, __LINE__
@@ -94,7 +94,7 @@ module Authlogic
             end
           end_eval
         end
-        
+
         def save_record(alternate_record = nil)
           r = alternate_record || record
           r.save_without_session_maintenance(:validate => false) if r && r.changed? && !r.readonly?

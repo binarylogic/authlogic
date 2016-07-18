@@ -26,20 +26,20 @@ module Authlogic
     class Sha256
       class << self
         attr_accessor :join_token
-        
+
         # The number of times to loop through the encryption.
         def stretches
           @stretches ||= 20
         end
         attr_writer :stretches
-        
+
         # Turns your raw password into a Sha256 hash.
         def encrypt(*tokens)
           digest = tokens.flatten.join(join_token)
           stretches.times { digest = Digest::SHA256.hexdigest(digest) }
           digest
         end
-        
+
         # Does the crypted password match the tokens? Uses the same tokens that were used to encrypt.
         def matches?(crypted, *tokens)
           encrypt(*tokens) == crypted

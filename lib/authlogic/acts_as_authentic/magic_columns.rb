@@ -9,7 +9,7 @@ module Authlogic
           add_acts_as_authentic_module(Methods)
         end
       end
-      
+
       # Methods relating to the magic columns
       module Methods
         def self.included(klass)

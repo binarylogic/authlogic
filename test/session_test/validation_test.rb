@@ -6,13 +6,13 @@ module SessionTest
       session = UserSession.new
       assert session.errors.is_a?(Authlogic::Session::Validation::Errors)
     end
-    
+
     def test_valid
       session = UserSession.new
       assert !session.valid?
       assert_nil session.record
       assert session.errors.count > 0
-      
+
       ben = users(:ben)
       session.unauthorized_record = ben
       assert session.valid?
