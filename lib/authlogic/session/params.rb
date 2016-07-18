@@ -30,7 +30,7 @@ module Authlogic
           persist :persist_by_params
         end
       end
-      
+
       # Configuration for the params / single access feature.
       module Config
         # Works exactly like cookie_key, but for params. So a user can login via params just like a cookie or a session. Your URL would look like:
@@ -46,7 +46,7 @@ module Authlogic
           rw_config(:params_key, value, cookie_key)
         end
         alias_method :params_key=, :params_key
-        
+
         # Authentication is allowed via a single access token, but maybe this is something you don't want for your application as a whole. Maybe this is
         # something you only want for specific request types. Specify a list of allowed request types and single access authentication will only be
         # allowed for the ones you specify.
@@ -58,7 +58,7 @@ module Authlogic
         end
         alias_method :single_access_allowed_request_types=, :single_access_allowed_request_types
       end
-      
+
       # The methods available for an Authlogic::Session::Base object that make up the params / single access feature.
       module InstanceMethods
         private
@@ -67,11 +67,11 @@ module Authlogic
             self.unauthorized_record = search_for_record("find_by_single_access_token", params_credentials)
             self.single_access = valid?
           end
-          
+
           def params_enabled?
             return false if !params_credentials || !klass.column_names.include?("single_access_token")
             return controller.single_access_allowed? if controller.responds_to_single_access_allowed?
-            
+
             case single_access_allowed_request_types
             when Array
               single_access_allowed_request_types.include?(controller.request_content_type) || single_access_allowed_request_types.include?(:all)
@@ -79,19 +79,19 @@ module Authlogic
               [:all, :any].include?(single_access_allowed_request_types)
             end
           end
-          
+
           def params_key
             build_key(self.class.params_key)
           end
-          
+
           def single_access?
             single_access == true
           end
-          
+
           def single_access_allowed_request_types
             self.class.single_access_allowed_request_types
           end
-          
+
           def params_credentials
             controller.params[params_key]
           end

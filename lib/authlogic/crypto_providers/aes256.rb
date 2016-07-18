@@ -17,13 +17,13 @@ module Authlogic
     class AES256
       class << self
         attr_writer :key
-    
+
         def encrypt(*tokens)
           aes.encrypt
           aes.key = @key
           [aes.update(tokens.join) + aes.final].pack("m").chomp
         end
-    
+
         def matches?(crypted, *tokens)
           aes.decrypt
           aes.key = @key
@@ -31,7 +31,7 @@ module Authlogic
         rescue OpenSSL::CipherError
           false
         end
-    
+
         private
           def aes
             raise ArgumentError.new("You must provide a key like #{name}.key = my_key before using the #{name}") if @key.blank?

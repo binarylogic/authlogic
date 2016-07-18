@@ -11,14 +11,14 @@ module Authlogic
           super("You must activate the Authlogic::Session::Base.controller with a controller object before creating objects")
         end
       end
-      
+
       def self.included(klass)
         klass.class_eval do
           extend ClassMethods
           include InstanceMethods
         end
       end
-      
+
       module ClassMethods
         # Returns true if a controller has been set and can be used properly. This MUST be set before anything can be done.
         # Similar to how ActiveRecord won't allow you to do anything without establishing a DB connection. In your framework
@@ -27,7 +27,7 @@ module Authlogic
         def activated?
           !controller.nil?
         end
-        
+
         # This accepts a controller object wrapped with the Authlogic controller adapter. The controller adapters close the gap
         # between the different controllers in each framework. That being said, Authlogic is expecting your object's class to
         # extend Authlogic::ControllerAdapters::AbstractAdapter. See Authlogic::ControllerAdapters for more info.
@@ -36,20 +36,20 @@ module Authlogic
         def controller=(value)
           RequestStore.store[:authlogic_controller] = value
         end
-        
+
         # The current controller object
         def controller
           RequestStore.store[:authlogic_controller]
         end
       end
-      
+
       module InstanceMethods
         # Making sure we are activated before we start creating objects
         def initialize(*args)
           raise NotActivatedError.new(self) unless self.class.activated?
           super
         end
-        
+
         private
           def controller
             self.class.controller

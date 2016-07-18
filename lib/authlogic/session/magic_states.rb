@@ -21,7 +21,7 @@ module Authlogic
           validate :validate_magic_states, :unless => :disable_magic_states?
         end
       end
-      
+
       # Configuration for the magic states feature.
       module Config
         # Set this to true if you want to disable the checking of active?, approved?, and confirmed? on your record. This is more or less of a
@@ -35,14 +35,14 @@ module Authlogic
         end
         alias_method :disable_magic_states=, :disable_magic_states
       end
-      
+
       # The methods available for an Authlogic::Session::Base object that make up the magic states feature.
       module InstanceMethods
         private
           def disable_magic_states?
             self.class.disable_magic_states == true
           end
-        
+
           def validate_magic_states
             return true if attempted_record.nil?
             [:active, :approved, :confirmed].each do |required_status|

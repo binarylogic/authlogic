@@ -7,7 +7,7 @@ module Authlogic
 
         def matches?(crypted, *tokens)
           stretches = 1 << ITOA64.index(crypted[3,1])
-          plain, salt = *tokens 
+          plain, salt = *tokens
           hashed = Digest::MD5.digest(salt+plain)
           stretches.times do |i|
             hashed = Digest::MD5.digest(hashed+plain)
@@ -16,10 +16,10 @@ module Authlogic
         end
 
         def encode_64(input, length)
-          output = "" 
+          output = ""
           i = 0
           while i < length
-            value = input[i] 
+            value = input[i]
             i+=1
             break if value.nil?
             output += ITOA64[value & 0x3f, 1]

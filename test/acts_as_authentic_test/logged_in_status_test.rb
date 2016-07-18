@@ -42,7 +42,7 @@ module ActsAsAuthenticTest
       # test happens so fast that the test fails... I just don't know a better way to test it!
 
       # for rails 5 I've changed the where_values to to_sql to compare
-      
+
       assert User.logged_in.to_sql != User.logged_out.to_sql, ERROR_MSG % '#logged_out'
 
       assert_equal 3, User.logged_out.count

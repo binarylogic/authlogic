@@ -1,0 +1,7 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  # You can run the authlogic test suite with any supported version of MRI, but the
+  # linter will only care about this `TargetRubyVersion`. This should be set to the
+  # lowest version of MRI that authlogic supports.
+  TargetRubyVersion: 1.9

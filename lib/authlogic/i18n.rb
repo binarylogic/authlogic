@@ -22,7 +22,7 @@ module Authlogic
   #       # do whatever you want here with the arguments passed to you.
   #     end
   #   end
-  #   
+  #
   #   Authlogic::I18n.translator = MyAuthlogicI18nTranslator.new
   #
   # That it's! Here is a complete list of the keys that are passed. Just define these however you wish:
@@ -53,28 +53,28 @@ module Authlogic
   module I18n
     @@scope = :authlogic
     @@translator = nil
-    
+
     class << self
       # Returns the current scope. Defaults to :authlogic
       def scope
         @@scope
       end
-   
+
       # Sets the current scope. Used to set a custom scope.
       def scope=(scope)
         @@scope = scope
       end
-      
+
       # Returns the current translator. Defaults to +Translator+.
       def translator
         @@translator ||= Translator.new
       end
-      
+
       # Sets the current translator. Used to set a custom translator.
       def translator=(translator)
         @@translator = translator
       end
-    
+
       # All message translation is passed to this method. The first argument is the key for the message. The second is options, see the rails I18n library for a list of options used.
       def translate(key, options = {})
         translator.translate key, { :scope => I18n.scope }.merge(options)

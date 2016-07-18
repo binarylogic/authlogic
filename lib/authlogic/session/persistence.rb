@@ -8,7 +8,7 @@ module Authlogic
           include InstanceMethods
         end
       end
-      
+
       module ClassMethods
         # This is how you persist a session. This finds the record for the current session using
         # a variety of methods. It basically tries to "log in" the user without the user having
@@ -43,7 +43,7 @@ module Authlogic
           end
         end
       end
-      
+
       module InstanceMethods
         # Let's you know if the session is being persisted or not, meaning the user does not have to explicitly log in
         # in order to be logged in. If the session has no associated record, it will try to find a record and persist

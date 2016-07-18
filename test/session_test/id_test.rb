@@ -7,7 +7,7 @@ module SessionTest
       session.credentials = [:my_id]
       assert_equal :my_id, session.id
     end
-      
+
     def test_id
       session = UserSession.new
       session.id = :my_id

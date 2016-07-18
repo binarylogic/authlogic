@@ -7,7 +7,7 @@ module SessionTest
       old_perishable_token = ben.perishable_token
       session = UserSession.create(ben)
       assert_not_equal old_perishable_token, ben.perishable_token
-      
+
       drew = employees(:drew)
       assert UserSession.create(drew)
     end

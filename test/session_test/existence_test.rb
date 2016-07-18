@@ -11,23 +11,23 @@ module SessionTest
         assert !UserSession.create!(:login => ben.login, :password => "benrocks").new_session?
       end
     end
-    
+
     class IsntaceMethodsTest < ActiveSupport::TestCase
       def test_new_session
         session = UserSession.new
         assert session.new_session?
-      
+
         set_session_for(users(:ben))
         session = UserSession.find
         assert !session.new_session?
       end
-    
+
       def test_save_with_nothing
         session = UserSession.new
         assert !session.save
         assert session.new_session?
       end
-    
+
       def test_save_with_block
         ben = users(:ben)
         session = UserSession.new
@@ -37,15 +37,15 @@ module SessionTest
         assert !block_result
         assert session.new_session?
       end
-    
+
       def test_save_with_bang
         session = UserSession.new
         assert_raise(Authlogic::Session::Existence::SessionInvalidError) { session.save! }
-      
+
         session.unauthorized_record = users(:ben)
         assert_nothing_raised { session.save! }
       end
-    
+
       def test_destroy
         ben = users(:ben)
         session = UserSession.new

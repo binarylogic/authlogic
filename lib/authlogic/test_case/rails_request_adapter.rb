@@ -5,7 +5,7 @@ module Authlogic
     class RailsRequestAdapter < ControllerAdapters::AbstractAdapter
       def authenticate_with_http_basic(&block)
       end
-      
+
       def cookies
         new_cookies = MockCookieJar.new
         super.each do |key, value|
@@ -13,15 +13,15 @@ module Authlogic
         end
         new_cookies
       end
-      
+
       def cookie_domain
         nil
       end
-      
+
       def request
         @request ||= MockRequest.new(controller)
       end
-      
+
       def request_content_type
         request.format.to_s
       end
