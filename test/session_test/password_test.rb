@@ -34,7 +34,7 @@ module SessionTest
       end
 
       def test_generalize_credentials_error_messages_set_to_string
-        UserSession.generalize_credentials_error_messages= "Custom Error Message"
+        UserSession.generalize_credentials_error_messages = "Custom Error Message"
         assert UserSession.generalize_credentials_error_messages
         session = UserSession.create(:login => users(:ben).login, :password => "invalud-password")
         assert_equal ["Custom Error Message"], session.errors.full_messages

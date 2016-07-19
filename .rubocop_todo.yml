@@ -453,15 +453,6 @@ Style/SpaceAfterNot:
     - 'test/session_test/active_record_trickery_test.rb'
 
 # Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment.
-Style/SpaceAroundOperators:
-  Exclude:
-    - 'lib/authlogic/crypto_providers/wordpress.rb'
-    - 'lib/authlogic/random.rb'
-    - 'test/session_test/password_test.rb'
-    - 'test/test_helper.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: SupportedStyles.
 # SupportedStyles: use_perl_names, use_english_names
 Style/SpecialGlobalVars:

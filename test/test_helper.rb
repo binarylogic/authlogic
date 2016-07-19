@@ -10,7 +10,7 @@ I18n.load_path << File.dirname(__FILE__) + '/i18n/lol.yml'
 #ActiveRecord::Schema.verbose = false
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
 logger = Logger.new(STDOUT)
-logger.level= Logger::FATAL
+logger.level = Logger::FATAL
 ActiveRecord::Base.logger = logger
 
 if (ActiveRecord::VERSION::STRING < '4.1')
