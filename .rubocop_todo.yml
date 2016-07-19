@@ -230,12 +230,6 @@ Style/EmptyLinesAroundClassBody:
     - 'test/acts_as_authentic_test/email_test.rb'
 
 # Cop supports --auto-correct.
-Style/EmptyLinesAroundMethodBody:
-  Exclude:
-    - 'test/acts_as_authentic_test/email_test.rb'
-    - 'test/acts_as_authentic_test/login_test.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: AllowForAlignment, ForceEqualSignAlignment.
 Style/ExtraSpacing:
   Exclude:
