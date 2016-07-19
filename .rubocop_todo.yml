@@ -447,12 +447,6 @@ Style/SpaceAfterComma:
     - 'lib/authlogic/crypto_providers/wordpress.rb'
 
 # Cop supports --auto-correct.
-Style/SpaceAfterNot:
-  Exclude:
-    - 'lib/authlogic/test_case.rb'
-    - 'test/session_test/active_record_trickery_test.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: SupportedStyles.
 # SupportedStyles: use_perl_names, use_english_names
 Style/SpecialGlobalVars:
