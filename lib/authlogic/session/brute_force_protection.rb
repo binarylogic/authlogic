@@ -26,13 +26,19 @@ module Authlogic
 
       # Configuration for the brute force protection feature.
       module Config
-        # To help protect from brute force attacks you can set a limit on the allowed number of consecutive failed logins. By default this is 50, this is a very liberal
-        # number, and if someone fails to login after 50 tries it should be pretty obvious that it's a machine trying to login in and very likely a brute force attack.
+        # To help protect from brute force attacks you can set a limit on the
+        # allowed number of consecutive failed logins. By default this is 50,
+        # this is a very liberal number, and if someone fails to login after 50
+        # tries it should be pretty obvious that it's a machine trying to login
+        # in and very likely a brute force attack.
         #
-        # In order to enable this field your model MUST have a failed_login_count (integer) field.
+        # In order to enable this field your model MUST have a
+        # failed_login_count (integer) field.
         #
-        # If you don't know what a brute force attack is, it's when a machine tries to login into a system using every combination of character possible. Thus resulting
-        # in possibly millions of attempts to log into an account.
+        # If you don't know what a brute force attack is, it's when a machine
+        # tries to login into a system using every combination of character
+        # possible. Thus resulting in possibly millions of attempts to log into
+        # an account.
         #
         # * <tt>Default:</tt> 50
         # * <tt>Accepts:</tt> Integer, set to 0 to disable
@@ -41,7 +47,8 @@ module Authlogic
         end
         alias_method :consecutive_failed_logins_limit=, :consecutive_failed_logins_limit
 
-        # Once the failed logins limit has been exceed, how long do you want to ban the user? This can be a temporary or permanent ban.
+        # Once the failed logins limit has been exceed, how long do you want to
+        # ban the user? This can be a temporary or permanent ban.
         #
         # * <tt>Default:</tt> 2.hours
         # * <tt>Accepts:</tt> Fixnum, set to 0 for permanent ban
@@ -51,11 +58,14 @@ module Authlogic
         alias_method :failed_login_ban_for=, :failed_login_ban_for
       end
 
-      # The methods available for an Authlogic::Session::Base object that make up the brute force protection feature.
+      # The methods available for an Authlogic::Session::Base object that make
+      # up the brute force protection feature.
       module InstanceMethods
-        # Returns true when the consecutive_failed_logins_limit has been exceeded and is being temporarily banned.
-        # Notice the word temporary, the user will not be permanently banned unless you choose to do so with configuration.
-        # By default they will be banned for 2 hours. During that 2 hour period this method will return true.
+        # Returns true when the consecutive_failed_logins_limit has been
+        # exceeded and is being temporarily banned. Notice the word temporary,
+        # the user will not be permanently banned unless you choose to do so
+        # with configuration. By default they will be banned for 2 hours. During
+        # that 2 hour period this method will return true.
         def being_brute_force_protected?
           exceeded_failed_logins_limit? && (failed_login_ban_for <= 0 ||
             (attempted_record.respond_to?(:updated_at) && attempted_record.updated_at >= failed_login_ban_for.seconds.ago))

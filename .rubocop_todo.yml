@@ -73,6 +73,8 @@ Metrics/AbcSize:
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
   Max: 187
+  Exclude:
+    - 'test/**/*'
 
 Metrics/CyclomaticComplexity:
   Max: 12
@@ -80,18 +82,20 @@ Metrics/CyclomaticComplexity:
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes.
 # URISchemes: http, https
 Metrics/LineLength:
-  Max: 180
+  Max: 160
 
 # Configuration parameters: CountComments.
 Metrics/MethodLength:
   Max: 31
+  Exclude:
+    - 'test/**/*'
 
 # Configuration parameters: CountComments.
 Metrics/ModuleLength:
   Max: 106
 
 Metrics/PerceivedComplexity:
-  Max: 12
+  Max: 13
 
 # Cop supports --auto-correct.
 Performance/RedundantBlockCall:

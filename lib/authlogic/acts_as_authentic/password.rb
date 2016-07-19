@@ -231,14 +231,19 @@ module Authlogic
             @password
           end
 
-          # This is a virtual method. Once a password is passed to it, it will create new password salt as well as encrypt
-          # the password.
+          # This is a virtual method. Once a password is passed to it, it will
+          # create new password salt as well as encrypt the password.
           def password=(pass)
             return if ignore_blank_passwords? && pass.blank?
             before_password_set
             @password = pass
             send("#{password_salt_field}=", Authlogic::Random.friendly_token) if password_salt_field
-            send("#{crypted_password_field}=", crypto_provider.encrypt(*encrypt_arguments(@password, false, act_like_restful_authentication? ? :restful_authentication : nil)))
+            send(
+              "#{crypted_password_field}=",
+              crypto_provider.encrypt(
+                *encrypt_arguments(@password, false, act_like_restful_authentication? ? :restful_authentication : nil)
+              )
+            )
             @password_changed = true
             after_password_set
           end
@@ -247,7 +252,13 @@ module Authlogic
           # check_passwords_against_database. See that method for more information, but basically it just tells Authlogic to check the password
           # against the value in the database or the value in the object.
           def valid_password?(attempted_password, check_against_database = check_passwords_against_database?)
-            crypted = check_against_database && send("#{crypted_password_field}_changed?") ? send("#{crypted_password_field}_was") : send(crypted_password_field)
+            crypted =
+              if check_against_database && send("#{crypted_password_field}_changed?")
+                send("#{crypted_password_field}_was")
+              else
+                send(crypted_password_field)
+              end
+
             return false if attempted_password.blank? || crypted.blank?
             before_password_verification
 
@@ -294,7 +305,14 @@ module Authlogic
 
             def encrypt_arguments(raw_password, check_against_database, arguments_type = nil)
               salt = nil
-              salt = (check_against_database && send("#{password_salt_field}_changed?") ? send("#{password_salt_field}_was") : send(password_salt_field)) if password_salt_field
+              if password_salt_field
+                salt =
+                  if check_against_database && send("#{password_salt_field}_changed?")
+                    send("#{password_salt_field}_was")
+                  else
+                    send(password_salt_field)
+                  end
+              end
 
               case arguments_type
               when :restful_authentication

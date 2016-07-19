@@ -56,16 +56,31 @@ module Authlogic
           self.validates_length_of_email_field_options = validates_length_of_email_field_options.merge(options)
         end
 
-        # A hash of options for the validates_format_of call for the email field. Allows you to change this however you want.
+        # A hash of options for the validates_format_of call for the email
+        # field. Allows you to change this however you want.
         #
-        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
-        # merge options into it. Checkout the convenience function merge_validates_format_of_email_field_options to merge
-        # options.</b>
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as
+        # possible, so you can completely replace the hash or merge options into
+        # it. Checkout the convenience function
+        # merge_validates_format_of_email_field_options to merge options.</b>
         #
-        # To validate international email addresses, enable the provided alternate regex:
+        # To validate international email addresses, enable the provided
+        # alternate regex:
+        #
         # * <tt>validates_format_of_email_field_options({:with => Authlogic::Regex.email_nonascii})</tt>
         #
-        # * <tt>Default:</tt> {:with => Authlogic::Regex.email, :message => Proc.new {I18n.t('error_messages.email_invalid', :default => "should look like an email address.")}}
+        # * <tt>Default:</tt>
+        #
+        #         {
+        #           :with => Authlogic::Regex.email,
+        #           :message => Proc.new {
+        #             I18n.t(
+        #               'error_messages.email_invalid',
+        #               :default => "should look like an email address."
+        #             )
+        #           }
+        #         }
+        #
         # * <tt>Accepts:</tt> Hash of options accepted by validates_format_of
         def validates_format_of_email_field_options(value = nil)
           rw_config(
@@ -89,16 +104,34 @@ module Authlogic
           self.validates_format_of_email_field_options = validates_format_of_email_field_options.merge(options)
         end
 
-        # A hash of options for the validates_uniqueness_of call for the email field. Allows you to change this however you want.
+        # A hash of options for the validates_uniqueness_of call for the email
+        # field. Allows you to change this however you want.
         #
-        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
-        # merge options into it. Checkout the convenience function merge_validates_uniqueness_of_email_field_options to merge
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as
+        # possible, so you can completely replace the hash or merge options into
+        # it. Checkout the convenience function
+        # merge_validates_uniqueness_of_email_field_options to merge
         # options.</b>
         #
-        # * <tt>Default:</tt> {:case_sensitive => false, :scope => validations_scope, :if => "#{email_field}_changed?".to_sym}
+        # * <tt>Default:</tt>
+        #
+        #         {
+        #           :case_sensitive => false,
+        #           :scope => validations_scope,
+        #           :if => "#{email_field}_changed?".to_sym
+        #         }
+        #
         # * <tt>Accepts:</tt> Hash of options accepted by validates_uniqueness_of
         def validates_uniqueness_of_email_field_options(value = nil)
-          rw_config(:validates_uniqueness_of_email_field_options, value, { :case_sensitive => false, :scope => validations_scope, :if => "#{email_field}_changed?".to_sym })
+          rw_config(
+            :validates_uniqueness_of_email_field_options,
+            value,
+            {
+              :case_sensitive => false,
+              :scope => validations_scope,
+              :if => "#{email_field}_changed?".to_sym
+            }
+          )
         end
         alias_method :validates_uniqueness_of_email_field_options=, :validates_uniqueness_of_email_field_options
 

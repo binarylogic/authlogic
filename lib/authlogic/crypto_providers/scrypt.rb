@@ -49,7 +49,14 @@ module Authlogic
 
         # Creates an SCrypt hash for the password passed.
         def encrypt(*tokens)
-          ::SCrypt::Password.create(join_tokens(tokens), :key_len => key_len, :salt_size => salt_size, :max_mem => max_mem, :max_memfrac => max_memfrac, :max_time => max_time)
+          ::SCrypt::Password.create(
+            join_tokens(tokens),
+            :key_len => key_len,
+            :salt_size => salt_size,
+            :max_mem => max_mem,
+            :max_memfrac => max_memfrac,
+            :max_time => max_time
+          )
         end
 
         # Does the hash match the tokens? Uses the same tokens that were used to encrypt.

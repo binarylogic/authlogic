@@ -33,12 +33,16 @@ module Authlogic
 
       # Configuration for the params / single access feature.
       module Config
-        # Works exactly like cookie_key, but for params. So a user can login via params just like a cookie or a session. Your URL would look like:
+        # Works exactly like cookie_key, but for params. So a user can login via
+        # params just like a cookie or a session. Your URL would look like:
         #
         #   http://www.domain.com?user_credentials=my_single_access_key
         #
-        # You can change the "user_credentials" key above with this configuration option. Keep in mind, just like cookie_key, if you supply an id
-        # the id will be appended to the front. Check out cookie_key for more details. Also checkout the "Single Access / Private Feeds Access" section in the README.
+        # You can change the "user_credentials" key above with this
+        # configuration option. Keep in mind, just like cookie_key, if you
+        # supply an id the id will be appended to the front. Check out
+        # cookie_key for more details. Also checkout the "Single Access /
+        # Private Feeds Access" section in the README.
         #
         # * <tt>Default:</tt> cookie_key
         # * <tt>Accepts:</tt> String
@@ -47,19 +51,23 @@ module Authlogic
         end
         alias_method :params_key=, :params_key
 
-        # Authentication is allowed via a single access token, but maybe this is something you don't want for your application as a whole. Maybe this is
-        # something you only want for specific request types. Specify a list of allowed request types and single access authentication will only be
+        # Authentication is allowed via a single access token, but maybe this is
+        # something you don't want for your application as a whole. Maybe this
+        # is something you only want for specific request types. Specify a list
+        # of allowed request types and single access authentication will only be
         # allowed for the ones you specify.
         #
         # * <tt>Default:</tt> ["application/rss+xml", "application/atom+xml"]
-        # * <tt>Accepts:</tt> String of a request type, or :all or :any to allow single access authentication for any and all request types
+        # * <tt>Accepts:</tt> String of a request type, or :all or :any to
+        #   allow single access authentication for any and all request types
         def single_access_allowed_request_types(value = nil)
           rw_config(:single_access_allowed_request_types, value, ["application/rss+xml", "application/atom+xml"])
         end
         alias_method :single_access_allowed_request_types=, :single_access_allowed_request_types
       end
 
-      # The methods available for an Authlogic::Session::Base object that make up the params / single access feature.
+      # The methods available for an Authlogic::Session::Base object that make
+      # up the params / single access feature.
       module InstanceMethods
         private
 
