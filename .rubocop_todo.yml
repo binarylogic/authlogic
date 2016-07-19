@@ -475,16 +475,6 @@ Style/SpaceBeforeBlockBraces:
     - 'test/acts_as_authentic_test/email_test.rb'
 
 # Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, EnforcedStyleForEmptyBraces, SpaceBeforeBlockParameters.
-# SupportedStyles: space, no_space
-Style/SpaceInsideBlockBraces:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/email.rb'
-    - 'lib/authlogic/controller_adapters/rack_adapter.rb'
-    - 'test/acts_as_authentic_test/email_test.rb'
-    - 'test/random_test.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: SupportedStyles.
 # SupportedStyles: use_perl_names, use_english_names
 Style/SpecialGlobalVars:
