@@ -151,6 +151,7 @@ module Authlogic
         end
 
         private
+
           def configure_password_methods
             if login_field
               self.class.send(:attr_writer, login_field) if !respond_to?("#{login_field}=")

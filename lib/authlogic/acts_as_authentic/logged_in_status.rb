@@ -49,6 +49,7 @@ module Authlogic
           end
 
           private
+
             def logged_in_timeout
               self.class.logged_in_timeout
             end

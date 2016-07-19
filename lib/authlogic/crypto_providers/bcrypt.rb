@@ -81,6 +81,7 @@ module Authlogic
         end
 
         private
+
           def join_tokens(tokens)
             tokens.flatten.join
           end

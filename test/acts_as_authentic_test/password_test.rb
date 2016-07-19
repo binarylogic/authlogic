@@ -216,6 +216,7 @@ module ActsAsAuthenticTest
     end
 
     private
+
       def transition_password_to(crypto_provider, records, from_crypto_providers = Authlogic::CryptoProviders::Sha512)
         records = [records] unless records.is_a?(Array)
         User.acts_as_authentic do |c|

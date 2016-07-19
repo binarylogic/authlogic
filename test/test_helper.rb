@@ -130,6 +130,7 @@ class ActiveSupport::TestCase
 
 
   private
+
     # Many of the tests change Authlogic config for the test models. Some tests
     # were not resetting the config after tests, which didn't surface as broken
     # tests until Rails 4.1 was added for testing. This ensures that all the

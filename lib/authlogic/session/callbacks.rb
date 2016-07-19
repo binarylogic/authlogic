@@ -87,6 +87,7 @@ module Authlogic
       end
 
       private
+
         METHODS.each do |method|
           class_eval <<-"end_eval", __FILE__, __LINE__
             def #{method}

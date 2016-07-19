@@ -58,6 +58,7 @@ module Authlogic
           alias_method :forget!, :reset_persistence_token!
 
           private
+
             def reset_persistence_token?
               persistence_token.blank?
             end

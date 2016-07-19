@@ -9,6 +9,7 @@ module Authlogic
     end
 
     private
+
       # This is a one-liner method to write a config setting, read the config
       # setting, and also set a default value for the setting.
       def rw_config(key, value, default_value = nil)

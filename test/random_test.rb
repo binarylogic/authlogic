@@ -10,6 +10,7 @@ class RandomTest < ActiveSupport::TestCase
   end
 
   private
+
     def with_any_random(&block)
       [true, false].each { |val| with_secure_random_enabled(val, &block) }
     end

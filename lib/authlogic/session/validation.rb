@@ -74,6 +74,7 @@ module Authlogic
       end
 
       private
+
         def ensure_authentication_attempted
           errors.add(:base, I18n.t('error_messages.no_authentication_details', :default => "You did not provide any details for authentication.")) if errors.empty? && attempted_record.nil?
         end

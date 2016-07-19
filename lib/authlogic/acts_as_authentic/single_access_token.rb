@@ -51,6 +51,7 @@ module Authlogic
           end
 
           protected
+
             def reset_single_access_token?
               single_access_token.blank?
             end

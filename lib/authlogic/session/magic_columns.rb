@@ -40,6 +40,7 @@ module Authlogic
       # The methods available for an Authlogic::Session::Base object that make up the magic columns feature.
       module InstanceMethods
         private
+
           def increase_failed_login_count
             if invalid_password? && attempted_record.respond_to?(:failed_login_count)
               attempted_record.failed_login_count ||= 0

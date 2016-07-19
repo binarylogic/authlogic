@@ -38,6 +38,7 @@ module Authlogic
       end
 
       private
+
         def authenticating_with_unauthorized_record?
           !unauthorized_record.nil?
         end

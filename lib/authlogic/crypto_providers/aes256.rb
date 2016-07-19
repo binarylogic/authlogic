@@ -33,6 +33,7 @@ module Authlogic
         end
 
         private
+
           def aes
             raise ArgumentError.new("You must provide a key like #{name}.key = my_key before using the #{name}") if @key.blank?
             @aes ||= OpenSSL::Cipher::Cipher.new("AES-256-ECB")

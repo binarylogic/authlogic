@@ -194,6 +194,7 @@ module Authlogic
         end
 
         private
+
           METHODS.each do |method|
             class_eval <<-"end_eval", __FILE__, __LINE__
               def #{method}
@@ -282,6 +283,7 @@ module Authlogic
           alias_method :randomize_password!, :reset_password!
 
           private
+
             def check_passwords_against_database?
               self.class.check_passwords_against_database == true
             end

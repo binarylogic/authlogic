@@ -39,6 +39,7 @@ module Authlogic
       # The methods available for an Authlogic::Session::Base object that make up the magic states feature.
       module InstanceMethods
         private
+
           def disable_magic_states?
             self.class.disable_magic_states == true
           end

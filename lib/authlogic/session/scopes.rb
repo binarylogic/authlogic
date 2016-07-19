@@ -69,6 +69,7 @@ module Authlogic
         end
 
         private
+
           def scope=(value)
             RequestStore.store[:authlogic_scope] = value
           end
@@ -87,6 +88,7 @@ module Authlogic
         end
 
         private
+
           # Used for things like cookie_key, session_key, etc.
           def build_key(last_part)
             [scope[:id], super].compact.join("_")

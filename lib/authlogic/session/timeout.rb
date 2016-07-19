@@ -66,6 +66,7 @@ module Authlogic
         end
 
         private
+
           def reset_stale_state
             self.stale_record = nil
           end

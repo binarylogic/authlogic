@@ -112,6 +112,7 @@ module Authlogic
         end
 
         private
+
           def find_with_case(field, value, sensitivity = true)
             relation = if not sensitivity
               connection.case_insensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)

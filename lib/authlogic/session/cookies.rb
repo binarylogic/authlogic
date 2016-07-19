@@ -174,6 +174,7 @@ module Authlogic
         end
 
         private
+
           def cookie_key
             build_key(self.class.cookie_key)
           end
