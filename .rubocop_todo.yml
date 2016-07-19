@@ -211,13 +211,6 @@ Style/EmptyLineBetweenDefs:
     - 'lib/authlogic/controller_adapters/rack_adapter.rb'
 
 # Cop supports --auto-correct.
-Style/EmptyLines:
-  Exclude:
-    - 'test/acts_as_authentic_test/email_test.rb'
-    - 'test/session_test/password_test.rb'
-    - 'test/test_helper.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: AllowForAlignment, ForceEqualSignAlignment.
 Style/ExtraSpacing:
   Exclude:

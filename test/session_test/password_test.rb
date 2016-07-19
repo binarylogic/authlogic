@@ -40,7 +40,6 @@ module SessionTest
         assert_equal ["Custom Error Message"], session.errors.full_messages
       end
 
-
       def test_login_field
         UserSession.configured_password_methods = false
         UserSession.login_field = :saweet

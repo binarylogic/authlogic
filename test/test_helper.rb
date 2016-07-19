@@ -128,7 +128,6 @@ class ActiveSupport::TestCase
   teardown :config_teardown
   teardown { Timecop.return } # for tests that need to freeze the time
 
-
   private
 
     # Many of the tests change Authlogic config for the test models. Some tests

@@ -107,7 +107,6 @@ module ActsAsAuthenticTest
       assert_equal dmessage, message.call
       assert_equal default, options
 
-
       User.validates_format_of_email_field_options = { :yes => "no" }
       assert_equal({ :yes => "no" }, User.validates_format_of_email_field_options)
       User.validates_format_of_email_field_options default
