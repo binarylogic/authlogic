@@ -112,7 +112,15 @@ module ActsAsAuthenticTest
       User.validates_format_of_email_field_options default
       assert_equal default, User.validates_format_of_email_field_options
 
-      with_email_nonascii = { :with => Authlogic::Regex.email_nonascii, :message => Proc.new { I18n.t('error_messages.email_invalid_international', :default => "should look like an international email address.") } }
+      with_email_nonascii = {
+        :with => Authlogic::Regex.email_nonascii,
+        :message => Proc.new do
+          I18n.t(
+            'error_messages.email_invalid_international',
+            :default => "should look like an international email address."
+          )
+        end
+      }
       User.validates_format_of_email_field_options = with_email_nonascii
       assert_equal(with_email_nonascii, User.validates_format_of_email_field_options)
       User.validates_format_of_email_field_options with_email_nonascii
