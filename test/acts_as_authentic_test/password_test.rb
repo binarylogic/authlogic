@@ -52,34 +52,34 @@ module ActsAsAuthenticTest
     end
 
     def test_validates_length_of_password_field_options_config
-      default = {:minimum => 8, :if => :require_password?}
+      default = { :minimum => 8, :if => :require_password? }
       assert_equal default, User.validates_length_of_password_field_options
       assert_equal default, Employee.validates_length_of_password_field_options
 
-      User.validates_length_of_password_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_length_of_password_field_options)
+      User.validates_length_of_password_field_options = { :yes => "no" }
+      assert_equal({ :yes => "no" }, User.validates_length_of_password_field_options)
       User.validates_length_of_password_field_options default
       assert_equal default, User.validates_length_of_password_field_options
     end
 
     def test_validates_confirmation_of_password_field_options_config
-      default = {:if => :require_password?}
+      default = { :if => :require_password? }
       assert_equal default, User.validates_confirmation_of_password_field_options
       assert_equal default, Employee.validates_confirmation_of_password_field_options
 
-      User.validates_confirmation_of_password_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_confirmation_of_password_field_options)
+      User.validates_confirmation_of_password_field_options = { :yes => "no" }
+      assert_equal({ :yes => "no" }, User.validates_confirmation_of_password_field_options)
       User.validates_confirmation_of_password_field_options default
       assert_equal default, User.validates_confirmation_of_password_field_options
     end
 
     def test_validates_length_of_password_confirmation_field_options_config
-      default = {:minimum => 8, :if => :require_password?}
+      default = { :minimum => 8, :if => :require_password? }
       assert_equal default, User.validates_length_of_password_confirmation_field_options
       assert_equal default, Employee.validates_length_of_password_confirmation_field_options
 
-      User.validates_length_of_password_confirmation_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_length_of_password_confirmation_field_options)
+      User.validates_length_of_password_confirmation_field_options = { :yes => "no" }
+      assert_equal({ :yes => "no" }, User.validates_length_of_password_confirmation_field_options)
       User.validates_length_of_password_confirmation_field_options default
       assert_equal default, User.validates_length_of_password_confirmation_field_options
     end
@@ -216,6 +216,7 @@ module ActsAsAuthenticTest
     end
 
     private
+
       def transition_password_to(crypto_provider, records, from_crypto_providers = Authlogic::CryptoProviders::Sha512)
         records = [records] unless records.is_a?(Array)
         User.acts_as_authentic do |c|

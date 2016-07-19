@@ -76,6 +76,7 @@ module Authlogic
         end
 
         private
+
           def skip_session_maintenance=(value)
             @skip_session_maintenance = value
           end

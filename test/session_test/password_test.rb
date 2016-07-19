@@ -34,12 +34,11 @@ module SessionTest
       end
 
       def test_generalize_credentials_error_messages_set_to_string
-        UserSession.generalize_credentials_error_messages= "Custom Error Message"
+        UserSession.generalize_credentials_error_messages = "Custom Error Message"
         assert UserSession.generalize_credentials_error_messages
         session = UserSession.create(:login => users(:ben).login, :password => "invalud-password")
         assert_equal ["Custom Error Message"], session.errors.full_messages
       end
-
 
       def test_login_field
         UserSession.configured_password_methods = false
@@ -80,16 +79,16 @@ module SessionTest
 
       def test_credentials
         session = UserSession.new
-        session.credentials = {:login => "login", :password => "pass"}
+        session.credentials = { :login => "login", :password => "pass" }
         assert_equal "login", session.login
         assert_nil session.password
         assert_equal "pass", session.send(:protected_password)
-        assert_equal({:password => "<protected>", :login => "login"}, session.credentials)
+        assert_equal({ :password => "<protected>", :login => "login" }, session.credentials)
       end
 
       def test_credentials_are_params_safe
         session = UserSession.new
-        assert_nothing_raised { session.credentials = {:hacker_method => "error!"} }
+        assert_nothing_raised { session.credentials = { :hacker_method => "error!" } }
       end
 
       def test_save_with_credentials

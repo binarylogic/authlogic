@@ -24,14 +24,14 @@ module SessionTest
       def test_persist_persist_by_session_with_session_fixation_attack
         ben = users(:ben)
         controller.session["user_credentials"] = 'neo'
-        controller.session["user_credentials_id"] = {:select => " *,'neo' AS persistence_token FROM users WHERE id = #{ben.id} limit 1 -- "}
+        controller.session["user_credentials_id"] = { :select => " *,'neo' AS persistence_token FROM users WHERE id = #{ben.id} limit 1 -- " }
         @user_session = UserSession.find
         assert @user_session.blank?
       end
 
       def test_persist_persist_by_session_with_sql_injection_attack
         ben = users(:ben)
-        controller.session["user_credentials"] = {:select => "ABRA CADABRA"}
+        controller.session["user_credentials"] = { :select => "ABRA CADABRA" }
         controller.session["user_credentials_id"] = nil
         assert_nothing_raised do
           @user_session = UserSession.find

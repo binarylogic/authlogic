@@ -68,6 +68,7 @@ module Authlogic
       # Instance methods for the HTTP basic auth feature of authlogic.
       module InstanceMethods
         private
+
           def persist_by_http_auth?
             allow_http_basic_auth? && login_field && password_field
           end

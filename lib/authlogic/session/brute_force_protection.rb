@@ -62,6 +62,7 @@ module Authlogic
         end
 
         private
+
           def exceeded_failed_logins_limit?
             !attempted_record.nil? && attempted_record.respond_to?(:failed_login_count) && consecutive_failed_logins_limit > 0 &&
               attempted_record.failed_login_count && attempted_record.failed_login_count >= consecutive_failed_logins_limit

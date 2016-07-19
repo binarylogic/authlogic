@@ -20,6 +20,7 @@ module Authlogic
       end
 
       private
+
         def attempted_record=(value)
           value = priority_record if value == priority_record
           super

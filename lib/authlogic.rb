@@ -55,5 +55,5 @@ path = File.dirname(__FILE__) + "/authlogic/"
    require path + library
  end
 
-require path + "controller_adapters/rails_adapter"   if defined?( Rails   )
-require path + "controller_adapters/sinatra_adapter" if defined?( Sinatra )
+require path + "controller_adapters/rails_adapter"   if defined?(Rails)
+require path + "controller_adapters/sinatra_adapter" if defined?(Sinatra)

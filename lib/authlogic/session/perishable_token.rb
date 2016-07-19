@@ -10,6 +10,7 @@ module Authlogic
       end
 
       private
+
         def reset_perishable_token!
           record.reset_perishable_token if record.respond_to?(:reset_perishable_token) && !record.disable_perishable_token_maintenance?
         end

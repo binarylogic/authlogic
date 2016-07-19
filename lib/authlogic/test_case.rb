@@ -100,7 +100,7 @@ module Authlogic
     #
     #   setup :activate_authlogic
     def activate_authlogic
-      if @request && ! @request.respond_to?(:params)
+      if @request && !@request.respond_to?(:params)
         class <<@request
           alias_method :params, :parameters
         end

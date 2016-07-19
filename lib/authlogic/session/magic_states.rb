@@ -1,18 +1,25 @@
 module Authlogic
   module Session
-    # Authlogic tries to check the state of the record before creating the session. If your record responds to the following methods and any of them return false, validation will fail:
+    # Authlogic tries to check the state of the record before creating the session. If
+    # your record responds to the following methods and any of them return false,
+    # validation will fail:
     #
     #   Method name           Description
     #   active?               Is the record marked as active?
     #   approved?             Has the record been approved?
     #   confirmed?            Has the record been confirmed?
     #
-    # Authlogic does nothing to define these methods for you, its up to you to define what they mean. If your object responds to these methods Authlogic will use them, otherwise they are ignored.
+    # Authlogic does nothing to define these methods for you, its up to you to define what
+    # they mean. If your object responds to these methods Authlogic will use them,
+    # otherwise they are ignored.
     #
-    # What's neat about this is that these are checked upon any type of login. When logging in explicitly, by cookie, session, or basic http auth.
-    # So if you mark a user inactive in the middle of their session they wont be logged back in next time they refresh the page. Giving you complete control.
+    # What's neat about this is that these are checked upon any type of login. When
+    # logging in explicitly, by cookie, session, or basic http auth. So if you mark a user
+    # inactive in the middle of their session they wont be logged back in next time they
+    # refresh the page. Giving you complete control.
     #
-    # Need Authlogic to check your own "state"? No problem, check out the hooks section below. Add in a before_validation to do your own checking. The sky is the limit.
+    # Need Authlogic to check your own "state"? No problem, check out the hooks section
+    # below. Add in a before_validation to do your own checking. The sky is the limit.
     module MagicStates
       def self.included(klass)
         klass.class_eval do
@@ -39,6 +46,7 @@ module Authlogic
       # The methods available for an Authlogic::Session::Base object that make up the magic states feature.
       module InstanceMethods
         private
+
           def disable_magic_states?
             self.class.disable_magic_states == true
           end

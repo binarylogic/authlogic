@@ -19,7 +19,7 @@ module Authlogic
     #   end
     class SCrypt
       class << self
-        DEFAULTS = {:key_len => 32, :salt_size => 8, :max_time => 0.2, :max_mem => 1024 * 1024, :max_memfrac => 0.5}
+        DEFAULTS = { :key_len => 32, :salt_size => 8, :max_time => 0.2, :max_mem => 1024 * 1024, :max_memfrac => 0.5 }
 
         attr_writer :key_len, :salt_size, :max_time, :max_mem, :max_memfrac
         # Key length - length in bytes of generated key, from 16 to 512.
@@ -60,6 +60,7 @@ module Authlogic
         end
 
         private
+
           def join_tokens(tokens)
             tokens.flatten.join
           end

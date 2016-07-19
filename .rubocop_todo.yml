@@ -97,7 +97,7 @@ Metrics/CyclomaticComplexity:
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes.
 # URISchemes: http, https
 Metrics/LineLength:
-  Max: 230
+  Max: 180
 
 # Configuration parameters: CountComments.
 Metrics/MethodLength:
@@ -205,45 +205,6 @@ Style/EmptyElse:
     - 'lib/authlogic/session/persistence.rb'
 
 # Cop supports --auto-correct.
-# Configuration parameters: AllowAdjacentOneLineDefs.
-Style/EmptyLineBetweenDefs:
-  Exclude:
-    - 'lib/authlogic/controller_adapters/rack_adapter.rb'
-
-# Cop supports --auto-correct.
-Style/EmptyLines:
-  Exclude:
-    - 'test/acts_as_authentic_test/email_test.rb'
-    - 'test/session_test/password_test.rb'
-    - 'test/test_helper.rb'
-
-# Cop supports --auto-correct.
-Style/EmptyLinesAroundAccessModifier:
-  Enabled: false
-
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: empty_lines, no_empty_lines
-Style/EmptyLinesAroundClassBody:
-  Exclude:
-    - 'lib/authlogic/controller_adapters/rack_adapter.rb'
-    - 'test/acts_as_authentic_test/email_test.rb'
-
-# Cop supports --auto-correct.
-Style/EmptyLinesAroundMethodBody:
-  Exclude:
-    - 'test/acts_as_authentic_test/email_test.rb'
-    - 'test/acts_as_authentic_test/login_test.rb'
-
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: empty_lines, no_empty_lines
-Style/EmptyLinesAroundModuleBody:
-  Exclude:
-    - 'lib/authlogic/controller_adapters/rack_adapter.rb'
-    - 'lib/authlogic/session/active_record_trickery.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: AllowForAlignment, ForceEqualSignAlignment.
 Style/ExtraSpacing:
   Exclude:
@@ -311,13 +272,6 @@ Style/IndentationWidth:
 Style/Lambda:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/logged_in_status.rb'
-
-# Cop supports --auto-correct.
-Style/LeadingCommentSpace:
-  Exclude:
-    - 'lib/authlogic/config.rb'
-    - 'lib/authlogic/regex.rb'
-    - 'test/test_helper.rb'
 
 # Cop supports --auto-correct.
 Style/LineEndConcatenation:
@@ -430,70 +384,10 @@ Style/RescueModifier:
     - 'lib/authlogic/acts_as_authentic/session_maintenance.rb'
 
 # Cop supports --auto-correct.
-# Configuration parameters: AllowAsExpressionSeparator.
-Style/Semicolon:
-  Exclude:
-    - 'lib/authlogic/crypto_providers/wordpress.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: AllowIfMethodIsEmpty.
 Style/SingleLineMethods:
   Exclude:
     - 'lib/authlogic/controller_adapters/rack_adapter.rb'
-
-# Cop supports --auto-correct.
-Style/SpaceAfterComma:
-  Exclude:
-    - 'lib/authlogic/crypto_providers/wordpress.rb'
-
-# Cop supports --auto-correct.
-Style/SpaceAfterNot:
-  Exclude:
-    - 'lib/authlogic/test_case.rb'
-    - 'test/session_test/active_record_trickery_test.rb'
-
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment.
-Style/SpaceAroundOperators:
-  Exclude:
-    - 'lib/authlogic/crypto_providers/wordpress.rb'
-    - 'lib/authlogic/random.rb'
-    - 'test/session_test/password_test.rb'
-    - 'test/test_helper.rb'
-
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: space, no_space
-Style/SpaceBeforeBlockBraces:
-  Exclude:
-    - 'authlogic.gemspec'
-    - 'lib/authlogic/acts_as_authentic/email.rb'
-    - 'lib/authlogic/acts_as_authentic/logged_in_status.rb'
-    - 'lib/authlogic/controller_adapters/rack_adapter.rb'
-    - 'lib/authlogic/random.rb'
-    - 'lib/authlogic/session/callbacks.rb'
-    - 'test/acts_as_authentic_test/email_test.rb'
-
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, EnforcedStyleForEmptyBraces, SpaceBeforeBlockParameters.
-# SupportedStyles: space, no_space
-Style/SpaceInsideBlockBraces:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/email.rb'
-    - 'lib/authlogic/controller_adapters/rack_adapter.rb'
-    - 'test/acts_as_authentic_test/email_test.rb'
-    - 'test/random_test.rb'
-
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SupportedStyles.
-# SupportedStyles: space, no_space, compact
-Style/SpaceInsideHashLiteralBraces:
-  Enabled: false
-
-# Cop supports --auto-correct.
-Style/SpaceInsideParens:
-  Exclude:
-    - 'lib/authlogic.rb'
 
 # Cop supports --auto-correct.
 # Configuration parameters: SupportedStyles.
@@ -521,12 +415,6 @@ Style/StringLiteralsInInterpolation:
 Style/SymbolProc:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/persistence_token.rb'
-
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: final_newline, final_blank_line
-Style/TrailingBlankLines:
-  Enabled: false
 
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.

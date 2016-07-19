@@ -28,6 +28,7 @@ module Authlogic
       # Instance methods for the session feature.
       module InstanceMethods
         private
+
           # Tries to validate the session from information in the session
           def persist_by_session
             persistence_token, record_id = session_credentials

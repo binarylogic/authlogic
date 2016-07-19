@@ -62,6 +62,7 @@ module Authlogic
       # The methods available for an Authlogic::Session::Base object that make up the params / single access feature.
       module InstanceMethods
         private
+
           def persist_by_params
             return false if !params_enabled?
             self.unauthorized_record = search_for_record("find_by_single_access_token", params_credentials)
