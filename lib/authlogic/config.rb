@@ -1,4 +1,4 @@
-#encoding: utf-8
+# encoding: utf-8
 module Authlogic
   module Config
     def self.extended(klass)

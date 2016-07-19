@@ -313,13 +313,6 @@ Style/Lambda:
     - 'lib/authlogic/acts_as_authentic/logged_in_status.rb'
 
 # Cop supports --auto-correct.
-Style/LeadingCommentSpace:
-  Exclude:
-    - 'lib/authlogic/config.rb'
-    - 'lib/authlogic/regex.rb'
-    - 'test/test_helper.rb'
-
-# Cop supports --auto-correct.
 Style/LineEndConcatenation:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/base.rb'
