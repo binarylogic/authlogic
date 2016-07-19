@@ -523,12 +523,6 @@ Style/SymbolProc:
     - 'lib/authlogic/acts_as_authentic/persistence_token.rb'
 
 # Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: final_newline, final_blank_line
-Style/TrailingBlankLines:
-  Enabled: false
-
-# Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
 # SupportedStyles: comma, consistent_comma, no_comma
 Style/TrailingCommaInLiteral:
