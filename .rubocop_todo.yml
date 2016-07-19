@@ -23,10 +23,6 @@ Lint/BlockAlignment:
   Exclude:
     - 'lib/authlogic.rb'
 
-Lint/DuplicateMethods:
-  Exclude:
-    - 'test/acts_as_authentic_test/perishable_token_test.rb'
-
 # Cop supports --auto-correct.
 # Configuration parameters: AlignWith, SupportedStyles, AutoCorrect.
 # SupportedStyles: keyword, variable, start_of_line
