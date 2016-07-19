@@ -442,11 +442,6 @@ Style/SingleLineMethods:
     - 'lib/authlogic/controller_adapters/rack_adapter.rb'
 
 # Cop supports --auto-correct.
-Style/SpaceAfterComma:
-  Exclude:
-    - 'lib/authlogic/crypto_providers/wordpress.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: SupportedStyles.
 # SupportedStyles: use_perl_names, use_english_names
 Style/SpecialGlobalVars:

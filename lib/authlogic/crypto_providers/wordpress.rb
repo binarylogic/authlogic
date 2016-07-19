@@ -6,13 +6,13 @@ module Authlogic
         ITOA64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
         def matches?(crypted, *tokens)
-          stretches = 1 << ITOA64.index(crypted[3,1])
+          stretches = 1 << ITOA64.index(crypted[3, 1])
           plain, salt = *tokens
           hashed = Digest::MD5.digest(salt + plain)
           stretches.times do |i|
             hashed = Digest::MD5.digest(hashed + plain)
           end
-          crypted[0,12] + encode_64(hashed, 16) == crypted
+          crypted[0, 12] + encode_64(hashed, 16) == crypted
         end
 
         def encode_64(input, length)
@@ -29,11 +29,11 @@ module Authlogic
             i += 1
             break if i >= length
             value |= input[i] << 16 if i < length
-            output += ITOA64[(value >> 12) & 0x3f,1]
+            output += ITOA64[(value >> 12) & 0x3f, 1]
 
             i += 1
             break if i >= length
-            output += ITOA64[(value >> 18) & 0x3f,1]
+            output += ITOA64[(value >> 18) & 0x3f, 1]
           end
           output
         end
