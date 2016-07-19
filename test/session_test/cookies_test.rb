@@ -82,7 +82,7 @@ module SessionTest
     class InstanceMethodsTest < ActiveSupport::TestCase
       def test_credentials
         session = UserSession.new
-        session.credentials = {:remember_me => true}
+        session.credentials = { :remember_me => true }
         assert_equal true, session.remember_me
       end
 

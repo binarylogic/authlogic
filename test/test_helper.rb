@@ -168,7 +168,7 @@ class ActiveSupport::TestCase
     end
 
     def set_cookie_for(user)
-      controller.cookies["user_credentials"] = {:value => "#{user.persistence_token}::#{user.id}", :expires => nil}
+      controller.cookies["user_credentials"] = { :value => "#{user.persistence_token}::#{user.id}", :expires => nil }
     end
 
     def unset_cookie

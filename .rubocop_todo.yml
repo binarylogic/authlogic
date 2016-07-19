@@ -485,12 +485,6 @@ Style/SpaceInsideBlockBraces:
     - 'test/random_test.rb'
 
 # Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SupportedStyles.
-# SupportedStyles: space, no_space, compact
-Style/SpaceInsideHashLiteralBraces:
-  Enabled: false
-
-# Cop supports --auto-correct.
 # Configuration parameters: SupportedStyles.
 # SupportedStyles: use_perl_names, use_english_names
 Style/SpecialGlobalVars:
