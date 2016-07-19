@@ -35,10 +35,6 @@ Lint/Loop:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/persistence_token.rb'
 
-Lint/RescueException:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/base.rb'
-
 Lint/ShadowingOuterLocalVariable:
   Exclude:
     - 'lib/authlogic/session/cookies.rb'
