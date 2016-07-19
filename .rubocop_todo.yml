@@ -236,14 +236,6 @@ Style/EmptyLinesAroundMethodBody:
     - 'test/acts_as_authentic_test/login_test.rb'
 
 # Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: empty_lines, no_empty_lines
-Style/EmptyLinesAroundModuleBody:
-  Exclude:
-    - 'lib/authlogic/controller_adapters/rack_adapter.rb'
-    - 'lib/authlogic/session/active_record_trickery.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: AllowForAlignment, ForceEqualSignAlignment.
 Style/ExtraSpacing:
   Exclude:

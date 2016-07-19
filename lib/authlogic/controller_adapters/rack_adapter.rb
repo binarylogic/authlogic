@@ -59,5 +59,4 @@ module Authlogic
       end
     end
   end
-
 end

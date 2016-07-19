@@ -31,7 +31,6 @@ module Authlogic
         def i18n_scope
           I18n.scope
         end
-
       end
 
       module InstanceMethods
