@@ -44,6 +44,7 @@ module Authlogic
 
         request.instance_eval do
           def request; self; end
+
           def remote_ip; self.ip; end
         end
 

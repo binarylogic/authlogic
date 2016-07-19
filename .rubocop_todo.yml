@@ -205,12 +205,6 @@ Style/EmptyElse:
     - 'lib/authlogic/session/persistence.rb'
 
 # Cop supports --auto-correct.
-# Configuration parameters: AllowAdjacentOneLineDefs.
-Style/EmptyLineBetweenDefs:
-  Exclude:
-    - 'lib/authlogic/controller_adapters/rack_adapter.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: AllowForAlignment, ForceEqualSignAlignment.
 Style/ExtraSpacing:
   Exclude:
