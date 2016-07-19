@@ -83,7 +83,7 @@ module Authlogic
           # You can do whatever you want with that method.
           def set_last_request_at? # :doc:
             return false if !record || !klass.column_names.include?("last_request_at")
-            return false if controller.responds_to_last_request_update_allowed? and !controller.last_request_update_allowed?
+            return false if controller.responds_to_last_request_update_allowed? && !controller.last_request_update_allowed?
             record.last_request_at.blank? || last_request_at_threshold.to_i.seconds.ago >= record.last_request_at
           end
 
