@@ -20,10 +20,7 @@ module SessionTest
       end
 
       def test_http_basic_auth_realm
-        original_http_basic_auth_realm = UserSession.http_basic_auth_realm
-
         assert_equal 'Application', UserSession.http_basic_auth_realm
-
         UserSession.http_basic_auth_realm = 'TestRealm'
         assert_equal 'TestRealm', UserSession.http_basic_auth_realm
       end

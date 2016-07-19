@@ -67,15 +67,6 @@ Lint/UselessAccessModifier:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/password.rb'
 
-Lint/UselessAssignment:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/login.rb'
-    - 'test/session_test/existence_test.rb'
-    - 'test/session_test/http_auth_test.rb'
-    - 'test/session_test/magic_columns_test.rb'
-    - 'test/session_test/perishability_test.rb'
-    - 'test/session_test/session_test.rb'
-
 Metrics/AbcSize:
   Max: 82
 

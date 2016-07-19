@@ -143,7 +143,7 @@ module Authlogic
               else
                 value = connection.case_sensitive_modifier(value, field.to_s)
               end
-              relation = arel_table[field.to_s].eq(value)
+              arel_table[field.to_s].eq(value)
             end
 
             # bind value in rails 5
