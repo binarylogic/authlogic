@@ -5,3 +5,19 @@ AllCops:
   # linter will only care about this `TargetRubyVersion`. This should be set to the
   # lowest version of MRI that authlogic supports.
   TargetRubyVersion: 1.9
+
+# Please use normal indentation when aligning parameters.
+#
+# Good:
+#
+#     method_call(a,
+#       b)
+#
+# Bad:
+#
+#     method_call(a,
+#                 b)
+#
+# The latter is harder to maintain and uses too much horizontal space.
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
