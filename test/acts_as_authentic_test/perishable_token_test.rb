@@ -64,7 +64,7 @@ module ActsAsAuthenticTest
       assert_nil User.find_using_perishable_token(ben.perishable_token)
     end
 
-    def test_find_using_perishable_token_when_perished
+    def test_find_using_perishable_token_when_perished_2
       User.perishable_token_valid_for = 1.minute
       ben = users(:ben)
       ActiveRecord::Base.connection.execute("UPDATE users set updated_at = '#{2.minutes.ago.to_s(:db)}' where id = #{ben.id}")

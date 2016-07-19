@@ -1,6 +1,7 @@
 module Authlogic
   module Session
-    # Handles all authentication that deals with cookies, such as persisting, saving, and destroying.
+    # Handles all authentication that deals with cookies, such as persisting,
+    # saving, and destroying.
     module Cookies
       def self.included(klass)
         klass.class_eval do
@@ -14,8 +15,10 @@ module Authlogic
 
       # Configuration for the cookie feature set.
       module Config
-        # The name of the cookie or the key in the cookies hash. Be sure and use a unique name. If you have multiple sessions and they use the same cookie it will cause problems.
-        # Also, if a id is set it will be inserted into the beginning of the string. Example:
+        # The name of the cookie or the key in the cookies hash. Be sure and use
+        # a unique name. If you have multiple sessions and they use the same
+        # cookie it will cause problems. Also, if a id is set it will be
+        # inserted into the beginning of the string. Example:
         #
         #   session = UserSession.new
         #   session.cookie_key => "user_credentials"
@@ -97,7 +100,9 @@ module Authlogic
           @remember_me = self.class.remember_me
         end
 
-        # Accepts a boolean as a flag to remember the session or not. Basically to expire the cookie at the end of the session or keep it for "remember_me_until".
+        # Accepts a boolean as a flag to remember the session or not. Basically
+        # to expire the cookie at the end of the session or keep it for
+        # "remember_me_until".
         def remember_me=(value)
           @remember_me = value
         end
@@ -147,7 +152,8 @@ module Authlogic
           @httponly = self.class.httponly
         end
 
-        # Accepts a boolean as to whether the cookie should be marked as httponly.  If true, the cookie will not be accessible from javascript
+        # Accepts a boolean as to whether the cookie should be marked as
+        # httponly.  If true, the cookie will not be accessible from javascript
         def httponly=(value)
           @httponly = value
         end
@@ -163,7 +169,8 @@ module Authlogic
           @sign_cookie = self.class.sign_cookie
         end
 
-        # Accepts a boolean as to whether the cookie should be signed.  If true the cookie will be saved and verified using a signature.
+        # Accepts a boolean as to whether the cookie should be signed.  If true
+        # the cookie will be saved and verified using a signature.
         def sign_cookie=(value)
           @sign_cookie = value
         end

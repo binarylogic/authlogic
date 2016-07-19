@@ -72,7 +72,7 @@ module Authlogic
             begin
               column_names
               true
-            rescue Exception
+            rescue StandardError
               false
             end
           end

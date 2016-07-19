@@ -30,7 +30,6 @@ module SessionTest
       end
 
       def test_persist_persist_by_session_with_sql_injection_attack
-        ben = users(:ben)
         controller.session["user_credentials"] = { :select => "ABRA CADABRA" }
         controller.session["user_credentials_id"] = nil
         assert_nothing_raised do

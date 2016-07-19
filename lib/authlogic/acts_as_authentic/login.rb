@@ -92,16 +92,33 @@ module Authlogic
           self.validates_format_of_login_field_options = validates_format_of_login_field_options.merge(options)
         end
 
-        # A hash of options for the validates_uniqueness_of call for the login field. Allows you to change this however you want.
+        # A hash of options for the validates_uniqueness_of call for the login
+        # field. Allows you to change this however you want.
         #
-        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
-        # merge options into it. Checkout the convenience function merge_validates_format_of_login_field_options to merge
-        # options.</b>
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as
+        # possible, so you can completely replace the hash or merge options into
+        # it. Checkout the convenience function
+        # merge_validates_format_of_login_field_options to merge options.</b>
         #
-        # * <tt>Default:</tt> {:case_sensitive => false, :scope => validations_scope, :if => "#{login_field}_changed?".to_sym}
+        # * <tt>Default:</tt>
+        #
+        #         {
+        #           :case_sensitive => false,
+        #           :scope => validations_scope,
+        #           :if => "#{login_field}_changed?".to_sym
+        #         }
+        #
         # * <tt>Accepts:</tt> Hash of options accepted by validates_uniqueness_of
         def validates_uniqueness_of_login_field_options(value = nil)
-          rw_config(:validates_uniqueness_of_login_field_options, value, { :case_sensitive => false, :scope => validations_scope, :if => "#{login_field}_changed?".to_sym })
+          rw_config(
+            :validates_uniqueness_of_login_field_options,
+            value,
+            {
+              :case_sensitive => false,
+              :scope => validations_scope,
+              :if => "#{login_field}_changed?".to_sym
+            }
+          )
         end
         alias_method :validates_uniqueness_of_login_field_options=, :validates_uniqueness_of_login_field_options
 
@@ -143,7 +160,7 @@ module Authlogic
               else
                 value = connection.case_sensitive_modifier(value, field.to_s)
               end
-              relation = arel_table[field.to_s].eq(value)
+              arel_table[field.to_s].eq(value)
             end
 
             # bind value in rails 5

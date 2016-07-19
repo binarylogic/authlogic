@@ -45,8 +45,11 @@ module Authlogic
     # You are good to go!
     class BCrypt
       class << self
-        # This is the :cost option for the BCrpyt library. The higher the cost the more secure it is and the longer is take the generate a hash. By default this is 10.
-        # Set this to any value >= the engine's minimum (currently 4), play around with it to get that perfect balance between security and performance.
+        # This is the :cost option for the BCrpyt library. The higher the cost
+        # the more secure it is and the longer is take the generate a hash. By
+        # default this is 10. Set this to any value >= the engine's minimum
+        # (currently 4), play around with it to get that perfect balance between
+        # security and performance.
         def cost
           @cost ||= 10
         end
@@ -63,14 +66,16 @@ module Authlogic
           ::BCrypt::Password.create(join_tokens(tokens), :cost => cost)
         end
 
-        # Does the hash match the tokens? Uses the same tokens that were used to encrypt.
+        # Does the hash match the tokens? Uses the same tokens that were used to
+        # encrypt.
         def matches?(hash, *tokens)
           hash = new_from_hash(hash)
           return false if hash.blank?
           hash == join_tokens(tokens)
         end
 
-        # This method is used as a flag to tell Authlogic to "resave" the password upon a successful login, using the new cost
+        # This method is used as a flag to tell Authlogic to "resave" the
+        # password upon a successful login, using the new cost
         def cost_matches?(hash)
           hash = new_from_hash(hash)
           if hash.blank?

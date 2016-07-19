@@ -23,10 +23,6 @@ Lint/BlockAlignment:
   Exclude:
     - 'lib/authlogic.rb'
 
-Lint/DuplicateMethods:
-  Exclude:
-    - 'test/acts_as_authentic_test/perishable_token_test.rb'
-
 # Cop supports --auto-correct.
 # Configuration parameters: AlignWith, SupportedStyles, AutoCorrect.
 # SupportedStyles: keyword, variable, start_of_line
@@ -38,10 +34,6 @@ Lint/EndAlignment:
 Lint/Loop:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/persistence_token.rb'
-
-Lint/RescueException:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/base.rb'
 
 Lint/ShadowingOuterLocalVariable:
   Exclude:
@@ -75,21 +67,14 @@ Lint/UselessAccessModifier:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/password.rb'
 
-Lint/UselessAssignment:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/login.rb'
-    - 'test/session_test/existence_test.rb'
-    - 'test/session_test/http_auth_test.rb'
-    - 'test/session_test/magic_columns_test.rb'
-    - 'test/session_test/perishability_test.rb'
-    - 'test/session_test/session_test.rb'
-
 Metrics/AbcSize:
   Max: 82
 
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
   Max: 187
+  Exclude:
+    - 'test/**/*'
 
 Metrics/CyclomaticComplexity:
   Max: 12
@@ -97,18 +82,20 @@ Metrics/CyclomaticComplexity:
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes.
 # URISchemes: http, https
 Metrics/LineLength:
-  Max: 180
+  Max: 160
 
 # Configuration parameters: CountComments.
 Metrics/MethodLength:
   Max: 31
+  Exclude:
+    - 'test/**/*'
 
 # Configuration parameters: CountComments.
 Metrics/ModuleLength:
   Max: 106
 
 Metrics/PerceivedComplexity:
-  Max: 12
+  Max: 13
 
 # Cop supports --auto-correct.
 Performance/RedundantBlockCall:

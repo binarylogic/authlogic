@@ -29,7 +29,6 @@ module SessionTest
       end
 
       def test_save_with_block
-        ben = users(:ben)
         session = UserSession.new
         block_result = session.save do |result|
           assert !result

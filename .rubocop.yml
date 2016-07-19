@@ -10,8 +10,14 @@ AllCops:
 #
 # Good:
 #
+#     method_call(
+#       a,
+#       b
+#     )
+#
 #     method_call(a,
-#       b)
+#       b
+#     )
 #
 # Bad:
 #
