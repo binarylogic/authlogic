@@ -3,7 +3,6 @@ require 'test_helper'
 
 module ActsAsAuthenticTest
   class EmailTest < ActiveSupport::TestCase
-
     GOOD_ASCII_EMAILS = [
       "a@a.com",
       "damien+test1...etc..@mydomain.com",

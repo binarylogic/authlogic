@@ -222,14 +222,6 @@ Style/EmptyLinesAroundAccessModifier:
   Enabled: false
 
 # Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: empty_lines, no_empty_lines
-Style/EmptyLinesAroundClassBody:
-  Exclude:
-    - 'lib/authlogic/controller_adapters/rack_adapter.rb'
-    - 'test/acts_as_authentic_test/email_test.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: AllowForAlignment, ForceEqualSignAlignment.
 Style/ExtraSpacing:
   Exclude:

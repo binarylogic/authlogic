@@ -37,7 +37,6 @@ module Authlogic
     #     end
     #
     class RackAdapter < AbstractAdapter
-
       def initialize(env)
         # We use the Rack::Request object as the controller object.
         # For this to work, we have to add some glue.
