@@ -2,10 +2,13 @@ require 'request_store'
 
 module Authlogic
   module Session
-    # Authentication can be scoped, and it's easy, you just need to define how you want to scope everything. This should help you:
+    # Authentication can be scoped, and it's easy, you just need to define how you want to
+    # scope everything. This should help you:
     #
-    # 1. Want to scope by a parent object? Ex: An account has many users. Checkout Authlogic::AuthenticatesMany
-    # 2. Want to scope the validations in your model? Ex: 2 users can have the same login under different accounts. See Authlogic::ActsAsAuthentic::Scope
+    # 1. Want to scope by a parent object? Ex: An account has many users.
+    #    Checkout Authlogic::AuthenticatesMany
+    # 2. Want to scope the validations in your model? Ex: 2 users can have the same login
+    #    under different accounts. See Authlogic::ActsAsAuthentic::Scope
     module Scopes # :nodoc:
       def self.included(klass)
         klass.class_eval do
@@ -22,11 +25,15 @@ module Authlogic
           RequestStore.store[:authlogic_scope]
         end
 
-        # What with_scopes focuses on is scoping the query when finding the object and the name of the cookie / session. It works very similar to
-        # ActiveRecord::Base#with_scopes. It accepts a hash with any of the following options:
+        # What with_scopes focuses on is scoping the query when finding the object and the
+        # name of the cookie / session. It works very similar to
+        # ActiveRecord::Base#with_scopes. It accepts a hash with any of the following
+        # options:
         #
-        # * <tt>find_options:</tt> any options you can pass into ActiveRecord::Base.find. This is used when trying to find the record.
-        # * <tt>id:</tt> The id of the session, this gets merged with the real id. For information ids see the id method.
+        # * <tt>find_options:</tt> any options you can pass into ActiveRecord::Base.find.
+        #   This is used when trying to find the record.
+        # * <tt>id:</tt> The id of the session, this gets merged with the real id. For
+        #   information ids see the id method.
         #
         # Here is how you use it:
         #
@@ -34,7 +41,8 @@ module Authlogic
         #     UserSession.find
         #   end
         #
-        # Essentially what the above does is scope the searching of the object with the sql you provided. So instead of:
+        # Essentially what the above does is scope the searching of the object with the
+        # sql you provided. So instead of:
         #
         #   User.where("login = 'ben'").first
         #
@@ -42,7 +50,8 @@ module Authlogic
         #
         #   User.where("login = 'ben' and account_id = 2").first
         #
-        # You will also notice the :id option. This works just like the id method. It scopes your cookies. So the name of your cookie will be:
+        # You will also notice the :id option. This works just like the id method. It
+        # scopes your cookies. So the name of your cookie will be:
         #
         #   account_2_user_credentials
         #

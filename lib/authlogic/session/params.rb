@@ -1,15 +1,19 @@
 module Authlogic
   module Session
-    # This module is responsible for authenticating the user via params, which ultimately allows the user to log in using a URL like the following:
+    # This module is responsible for authenticating the user via params, which ultimately
+    # allows the user to log in using a URL like the following:
     #
     #   https://www.domain.com?user_credentials=4LiXF7FiGUppIPubBPey
     #
-    # Notice the token in the URL, this is a single access token. A single access token is used for single access only, it is not persisted. Meaning the user
-    # provides it, Authlogic grants them access, and that's it. If they want access again they need to provide the token again. Authlogic will
-    # *NEVER* try to persist the session after authenticating through this method.
+    # Notice the token in the URL, this is a single access token. A single access token is
+    # used for single access only, it is not persisted. Meaning the user provides it,
+    # Authlogic grants them access, and that's it. If they want access again they need to
+    # provide the token again. Authlogic will *NEVER* try to persist the session after
+    # authenticating through this method.
     #
-    # For added security, this token is *ONLY* allowed for RSS and ATOM requests. You can change this with the configuration. You can also define if
-    # it is allowed dynamically by defining a single_access_allowed? method in your controller. For example:
+    # For added security, this token is *ONLY* allowed for RSS and ATOM requests. You can
+    # change this with the configuration. You can also define if it is allowed dynamically
+    # by defining a single_access_allowed? method in your controller. For example:
     #
     #   class UsersController < ApplicationController
     #     private
@@ -17,8 +21,9 @@ module Authlogic
     #         action_name == "index"
     #       end
     #
-    # Also, by default, this token is permanent. Meaning if the user changes their password, this token will remain the same. It will only change
-    # when it is explicitly reset.
+    # Also, by default, this token is permanent. Meaning if the user changes their
+    # password, this token will remain the same. It will only change when it is explicitly
+    # reset.
     #
     # You can modify all of this behavior with the Config sub module.
     module Params
@@ -83,7 +88,8 @@ module Authlogic
 
             case single_access_allowed_request_types
             when Array
-              single_access_allowed_request_types.include?(controller.request_content_type) || single_access_allowed_request_types.include?(:all)
+              single_access_allowed_request_types.include?(controller.request_content_type) ||
+                single_access_allowed_request_types.include?(:all)
             else
               [:all, :any].include?(single_access_allowed_request_types)
             end

@@ -1,7 +1,8 @@
 module Authlogic
   module ActsAsAuthentic
-    # This module is responsible for maintaining the single_access token. For more information the single access token and how to use it,
-    # see the Authlogic::Session::Params module.
+    # This module is responsible for maintaining the single_access token. For more
+    # information the single access token and how to use it, see the
+    # Authlogic::Session::Params module.
     module SingleAccessToken
       def self.included(klass)
         klass.class_eval do
@@ -12,10 +13,10 @@ module Authlogic
 
       # All configuration for the single_access token aspect of acts_as_authentic.
       module Config
-        # The single access token is used for authentication via URLs, such as a private feed. That being said,
-        # if the user changes their password, that token probably shouldn't change. If it did, the user would have
-        # to update all of their URLs. So be default this is option is disabled, if you need it, feel free to turn
-        # it on.
+        # The single access token is used for authentication via URLs, such as a private
+        # feed. That being said, if the user changes their password, that token probably
+        # shouldn't change. If it did, the user would have to update all of their URLs. So
+        # be default this is option is disabled, if you need it, feel free to turn it on.
         #
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
@@ -34,7 +35,9 @@ module Authlogic
             include InstanceMethods
             validates_uniqueness_of :single_access_token, :if => :single_access_token_changed?
             before_validation :reset_single_access_token, :if => :reset_single_access_token?
-            after_password_set(:reset_single_access_token, :if => :change_single_access_token_with_password?) if respond_to?(:after_password_set)
+            if respond_to?(:after_password_set)
+              after_password_set(:reset_single_access_token, :if => :change_single_access_token_with_password?)
+            end
           end
         end
 
