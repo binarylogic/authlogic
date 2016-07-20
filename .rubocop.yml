@@ -6,6 +6,10 @@ AllCops:
   # lowest version of MRI that authlogic supports.
   TargetRubyVersion: 1.9
 
+# Compared to metrics like AbcSize, MethodLength has questionable value.
+Metrics/MethodLength:
+  Enabled: false
+
 # Please use normal indentation when aligning parameters.
 #
 # Good:

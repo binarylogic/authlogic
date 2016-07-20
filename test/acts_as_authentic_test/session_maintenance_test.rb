@@ -11,7 +11,14 @@ module ActsAsAuthenticTest
     end
 
     def test_login_after_create
-      assert User.create(:login => "awesome", :password => "saweeeet", :password_confirmation => "saweeeet", :email => "awesome@awesome.com")
+      assert(
+        User.create(
+          :login => "awesome",
+          :password => "saweeeet",
+          :password_confirmation => "saweeeet",
+          :email => "awesome@awesome.com"
+        )
+      )
       assert UserSession.find
     end
 

@@ -51,7 +51,8 @@ module Authlogic
         end
         alias_method :remember_me_for=, :remember_me_for
 
-        # Should the cookie be set as secure?  If true, the cookie will only be sent over SSL connections
+        # Should the cookie be set as secure?  If true, the cookie will only be sent over
+        # SSL connections
         #
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
@@ -60,7 +61,8 @@ module Authlogic
         end
         alias_method :secure=, :secure
 
-        # Should the cookie be set as httponly?  If true, the cookie will not be accessible from javascript
+        # Should the cookie be set as httponly?  If true, the cookie will not be
+        # accessible from javascript
         #
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
@@ -69,7 +71,8 @@ module Authlogic
         end
         alias_method :httponly=, :httponly
 
-        # Should the cookie be signed? If the controller adapter supports it, this is a measure against cookie tampering.
+        # Should the cookie be signed? If the controller adapter supports it, this is a
+        # measure against cookie tampering.
         def sign_cookie(value = nil)
           if value && !controller.cookies.respond_to?(:signed)
             raise "Signed cookies not supported with #{controller.class}!"
@@ -79,7 +82,8 @@ module Authlogic
         alias_method :sign_cookie=, :sign_cookie
       end
 
-      # The methods available for an Authlogic::Session::Base object that make up the cookie feature set.
+      # The methods available for an Authlogic::Session::Base object that make up the
+      # cookie feature set.
       module InstanceMethods
         # Allows you to set the remember_me option when passing credentials.
         def credentials=(value)
@@ -112,13 +116,15 @@ module Authlogic
           remember_me == true || remember_me == "true" || remember_me == "1"
         end
 
-        # How long to remember the user if remember_me is true. This is based on the class level configuration: remember_me_for
+        # How long to remember the user if remember_me is true. This is based on the class
+        # level configuration: remember_me_for
         def remember_me_for
           return unless remember_me?
           self.class.remember_me_for
         end
 
-        # When to expire the cookie. See remember_me_for configuration option to change this.
+        # When to expire the cookie. See remember_me_for configuration option to change
+        # this.
         def remember_me_until
           return unless remember_me?
           remember_me_for.from_now
@@ -136,7 +142,8 @@ module Authlogic
           @secure = self.class.secure
         end
 
-        # Accepts a boolean as to whether the cookie should be marked as secure.  If true the cookie will only ever be sent over an SSL connection.
+        # Accepts a boolean as to whether the cookie should be marked as secure.  If true
+        # the cookie will only ever be sent over an SSL connection.
         def secure=(value)
           @secure = value
         end

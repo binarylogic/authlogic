@@ -165,8 +165,16 @@ module ActsAsAuthenticTest
       ben = users(:ben)
 
       transition_password_to(Authlogic::CryptoProviders::BCrypt, ben)
-      transition_password_to(Authlogic::CryptoProviders::Sha1, ben, [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::BCrypt])
-      transition_password_to(Authlogic::CryptoProviders::Sha512, ben, [Authlogic::CryptoProviders::Sha1, Authlogic::CryptoProviders::BCrypt])
+      transition_password_to(
+        Authlogic::CryptoProviders::Sha1,
+        ben,
+        [Authlogic::CryptoProviders::Sha512, Authlogic::CryptoProviders::BCrypt]
+      )
+      transition_password_to(
+        Authlogic::CryptoProviders::Sha512,
+        ben,
+        [Authlogic::CryptoProviders::Sha1, Authlogic::CryptoProviders::BCrypt]
+      )
     end
 
     def test_checks_password_against_database

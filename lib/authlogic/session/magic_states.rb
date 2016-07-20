@@ -31,9 +31,11 @@ module Authlogic
 
       # Configuration for the magic states feature.
       module Config
-        # Set this to true if you want to disable the checking of active?, approved?, and confirmed? on your record. This is more or less of a
-        # convenience feature, since 99% of the time if those methods exist and return false you will not want the user logging in. You could
-        # easily accomplish this same thing with a before_validation method or other callbacks.
+        # Set this to true if you want to disable the checking of active?, approved?, and
+        # confirmed? on your record. This is more or less of a convenience feature, since
+        # 99% of the time if those methods exist and return false you will not want the
+        # user logging in. You could easily accomplish this same thing with a
+        # before_validation method or other callbacks.
         #
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
@@ -43,7 +45,8 @@ module Authlogic
         alias_method :disable_magic_states=, :disable_magic_states
       end
 
-      # The methods available for an Authlogic::Session::Base object that make up the magic states feature.
+      # The methods available for an Authlogic::Session::Base object that make up the
+      # magic states feature.
       module InstanceMethods
         private
 

@@ -23,8 +23,9 @@ module Authlogic
         # You can change what method UserSession calls by specifying it here. Then in your User model you can make that method do
         # anything you want, giving you complete control of how users are found by the UserSession.
         #
-        # Let's take an example: You want to allow users to login by username or email. Set this to the name of the class method
-        # that does this in the User model. Let's call it "find_by_username_or_email"
+        # Let's take an example: You want to allow users to login by username or email.
+        # Set this to the name of the class method that does this in the User model. Let's
+        # call it "find_by_username_or_email"
         #
         #   class User < ActiveRecord::Base
         #     def self.find_by_username_or_email(login)
@@ -32,8 +33,10 @@ module Authlogic
         #     end
         #   end
         #
-        # Now just specify the name of this method for this configuration option and you are all set. You can do anything you
-        # want here. Maybe you allow users to have multiple logins and you want to search a has_many relationship, etc. The sky is the limit.
+        # Now just specify the name of this method for this configuration option and you
+        # are all set. You can do anything you want here. Maybe you allow users to have
+        # multiple logins and you want to search a has_many relationship, etc. The sky is
+        # the limit.
         #
         # * <tt>Default:</tt> "find_by_smart_case_login_field"
         # * <tt>Accepts:</tt> Symbol or String
@@ -42,9 +45,10 @@ module Authlogic
         end
         alias_method :find_by_login_method=, :find_by_login_method
 
-        # The text used to identify credentials (username/password) combination when a bad login attempt occurs.
-        # When you show error messages for a bad login, it's considered good security practice to hide which field
-        # the user has entered incorrectly (the login field or the password field). For a full explanation, see
+        # The text used to identify credentials (username/password) combination when a bad
+        # login attempt occurs. When you show error messages for a bad login, it's
+        # considered good security practice to hide which field the user has entered
+        # incorrectly (the login field or the password field). For a full explanation, see
         # http://www.gnucitizen.org/blog/username-enumeration-vulnerabilities/
         #
         # Example of use:
@@ -79,10 +83,12 @@ module Authlogic
         end
         alias_method :generalize_credentials_error_messages=, :generalize_credentials_error_messages
 
-        # The name of the method you want Authlogic to create for storing the login / username. Keep in mind this is just for your
-        # Authlogic::Session, if you want it can be something completely different than the field in your model. So if you wanted people to
-        # login with a field called "login" and then find users by email this is completely doable. See the find_by_login_method configuration
-        # option for more details.
+        # The name of the method you want Authlogic to create for storing the login /
+        # username. Keep in mind this is just for your Authlogic::Session, if you want it
+        # can be something completely different than the field in your model. So if you
+        # wanted people to login with a field called "login" and then find users by email
+        # this is completely doable. See the find_by_login_method configuration option for
+        # more details.
         #
         # * <tt>Default:</tt> klass.login_field || klass.email_field
         # * <tt>Accepts:</tt> Symbol or String
@@ -181,8 +187,12 @@ module Authlogic
             self.invalid_password = false
 
             # check for blank fields
-            errors.add(login_field, I18n.t('error_messages.login_blank', :default => "cannot be blank")) if send(login_field).blank?
-            errors.add(password_field, I18n.t('error_messages.password_blank', :default => "cannot be blank")) if send("protected_#{password_field}").blank?
+            if send(login_field).blank?
+              errors.add(login_field, I18n.t('error_messages.login_blank', :default => "cannot be blank"))
+            end
+            if send("protected_#{password_field}").blank?
+              errors.add(password_field, I18n.t('error_messages.password_blank', :default => "cannot be blank"))
+            end
             return if errors.count > 0
 
             self.attempted_record = search_for_record(find_by_login_method, send(login_field))

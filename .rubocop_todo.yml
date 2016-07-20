@@ -70,11 +70,8 @@ Lint/UselessAccessModifier:
 Metrics/AbcSize:
   Max: 82
 
-# Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 187
-  Exclude:
-    - 'test/**/*'
+  Enabled: false
 
 Metrics/CyclomaticComplexity:
   Max: 12
@@ -82,17 +79,10 @@ Metrics/CyclomaticComplexity:
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes.
 # URISchemes: http, https
 Metrics/LineLength:
-  Max: 160
+  Max: 140
 
-# Configuration parameters: CountComments.
-Metrics/MethodLength:
-  Max: 31
-  Exclude:
-    - 'test/**/*'
-
-# Configuration parameters: CountComments.
 Metrics/ModuleLength:
-  Max: 106
+  Enabled: false
 
 Metrics/PerceivedComplexity:
   Max: 13
@@ -271,6 +261,9 @@ Style/ModuleFunction:
   Exclude:
     - 'lib/authlogic/random.rb'
 
+Style/MultilineOperationIndentation:
+  Enabled: false
+
 Style/MultilineTernaryOperator:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/password.rb'
@@ -306,8 +299,7 @@ Style/NegatedIf:
 # Configuration parameters: EnforcedStyle, MinBodyLength, SupportedStyles.
 # SupportedStyles: skip_modifier_ifs, always
 Style/Next:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/password.rb'
+  Enabled: false
 
 # Cop supports --auto-correct.
 Style/Not:

@@ -1,7 +1,8 @@
 module Authlogic
   module ActsAsAuthentic
-    # This module has a lot of neat functionality. It is responsible for encrypting your password, salting it, and verifying it.
-    # It can also help you transition to a new encryption algorithm. See the Config sub module for configuration options.
+    # This module has a lot of neat functionality. It is responsible for encrypting your
+    # password, salting it, and verifying it. It can also help you transition to a new
+    # encryption algorithm. See the Config sub module for configuration options.
     module Password
       def self.included(klass)
         klass.class_eval do
@@ -18,7 +19,11 @@ module Authlogic
         # * <tt>Default:</tt> :crypted_password, :encrypted_password, :password_hash, or :pw_hash
         # * <tt>Accepts:</tt> Symbol
         def crypted_password_field(value = nil)
-          rw_config(:crypted_password_field, value, first_column_to_exist(nil, :crypted_password, :encrypted_password, :password_hash, :pw_hash))
+          rw_config(
+            :crypted_password_field,
+            value,
+            first_column_to_exist(nil, :crypted_password, :encrypted_password, :password_hash, :pw_hash)
+          )
         end
         alias_method :crypted_password_field=, :crypted_password_field
 
@@ -27,12 +32,16 @@ module Authlogic
         # * <tt>Default:</tt> :password_salt, :pw_salt, :salt, nil if none exist
         # * <tt>Accepts:</tt> Symbol
         def password_salt_field(value = nil)
-          rw_config(:password_salt_field, value, first_column_to_exist(nil, :password_salt, :pw_salt, :salt))
+          rw_config(
+            :password_salt_field,
+            value,
+            first_column_to_exist(nil, :password_salt, :pw_salt, :salt)
+          )
         end
         alias_method :password_salt_field=, :password_salt_field
 
-        # Whether or not to require a password confirmation. If you don't want your users to confirm their password
-        # just set this to false.
+        # Whether or not to require a password confirmation. If you don't want your users
+        # to confirm their password just set this to false.
         #
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
@@ -41,14 +50,17 @@ module Authlogic
         end
         alias_method :require_password_confirmation=, :require_password_confirmation
 
-        # By default passwords are required when a record is new or the crypted_password is blank, but if both of these things
-        # are met a password is not required. In this case, blank passwords are ignored.
+        # By default passwords are required when a record is new or the crypted_password
+        # is blank, but if both of these things are met a password is not required. In
+        # this case, blank passwords are ignored.
         #
-        # Think about a profile page, where the user can edit all of their information, including changing their password.
-        # If they do not want to change their password they just leave the fields blank. This will try to set the password to
-        # a blank value, in which case is incorrect behavior. As such, Authlogic ignores this. But let's say you have a completely
-        # separate page for resetting passwords, you might not want to ignore blank passwords. If this is the case for you, then
-        # just set this value to false.
+        # Think about a profile page, where the user can edit all of their information,
+        # including changing their password. If they do not want to change their password
+        # they just leave the fields blank. This will try to set the password to a blank
+        # value, in which case is incorrect behavior. As such, Authlogic ignores this. But
+        # let's say you have a completely separate page for resetting passwords, you might
+        # not want to ignore blank passwords. If this is the case for you, then just set
+        # this value to false.
         #
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
@@ -57,15 +69,16 @@ module Authlogic
         end
         alias_method :ignore_blank_passwords=, :ignore_blank_passwords
 
-        # When calling valid_password?("some pass") do you want to check that password against what's in that object or whats in
-        # the database. Take this example:
+        # When calling valid_password?("some pass") do you want to check that password
+        # against what's in that object or whats in the database. Take this example:
         #
         #   u = User.first
         #   u.password = "new pass"
         #   u.valid_password?("old pass")
         #
-        # Should the last line above return true or false? The record hasn't been saved yet, so most would assume true.
-        # Other would assume false. So I let you decide by giving you this option.
+        # Should the last line above return true or false? The record hasn't been saved
+        # yet, so most would assume true. Other would assume false. So I let you decide by
+        # giving you this option.
         #
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
@@ -83,10 +96,12 @@ module Authlogic
         end
         alias_method :validate_password_field=, :validate_password_field
 
-        # A hash of options for the validates_length_of call for the password field. Allows you to change this however you want.
+        # A hash of options for the validates_length_of call for the password field.
+        # Allows you to change this however you want.
         #
-        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
-        # merge options into it. Checkout the convenience function merge_validates_length_of_password_field_options to merge
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so
+        # you can completely replace the hash or merge options into it. Checkout the
+        # convenience function merge_validates_length_of_password_field_options to merge
         # options.</b>
         #
         # * <tt>Default:</tt> {:minimum => 8, :if => :require_password?}
@@ -96,9 +111,11 @@ module Authlogic
         end
         alias_method :validates_length_of_password_field_options=, :validates_length_of_password_field_options
 
-        # A convenience function to merge options into the validates_length_of_login_field_options. So instead of:
+        # A convenience function to merge options into the
+        # validates_length_of_login_field_options. So instead of:
         #
-        #   self.validates_length_of_password_field_options = validates_length_of_password_field_options.merge(:my_option => my_value)
+        #   self.validates_length_of_password_field_options =
+        #     validates_length_of_password_field_options.merge(:my_option => my_value)
         #
         # You can do this:
         #
@@ -107,10 +124,12 @@ module Authlogic
           self.validates_length_of_password_field_options = validates_length_of_password_field_options.merge(options)
         end
 
-        # A hash of options for the validates_confirmation_of call for the password field. Allows you to change this however you want.
+        # A hash of options for the validates_confirmation_of call for the password field.
+        # Allows you to change this however you want.
         #
-        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
-        # merge options into it. Checkout the convenience function merge_validates_length_of_password_field_options to merge
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so
+        # you can completely replace the hash or merge options into it. Checkout the
+        # convenience function merge_validates_length_of_password_field_options to merge
         # options.</b>
         #
         # * <tt>Default:</tt> {:if => :require_password?}
@@ -120,31 +139,41 @@ module Authlogic
         end
         alias_method :validates_confirmation_of_password_field_options=, :validates_confirmation_of_password_field_options
 
-        # See merge_validates_length_of_password_field_options. The same thing, except for validates_confirmation_of_password_field_options
+        # See merge_validates_length_of_password_field_options. The same thing, except for
+        # validates_confirmation_of_password_field_options
         def merge_validates_confirmation_of_password_field_options(options = {})
           self.validates_confirmation_of_password_field_options = validates_confirmation_of_password_field_options.merge(options)
         end
 
-        # A hash of options for the validates_length_of call for the password_confirmation field. Allows you to change this however you want.
+        # A hash of options for the validates_length_of call for the password_confirmation
+        # field. Allows you to change this however you want.
         #
-        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
-        # merge options into it. Checkout the convenience function merge_validates_length_of_password_field_options to merge
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so
+        # you can completely replace the hash or merge options into it. Checkout the
+        # convenience function merge_validates_length_of_password_field_options to merge
         # options.</b>
         #
         # * <tt>Default:</tt> validates_length_of_password_field_options
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_password_confirmation_field_options(value = nil)
-          rw_config(:validates_length_of_password_confirmation_field_options, value, validates_length_of_password_field_options)
+          rw_config(
+            :validates_length_of_password_confirmation_field_options,
+            value,
+            validates_length_of_password_field_options
+          )
         end
         alias_method :validates_length_of_password_confirmation_field_options=, :validates_length_of_password_confirmation_field_options
 
-        # See merge_validates_length_of_password_field_options. The same thing, except for validates_length_of_password_confirmation_field_options
+        # See merge_validates_length_of_password_field_options. The same thing, except for
+        # validates_length_of_password_confirmation_field_options
         def merge_validates_length_of_password_confirmation_field_options(options = {})
-          self.validates_length_of_password_confirmation_field_options = validates_length_of_password_confirmation_field_options.merge(options)
+          self.validates_length_of_password_confirmation_field_options =
+            validates_length_of_password_confirmation_field_options.merge(options)
         end
 
-        # The class you want to use to encrypt and verify your encrypted passwords. See the Authlogic::CryptoProviders module for more info
-        # on the available methods and how to create your own.
+        # The class you want to use to encrypt and verify your encrypted passwords. See
+        # the Authlogic::CryptoProviders module for more info on the available methods and
+        # how to create your own.
         #
         # * <tt>Default:</tt> CryptoProviders::SCrypt
         # * <tt>Accepts:</tt> Class
@@ -153,14 +182,17 @@ module Authlogic
         end
         alias_method :crypto_provider=, :crypto_provider
 
-        # Let's say you originally encrypted your passwords with Sha1. Sha1 is starting to join the party with MD5 and you want to switch
-        # to something stronger. No problem, just specify your new and improved algorithm with the crypt_provider option and then let
-        # Authlogic know you are transitioning from Sha1 using this option. Authlogic will take care of everything, including transitioning
-        # your users to the new algorithm. The next time a user logs in, they will be granted access using the old algorithm and their
-        # password will be resaved with the new algorithm. All new users will obviously use the new algorithm as well.
+        # Let's say you originally encrypted your passwords with Sha1. Sha1 is starting to
+        # join the party with MD5 and you want to switch to something stronger. No
+        # problem, just specify your new and improved algorithm with the crypt_provider
+        # option and then let Authlogic know you are transitioning from Sha1 using this
+        # option. Authlogic will take care of everything, including transitioning your
+        # users to the new algorithm. The next time a user logs in, they will be granted
+        # access using the old algorithm and their password will be resaved with the new
+        # algorithm. All new users will obviously use the new algorithm as well.
         #
-        # Lastly, if you want to transition again, you can pass an array of crypto providers. So you can transition from as many algorithms
-        # as you want.
+        # Lastly, if you want to transition again, you can pass an array of crypto
+        # providers. So you can transition from as many algorithms as you want.
         #
         # * <tt>Default:</tt> nil
         # * <tt>Accepts:</tt> Class or Array
@@ -248,9 +280,11 @@ module Authlogic
             after_password_set
           end
 
-          # Accepts a raw password to determine if it is the correct password or not. Notice the second argument. That defaults to the value of
-          # check_passwords_against_database. See that method for more information, but basically it just tells Authlogic to check the password
-          # against the value in the database or the value in the object.
+          # Accepts a raw password to determine if it is the correct password or not.
+          # Notice the second argument. That defaults to the value of
+          # check_passwords_against_database. See that method for more information, but
+          # basically it just tells Authlogic to check the password against the value in
+          # the database or the value in the object.
           def valid_password?(attempted_password, check_against_database = check_passwords_against_database?)
             crypted =
               if check_against_database && send("#{crypted_password_field}_changed?")
