@@ -15,9 +15,7 @@ Rake::TestTask.new(:test) do |test|
   test.ruby_opts += ["-W1"]
 end
 
-# Run linter (rubocop) before tests.
 require "rubocop/rake_task"
 RuboCop::RakeTask.new
-task :test => :rubocop
 
-task :default => :test
+task :default => [:rubocop, :test]
