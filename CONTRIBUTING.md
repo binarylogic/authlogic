@@ -1,3 +1,29 @@
+# Contributing to Authlogic
+
+## Issues
+
+### Security Issues
+
+**Do not disclose security issues in public.** Instead, please email:
+
+```
+Ben Johnson <bjohnson@binarylogic.com>,
+Tieg Zaharia <tieg.zaharia@gmail.com>
+Jared Beck <jared@jaredbeck.com>
+```
+
+We will review security issues promptly.
+
+### Non-Security Issues
+
+Please use github issues for reproducible, minimal bug reports.
+
+### Usage Questions
+
+Please use stackoverflow for usage questions.
+
+## Development
+
 ### Testing
 
 Tests can be ran against different versions of Rails like so:
