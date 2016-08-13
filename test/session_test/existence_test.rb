@@ -6,13 +6,20 @@ module SessionTest
       def test_create
         ben = users(:ben)
         assert UserSession.create(:login => "somelogin", :password => "badpw2").new_session?
-        assert !UserSession.create(:login => ben.login, :password => "benrocks").new_session?
-        assert_raise(Authlogic::Session::Existence::SessionInvalidError) { UserSession.create!(:login => ben.login, :password => "badpw") }
-        assert !UserSession.create!(:login => ben.login, :password => "benrocks").new_session?
+        refute UserSession.create(:login => ben.login, :password => "benrocks").new_session?
+      end
+
+      def test_create_bang
+        ben = users(:ben)
+        err = assert_raise(Authlogic::Session::Existence::SessionInvalidError) do
+          UserSession.create!(:login => ben.login, :password => "badpw")
+        end
+        assert_includes err.message, "Password is not valid"
+        refute UserSession.create!(:login => ben.login, :password => "benrocks").new_session?
       end
     end
 
-    class IsntaceMethodsTest < ActiveSupport::TestCase
+    class InstanceMethodsTest < ActiveSupport::TestCase
       def test_new_session
         session = UserSession.new
         assert session.new_session?
