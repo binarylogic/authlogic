@@ -78,10 +78,30 @@ module ActsAsAuthenticTest
       assert_equal controller.cookies["user_credentials"], old_cookie_key
     end
 
-    def test_with_invalid_user
-      invalid_john = User.new(:login => "invalid_johnny", :password => "missing_stuff_dude", :password_confirmation => "missing_stuff_dude")
-      assert_raises ActiveRecord::RecordInvalid do
-        UserSession.create(invalid_john)
+    def test_create_with_invalid_user
+      invalid_john = User.new(
+        :login => "invalid_johnny",
+        :password => "missing_stuff_dude",
+        :password_confirmation => "missing_stuff_dude",
+        :email => nil
+      )
+
+      assert_nothing_raised do
+        @invalid_user = UserSession.create(invalid_john)
+      end
+      assert !@invalid_user.persisted?
+      assert_equal @invalid_user.errors.keys, [:email]
+    end
+
+    def test_create_bang_with_invalid_user
+      invalid_john = User.new(
+        :login => "invalid_johnny",
+        :password => "missing_stuff_dude",
+        :password_confirmation => "missing_stuff_dude",
+        :email => nil
+      )
+      assert_raises Authlogic::Session::Existence::SessionInvalidError do
+        UserSession.create!(invalid_john)
       end
     end
 
