@@ -1,6 +1,7 @@
 module Authlogic
   module Session
-    # Handles all authentication that deals with cookies, such as persisting, saving, and destroying.
+    # Handles all authentication that deals with cookies, such as persisting,
+    # saving, and destroying.
     module Cookies
       def self.included(klass)
         klass.class_eval do
@@ -14,8 +15,10 @@ module Authlogic
 
       # Configuration for the cookie feature set.
       module Config
-        # The name of the cookie or the key in the cookies hash. Be sure and use a unique name. If you have multiple sessions and they use the same cookie it will cause problems.
-        # Also, if a id is set it will be inserted into the beginning of the string. Exmaple:
+        # The name of the cookie or the key in the cookies hash. Be sure and use
+        # a unique name. If you have multiple sessions and they use the same
+        # cookie it will cause problems. Also, if a id is set it will be
+        # inserted into the beginning of the string. Example:
         #
         #   session = UserSession.new
         #   session.cookie_key => "user_credentials"
@@ -48,7 +51,8 @@ module Authlogic
         end
         alias_method :remember_me_for=, :remember_me_for
 
-        # Should the cookie be set as secure?  If true, the cookie will only be sent over SSL connections
+        # Should the cookie be set as secure?  If true, the cookie will only be sent over
+        # SSL connections
         #
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
@@ -57,7 +61,8 @@ module Authlogic
         end
         alias_method :secure=, :secure
 
-        # Should the cookie be set as httponly?  If true, the cookie will not be accessable from javascript
+        # Should the cookie be set as httponly?  If true, the cookie will not be
+        # accessible from javascript
         #
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
@@ -66,7 +71,8 @@ module Authlogic
         end
         alias_method :httponly=, :httponly
 
-        # Should the cookie be signed? If the controller adapter supports it, this is a measure against cookie tampering.
+        # Should the cookie be signed? If the controller adapter supports it, this is a
+        # measure against cookie tampering.
         def sign_cookie(value = nil)
           if value && !controller.cookies.respond_to?(:signed)
             raise "Signed cookies not supported with #{controller.class}!"
@@ -76,7 +82,8 @@ module Authlogic
         alias_method :sign_cookie=, :sign_cookie
       end
 
-      # The methods available for an Authlogic::Session::Base object that make up the cookie feature set.
+      # The methods available for an Authlogic::Session::Base object that make up the
+      # cookie feature set.
       module InstanceMethods
         # Allows you to set the remember_me option when passing credentials.
         def credentials=(value)
@@ -97,7 +104,9 @@ module Authlogic
           @remember_me = self.class.remember_me
         end
 
-        # Accepts a boolean as a flag to remember the session or not. Basically to expire the cookie at the end of the session or keep it for "remember_me_until".
+        # Accepts a boolean as a flag to remember the session or not. Basically
+        # to expire the cookie at the end of the session or keep it for
+        # "remember_me_until".
         def remember_me=(value)
           @remember_me = value
         end
@@ -107,13 +116,15 @@ module Authlogic
           remember_me == true || remember_me == "true" || remember_me == "1"
         end
 
-        # How long to remember the user if remember_me is true. This is based on the class level configuration: remember_me_for
+        # How long to remember the user if remember_me is true. This is based on the class
+        # level configuration: remember_me_for
         def remember_me_for
           return unless remember_me?
           self.class.remember_me_for
         end
 
-        # When to expire the cookie. See remember_me_for configuration option to change this.
+        # When to expire the cookie. See remember_me_for configuration option to change
+        # this.
         def remember_me_until
           return unless remember_me?
           remember_me_for.from_now
@@ -131,7 +142,8 @@ module Authlogic
           @secure = self.class.secure
         end
 
-        # Accepts a boolean as to whether the cookie should be marked as secure.  If true the cookie will only ever be sent over an SSL connection.
+        # Accepts a boolean as to whether the cookie should be marked as secure.  If true
+        # the cookie will only ever be sent over an SSL connection.
         def secure=(value)
           @secure = value
         end
@@ -141,13 +153,14 @@ module Authlogic
           secure == true || secure == "true" || secure == "1"
         end
 
-        # If the cookie should be marked as httponly (not accessable via javascript)
+        # If the cookie should be marked as httponly (not accessible via javascript)
         def httponly
           return @httponly if defined?(@httponly)
           @httponly = self.class.httponly
         end
 
-        # Accepts a boolean as to whether the cookie should be marked as httponly.  If true, the cookie will not be accessable from javascript
+        # Accepts a boolean as to whether the cookie should be marked as
+        # httponly.  If true, the cookie will not be accessible from javascript
         def httponly=(value)
           @httponly = value
         end
@@ -163,7 +176,8 @@ module Authlogic
           @sign_cookie = self.class.sign_cookie
         end
 
-        # Accepts a boolean as to whether the cookie should be signed.  If true the cookie will be saved and verified using a signature.
+        # Accepts a boolean as to whether the cookie should be signed.  If true
+        # the cookie will be saved and verified using a signature.
         def sign_cookie=(value)
           @sign_cookie = value
         end
@@ -174,6 +188,7 @@ module Authlogic
         end
 
         private
+
           def cookie_key
             build_key(self.class.cookie_key)
           end

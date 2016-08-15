@@ -7,13 +7,13 @@ module Authlogic
           extend Config
           include InstanceMethods
           validate :validate_by_password, :if => :authenticating_with_password?
-          
+
           class << self
             attr_accessor :configured_password_methods
           end
         end
       end
-      
+
       # Password configuration
       module Config
         # Authlogic tries to validate the credentials passed to it. One part of validation is actually finding the user and
@@ -23,8 +23,9 @@ module Authlogic
         # You can change what method UserSession calls by specifying it here. Then in your User model you can make that method do
         # anything you want, giving you complete control of how users are found by the UserSession.
         #
-        # Let's take an example: You want to allow users to login by username or email. Set this to the name of the class method
-        # that does this in the User model. Let's call it "find_by_username_or_email"
+        # Let's take an example: You want to allow users to login by username or email.
+        # Set this to the name of the class method that does this in the User model. Let's
+        # call it "find_by_username_or_email"
         #
         #   class User < ActiveRecord::Base
         #     def self.find_by_username_or_email(login)
@@ -32,8 +33,10 @@ module Authlogic
         #     end
         #   end
         #
-        # Now just specify the name of this method for this configuration option and you are all set. You can do anything you
-        # want here. Maybe you allow users to have multiple logins and you want to search a has_many relationship, etc. The sky is the limit.
+        # Now just specify the name of this method for this configuration option and you
+        # are all set. You can do anything you want here. Maybe you allow users to have
+        # multiple logins and you want to search a has_many relationship, etc. The sky is
+        # the limit.
         #
         # * <tt>Default:</tt> "find_by_smart_case_login_field"
         # * <tt>Accepts:</tt> Symbol or String
@@ -41,10 +44,11 @@ module Authlogic
           rw_config(:find_by_login_method, value, "find_by_smart_case_login_field")
         end
         alias_method :find_by_login_method=, :find_by_login_method
-        
-        # The text used to identify credentials (username/password) combination when a bad login attempt occurs.
-        # When you show error messages for a bad login, it's considered good security practice to hide which field
-        # the user has entered incorrectly (the login field or the password field). For a full explanation, see
+
+        # The text used to identify credentials (username/password) combination when a bad
+        # login attempt occurs. When you show error messages for a bad login, it's
+        # considered good security practice to hide which field the user has entered
+        # incorrectly (the login field or the password field). For a full explanation, see
         # http://www.gnucitizen.org/blog/username-enumeration-vulnerabilities/
         #
         # Example of use:
@@ -56,9 +60,9 @@ module Authlogic
         #   This would make the error message for bad logins and bad passwords look identical:
         #
         #   Login/Password combination is not valid
-        #  
+        #
         #   Alternatively you may use a custom message:
-        # 
+        #
         #   class UserSession < AuthLogic::Session::Base
         #     generalize_credentials_error_messages "Your login information is invalid"
         #   end
@@ -71,18 +75,20 @@ module Authlogic
         #
         # If you are developing an app where security is an extreme priority (such as a financial application),
         # then you should enable this. Otherwise, leaving this off is fine.
-        # 
+        #
         # * <tt>Default</tt> false
         # * <tt>Accepts:</tt> Boolean
         def generalize_credentials_error_messages(value = nil)
           rw_config(:generalize_credentials_error_messages, value, false)
         end
         alias_method :generalize_credentials_error_messages=, :generalize_credentials_error_messages
-        
-        # The name of the method you want Authlogic to create for storing the login / username. Keep in mind this is just for your
-        # Authlogic::Session, if you want it can be something completely different than the field in your model. So if you wanted people to
-        # login with a field called "login" and then find users by email this is compeltely doable. See the find_by_login_method configuration
-        # option for more details.
+
+        # The name of the method you want Authlogic to create for storing the login /
+        # username. Keep in mind this is just for your Authlogic::Session, if you want it
+        # can be something completely different than the field in your model. So if you
+        # wanted people to login with a field called "login" and then find users by email
+        # this is completely doable. See the find_by_login_method configuration option for
+        # more details.
         #
         # * <tt>Default:</tt> klass.login_field || klass.email_field
         # * <tt>Accepts:</tt> Symbol or String
@@ -90,7 +96,7 @@ module Authlogic
           rw_config(:login_field, value, klass.login_field || klass.email_field)
         end
         alias_method :login_field=, :login_field
-        
+
         # Works exactly like login_field, but for the password instead. Returns :password if a login_field exists.
         #
         # * <tt>Default:</tt> :password
@@ -99,7 +105,7 @@ module Authlogic
           rw_config(:password_field, value, login_field && :password)
         end
         alias_method :password_field=, :password_field
-        
+
         # The name of the method in your model used to verify the password. This should be an instance method. It should also
         # be prepared to accept a raw password and a crytped password.
         #
@@ -110,7 +116,7 @@ module Authlogic
         end
         alias_method :verify_password_method=, :verify_password_method
       end
-      
+
       # Password related instance methods
       module InstanceMethods
         def initialize(*args)
@@ -120,7 +126,7 @@ module Authlogic
           end
           super
         end
-        
+
         # Returns the login_field / password_field credentials combination in hash form.
         def credentials
           if authenticating_with_password?
@@ -132,11 +138,12 @@ module Authlogic
             super
           end
         end
-        
+
         # Accepts the login_field / password_field credentials combination in hash form.
         def credentials=(value)
           super
-          values = value.is_a?(Array) ? value : [value]
+          values = parse_param_val(value) # add strong parameters check
+
           if values.first.is_a?(Hash)
             values.first.with_indifferent_access.slice(login_field, password_field).each do |field, value|
               next if value.blank?
@@ -144,18 +151,19 @@ module Authlogic
             end
           end
         end
-        
+
         def invalid_password?
           invalid_password == true
         end
-        
+
         private
+
           def configure_password_methods
             if login_field
               self.class.send(:attr_writer, login_field) if !respond_to?("#{login_field}=")
               self.class.send(:attr_reader, login_field) if !respond_to?(login_field)
             end
-            
+
             if password_field
               self.class.send(:attr_writer, password_field) if !respond_to?("#{password_field}=")
               self.class.send(:define_method, password_field) {} if !respond_to?(password_field)
@@ -174,16 +182,19 @@ module Authlogic
           def authenticating_with_password?
             login_field && (!send(login_field).nil? || !send("protected_#{password_field}").nil?)
           end
-          
+
           def validate_by_password
             self.invalid_password = false
-            
+
             # check for blank fields
-            errors.add(login_field, I18n.t('error_messages.login_blank', :default => "cannot be blank")) if send(login_field).blank?
-            errors.add(password_field, I18n.t('error_messages.password_blank', :default => "cannot be blank")) if send("protected_#{password_field}").blank?
+            if send(login_field).blank?
+              errors.add(login_field, I18n.t('error_messages.login_blank', :default => "cannot be blank"))
+            end
+            if send("protected_#{password_field}").blank?
+              errors.add(password_field, I18n.t('error_messages.password_blank', :default => "cannot be blank"))
+            end
             return if errors.count > 0
 
-            # check for unknown login
             self.attempted_record = search_for_record(find_by_login_method, send(login_field))
             if attempted_record.blank?
               generalize_credentials_error_messages? ?
@@ -201,19 +212,19 @@ module Authlogic
               return
             end
           end
-          
+
           attr_accessor :invalid_password
-          
+
           def find_by_login_method
             self.class.find_by_login_method
           end
-          
+
           def login_field
             self.class.login_field
           end
-          
+
           def add_general_credentials_error
-            error_message = 
+            error_message =
             if self.class.generalize_credentials_error_messages.is_a? String
               self.class.generalize_credentials_error_messages
             else
@@ -221,17 +232,28 @@ module Authlogic
             end
             errors.add(:base, I18n.t('error_messages.general_credentials_error', :default => error_message))
           end
-          
+
           def generalize_credentials_error_messages?
             self.class.generalize_credentials_error_messages
           end
-          
+
           def password_field
             self.class.password_field
           end
-          
+
           def verify_password_method
             self.class.verify_password_method
+          end
+
+          # In Rails 5 the ActionController::Parameters no longer inherits from HashWithIndifferentAccess.
+          # See: http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#actioncontroller-parameters-no-longer-inherits-from-hashwithindifferentaccess
+          # This method converts the ActionController::Parameters to a Hash
+          def parse_param_val(value)
+            if value.first.class.name == "ActionController::Parameters"
+              [value.first.to_h]
+            else
+              value.is_a?(Array) ? value : [value]
+            end
           end
       end
     end

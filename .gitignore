@@ -10,3 +10,5 @@ benchmarks/*
 test/gemfiles/Gemfile*.lock
 .bundle
 Gemfile.lock
+.ruby-gemset
+.ruby-version

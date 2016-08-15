@@ -9,7 +9,7 @@ module Authlogic
           extend Config
         end
       end
-      
+
       # All configuration for the scope feature.
       module Config
         # Allows you to scope everything to specific field(s). Works just like validates_uniqueness_of.

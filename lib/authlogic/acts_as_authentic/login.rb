@@ -38,7 +38,7 @@ module Authlogic
         # * <tt>Default:</tt> {:within => 3..100}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_login_field_options(value = nil)
-          rw_config(:validates_length_of_login_field_options, value, {:within => 3..100})
+          rw_config(:validates_length_of_login_field_options, value, { :within => 3..100 })
         end
         alias_method :validates_length_of_login_field_options=, :validates_length_of_login_field_options
 
@@ -59,10 +59,31 @@ module Authlogic
         # merge options into it. Checkout the convenience function merge_validates_format_of_login_field_options to merge
         # options.</b>
         #
-        # * <tt>Default:</tt> {:with => Authlogic::Regex.login, :message => lambda {I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")}}
+        # * <tt>Default:</tt>
+        #
+        #         {
+        #           :with => Authlogic::Regex.login,
+        #           :message => lambda {
+        #             I18n.t(
+        #               'error_messages.login_invalid',
+        #               :default => "should use only letters, numbers, spaces, and .-_@+ please."
+        #             )
+        #           }
+        #         }
+        #
         # * <tt>Accepts:</tt> Hash of options accepted by validates_format_of
         def validates_format_of_login_field_options(value = nil)
-          rw_config(:validates_format_of_login_field_options, value, {:with => Authlogic::Regex.login, :message => I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")})
+          rw_config(
+            :validates_format_of_login_field_options,
+            value,
+            {
+              :with => Authlogic::Regex.login,
+              :message => I18n.t(
+                'error_messages.login_invalid',
+                :default => "should use only letters, numbers, spaces, and .-_@+ please."
+              )
+            }
+          )
         end
         alias_method :validates_format_of_login_field_options=, :validates_format_of_login_field_options
 
@@ -71,16 +92,33 @@ module Authlogic
           self.validates_format_of_login_field_options = validates_format_of_login_field_options.merge(options)
         end
 
-        # A hash of options for the validates_uniqueness_of call for the login field. Allows you to change this however you want.
+        # A hash of options for the validates_uniqueness_of call for the login
+        # field. Allows you to change this however you want.
         #
-        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
-        # merge options into it. Checkout the convenience function merge_validates_format_of_login_field_options to merge
-        # options.</b>
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as
+        # possible, so you can completely replace the hash or merge options into
+        # it. Checkout the convenience function
+        # merge_validates_format_of_login_field_options to merge options.</b>
         #
-        # * <tt>Default:</tt> {:case_sensitive => false, :scope => validations_scope, :if => "#{login_field}_changed?".to_sym}
+        # * <tt>Default:</tt>
+        #
+        #         {
+        #           :case_sensitive => false,
+        #           :scope => validations_scope,
+        #           :if => "#{login_field}_changed?".to_sym
+        #         }
+        #
         # * <tt>Accepts:</tt> Hash of options accepted by validates_uniqueness_of
         def validates_uniqueness_of_login_field_options(value = nil)
-          rw_config(:validates_uniqueness_of_login_field_options, value, {:case_sensitive => false, :scope => validations_scope, :if => "#{login_field}_changed?".to_sym})
+          rw_config(
+            :validates_uniqueness_of_login_field_options,
+            value,
+            {
+              :case_sensitive => false,
+              :scope => validations_scope,
+              :if => "#{login_field}_changed?".to_sym
+            }
+          )
         end
         alias_method :validates_uniqueness_of_login_field_options=, :validates_uniqueness_of_login_field_options
 
@@ -112,15 +150,30 @@ module Authlogic
         end
 
         private
+
           def find_with_case(field, value, sensitivity = true)
+            ar_gem_version = Gem::Version.new(ActiveRecord::VERSION::STRING)
+
             relation = if not sensitivity
               connection.case_insensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
+            elsif ar_gem_version >= Gem::Version.new('5.0')
+              connection.case_sensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
             else
-              value    = connection.case_sensitive_modifier(value) if value
-              relation = arel_table[field.to_s].eq(value)
+              if ar_gem_version < Gem::Version.new('4.2')
+                value = connection.case_sensitive_modifier(value)
+              else
+                value = connection.case_sensitive_modifier(value, field.to_s)
+              end
+              arel_table[field.to_s].eq(value)
             end
 
-            where(relation).first
+            # bind value in rails 5
+            if ar_gem_version >= Gem::Version.new('5')
+              bind = ActiveRecord::Relation::QueryAttribute.new(field.to_s, value, ActiveRecord::Type::Value.new)
+              where(relation, bind).first
+            else
+              where(relation).first
+            end
           end
       end
 

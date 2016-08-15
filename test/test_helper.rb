@@ -5,18 +5,22 @@ require "active_record/fixtures"
 require "timecop"
 require "i18n"
 
-
 I18n.load_path << File.dirname(__FILE__) + '/i18n/lol.yml'
 
-#ActiveRecord::Schema.verbose = false
+# ActiveRecord::Schema.verbose = false
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
 logger = Logger.new(STDOUT)
-logger.level= Logger::FATAL
+logger.level = Logger::FATAL
 ActiveRecord::Base.logger = logger
 
 if (ActiveRecord::VERSION::STRING < '4.1')
   ActiveRecord::Base.configurations = true
 end
+
+if ActiveSupport.respond_to?(:test_order)
+  ActiveSupport.test_order = :sorted
+end
+
 ActiveRecord::Base.default_timezone = :local
 ActiveRecord::Schema.define(:version => 1) do
   create_table :companies do |t|
@@ -124,8 +128,8 @@ class ActiveSupport::TestCase
   teardown :config_teardown
   teardown { Timecop.return } # for tests that need to freeze the time
 
-
   private
+
     # Many of the tests change Authlogic config for the test models. Some tests
     # were not resetting the config after tests, which didn't surface as broken
     # tests until Rails 4.1 was added for testing. This ensures that all the
@@ -164,7 +168,7 @@ class ActiveSupport::TestCase
     end
 
     def set_cookie_for(user)
-      controller.cookies["user_credentials"] = {:value => "#{user.persistence_token}::#{user.id}", :expires => nil}
+      controller.cookies["user_credentials"] = { :value => "#{user.persistence_token}::#{user.id}", :expires => nil }
     end
 
     def unset_cookie

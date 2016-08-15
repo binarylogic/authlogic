@@ -1,4 +1,4 @@
-#encoding: utf-8
+# encoding: utf-8
 module Authlogic
   # This is a module the contains regular expressions used throughout Authlogic. The point of extracting
   # them out into their own module is to make them easily available to you for other uses. Ex:
@@ -11,17 +11,37 @@ module Authlogic
     # which is an excellent resource for regular expressions.
     def self.email
       @email_regex ||= begin
-        email_name_regex  = '[A-Z0-9_\.%\+\-\']+'
+        email_name_regex  = '[A-Z0-9_\.&%\+\-\']+'
         domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
         domain_tld_regex  = '(?:[A-Z]{2,13})'
         /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
       end
     end
 
-    # A simple regular expression that only allows for letters, numbers, spaces, and .-_@. Just a standard login / username
+    # A draft regular expression for internationalized email addresses.
+    # Given that the standard may be in flux, this simply emulates @email_regex but rather than
+    # allowing specific characters for each part, it instead disallows the complement set of characters:
+    # - email_name_regex disallows: @[]^ !"#$()*,/:;<=>?`{|}~\ and control characters
+    # - domain_head_regex disallows: _%+ and all characters in email_name_regex
+    # - domain_tld_regex disallows: 0123456789- and all characters in domain_head_regex
+    # http://en.wikipedia.org/wiki/Email_address#Internationalization
+    # http://tools.ietf.org/html/rfc6530
+    # http://www.unicode.org/faq/idn.html
+    # http://ruby-doc.org/core-2.1.5/Regexp.html#class-Regexp-label-Character+Classes
+    # http://en.wikipedia.org/wiki/Unicode_character_property#General_Category
+    def self.email_nonascii
+      @email_nonascii_regex ||= begin
+        email_name_regex  = '[^[:cntrl:][@\[\]\^ \!\"#$\(\)*,/:;<=>\?`{|}~\\\]]+'
+        domain_head_regex = '(?:[^[:cntrl:][@\[\]\^ \!\"#$&\(\)*,/:;<=>\?`{|}~\\\_\.%\+\']]+\.)+'
+        domain_tld_regex  = '(?:[^[:cntrl:][@\[\]\^ \!\"#$&\(\)*,/:;<=>\?`{|}~\\\_\.%\+\-\'0-9]]{2,13})'
+        /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/
+      end
+    end
+
+    # A simple regular expression that only allows for letters, numbers, spaces, and .-_@+. Just a standard login / username
     # regular expression.
     def self.login
-      /\A\w[\w\.+\-_@ ]+\z/
+      /\A[a-zA-Z0-9_][a-zA-Z0-9\.+\-_@ ]+\z/
     end
   end
 end

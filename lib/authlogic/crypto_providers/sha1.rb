@@ -10,13 +10,13 @@ module Authlogic
           @join_token ||= "--"
         end
         attr_writer :join_token
-        
+
         # The number of times to loop through the encryption. This is ten because that is what restful_authentication defaults to.
         def stretches
           @stretches ||= 10
         end
         attr_writer :stretches
-        
+
         # Turns your raw password into a Sha1 hash.
         def encrypt(*tokens)
           tokens = tokens.flatten
@@ -24,7 +24,7 @@ module Authlogic
           stretches.times { digest = Digest::SHA1.hexdigest([digest, *tokens].join(join_token)) }
           digest
         end
-        
+
         # Does the crypted password match the tokens? Uses the same tokens that were used to encrypt.
         def matches?(crypted, *tokens)
           encrypt(*tokens) == crypted

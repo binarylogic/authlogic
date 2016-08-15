@@ -41,10 +41,7 @@ module SessionTest
 
         # grab old values
         old_login_count = aaron.login_count
-        old_failed_login_count = aaron.failed_login_count
-        old_last_login_at = aaron.last_login_at
         old_current_login_at = aaron.current_login_at
-        old_last_login_ip = aaron.last_login_ip
         old_current_login_ip = aaron.current_login_ip
 
         assert UserSession.create(:login => aaron.login, :password => "aaronrocks").valid?

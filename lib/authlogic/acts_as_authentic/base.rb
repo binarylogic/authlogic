@@ -67,11 +67,12 @@ module Authlogic
         end
 
         private
+
           def db_setup?
             begin
               column_names
               true
-            rescue Exception
+            rescue StandardError
               false
             end
           end
@@ -99,4 +100,3 @@ end
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::SessionMaintenance
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::SingleAccessToken
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::ValidationsScope
-

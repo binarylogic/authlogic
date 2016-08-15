@@ -1,0 +1,33 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  # You can run the authlogic test suite with any supported version of MRI, but the
+  # linter will only care about this `TargetRubyVersion`. This should be set to the
+  # lowest version of MRI that authlogic supports.
+  TargetRubyVersion: 1.9
+
+# Compared to metrics like AbcSize, MethodLength has questionable value.
+Metrics/MethodLength:
+  Enabled: false
+
+# Please use normal indentation when aligning parameters.
+#
+# Good:
+#
+#     method_call(
+#       a,
+#       b
+#     )
+#
+#     method_call(a,
+#       b
+#     )
+#
+# Bad:
+#
+#     method_call(a,
+#                 b)
+#
+# The latter is harder to maintain and uses too much horizontal space.
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation

@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased
+
+* changes
+  * increased default minimum password length to 8 (@iainbeeston)
+  * bind parameters in where statement for rails 5 support
+  * change callback for rails 5 support
+  * converts the ActionController::Parameters to a Hash for rails 5 support
+  * check last_request_at_threshold even if last_request_at_update_allowed returns true (@rofreg)
+
+## 3.4.6 2015
+
+* changes
+  * add Regex.email_nonascii for validation of emails w/unicode (@rchekaluk)
+  * allow scrypt 2.x (@jaredbeck)
+
 ## 3.4.5 2015-03-01
 
 * changes

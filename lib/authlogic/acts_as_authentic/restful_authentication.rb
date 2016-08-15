@@ -36,6 +36,7 @@ module Authlogic
         alias_method :transition_from_restful_authentication=, :transition_from_restful_authentication
 
         private
+
           def set_restful_authentication_config
             crypto_provider_key = act_like_restful_authentication ? :crypto_provider : :transition_from_crypto_providers
             self.send("#{crypto_provider_key}=", CryptoProviders::Sha1)
@@ -48,6 +49,7 @@ module Authlogic
 
       module InstanceMethods
         private
+
           def act_like_restful_authentication?
             self.class.act_like_restful_authentication == true
           end

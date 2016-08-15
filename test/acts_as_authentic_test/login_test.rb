@@ -23,32 +23,38 @@ module ActsAsAuthenticTest
     end
 
     def test_validates_length_of_login_field_options_config
-      assert_equal({:within => 3..100}, User.validates_length_of_login_field_options)
-      assert_equal({:within => 3..100}, Employee.validates_length_of_login_field_options)
+      assert_equal({ :within => 3..100 }, User.validates_length_of_login_field_options)
+      assert_equal({ :within => 3..100 }, Employee.validates_length_of_login_field_options)
 
-      User.validates_length_of_login_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_length_of_login_field_options)
-      User.validates_length_of_login_field_options({:within => 3..100})
-      assert_equal({:within => 3..100}, User.validates_length_of_login_field_options)
+      User.validates_length_of_login_field_options = { :yes => "no" }
+      assert_equal({ :yes => "no" }, User.validates_length_of_login_field_options)
+      User.validates_length_of_login_field_options({ :within => 3..100 })
+      assert_equal({ :within => 3..100 }, User.validates_length_of_login_field_options)
     end
 
     def test_validates_format_of_login_field_options_config
-      default = {:with => /\A\w[\w\.+\-_@ ]+\z/, :message => I18n.t('error_messages.login_invalid', :default => "should use only letters, numbers, spaces, and .-_@ please.")}
+      default = {
+        :with => /\A[a-zA-Z0-9_][a-zA-Z0-9\.+\-_@ ]+\z/,
+        :message => I18n.t(
+          'error_messages.login_invalid',
+          :default => "should use only letters, numbers, spaces, and .-_@+ please."
+        )
+      }
       assert_equal default, User.validates_format_of_login_field_options
       assert_equal default, Employee.validates_format_of_login_field_options
 
-      User.validates_format_of_login_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_format_of_login_field_options)
+      User.validates_format_of_login_field_options = { :yes => "no" }
+      assert_equal({ :yes => "no" }, User.validates_format_of_login_field_options)
       User.validates_format_of_login_field_options default
       assert_equal default, User.validates_format_of_login_field_options
     end
 
     def test_validates_uniqueness_of_login_field_options_config
-      default = {:case_sensitive => false, :scope => User.validations_scope, :if => "#{User.login_field}_changed?".to_sym}
+      default = { :case_sensitive => false, :scope => User.validations_scope, :if => "#{User.login_field}_changed?".to_sym }
       assert_equal default, User.validates_uniqueness_of_login_field_options
 
-      User.validates_uniqueness_of_login_field_options = {:yes => "no"}
-      assert_equal({:yes => "no"}, User.validates_uniqueness_of_login_field_options)
+      User.validates_uniqueness_of_login_field_options = { :yes => "no" }
+      assert_equal({ :yes => "no" }, User.validates_uniqueness_of_login_field_options)
       User.validates_uniqueness_of_login_field_options default
       assert_equal default, User.validates_uniqueness_of_login_field_options
     end
@@ -77,6 +83,34 @@ module ActsAsAuthenticTest
       u.login = "dakota.dux+1@gmail.com"
       assert !u.valid?
       assert u.errors[:login].size == 0
+
+      u.login = "marks .-_@+"
+      assert !u.valid?
+      assert u.errors[:login].size == 0
+
+      u.login = " space"
+      assert !u.valid?
+      assert u.errors[:login].size > 0
+
+      u.login = ".dot"
+      assert !u.valid?
+      assert u.errors[:login].size > 0
+
+      u.login = "-hyphen"
+      assert !u.valid?
+      assert u.errors[:login].size > 0
+
+      u.login = "_underscore"
+      assert !u.valid?
+      assert u.errors[:login].size == 0
+
+      u.login = "@atmark"
+      assert !u.valid?
+      assert u.errors[:login].size > 0
+
+      u.login = "+plus"
+      assert !u.valid?
+      assert u.errors[:login].size > 0
     end
 
     def test_validates_uniqueness_of_login_field

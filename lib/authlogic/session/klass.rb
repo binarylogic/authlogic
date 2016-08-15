@@ -56,6 +56,7 @@ module Authlogic
         end
 
         private
+
           def klass
             self.class.klass
           end
