@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased
+## 3.5.0 2016-08-29
+
+* new
+  * Rails 5.0 support! Thanks to all reporters and contributors.
 
 * changes
   * increased default minimum password length to 8 (@iainbeeston)
