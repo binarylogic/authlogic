@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* ensure that login field validation uses correct locale (@sskirby)
+
 ## 3.5.0 2016-08-29
 
 * new
