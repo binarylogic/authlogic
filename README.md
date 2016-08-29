@@ -1,6 +1,6 @@
 # Authlogic
 
-**Authlogic supports both rails 3 and 4. For rails 2, see the [rails2 branch](https://github.com/binarylogic/authlogic/tree/rails2).**
+**Authlogic supports rails 3, 4 and 5. For rails 2, see the [rails2 branch](https://github.com/binarylogic/authlogic/tree/rails2).**
 
 [![Gem Version](https://badge.fury.io/rb/authlogic.png)](http://badge.fury.io/rb/authlogic)
 [![Build Status](https://travis-ci.org/binarylogic/authlogic.png?branch=master)](https://travis-ci.org/binarylogic/authlogic)
