@@ -35,13 +35,26 @@ module ActsAsAuthenticTest
     def test_validates_format_of_login_field_options_config
       default = {
         :with => /\A[a-zA-Z0-9_][a-zA-Z0-9\.+\-_@ ]+\z/,
-        :message => I18n.t(
-          'error_messages.login_invalid',
-          :default => "should use only letters, numbers, spaces, and .-_@+ please."
-        )
+        :message => proc do
+          I18n.t(
+            'error_messages.login_invalid',
+            :default => "should use only letters, numbers, spaces, and .-_@+ please."
+          )
+        end
       }
-      assert_equal default, User.validates_format_of_login_field_options
-      assert_equal default, Employee.validates_format_of_login_field_options
+      default_message = default.delete(:message).call
+
+      options = User.validates_format_of_login_field_options
+      message = options.delete(:message)
+      assert message.is_a?(Proc)
+      assert_equal default_message, message.call
+      assert_equal default, options
+
+      options = Employee.validates_format_of_login_field_options
+      message = options.delete(:message)
+      assert message.is_a?(Proc)
+      assert_equal default_message, message.call
+      assert_equal default, options
 
       User.validates_format_of_login_field_options = { :yes => "no" }
       assert_equal({ :yes => "no" }, User.validates_format_of_login_field_options)
