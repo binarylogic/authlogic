@@ -119,8 +119,16 @@ Authlogic::CryptoProviders::AES256.key = "myafdsfddddddddddddddddddddddddddddddd
 class ActiveSupport::TestCase
   include ActiveRecord::TestFixtures
   self.fixture_path = File.dirname(__FILE__) + "/fixtures"
-  self.use_transactional_fixtures = false
-  self.use_instantiated_fixtures  = false
+
+  # use_transactional_fixtures= is deprecated and will be removed from Rails 5.1
+  # (use use_transactional_tests= instead)
+  if respond_to?(:use_transactional_tests=)
+    self.use_transactional_tests = false
+  else
+    self.use_transactional_fixtures = false
+  end
+
+  self.use_instantiated_fixtures = false
   self.pre_loaded_fixtures = false
   fixtures :all
   setup :activate_authlogic
