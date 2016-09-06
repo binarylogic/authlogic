@@ -25,7 +25,8 @@ module SessionTest
         ben = users(:ben)
         ben.failed_login_count = UserSession.consecutive_failed_logins_limit - 1
         assert ben.save
-        assert UserSession.create(:login => ben.login, :password => "benrocks")
+        session = UserSession.create(:login => ben.login, :password => "benrocks")
+        refute session.new_session?
       end
 
       def test_exceeded_limit

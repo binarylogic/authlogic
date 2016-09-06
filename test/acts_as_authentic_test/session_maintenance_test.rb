@@ -11,14 +11,13 @@ module ActsAsAuthenticTest
     end
 
     def test_login_after_create
-      assert(
-        User.create(
-          :login => "awesome",
-          :password => "saweeeet",
-          :password_confirmation => "saweeeet",
-          :email => "awesome@awesome.com"
-        )
+      user = User.create(
+        :login => "awesome",
+        :password => "saweeeet",
+        :password_confirmation => "saweeeet",
+        :email => "awesome@awesome.com"
       )
+      assert user.persisted?
       assert UserSession.find
     end
 
@@ -60,7 +59,13 @@ module ActsAsAuthenticTest
       UserSession.create(ben)
       old_session_key = controller.session["user_credentials"]
       old_cookie_key = controller.cookies["user_credentials"]
-      assert User.create(:login => "awesome", :password => "saweet", :password_confirmation => "saweet", :email => "awesome@saweet.com")
+      user = User.create(
+        :login => "awesome",
+        :password => "saweet", # Password is too short, user invalid
+        :password_confirmation => "saweet",
+        :email => "awesome@saweet.com"
+      )
+      refute user.persisted?
       assert_equal controller.session["user_credentials"], old_session_key
       assert_equal controller.cookies["user_credentials"], old_cookie_key
     end
