@@ -291,5 +291,4 @@ See [Authlogic::TestCase](https://github.com/binarylogic/authlogic/blob/master/l
 
 Interested in how all of this all works? Think about an ActiveRecord model. A database connection must be established before you can use it. In the case of Authlogic, a controller connection must be established before you can use it. It uses that controller connection to modify cookies, the current session, login with HTTP basic, etc. It connects to the controller through a before filter that is automatically set in your controller which lets Authlogic know about the current controller object. Then Authlogic leverages that to do everything, it's a pretty simple design. Nothing crazy going on, Authlogic is just leveraging the tools your framework provides in the controller object.
 
-
-Copyright (c) 2012 [Ben Johnson of Binary Logic](http://www.binarylogic.com), released under the MIT license
+Copyright (c) 2012 Ben Johnson of Binary Logic, released under the MIT license

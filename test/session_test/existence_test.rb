@@ -3,10 +3,15 @@ require 'test_helper'
 module SessionTest
   module ExistenceTest
     class ClassMethodsTest < ActiveSupport::TestCase
-      def test_create
+      def test_create_with_good_credentials
         ben = users(:ben)
-        assert UserSession.create(:login => "somelogin", :password => "badpw2").new_session?
-        refute UserSession.create(:login => ben.login, :password => "benrocks").new_session?
+        session = UserSession.create(:login => ben.login, :password => "benrocks")
+        refute session.new_session?
+      end
+
+      def test_create_with_bad_credentials
+        session = UserSession.create(:login => "somelogin", :password => "badpw2")
+        assert session.new_session?
       end
 
       def test_create_bang

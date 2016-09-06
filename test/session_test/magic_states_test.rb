@@ -15,11 +15,9 @@ module SessionTest
     class InstanceMethodsTest < ActiveSupport::TestCase
       def test_disabling_magic_states
         UserSession.disable_magic_states = true
-
         ben = users(:ben)
         ben.update_attribute(:active, false)
-        assert UserSession.create(ben)
-
+        refute UserSession.create(ben).new_session?
         UserSession.disable_magic_states = false
       end
 
