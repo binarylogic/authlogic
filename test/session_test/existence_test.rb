@@ -31,21 +31,21 @@ module SessionTest
 
         set_session_for(users(:ben))
         session = UserSession.find
-        assert !session.new_session?
+        refute session.new_session?
       end
 
       def test_save_with_nothing
         session = UserSession.new
-        assert !session.save
+        refute session.save
         assert session.new_session?
       end
 
       def test_save_with_block
         session = UserSession.new
         block_result = session.save do |result|
-          assert !result
+          refute result
         end
-        assert !block_result
+        refute block_result
         assert session.new_session?
       end
 
@@ -60,15 +60,15 @@ module SessionTest
       def test_destroy
         ben = users(:ben)
         session = UserSession.new
-        assert !session.valid?
-        assert !session.errors.empty?
+        refute session.valid?
+        refute session.errors.empty?
         assert session.destroy
         assert session.errors.empty?
         session.unauthorized_record = ben
         assert session.save
         assert session.record
         assert session.destroy
-        assert !session.record
+        refute session.record
       end
     end
   end

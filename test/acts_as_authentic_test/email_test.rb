@@ -76,7 +76,7 @@ module ActsAsAuthenticTest
       assert Employee.validate_email_field
 
       User.validate_email_field = false
-      assert !User.validate_email_field
+      refute User.validate_email_field
       User.validate_email_field true
       assert User.validate_email_field
     end
@@ -171,11 +171,11 @@ module ActsAsAuthenticTest
     def test_validates_length_of_email_field
       u = User.new
       u.email = "a@a.a"
-      assert !u.valid?
-      assert !u.errors[:email].empty?
+      refute u.valid?
+      refute u.errors[:email].empty?
 
       u.email = "a@a.com"
-      assert !u.valid?
+      refute u.valid?
       assert u.errors[:email].empty?
     end
 
@@ -183,7 +183,7 @@ module ActsAsAuthenticTest
       u = User.new
       u.email = "aaaaaaaaaaaaa"
       u.valid?
-      assert !u.errors[:email].empty?
+      refute u.errors[:email].empty?
 
       u.email = "a@a.com"
       u.valid?
@@ -202,8 +202,8 @@ module ActsAsAuthenticTest
       assert u.errors[:email].empty?
 
       u.email = "<script>alert(123);</script>\nnobody@example.com"
-      assert !u.valid?
-      assert !u.errors[:email].empty?
+      refute u.valid?
+      refute u.errors[:email].empty?
 
       u.email = "a&b@c.com"
       u.valid?
@@ -223,15 +223,15 @@ module ActsAsAuthenticTest
     def test_validates_uniqueness_of_email_field
       u = User.new
       u.email = "bjohnson@binarylogic.com"
-      assert !u.valid?
-      assert !u.errors[:email].empty?
+      refute u.valid?
+      refute u.errors[:email].empty?
 
       u.email = "BJOHNSON@binarylogic.com"
-      assert !u.valid?
-      assert !u.errors[:email].empty?
+      refute u.valid?
+      refute u.errors[:email].empty?
 
       u.email = "a@a.com"
-      assert !u.valid?
+      refute u.valid?
       assert u.errors[:email].empty?
     end
   end

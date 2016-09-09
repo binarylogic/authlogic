@@ -21,7 +21,7 @@ module SessionTest
 
       def test_generalize_credentials_error_mesages_set_to_false
         UserSession.generalize_credentials_error_messages false
-        assert !UserSession.generalize_credentials_error_messages
+        refute UserSession.generalize_credentials_error_messages
         session = UserSession.create(:login => users(:ben).login, :password => "invalud-password")
         assert_equal ["Password is not valid"], session.errors.full_messages
       end
@@ -95,7 +95,7 @@ module SessionTest
         aaron = users(:aaron)
         session = UserSession.new(:login => aaron.login, :password => "aaronrocks")
         assert session.save
-        assert !session.new_session?
+        refute session.new_session?
         assert_equal 1, session.record.login_count
         assert Time.now >= session.record.current_login_at
         assert_equal "1.1.1.1", session.record.current_login_ip

@@ -89,11 +89,11 @@ module SessionTest
       def test_remember_me
         session = UserSession.new
         assert_equal false, session.remember_me
-        assert !session.remember_me?
+        refute session.remember_me?
 
         session.remember_me = false
         assert_equal false, session.remember_me
-        assert !session.remember_me?
+        refute session.remember_me?
 
         session.remember_me = true
         assert_equal true, session.remember_me
@@ -101,7 +101,7 @@ module SessionTest
 
         session.remember_me = nil
         assert_nil session.remember_me
-        assert !session.remember_me?
+        refute session.remember_me?
 
         session.remember_me = "1"
         assert_equal "1", session.remember_me
@@ -122,7 +122,7 @@ module SessionTest
 
       def test_persist_persist_by_cookie
         ben = users(:ben)
-        assert !UserSession.find
+        refute UserSession.find
         set_cookie_for(ben)
         assert session = UserSession.find
         assert_equal ben, session.record
@@ -131,9 +131,9 @@ module SessionTest
       def test_persist_persist_by_cookie_with_blank_persistence_token
         ben = users(:ben)
         ben.update_column(:persistence_token, "")
-        assert !UserSession.find
+        refute UserSession.find
         set_cookie_for(ben)
-        assert !UserSession.find
+        refute UserSession.find
       end
 
       def test_remember_me_expired
@@ -141,12 +141,12 @@ module SessionTest
         session = UserSession.new(ben)
         session.remember_me = true
         assert session.save
-        assert !session.remember_me_expired?
+        refute session.remember_me_expired?
 
         session = UserSession.new(ben)
         session.remember_me = false
         assert session.save
-        assert !session.remember_me_expired?
+        refute session.remember_me_expired?
       end
 
       def test_after_save_save_cookie
@@ -194,7 +194,7 @@ module SessionTest
         session = UserSession.find
         assert controller.cookies["user_credentials"]
         assert session.destroy
-        assert !controller.cookies["user_credentials"]
+        refute controller.cookies["user_credentials"]
       end
     end
   end

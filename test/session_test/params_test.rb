@@ -25,17 +25,17 @@ module SessionTest
         ben = users(:ben)
         session = UserSession.new
 
-        assert !session.persisting?
+        refute session.persisting?
         set_params_for(ben)
 
-        assert !session.persisting?
-        assert !session.unauthorized_record
-        assert !session.record
+        refute session.persisting?
+        refute session.unauthorized_record
+        refute session.record
         assert_nil controller.session["user_credentials"]
 
         set_request_content_type("text/plain")
-        assert !session.persisting?
-        assert !session.unauthorized_record
+        refute session.persisting?
+        refute session.unauthorized_record
         assert_nil controller.session["user_credentials"]
 
         set_request_content_type("application/atom+xml")

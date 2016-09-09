@@ -6,7 +6,7 @@ module SessionTest
       def test_activated
         assert UserSession.activated?
         Authlogic::Session::Base.controller = nil
-        assert !UserSession.activated?
+        refute UserSession.activated?
       end
 
       def test_controller
