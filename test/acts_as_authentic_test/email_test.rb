@@ -8,7 +8,7 @@ module ActsAsAuthenticTest
       "damien+test1...etc..@mydomain.com",
       "dakota.dux+1@gmail.com",
       "dakota.d'ux@gmail.com",
-      "a&b@c.com",
+      "a&b@c.com"
     ]
 
     BAD_ASCII_EMAILS = [
@@ -16,7 +16,7 @@ module ActsAsAuthenticTest
       "aaaaaaaaaaaaa",
       "question?mark@gmail.com",
       "backslash@g\\mail.com",
-      "<script>alert(123);</script>\nnobody@example.com",
+      "<script>alert(123);</script>\nnobody@example.com"
     ]
 
     # http://en.wikipedia.org/wiki/ISO/IEC_8859-1#Codepage_layout
@@ -58,7 +58,7 @@ module ActsAsAuthenticTest
       "我>.香港",                    # greater than
       "我?本@屋企.香港",              # question mark
       "чебурша@ьн\\ами.рф",         # backslash
-      "user@domain.com%0A<script>alert('hello')</script>",
+      "user@domain.com%0A<script>alert('hello')</script>"
     ]
 
     def test_email_field_config

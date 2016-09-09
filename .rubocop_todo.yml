@@ -385,13 +385,6 @@ Style/SymbolProc:
     - 'lib/authlogic/acts_as_authentic/persistence_token.rb'
 
 # Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
-# SupportedStyles: comma, consistent_comma, no_comma
-Style/TrailingCommaInLiteral:
-  Exclude:
-    - 'test/acts_as_authentic_test/email_test.rb'
-
-# Cop supports --auto-correct.
 Style/UnneededPercentQ:
   Exclude:
     - 'authlogic.gemspec'
