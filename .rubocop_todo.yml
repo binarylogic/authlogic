@@ -358,12 +358,6 @@ Style/RescueModifier:
     - 'lib/authlogic/acts_as_authentic/session_maintenance.rb'
 
 # Cop supports --auto-correct.
-# Configuration parameters: AllowIfMethodIsEmpty.
-Style/SingleLineMethods:
-  Exclude:
-    - 'lib/authlogic/controller_adapters/rack_adapter.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: SupportedStyles.
 # SupportedStyles: use_perl_names, use_english_names
 Style/SpecialGlobalVars:
