@@ -32,8 +32,10 @@ module Authlogic
 
           if !unsupported_options.nil?
             raise ArgumentError.new(
-              "You are using the old v1.X.X configuration method for Authlogic. Instead of passing a hash of " +
-              "configuration options to acts_as_authentic, pass a block: acts_as_authentic { |c| c.my_option = my_value }"
+              "You are using the old v1.X.X configuration method for " \
+                "Authlogic. Instead of passing a hash of configuration " \
+                "options to acts_as_authentic, pass a block: " \
+                "acts_as_authentic { |c| c.my_option = my_value }"
             )
           end
 

@@ -250,11 +250,6 @@ Style/Lambda:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/logged_in_status.rb'
 
-# Cop supports --auto-correct.
-Style/LineEndConcatenation:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/base.rb'
-
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: module_function, extend_self
 Style/ModuleFunction:
