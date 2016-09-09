@@ -102,7 +102,8 @@ module Authlogic
           end
 
           def get_session_information
-            # Need to determine if we are completely logged out, or logged in as another user
+            # Need to determine if we are completely logged out, or logged in as
+            # another user.
             @_sessions = []
 
             session_ids.each do |session_id|
@@ -120,8 +121,9 @@ module Authlogic
           end
 
           def create_session
-            # We only want to automatically login into the first session, since this is the main session. The other sessions are sessions
-            # that need to be created after logging into the main session.
+            # We only want to automatically login into the first session, since
+            # this is the main session. The other sessions are sessions that
+            # need to be created after logging into the main session.
             session_id = session_ids.first
             session_class.create(*[self, self, session_id].compact)
 

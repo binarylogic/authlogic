@@ -31,15 +31,33 @@ module Authlogic
 
           klass.class_eval do
             include InstanceMethods
-            scope :logged_in, lambda { where("last_request_at > ? and current_login_at IS NOT NULL", logged_in_timeout.seconds.ago) }
-            scope :logged_out, lambda { where("last_request_at is NULL or last_request_at <= ?", logged_in_timeout.seconds.ago) }
+            scope(
+              :logged_in,
+              lambda do
+                where(
+                  "last_request_at > ? and current_login_at IS NOT NULL",
+                  logged_in_timeout.seconds.ago
+                )
+              end
+            )
+            scope(
+              :logged_out,
+              lambda do
+                where(
+                  "last_request_at is NULL or last_request_at <= ?",
+                  logged_in_timeout.seconds.ago
+                )
+              end
+            )
           end
         end
 
         module InstanceMethods
           # Returns true if the last_request_at > logged_in_timeout.
           def logged_in?
-            raise "Can not determine the records login state because there is no last_request_at column" if !respond_to?(:last_request_at)
+            unless respond_to?(:last_request_at)
+              raise "Can not determine the records login state because there is no last_request_at column"
+            end
             !last_request_at.nil? && last_request_at > logged_in_timeout.seconds.ago
           end
 

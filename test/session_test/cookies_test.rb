@@ -153,7 +153,10 @@ module SessionTest
         ben = users(:ben)
         session = UserSession.new(ben)
         assert session.save
-        assert_equal "#{ben.persistence_token}::#{ben.id}", controller.cookies["user_credentials"]
+        assert_equal(
+          "#{ben.persistence_token}::#{ben.id}",
+          controller.cookies["user_credentials"]
+        )
       end
 
       def test_after_save_save_cookie_signed
@@ -166,7 +169,10 @@ module SessionTest
         session.sign_cookie = true
         assert session.save
         assert_equal payload, controller.cookies.signed["user_credentials"]
-        assert_equal "#{payload}--#{Digest::SHA1.hexdigest payload}", controller.cookies.signed.parent_jar["user_credentials"]
+        assert_equal(
+          "#{payload}--#{Digest::SHA1.hexdigest payload}",
+          controller.cookies.signed.parent_jar["user_credentials"]
+        )
       end
 
       def test_after_save_save_cookie_with_remember_me
@@ -175,7 +181,10 @@ module SessionTest
           session = UserSession.new(ben)
           session.remember_me = true
           assert session.save
-          assert_equal "#{ben.persistence_token}::#{ben.id}::#{session.remember_me_until.iso8601}", controller.cookies["user_credentials"]
+          assert_equal(
+            "#{ben.persistence_token}::#{ben.id}::#{session.remember_me_until.iso8601}",
+            controller.cookies["user_credentials"]
+          )
         end
       end
 

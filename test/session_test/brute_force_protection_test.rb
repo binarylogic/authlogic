@@ -72,7 +72,9 @@ module SessionTest
           assert_equal i + 1, ben.reload.failed_login_count
         end
 
-        ActiveRecord::Base.connection.execute("update users set updated_at = '#{1.day.ago.to_s(:db)}' where login = '#{ben.login}'")
+        ActiveRecord::Base.connection.execute(
+          "update users set updated_at = '#{1.day.ago.to_s(:db)}' where login = '#{ben.login}'"
+        )
         session = UserSession.new(:login => ben.login, :password => "benrocks")
         assert session.save
         assert_equal 0, ben.reload.failed_login_count
@@ -92,7 +94,9 @@ module SessionTest
           assert_equal i + 1, ben.reload.failed_login_count
         end
 
-        ActiveRecord::Base.connection.execute("update users set updated_at = '#{1.day.ago.to_s(:db)}' where login = '#{ben.login}'")
+        ActiveRecord::Base.connection.execute(
+          "update users set updated_at = '#{1.day.ago.to_s(:db)}' where login = '#{ben.login}'"
+        )
         session = UserSession.new(:login => ben.login, :password => "badpassword1")
         assert !session.save
         assert_equal 1, ben.reload.failed_login_count
