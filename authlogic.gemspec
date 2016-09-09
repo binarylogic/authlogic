@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Ben Johnson"]
   s.email       = ["bjohnson@binarylogic.com"]
   s.homepage    = "http://github.com/binarylogic/authlogic"
-  s.summary     = %q{A clean, simple, and unobtrusive ruby authentication solution.}
-  s.description = %q{A clean, simple, and unobtrusive ruby authentication solution.}
+  s.summary     = 'A clean, simple, and unobtrusive ruby authentication solution.'
+  s.description = 'A clean, simple, and unobtrusive ruby authentication solution.'
 
   s.license = 'MIT'
 

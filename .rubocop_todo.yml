@@ -385,11 +385,6 @@ Style/SymbolProc:
     - 'lib/authlogic/acts_as_authentic/persistence_token.rb'
 
 # Cop supports --auto-correct.
-Style/UnneededPercentQ:
-  Exclude:
-    - 'authlogic.gemspec'
-
-# Cop supports --auto-correct.
 # Configuration parameters: SupportedStyles, MinSize, WordRegex.
 # SupportedStyles: percent, brackets
 Style/WordArray:
