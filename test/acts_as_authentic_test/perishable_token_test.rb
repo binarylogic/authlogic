@@ -26,7 +26,7 @@ module ActsAsAuthenticTest
       u = User.new
       u.perishable_token = users(:ben).perishable_token
       assert !u.valid?
-      assert u.errors[:perishable_token].size > 0
+      assert !u.errors[:perishable_token].empty?
     end
 
     def test_before_save_reset_perishable_token

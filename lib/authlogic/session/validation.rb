@@ -66,13 +66,13 @@ module Authlogic
         validate
         ensure_authentication_attempted
 
-        if errors.size == 0
+        if errors.empty?
           new_session? ? after_validation_on_create : after_validation_on_update
           after_validation
         end
 
         save_record(attempted_record)
-        errors.size == 0
+        errors.empty?
       end
 
       private

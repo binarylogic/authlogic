@@ -389,16 +389,3 @@ Style/SymbolProc:
 # SupportedStyles: percent, brackets
 Style/WordArray:
   EnforcedStyle: brackets
-
-# Cop supports --auto-correct.
-Style/ZeroLengthPredicate:
-  Exclude:
-    - 'lib/authlogic/session/validation.rb'
-    - 'test/acts_as_authentic_test/email_test.rb'
-    - 'test/acts_as_authentic_test/login_test.rb'
-    - 'test/acts_as_authentic_test/magic_columns_test.rb'
-    - 'test/acts_as_authentic_test/password_test.rb'
-    - 'test/acts_as_authentic_test/perishable_token_test.rb'
-    - 'test/acts_as_authentic_test/single_access_test.rb'
-    - 'test/session_test/brute_force_protection_test.rb'
-    - 'test/session_test/magic_states_test.rb'

@@ -172,42 +172,42 @@ module ActsAsAuthenticTest
       u = User.new
       u.email = "a@a.a"
       assert !u.valid?
-      assert u.errors[:email].size > 0
+      assert !u.errors[:email].empty?
 
       u.email = "a@a.com"
       assert !u.valid?
-      assert u.errors[:email].size == 0
+      assert u.errors[:email].empty?
     end
 
     def test_validates_format_of_email_field
       u = User.new
       u.email = "aaaaaaaaaaaaa"
       u.valid?
-      assert u.errors[:email].size > 0
+      assert !u.errors[:email].empty?
 
       u.email = "a@a.com"
       u.valid?
-      assert u.errors[:email].size == 0
+      assert u.errors[:email].empty?
 
       u.email = "damien+test1...etc..@mydomain.com"
       u.valid?
-      assert u.errors[:email].size == 0
+      assert u.errors[:email].empty?
 
       u.email = "dakota.dux+1@gmail.com"
       u.valid?
-      assert u.errors[:email].size == 0
+      assert u.errors[:email].empty?
 
       u.email = "dakota.d'ux@gmail.com"
       u.valid?
-      assert u.errors[:email].size == 0
+      assert u.errors[:email].empty?
 
       u.email = "<script>alert(123);</script>\nnobody@example.com"
       assert !u.valid?
-      assert u.errors[:email].size > 0
+      assert !u.errors[:email].empty?
 
       u.email = "a&b@c.com"
       u.valid?
-      assert u.errors[:email].size == 0
+      assert u.errors[:email].empty?
     end
 
     def test_validates_format_of_nonascii_email_field
@@ -224,15 +224,15 @@ module ActsAsAuthenticTest
       u = User.new
       u.email = "bjohnson@binarylogic.com"
       assert !u.valid?
-      assert u.errors[:email].size > 0
+      assert !u.errors[:email].empty?
 
       u.email = "BJOHNSON@binarylogic.com"
       assert !u.valid?
-      assert u.errors[:email].size > 0
+      assert !u.errors[:email].empty?
 
       u.email = "a@a.com"
       assert !u.valid?
-      assert u.errors[:email].size == 0
+      assert u.errors[:email].empty?
     end
   end
 end

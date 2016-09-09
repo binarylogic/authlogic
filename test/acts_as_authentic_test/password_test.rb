@@ -135,18 +135,18 @@ module ActsAsAuthenticTest
       u.password = "testpass"
       u.password_confirmation = ""
       assert !u.valid?
-      assert u.errors[:password_confirmation].size > 0
+      assert !u.errors[:password_confirmation].empty?
 
       u.password_confirmation = "testpass"
       assert !u.valid?
-      assert u.errors[:password_confirmation].size == 0
+      assert u.errors[:password_confirmation].empty?
 
       ben = users(:ben)
       assert ben.valid?
 
       ben.password = "newpasswd"
       assert !ben.valid?
-      assert ben.errors[:password_confirmation].size > 0
+      assert !ben.errors[:password_confirmation].empty?
 
       ben.password_confirmation = "newpasswd"
       assert ben.valid?

@@ -16,7 +16,7 @@ module ActsAsAuthenticTest
       u = User.new
       u.single_access_token = users(:ben).single_access_token
       assert !u.valid?
-      assert u.errors[:single_access_token].size > 0
+      assert !u.errors[:single_access_token].empty?
     end
 
     def test_before_validation_reset_single_access_token

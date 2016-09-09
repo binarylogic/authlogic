@@ -76,69 +76,69 @@ module ActsAsAuthenticTest
       u = User.new
       u.login = "a"
       assert !u.valid?
-      assert u.errors[:login].size > 0
+      assert !u.errors[:login].empty?
 
       u.login = "aaaaaaaaaa"
       assert !u.valid?
-      assert u.errors[:login].size == 0
+      assert u.errors[:login].empty?
     end
 
     def test_validates_format_of_login_field
       u = User.new
       u.login = "fdsf@^&*"
       assert !u.valid?
-      assert u.errors[:login].size > 0
+      assert !u.errors[:login].empty?
 
       u.login = "fdsfdsfdsfdsfs"
       assert !u.valid?
-      assert u.errors[:login].size == 0
+      assert u.errors[:login].empty?
 
       u.login = "dakota.dux+1@gmail.com"
       assert !u.valid?
-      assert u.errors[:login].size == 0
+      assert u.errors[:login].empty?
 
       u.login = "marks .-_@+"
       assert !u.valid?
-      assert u.errors[:login].size == 0
+      assert u.errors[:login].empty?
 
       u.login = " space"
       assert !u.valid?
-      assert u.errors[:login].size > 0
+      assert !u.errors[:login].empty?
 
       u.login = ".dot"
       assert !u.valid?
-      assert u.errors[:login].size > 0
+      assert !u.errors[:login].empty?
 
       u.login = "-hyphen"
       assert !u.valid?
-      assert u.errors[:login].size > 0
+      assert !u.errors[:login].empty?
 
       u.login = "_underscore"
       assert !u.valid?
-      assert u.errors[:login].size == 0
+      assert u.errors[:login].empty?
 
       u.login = "@atmark"
       assert !u.valid?
-      assert u.errors[:login].size > 0
+      assert !u.errors[:login].empty?
 
       u.login = "+plus"
       assert !u.valid?
-      assert u.errors[:login].size > 0
+      assert !u.errors[:login].empty?
     end
 
     def test_validates_uniqueness_of_login_field
       u = User.new
       u.login = "bjohnson"
       assert !u.valid?
-      assert u.errors[:login].size > 0
+      assert !u.errors[:login].empty?
 
       u.login = "BJOHNSON"
       assert !u.valid?
-      assert u.errors[:login].size > 0
+      assert !u.errors[:login].empty?
 
       u.login = "fdsfdsf"
       assert !u.valid?
-      assert u.errors[:login].size == 0
+      assert u.errors[:login].empty?
     end
 
     def test_find_by_smart_case_login_field

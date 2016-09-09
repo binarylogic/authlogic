@@ -29,7 +29,7 @@ module SessionTest
 
         ben.update_attribute(:active, false)
         assert !session.valid?
-        assert session.errors[:base].size > 0
+        assert !session.errors[:base].empty?
       end
 
       def test_validate_validate_magic_states_approved
@@ -40,7 +40,7 @@ module SessionTest
 
         ben.update_attribute(:approved, false)
         assert !session.valid?
-        assert session.errors[:base].size > 0
+        assert !session.errors[:base].empty?
       end
 
       def test_validate_validate_magic_states_confirmed
@@ -51,7 +51,7 @@ module SessionTest
 
         ben.update_attribute(:confirmed, false)
         assert !session.valid?
-        assert session.errors[:base].size > 0
+        assert !session.errors[:base].empty?
       end
     end
   end
