@@ -273,11 +273,10 @@ module Authlogic
             before_password_set
             @password = pass
             send("#{password_salt_field}=", Authlogic::Random.friendly_token) if password_salt_field
+            encryptor_arguments_type = act_like_restful_authentication? ? :restful_authentication : nil
             send(
               "#{crypted_password_field}=",
-              crypto_provider.encrypt(
-                *encrypt_arguments(@password, false, act_like_restful_authentication? ? :restful_authentication : nil)
-              )
+              crypto_provider.encrypt(*encrypt_arguments(@password, false, encryptor_arguments_type))
             )
             @password_changed = true
             after_password_set
@@ -300,13 +299,10 @@ module Authlogic
             before_password_verification
 
             crypto_providers.each_with_index do |encryptor, index|
-              # The arguments_type of for the transitioning from restful_authentication
-              arguments_type = (act_like_restful_authentication? && index == 0) ||
-                (transition_from_restful_authentication? && index > 0 && encryptor == Authlogic::CryptoProviders::Sha1) ?
-                :restful_authentication : nil
-
-              if encryptor.matches?(crypted, *encrypt_arguments(attempted_password, check_against_database, arguments_type))
-                transition_password(attempted_password) if transition_password?(index, encryptor, crypted, check_against_database)
+              if encryptor_matches?(crypted, encryptor, index, attempted_password, check_against_database)
+                if transition_password?(index, encryptor, crypted, check_against_database)
+                  transition_password(attempted_password)
+                end
                 after_password_verification
                 return true
               end
@@ -340,6 +336,8 @@ module Authlogic
               [crypto_provider] + transition_from_crypto_providers
             end
 
+            # Returns an array of arguments to be passed to a crypto provider, either its
+            # `matches?` or its `encrypt` method.
             def encrypt_arguments(raw_password, check_against_database, arguments_type = nil)
               salt = nil
               if password_salt_field
@@ -354,9 +352,24 @@ module Authlogic
               case arguments_type
               when :restful_authentication
                 [REST_AUTH_SITE_KEY, salt, raw_password, REST_AUTH_SITE_KEY].compact
-              else
+              when nil
                 [raw_password, salt].compact
+              else
+                raise "Invalid encryptor arguments_type: #{arguments_type}"
               end
+            end
+
+            # Given `encryptor`, does `attempted_password` match the `crypted` password?
+            def encryptor_matches?(crypted, encryptor, index, attempted_password, check_against_database)
+              # The arguments_type for the transitioning from restful_authentication
+              acting_restful = act_like_restful_authentication? && index == 0
+              transitioning = transition_from_restful_authentication? &&
+                index > 0 &&
+                encryptor == Authlogic::CryptoProviders::Sha1
+              restful = acting_restful || transitioning
+              arguments_type = restful ? :restful_authentication : nil
+              encryptor_args = encrypt_arguments(attempted_password, check_against_database, arguments_type)
+              encryptor.matches?(crypted, *encryptor_args)
             end
 
             # Determines if we need to transition the password.
