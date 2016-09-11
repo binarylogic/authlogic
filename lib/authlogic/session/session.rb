@@ -1,6 +1,7 @@
 module Authlogic
   module Session
-    # Handles all parts of authentication that deal with sessions. Such as persisting a session and saving / destroy a session.
+    # Handles all parts of authentication that deal with sessions. Such as persisting a
+    # session and saving / destroy a session.
     module Session
       def self.included(klass)
         klass.class_eval do
@@ -39,7 +40,9 @@ module Authlogic
               record = record_id.nil? ?
                 search_for_record("find_by_persistence_token", persistence_token.to_s) :
                 search_for_record("find_by_#{klass.primary_key}", record_id.to_s)
-              self.unauthorized_record = record if record && record.persistence_token == persistence_token
+              if record && record.persistence_token == persistence_token
+                self.unauthorized_record = record
+              end
               valid?
             else
               false
@@ -59,7 +62,8 @@ module Authlogic
 
           def update_session
             controller.session[session_key] = record && record.persistence_token
-            controller.session["#{session_key}_#{klass.primary_key}"] = record && record.send(record.class.primary_key)
+            compound_key = "#{session_key}_#{klass.primary_key}"
+            controller.session[compound_key] = record && record.send(record.class.primary_key)
           end
       end
     end

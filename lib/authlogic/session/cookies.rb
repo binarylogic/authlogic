@@ -225,9 +225,14 @@ module Authlogic
           end
 
           def generate_cookie_for_saving
-            remember_me_until_value = "::#{remember_me_until.iso8601}" if remember_me?
+            value = format(
+              "%s::%s%s",
+              record.persistence_token,
+              record.send(record.class.primary_key),
+              remember_me? ? "::#{remember_me_until.iso8601}" : ""
+            )
             {
-              value: "#{record.persistence_token}::#{record.send(record.class.primary_key)}#{remember_me_until_value}",
+              value: value,
               expires: remember_me_until,
               secure: secure,
               httponly: httponly,

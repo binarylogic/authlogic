@@ -29,7 +29,10 @@ class RandomTest < ActiveSupport::TestCase
 
     def reload_authlogic_with_sec_random!(secure_random, enabled = true)
       silence_warnings do
-        secure_random.parent.const_set(secure_random.name.sub("#{secure_random.parent}::", ''), enabled ? secure_random : nil)
+        secure_random.parent.const_set(
+          secure_random.name.sub("#{secure_random.parent}::", ''),
+          enabled ? secure_random : nil
+        )
         load(File.dirname(__FILE__) + '/../lib/authlogic/random.rb')
       end
     end
