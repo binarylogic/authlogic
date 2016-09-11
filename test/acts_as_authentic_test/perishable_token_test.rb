@@ -13,20 +13,20 @@ module ActsAsAuthenticTest
     end
 
     def test_disable_perishable_token_maintenance_config
-      assert !User.disable_perishable_token_maintenance
-      assert !Employee.disable_perishable_token_maintenance
+      refute User.disable_perishable_token_maintenance
+      refute Employee.disable_perishable_token_maintenance
 
       User.disable_perishable_token_maintenance = true
       assert User.disable_perishable_token_maintenance
       User.disable_perishable_token_maintenance false
-      assert !User.disable_perishable_token_maintenance
+      refute User.disable_perishable_token_maintenance
     end
 
     def test_validates_uniqueness_of_perishable_token
       u = User.new
       u.perishable_token = users(:ben).perishable_token
-      assert !u.valid?
-      assert u.errors[:perishable_token].size > 0
+      refute u.valid?
+      refute u.errors[:perishable_token].empty?
     end
 
     def test_before_save_reset_perishable_token

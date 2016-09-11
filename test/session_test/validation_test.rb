@@ -9,7 +9,7 @@ module SessionTest
 
     def test_valid
       session = UserSession.new
-      assert !session.valid?
+      refute session.valid?
       assert_nil session.record
       assert session.errors.count > 0
 

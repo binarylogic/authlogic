@@ -8,7 +8,7 @@ module SessionTest
         assert UserSession.logout_on_timeout
 
         UserSession.logout_on_timeout false
-        assert !UserSession.logout_on_timeout
+        refute UserSession.logout_on_timeout
       end
     end
 
@@ -33,7 +33,7 @@ module SessionTest
         ben.save
 
         assert session.persisting?
-        assert !session.stale?
+        refute session.stale?
         assert_nil session.stale_record
 
         UserSession.logout_on_timeout = false
@@ -63,7 +63,7 @@ module SessionTest
         assert session.save
         Timecop.freeze(Time.now + 2.months)
         assert session.persisting?
-        assert !session.stale?
+        refute session.stale?
         UserSession.remember_me = false
       end
 

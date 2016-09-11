@@ -52,11 +52,11 @@ module ActsAsAuthenticTest
 
     def test_logged_in_logged_out
       u = User.first
-      assert !u.logged_in?
+      refute u.logged_in?
       assert u.logged_out?
       u.last_request_at = Time.now
       assert u.logged_in?
-      assert !u.logged_out?
+      refute u.logged_out?
     end
   end
 end

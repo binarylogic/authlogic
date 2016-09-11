@@ -2,7 +2,8 @@ module Authlogic
   module Session
     # Responsible for session validation
     module Validation
-      # The errors in Authlogic work JUST LIKE ActiveRecord. In fact, it uses the exact same ActiveRecord errors class. Use it the same way:
+      # The errors in Authlogic work JUST LIKE ActiveRecord. In fact, it uses
+      # the exact same ActiveRecord errors class. Use it the same way:
       #
       #   class UserSession
       #     validate :check_if_awesome
@@ -22,9 +23,10 @@ module Authlogic
         end
       end
 
-      # You should use this as a place holder for any records that you find during validation. The main reason for this is to
-      # allow other modules to use it if needed. Take the failed_login_count feature, it needs this in order to increase
-      # the failed login count.
+      # You should use this as a place holder for any records that you find
+      # during validation. The main reason for this is to allow other modules to
+      # use it if needed. Take the failed_login_count feature, it needs this in
+      # order to increase the failed login count.
       def attempted_record
         @attempted_record
       end
@@ -34,8 +36,8 @@ module Authlogic
         @attempted_record = value
       end
 
-      # The errors in Authlogic work JUST LIKE ActiveRecord. In fact, it uses the exact same ActiveRecord errors class.
-      # Use it the same way:
+      # The errors in Authlogic work JUST LIKE ActiveRecord. In fact, it uses
+      # the exact same ActiveRecord errors class. Use it the same way:
       #
       # === Example
       #
@@ -52,9 +54,9 @@ module Authlogic
         @errors ||= Errors.new(self)
       end
 
-      # Determines if the information you provided for authentication is valid or not. If there is
-      # a problem with the information provided errors will be added to the errors object and this
-      # method will return false.
+      # Determines if the information you provided for authentication is valid
+      # or not. If there is a problem with the information provided errors will
+      # be added to the errors object and this method will return false.
       def valid?
         errors.clear
         self.attempted_record = nil
@@ -64,13 +66,13 @@ module Authlogic
         validate
         ensure_authentication_attempted
 
-        if errors.size == 0
+        if errors.empty?
           new_session? ? after_validation_on_create : after_validation_on_update
           after_validation
         end
 
         save_record(attempted_record)
-        errors.size == 0
+        errors.empty?
       end
 
       private

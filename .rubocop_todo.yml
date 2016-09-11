@@ -79,7 +79,7 @@ Metrics/CyclomaticComplexity:
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes.
 # URISchemes: http, https
 Metrics/LineLength:
-  Max: 140
+  Max: 130
 
 Metrics/ModuleLength:
   Enabled: false
@@ -250,11 +250,6 @@ Style/Lambda:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/logged_in_status.rb'
 
-# Cop supports --auto-correct.
-Style/LineEndConcatenation:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/base.rb'
-
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: module_function, extend_self
 Style/ModuleFunction:
@@ -363,12 +358,6 @@ Style/RescueModifier:
     - 'lib/authlogic/acts_as_authentic/session_maintenance.rb'
 
 # Cop supports --auto-correct.
-# Configuration parameters: AllowIfMethodIsEmpty.
-Style/SingleLineMethods:
-  Exclude:
-    - 'lib/authlogic/controller_adapters/rack_adapter.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: SupportedStyles.
 # SupportedStyles: use_perl_names, use_english_names
 Style/SpecialGlobalVars:
@@ -396,32 +385,7 @@ Style/SymbolProc:
     - 'lib/authlogic/acts_as_authentic/persistence_token.rb'
 
 # Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
-# SupportedStyles: comma, consistent_comma, no_comma
-Style/TrailingCommaInLiteral:
-  Exclude:
-    - 'test/acts_as_authentic_test/email_test.rb'
-
-# Cop supports --auto-correct.
-Style/UnneededPercentQ:
-  Exclude:
-    - 'authlogic.gemspec'
-
-# Cop supports --auto-correct.
 # Configuration parameters: SupportedStyles, MinSize, WordRegex.
 # SupportedStyles: percent, brackets
 Style/WordArray:
   EnforcedStyle: brackets
-
-# Cop supports --auto-correct.
-Style/ZeroLengthPredicate:
-  Exclude:
-    - 'lib/authlogic/session/validation.rb'
-    - 'test/acts_as_authentic_test/email_test.rb'
-    - 'test/acts_as_authentic_test/login_test.rb'
-    - 'test/acts_as_authentic_test/magic_columns_test.rb'
-    - 'test/acts_as_authentic_test/password_test.rb'
-    - 'test/acts_as_authentic_test/perishable_token_test.rb'
-    - 'test/acts_as_authentic_test/single_access_test.rb'
-    - 'test/session_test/brute_force_protection_test.rb'
-    - 'test/session_test/magic_states_test.rb'

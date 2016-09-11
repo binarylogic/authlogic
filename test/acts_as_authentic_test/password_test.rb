@@ -28,7 +28,7 @@ module ActsAsAuthenticTest
       assert Employee.ignore_blank_passwords
 
       User.ignore_blank_passwords = false
-      assert !User.ignore_blank_passwords
+      refute User.ignore_blank_passwords
       User.ignore_blank_passwords true
       assert User.ignore_blank_passwords
     end
@@ -36,7 +36,7 @@ module ActsAsAuthenticTest
     def test_check_passwords_against_database
       assert User.check_passwords_against_database
       User.check_passwords_against_database = false
-      assert !User.check_passwords_against_database
+      refute User.check_passwords_against_database
       User.check_passwords_against_database true
       assert User.check_passwords_against_database
     end
@@ -46,7 +46,7 @@ module ActsAsAuthenticTest
       assert Employee.validate_password_field
 
       User.validate_password_field = false
-      assert !User.validate_password_field
+      refute User.validate_password_field
       User.validate_password_field true
       assert User.validate_password_field
     end
@@ -109,7 +109,7 @@ module ActsAsAuthenticTest
       assert u.valid?
 
       u.password = u.password_confirmation = "abcdef"
-      assert !u.valid?
+      refute u.valid?
 
       assert u.errors[:password].include?("is too short (minimum is 8 characters)")
       assert u.errors[:password_confirmation].include?("is too short (minimum is 8 characters)")
@@ -120,7 +120,7 @@ module ActsAsAuthenticTest
       assert u.valid?
 
       u.password_confirmation = "abcdefghij"
-      assert !u.valid?
+      refute u.valid?
 
       if ActiveModel.respond_to?(:version) and ActiveModel.version.segments.first >= 4
         assert u.errors[:password_confirmation].include?("doesn't match Password")
@@ -134,19 +134,19 @@ module ActsAsAuthenticTest
 
       u.password = "testpass"
       u.password_confirmation = ""
-      assert !u.valid?
-      assert u.errors[:password_confirmation].size > 0
+      refute u.valid?
+      refute u.errors[:password_confirmation].empty?
 
       u.password_confirmation = "testpass"
-      assert !u.valid?
-      assert u.errors[:password_confirmation].size == 0
+      refute u.valid?
+      assert u.errors[:password_confirmation].empty?
 
       ben = users(:ben)
       assert ben.valid?
 
       ben.password = "newpasswd"
-      assert !ben.valid?
-      assert ben.errors[:password_confirmation].size > 0
+      refute ben.valid?
+      refute ben.errors[:password_confirmation].empty?
 
       ben.password_confirmation = "newpasswd"
       assert ben.valid?
@@ -180,21 +180,21 @@ module ActsAsAuthenticTest
     def test_checks_password_against_database
       ben = users(:aaron)
       ben.password = "new pass"
-      assert !ben.valid_password?("new pass")
+      refute ben.valid_password?("new pass")
       assert ben.valid_password?("aaronrocks")
     end
 
     def test_checks_password_against_database_and_always_fails_on_new_records
       user = User.new
       user.password = "new pass"
-      assert !user.valid_password?("new pass")
+      refute user.valid_password?("new pass")
     end
 
     def test_checks_password_against_object
       ben = users(:ben)
       ben.password = "new pass"
       assert ben.valid_password?("new pass", false)
-      assert !ben.valid_password?("benrocks", false)
+      refute ben.valid_password?("benrocks", false)
     end
 
     def test_reset_password

@@ -1,14 +1,17 @@
 module Authlogic
   module AuthenticatesMany
-    # An object of this class is used as a proxy for the authenticates_many relationship. It basically allows you to "save" scope details
-    # and call them on an object, which allows you to do the following:
+    # An object of this class is used as a proxy for the authenticates_many
+    # relationship. It basically allows you to "save" scope details and call
+    # them on an object, which allows you to do the following:
     #
     #   @account.user_sessions.new
     #   @account.user_sessions.find
     #   # ... etc
     #
-    # You can call all of the class level methods off of an object with a saved scope, so that calling the above methods scopes the user
-    # sessions down to that specific account. To implement this via ActiveRecord do something like:
+    # You can call all of the class level methods off of an object with a saved
+    # scope, so that calling the above methods scopes the user sessions down to
+    # that specific account. To implement this via ActiveRecord do something
+    # like:
     #
     #   class User < ActiveRecord::Base
     #     authenticates_many :user_sessions

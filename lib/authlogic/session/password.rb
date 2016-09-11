@@ -16,16 +16,19 @@ module Authlogic
 
       # Password configuration
       module Config
-        # Authlogic tries to validate the credentials passed to it. One part of validation is actually finding the user and
-        # making sure it exists. What method it uses the do this is up to you.
+        # Authlogic tries to validate the credentials passed to it. One part of
+        # validation is actually finding the user and making sure it exists.
+        # What method it uses the do this is up to you.
         #
-        # Let's say you have a UserSession that is authenticating a User. By default UserSession will call User.find_by_login(login).
-        # You can change what method UserSession calls by specifying it here. Then in your User model you can make that method do
-        # anything you want, giving you complete control of how users are found by the UserSession.
+        # Let's say you have a UserSession that is authenticating a User. By
+        # default UserSession will call User.find_by_login(login). You can
+        # change what method UserSession calls by specifying it here. Then in
+        # your User model you can make that method do anything you want, giving
+        # you complete control of how users are found by the UserSession.
         #
-        # Let's take an example: You want to allow users to login by username or email.
-        # Set this to the name of the class method that does this in the User model. Let's
-        # call it "find_by_username_or_email"
+        # Let's take an example: You want to allow users to login by username or
+        # email. Set this to the name of the class method that does this in the
+        # User model. Let's call it "find_by_username_or_email"
         #
         #   class User < ActiveRecord::Base
         #     def self.find_by_username_or_email(login)
@@ -33,10 +36,10 @@ module Authlogic
         #     end
         #   end
         #
-        # Now just specify the name of this method for this configuration option and you
-        # are all set. You can do anything you want here. Maybe you allow users to have
-        # multiple logins and you want to search a has_many relationship, etc. The sky is
-        # the limit.
+        # Now just specify the name of this method for this configuration option
+        # and you are all set. You can do anything you want here. Maybe you
+        # allow users to have multiple logins and you want to search a has_many
+        # relationship, etc. The sky is the limit.
         #
         # * <tt>Default:</tt> "find_by_smart_case_login_field"
         # * <tt>Accepts:</tt> Symbol or String
@@ -45,10 +48,11 @@ module Authlogic
         end
         alias_method :find_by_login_method=, :find_by_login_method
 
-        # The text used to identify credentials (username/password) combination when a bad
-        # login attempt occurs. When you show error messages for a bad login, it's
-        # considered good security practice to hide which field the user has entered
-        # incorrectly (the login field or the password field). For a full explanation, see
+        # The text used to identify credentials (username/password) combination
+        # when a bad login attempt occurs. When you show error messages for a
+        # bad login, it's considered good security practice to hide which field
+        # the user has entered incorrectly (the login field or the password
+        # field). For a full explanation, see
         # http://www.gnucitizen.org/blog/username-enumeration-vulnerabilities/
         #
         # Example of use:
@@ -57,7 +61,8 @@ module Authlogic
         #     generalize_credentials_error_messages true
         #   end
         #
-        #   This would make the error message for bad logins and bad passwords look identical:
+        #   This would make the error message for bad logins and bad passwords
+        #   look identical:
         #
         #   Login/Password combination is not valid
         #
@@ -69,12 +74,14 @@ module Authlogic
         #
         #   This will instead show your custom error message when the UserSession is invalid.
         #
-        # The downside to enabling this is that is can be too vague for a user that has a hard time remembering
-        # their username and password combinations. It also disables the ability to to highlight the field
+        # The downside to enabling this is that is can be too vague for a user
+        # that has a hard time remembering their username and password
+        # combinations. It also disables the ability to to highlight the field
         # with the error when you use form_for.
         #
-        # If you are developing an app where security is an extreme priority (such as a financial application),
-        # then you should enable this. Otherwise, leaving this off is fine.
+        # If you are developing an app where security is an extreme priority
+        # (such as a financial application), then you should enable this.
+        # Otherwise, leaving this off is fine.
         #
         # * <tt>Default</tt> false
         # * <tt>Accepts:</tt> Boolean
@@ -83,12 +90,13 @@ module Authlogic
         end
         alias_method :generalize_credentials_error_messages=, :generalize_credentials_error_messages
 
-        # The name of the method you want Authlogic to create for storing the login /
-        # username. Keep in mind this is just for your Authlogic::Session, if you want it
-        # can be something completely different than the field in your model. So if you
-        # wanted people to login with a field called "login" and then find users by email
-        # this is completely doable. See the find_by_login_method configuration option for
-        # more details.
+        # The name of the method you want Authlogic to create for storing the
+        # login / username. Keep in mind this is just for your
+        # Authlogic::Session, if you want it can be something completely
+        # different than the field in your model. So if you wanted people to
+        # login with a field called "login" and then find users by email this is
+        # completely doable. See the find_by_login_method configuration option
+        # for more details.
         #
         # * <tt>Default:</tt> klass.login_field || klass.email_field
         # * <tt>Accepts:</tt> Symbol or String
@@ -97,7 +105,8 @@ module Authlogic
         end
         alias_method :login_field=, :login_field
 
-        # Works exactly like login_field, but for the password instead. Returns :password if a login_field exists.
+        # Works exactly like login_field, but for the password instead. Returns
+        # :password if a login_field exists.
         #
         # * <tt>Default:</tt> :password
         # * <tt>Accepts:</tt> Symbol or String
@@ -106,8 +115,9 @@ module Authlogic
         end
         alias_method :password_field=, :password_field
 
-        # The name of the method in your model used to verify the password. This should be an instance method. It should also
-        # be prepared to accept a raw password and a crytped password.
+        # The name of the method in your model used to verify the password. This
+        # should be an instance method. It should also be prepared to accept a
+        # raw password and a crytped password.
         #
         # * <tt>Default:</tt> "valid_password?"
         # * <tt>Accepts:</tt> Symbol or String
@@ -127,7 +137,8 @@ module Authlogic
           super
         end
 
-        # Returns the login_field / password_field credentials combination in hash form.
+        # Returns the login_field / password_field credentials combination in
+        # hash form.
         def credentials
           if authenticating_with_password?
             details = {}
@@ -139,7 +150,8 @@ module Authlogic
           end
         end
 
-        # Accepts the login_field / password_field credentials combination in hash form.
+        # Accepts the login_field / password_field credentials combination in
+        # hash form.
         def credentials=(value)
           super
           values = parse_param_val(value) # add strong parameters check
@@ -168,10 +180,12 @@ module Authlogic
               self.class.send(:attr_writer, password_field) if !respond_to?("#{password_field}=")
               self.class.send(:define_method, password_field) {} if !respond_to?(password_field)
 
+              # The password should not be accessible publicly. This way forms
+              # using form_for don't fill the password with the attempted
+              # password. To prevent this we just create this method that is
+              # private.
               self.class.class_eval <<-"end_eval", __FILE__, __LINE__
                 private
-                  # The password should not be accessible publicly. This way forms using form_for don't fill the password with the
-                  # attempted password. To prevent this we just create this method that is private.
                   def protected_#{password_field}
                     @#{password_field}
                   end

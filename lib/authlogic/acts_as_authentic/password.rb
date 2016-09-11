@@ -162,7 +162,10 @@ module Authlogic
             validates_length_of_password_field_options
           )
         end
-        alias_method :validates_length_of_password_confirmation_field_options=, :validates_length_of_password_confirmation_field_options
+        alias_method(
+          :validates_length_of_password_confirmation_field_options=,
+          :validates_length_of_password_confirmation_field_options
+        )
 
         # See merge_validates_length_of_password_field_options. The same thing, except for
         # validates_length_of_password_confirmation_field_options

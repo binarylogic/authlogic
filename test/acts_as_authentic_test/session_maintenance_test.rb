@@ -5,7 +5,7 @@ module ActsAsAuthenticTest
     def test_maintain_sessions_config
       assert User.maintain_sessions
       User.maintain_sessions = false
-      assert !User.maintain_sessions
+      refute User.maintain_sessions
       User.maintain_sessions true
       assert User.maintain_sessions
     end
@@ -85,7 +85,7 @@ module ActsAsAuthenticTest
 
     def test_resetting_password_when_logged_out
       ben = users(:ben)
-      assert !UserSession.find
+      refute UserSession.find
       ben.password = "newpasswd"
       ben.password_confirmation = "newpasswd"
       assert ben.save

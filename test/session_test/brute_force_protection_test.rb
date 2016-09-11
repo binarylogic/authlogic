@@ -47,14 +47,14 @@ module SessionTest
 
         2.times do |i|
           session = UserSession.new(:login => ben.login, :password => "badpassword1")
-          assert !session.save
-          assert session.errors[:password].size > 0
+          refute session.save
+          refute session.errors[:password].empty?
           assert_equal i + 1, ben.reload.failed_login_count
         end
 
         session = UserSession.new(:login => ben.login, :password => "badpassword2")
-        assert !session.save
-        assert session.errors[:password].size == 0
+        refute session.save
+        assert session.errors[:password].empty?
         assert_equal 3, ben.reload.failed_login_count
 
         UserSession.consecutive_failed_logins_limit = 50
@@ -67,12 +67,14 @@ module SessionTest
 
         2.times do |i|
           session = UserSession.new(:login => ben.login, :password => "badpassword1")
-          assert !session.save
+          refute session.save
           assert session.invalid_password?
           assert_equal i + 1, ben.reload.failed_login_count
         end
 
-        ActiveRecord::Base.connection.execute("update users set updated_at = '#{1.day.ago.to_s(:db)}' where login = '#{ben.login}'")
+        ActiveRecord::Base.connection.execute(
+          "update users set updated_at = '#{1.day.ago.to_s(:db)}' where login = '#{ben.login}'"
+        )
         session = UserSession.new(:login => ben.login, :password => "benrocks")
         assert session.save
         assert_equal 0, ben.reload.failed_login_count
@@ -87,14 +89,16 @@ module SessionTest
 
         2.times do |i|
           session = UserSession.new(:login => ben.login, :password => "badpassword1")
-          assert !session.save
-          assert session.errors[:password].size > 0
+          refute session.save
+          refute session.errors[:password].empty?
           assert_equal i + 1, ben.reload.failed_login_count
         end
 
-        ActiveRecord::Base.connection.execute("update users set updated_at = '#{1.day.ago.to_s(:db)}' where login = '#{ben.login}'")
+        ActiveRecord::Base.connection.execute(
+          "update users set updated_at = '#{1.day.ago.to_s(:db)}' where login = '#{ben.login}'"
+        )
         session = UserSession.new(:login => ben.login, :password => "badpassword1")
-        assert !session.save
+        refute session.save
         assert_equal 1, ben.reload.failed_login_count
 
         UserSession.consecutive_failed_logins_limit = 50

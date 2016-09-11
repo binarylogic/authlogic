@@ -24,7 +24,7 @@ module ActsAsAuthenticTest
 
     def test_before_validate_reset_persistence_token
       u = User.new
-      assert !u.valid?
+      refute u.valid?
       assert_not_nil u.persistence_token
     end
 
@@ -34,8 +34,8 @@ module ActsAsAuthenticTest
       assert UserSession.find
       assert UserSession.find(:ziggity_zack)
       User.forget_all
-      assert !UserSession.find
-      assert !UserSession.find(:ziggity_zack)
+      refute UserSession.find
+      refute UserSession.find(:ziggity_zack)
     end
 
     def test_forget
@@ -49,7 +49,7 @@ module ActsAsAuthenticTest
 
       ben.forget!
 
-      assert !UserSession.find
+      refute UserSession.find
       assert UserSession.find(:ziggity_zack)
     end
   end

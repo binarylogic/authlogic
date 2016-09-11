@@ -29,11 +29,13 @@ module Authlogic
         end
         alias_method :validate_login_field=, :validate_login_field
 
-        # A hash of options for the validates_length_of call for the login field. Allows you to change this however you want.
+        # A hash of options for the validates_length_of call for the login
+        # field. Allows you to change this however you want.
         #
-        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
-        # merge options into it. Checkout the convenience function merge_validates_length_of_login_field_options to merge
-        # options.</b>
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as
+        # possible, so you can completely replace the hash or merge options into
+        # it. Checkout the convenience function
+        # merge_validates_length_of_login_field_options to merge options.</b>
         #
         # * <tt>Default:</tt> {:within => 3..100}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
@@ -42,9 +44,11 @@ module Authlogic
         end
         alias_method :validates_length_of_login_field_options=, :validates_length_of_login_field_options
 
-        # A convenience function to merge options into the validates_length_of_login_field_options. So instead of:
+        # A convenience function to merge options into the
+        # validates_length_of_login_field_options. So instead of:
         #
-        #   self.validates_length_of_login_field_options = validates_length_of_login_field_options.merge(:my_option => my_value)
+        #   self.validates_length_of_login_field_options =
+        #     validates_length_of_login_field_options.merge(:my_option => my_value)
         #
         # You can do this:
         #
@@ -53,11 +57,13 @@ module Authlogic
           self.validates_length_of_login_field_options = validates_length_of_login_field_options.merge(options)
         end
 
-        # A hash of options for the validates_format_of call for the login field. Allows you to change this however you want.
+        # A hash of options for the validates_format_of call for the login
+        # field. Allows you to change this however you want.
         #
-        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
-        # merge options into it. Checkout the convenience function merge_validates_format_of_login_field_options to merge
-        # options.</b>
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as
+        # possible, so you can completely replace the hash or merge options into
+        # it. Checkout the convenience function
+        # merge_validates_format_of_login_field_options to merge options.</b>
         #
         # * <tt>Default:</tt>
         #
@@ -89,7 +95,8 @@ module Authlogic
         end
         alias_method :validates_format_of_login_field_options=, :validates_format_of_login_field_options
 
-        # See merge_validates_length_of_login_field_options. The same thing, except for validates_format_of_login_field_options
+        # See merge_validates_length_of_login_field_options. The same thing,
+        # except for validates_format_of_login_field_options
         def merge_validates_format_of_login_field_options(options = {})
           self.validates_format_of_login_field_options = validates_format_of_login_field_options.merge(options)
         end
@@ -122,26 +129,36 @@ module Authlogic
             }
           )
         end
-        alias_method :validates_uniqueness_of_login_field_options=, :validates_uniqueness_of_login_field_options
+        alias_method(
+          :validates_uniqueness_of_login_field_options=,
+          :validates_uniqueness_of_login_field_options
+        )
 
-        # See merge_validates_length_of_login_field_options. The same thing, except for validates_uniqueness_of_login_field_options
+        # See merge_validates_length_of_login_field_options. The same thing,
+        # except for validates_uniqueness_of_login_field_options
         def merge_validates_uniqueness_of_login_field_options(options = {})
-          self.validates_uniqueness_of_login_field_options = validates_uniqueness_of_login_field_options.merge(options)
+          self.validates_uniqueness_of_login_field_options =
+            validates_uniqueness_of_login_field_options.merge(options)
         end
 
-        # This method allows you to find a record with the given login. If you notice, with Active Record you have the
-        # UniquenessValidator class. They give you a :case_sensitive option. I handle this in the same
-        # manner that they handle that. If you are using the login field, set false for the :case_sensitive option in
-        # validates_uniqueness_of_login_field_options and the column doesn't have a case-insensitive collation,
-        # this method will modify the query to look something like:
+        # This method allows you to find a record with the given login. If you
+        # notice, with Active Record you have the UniquenessValidator class.
+        # They give you a :case_sensitive option. I handle this in the same
+        # manner that they handle that. If you are using the login field, set
+        # false for the :case_sensitive option in
+        # validates_uniqueness_of_login_field_options and the column doesn't
+        # have a case-insensitive collation, this method will modify the query
+        # to look something like:
         #
         #   "LOWER(#{quoted_table_name}.#{login_field}) = LOWER(#{login})"
         #
-        # If you don't specify this it just uses a regular case-sensitive search (with the binary modifier if necessary):
+        # If you don't specify this it just uses a regular case-sensitive search
+        # (with the binary modifier if necessary):
         #
         #   "BINARY #{login_field} = #{login}"
         #
-        # The above also applies for using email as your login, except that you need to set the :case_sensitive in
+        # The above also applies for using email as your login, except that you
+        # need to set the :case_sensitive in
         # validates_uniqueness_of_email_field_options to false.
         def find_by_smart_case_login_field(login)
           if login_field

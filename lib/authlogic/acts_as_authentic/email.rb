@@ -133,11 +133,16 @@ module Authlogic
             }
           )
         end
-        alias_method :validates_uniqueness_of_email_field_options=, :validates_uniqueness_of_email_field_options
+        alias_method(
+          :validates_uniqueness_of_email_field_options=,
+          :validates_uniqueness_of_email_field_options
+        )
 
-        # See merge_validates_length_of_email_field_options. The same thing except for validates_uniqueness_of_email_field_options.
+        # See merge_validates_length_of_email_field_options. The same thing
+        # except for validates_uniqueness_of_email_field_options.
         def merge_validates_uniqueness_of_email_field_options(options = {})
-          self.validates_uniqueness_of_email_field_options = validates_uniqueness_of_email_field_options.merge(options)
+          self.validates_uniqueness_of_email_field_options =
+            validates_uniqueness_of_email_field_options.merge(options)
         end
       end
 

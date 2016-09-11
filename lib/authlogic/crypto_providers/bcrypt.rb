@@ -56,7 +56,10 @@ module Authlogic
 
         def cost=(val)
           if val < ::BCrypt::Engine::MIN_COST
-            raise ArgumentError.new("Authlogic's bcrypt cost cannot be set below the engine's min cost (#{::BCrypt::Engine::MIN_COST})")
+            raise ArgumentError.new(
+              "Authlogic's bcrypt cost cannot be set below the engine's " \
+                "min cost (#{::BCrypt::Engine::MIN_COST})"
+            )
           end
           @cost = val
         end

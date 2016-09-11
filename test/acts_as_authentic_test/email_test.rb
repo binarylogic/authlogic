@@ -8,7 +8,7 @@ module ActsAsAuthenticTest
       "damien+test1...etc..@mydomain.com",
       "dakota.dux+1@gmail.com",
       "dakota.d'ux@gmail.com",
-      "a&b@c.com",
+      "a&b@c.com"
     ]
 
     BAD_ASCII_EMAILS = [
@@ -16,7 +16,7 @@ module ActsAsAuthenticTest
       "aaaaaaaaaaaaa",
       "question?mark@gmail.com",
       "backslash@g\\mail.com",
-      "<script>alert(123);</script>\nnobody@example.com",
+      "<script>alert(123);</script>\nnobody@example.com"
     ]
 
     # http://en.wikipedia.org/wiki/ISO/IEC_8859-1#Codepage_layout
@@ -58,7 +58,7 @@ module ActsAsAuthenticTest
       "我>.香港",                    # greater than
       "我?本@屋企.香港",              # question mark
       "чебурша@ьн\\ами.рф",         # backslash
-      "user@domain.com%0A<script>alert('hello')</script>",
+      "user@domain.com%0A<script>alert('hello')</script>"
     ]
 
     def test_email_field_config
@@ -76,7 +76,7 @@ module ActsAsAuthenticTest
       assert Employee.validate_email_field
 
       User.validate_email_field = false
-      assert !User.validate_email_field
+      refute User.validate_email_field
       User.validate_email_field true
       assert User.validate_email_field
     end
@@ -155,7 +155,11 @@ module ActsAsAuthenticTest
     end
 
     def test_validates_uniqueness_of_email_field_options_config
-      default = { :case_sensitive => false, :scope => Employee.validations_scope, :if => "#{Employee.email_field}_changed?".to_sym }
+      default = {
+        :case_sensitive => false,
+        :scope => Employee.validations_scope,
+        :if => "#{Employee.email_field}_changed?".to_sym
+      }
       assert_equal default, Employee.validates_uniqueness_of_email_field_options
 
       Employee.validates_uniqueness_of_email_field_options = { :yes => "no" }
@@ -167,43 +171,43 @@ module ActsAsAuthenticTest
     def test_validates_length_of_email_field
       u = User.new
       u.email = "a@a.a"
-      assert !u.valid?
-      assert u.errors[:email].size > 0
+      refute u.valid?
+      refute u.errors[:email].empty?
 
       u.email = "a@a.com"
-      assert !u.valid?
-      assert u.errors[:email].size == 0
+      refute u.valid?
+      assert u.errors[:email].empty?
     end
 
     def test_validates_format_of_email_field
       u = User.new
       u.email = "aaaaaaaaaaaaa"
       u.valid?
-      assert u.errors[:email].size > 0
+      refute u.errors[:email].empty?
 
       u.email = "a@a.com"
       u.valid?
-      assert u.errors[:email].size == 0
+      assert u.errors[:email].empty?
 
       u.email = "damien+test1...etc..@mydomain.com"
       u.valid?
-      assert u.errors[:email].size == 0
+      assert u.errors[:email].empty?
 
       u.email = "dakota.dux+1@gmail.com"
       u.valid?
-      assert u.errors[:email].size == 0
+      assert u.errors[:email].empty?
 
       u.email = "dakota.d'ux@gmail.com"
       u.valid?
-      assert u.errors[:email].size == 0
+      assert u.errors[:email].empty?
 
       u.email = "<script>alert(123);</script>\nnobody@example.com"
-      assert !u.valid?
-      assert u.errors[:email].size > 0
+      refute u.valid?
+      refute u.errors[:email].empty?
 
       u.email = "a&b@c.com"
       u.valid?
-      assert u.errors[:email].size == 0
+      assert u.errors[:email].empty?
     end
 
     def test_validates_format_of_nonascii_email_field
@@ -219,16 +223,16 @@ module ActsAsAuthenticTest
     def test_validates_uniqueness_of_email_field
       u = User.new
       u.email = "bjohnson@binarylogic.com"
-      assert !u.valid?
-      assert u.errors[:email].size > 0
+      refute u.valid?
+      refute u.errors[:email].empty?
 
       u.email = "BJOHNSON@binarylogic.com"
-      assert !u.valid?
-      assert u.errors[:email].size > 0
+      refute u.valid?
+      refute u.errors[:email].empty?
 
       u.email = "a@a.com"
-      assert !u.valid?
-      assert u.errors[:email].size == 0
+      refute u.valid?
+      assert u.errors[:email].empty?
     end
   end
 end

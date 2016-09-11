@@ -3,25 +3,25 @@ require 'test_helper'
 module ActsAsAuthenticTest
   class SingleAccessTest < ActiveSupport::TestCase
     def test_change_single_access_token_with_password_config
-      assert !User.change_single_access_token_with_password
-      assert !Employee.change_single_access_token_with_password
+      refute User.change_single_access_token_with_password
+      refute Employee.change_single_access_token_with_password
 
       User.change_single_access_token_with_password = true
       assert User.change_single_access_token_with_password
       User.change_single_access_token_with_password false
-      assert !User.change_single_access_token_with_password
+      refute User.change_single_access_token_with_password
     end
 
     def test_validates_uniqueness_of_single_access_token
       u = User.new
       u.single_access_token = users(:ben).single_access_token
-      assert !u.valid?
-      assert u.errors[:single_access_token].size > 0
+      refute u.valid?
+      refute u.errors[:single_access_token].empty?
     end
 
     def test_before_validation_reset_single_access_token
       u = User.new
-      assert !u.valid?
+      refute u.valid?
       assert_not_nil u.single_access_token
     end
 

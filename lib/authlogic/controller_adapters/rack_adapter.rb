@@ -43,9 +43,13 @@ module Authlogic
         request = Rack::Request.new(env)
 
         request.instance_eval do
-          def request; self; end
+          def request
+            self
+          end
 
-          def remote_ip; self.ip; end
+          def remote_ip
+            self.ip
+          end
         end
 
         super(request)

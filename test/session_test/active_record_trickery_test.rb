@@ -49,18 +49,18 @@ module SessionTest
 
       def test_persisted
         session = UserSession.new(users(:ben))
-        assert !session.persisted?
+        refute session.persisted?
 
         session.save
         assert session.persisted?
 
         session.destroy
-        assert !session.persisted?
+        refute session.persisted?
       end
 
       def test_destroyed?
         session = UserSession.create(users(:ben))
-        assert !session.destroyed?
+        refute session.destroyed?
 
         session.destroy
         assert session.destroyed?
