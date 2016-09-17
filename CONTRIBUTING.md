@@ -16,11 +16,12 @@ We will review security issues promptly.
 
 ### Non-Security Issues
 
-Please use github issues for reproducible, minimal bug reports.
+Please use github issues only for bug reports and feature requests.
 
 ### Usage Questions
 
-Please use stackoverflow for usage questions.
+Please ask usage questions on
+[stackoverflow](http://stackoverflow.com/questions/tagged/authlogic).
 
 ## Development
 
