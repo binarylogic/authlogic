@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
@@ -10,9 +9,9 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/binarylogic/authlogic"
   s.summary     = 'A clean, simple, and unobtrusive ruby authentication solution.'
   s.description = 'A clean, simple, and unobtrusive ruby authentication solution.'
-
   s.license = 'MIT'
 
+  s.required_ruby_version = '>= 2.0.0'
   s.add_dependency 'activerecord', ['>= 3.2', '< 5.1']
   s.add_dependency 'activesupport', ['>= 3.2', '< 5.1']
   s.add_dependency 'request_store', '~> 1.0'
