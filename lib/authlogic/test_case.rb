@@ -135,21 +135,44 @@ module Authlogic
   #
   #   # test/test_helper.rb
   #   def login(user)
-  #     post user_sessions_url(:email => user.email, :password => 'password')
+  #     post user_sessions_url, :params => { :email => user.email, :password => 'password' }
   #   end
   #
   #   # test/controllers/posts_controller_test.rb
   #   test "#create requires a user to be logged in
   #     post posts_url, :params => { :body => 'Lorem ipsum' }
+  #
   #     assert_redirected_to new_user_session_url
   #   end
   #
   #   test "#create lets a logged in user create a new post" do
   #     login(users(:admin))
+  #
   #     assert_difference 'Posts.count' do
   #       post posts_url, :params => { :body => 'Lorem ipsum' }
   #     end
+  #
   #     assert_redirected_to posts_url
+  #   end
+  #
+  # You still have access to the `session` helper in an integration test and so
+  # you can still test to see if a user is logged in. A couple of helper methods
+  # might look like:
+  #
+  #   # test/test_helper.rb
+  #   def assert_logged_in
+  #     assert session[:user_credentials].present?
+  #   end
+  #
+  #   def assert_not_logged_in
+  #     assert session[:user_credentials].blank?
+  #   end
+  #
+  #   # test/user_sessions_controller_test.rb
+  #   test "#create logs in a user" do
+  #     login(users(:admin))
+  #
+  #     assert_logged_in
   #   end
   module TestCase
     # Activates authlogic so that you can use it in your tests. You should call
