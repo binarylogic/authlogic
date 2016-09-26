@@ -113,6 +113,67 @@ module Authlogic
   #
   # See how I am checking that Authlogic is interacting with the controller
   # properly? That's the idea here.
+  #
+  # === Testing with Rails 5
+  #
+  # Rails 5 has [deprecated classic controller tests](https://goo.gl/4zmt6y).
+  # Controller tests now inherit from `ActionDispatch::IntegrationTest` making
+  # them plain old integration tests now. You have two options for testing
+  # AuthLogic in Rails 5:
+  #
+  # * Add the `rails-controller-testing` gem to bring back the original
+  #   controller testing usage
+  # * Go full steam ahead with integration testing and actually log a user in
+  #   by submitting a form in the integration test.
+  #
+  # Naturally DHH recommends the second method and this is
+  # [what he does in his own tests](https://goo.gl/Ar6p0u). This is useful
+  # for testing not only AuthLogic itself (submitting login credentials to a
+  # UserSessionsController, for example) but any controller action that is
+  # behind a login wall. Add a helper method and use that before testing your
+  # actual controller action:
+  #
+  #   # test/test_helper.rb
+  #   def login(user)
+  #     post user_sessions_url, :params => { :email => user.email, :password => 'password' }
+  #   end
+  #
+  #   # test/controllers/posts_controller_test.rb
+  #   test "#create requires a user to be logged in
+  #     post posts_url, :params => { :body => 'Lorem ipsum' }
+  #
+  #     assert_redirected_to new_user_session_url
+  #   end
+  #
+  #   test "#create lets a logged in user create a new post" do
+  #     login(users(:admin))
+  #
+  #     assert_difference 'Posts.count' do
+  #       post posts_url, :params => { :body => 'Lorem ipsum' }
+  #     end
+  #
+  #     assert_redirected_to posts_url
+  #   end
+  #
+  # You still have access to the `session` helper in an integration test and so
+  # you can still test to see if a user is logged in. A couple of helper methods
+  # might look like:
+  #
+  #   # test/test_helper.rb
+  #   def assert_logged_in
+  #     assert session[:user_credentials].present?
+  #   end
+  #
+  #   def assert_not_logged_in
+  #     assert session[:user_credentials].blank?
+  #   end
+  #
+  #   # test/user_sessions_controller_test.rb
+  #   test "#create logs in a user" do
+  #     login(users(:admin))
+  #
+  #     assert_logged_in
+  #   end
   module TestCase
     # Activates authlogic so that you can use it in your tests. You should call
     # this method in your test's setup. Ex:
