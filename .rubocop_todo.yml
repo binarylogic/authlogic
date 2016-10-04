@@ -40,6 +40,9 @@ Lint/ShadowingOuterLocalVariable:
     - 'lib/authlogic/session/cookies.rb'
     - 'lib/authlogic/session/password.rb'
 
+Lint/UnneededSplatExpansion:
+  Enabled: false
+
 # Cop supports --auto-correct.
 # Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
 Lint/UnusedBlockArgument:
@@ -250,6 +253,9 @@ Style/Lambda:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/logged_in_status.rb'
 
+Style/MethodMissing:
+  Enabled: false
+
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: module_function, extend_self
 Style/ModuleFunction:
@@ -300,6 +306,9 @@ Style/Next:
 Style/Not:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/login.rb'
+
+Style/NumericPredicate:
+  Enabled: false
 
 # Cop supports --auto-correct.
 Style/ParallelAssignment:

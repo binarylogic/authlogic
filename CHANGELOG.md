@@ -1,8 +1,12 @@
 # Changelog
 
-## Unreleased
+## 4.0.0 Unreleased
 
-* ensure that login field validation uses correct locale (@sskirby)
+* Breaking Changes
+  * Drop support for ruby 1.9.3 
+
+# Fixed
+  * ensure that login field validation uses correct locale (@sskirby)
 
 ## 3.5.0 2016-08-29
 
