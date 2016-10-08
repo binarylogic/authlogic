@@ -2,7 +2,7 @@ require 'test_helper'
 
 module SessionTest
   module CookiesTest
-    class ConfiTest < ActiveSupport::TestCase
+    class ConfigTest < ActiveSupport::TestCase
       def test_cookie_key
         UserSession.cookie_key = "my_cookie_key"
         assert_equal "my_cookie_key", UserSession.cookie_key

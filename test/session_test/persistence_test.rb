@@ -5,6 +5,7 @@ module SessionTest
     def test_find
       aaron = users(:aaron)
       refute UserSession.find
+      UserSession.allow_http_basic_auth = true
       http_basic_auth_for(aaron) { assert UserSession.find }
       set_cookie_for(aaron)
       assert UserSession.find
