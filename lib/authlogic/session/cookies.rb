@@ -228,12 +228,11 @@ module Authlogic
             end
 
             if cookie =~ /::/
-              cookie.split('::')
+              return cookie.split('::')
             elsif cookie
-              decrypt_cookie(cookie).split('::')
-            else
-              nil
+              return decrypt_cookie(cookie).split('::')
             end
+            nil
           end
 
           # Tries to validate the session from information in the cookie
