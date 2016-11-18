@@ -227,10 +227,9 @@ module Authlogic
               cookie = controller.cookies[cookie_key]
             end
 
-            case
-            when cookie =~ /::/
+            if cookie =~ /::/
               cookie.split('::')
-            when cookie
+            elsif cookie
               decrypt_cookie(cookie).split('::')
             else
               nil
