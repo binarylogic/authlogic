@@ -170,10 +170,10 @@ module Authlogic
 
         private
 
-          def find_with_case(field, value, sensitivity)
+          def find_with_case(field, value, sensitive)
             ar_gem_version = Gem::Version.new(ActiveRecord::VERSION::STRING)
 
-            relation = if not sensitivity
+            relation = if not sensitive
               connection.case_insensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
             elsif ar_gem_version >= Gem::Version.new('5.0')
               connection.case_sensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
