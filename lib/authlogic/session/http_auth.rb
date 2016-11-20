@@ -25,7 +25,7 @@ module Authlogic
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
         def allow_http_basic_auth(value = nil)
-          rw_config(:allow_http_basic_auth, value, true)
+          rw_config(:allow_http_basic_auth, value, false)
         end
         alias_method :allow_http_basic_auth=, :allow_http_basic_auth
 

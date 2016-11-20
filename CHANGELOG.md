@@ -3,7 +3,8 @@
 ## 4.0.0 Unreleased
 
 * Breaking Changes
-  * Drop support for ruby 1.9.3 
+  * Drop support for ruby 1.9.3
+  * HTTP Basic Auth is now disabled by default (use allow_http_basic_auth to enable)
 
 # Fixed
   * ensure that login field validation uses correct locale (@sskirby)
