@@ -6,11 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-Lint/AmbiguousOperator:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/password.rb'
-    - 'lib/authlogic/session/callbacks.rb'
-
 # Configuration parameters: AllowSafeAssignment.
 Lint/AssignmentInCondition:
   Exclude:

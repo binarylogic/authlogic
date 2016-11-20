@@ -214,7 +214,7 @@ module Authlogic
 
         def self.included(klass)
           return if klass.crypted_password_field.nil?
-          klass.define_callbacks *METHODS
+          klass.define_callbacks(*METHODS)
 
           # If Rails 3, support the new callback syntax
           if klass.send(klass.respond_to?(:singleton_class) ? :singleton_class : :metaclass).method_defined?(:set_callback)
