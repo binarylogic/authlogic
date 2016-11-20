@@ -170,7 +170,7 @@ module Authlogic
 
         private
 
-          def find_with_case(field, value, sensitivity = true)
+          def find_with_case(field, value, sensitivity)
             ar_gem_version = Gem::Version.new(ActiveRecord::VERSION::STRING)
 
             relation = if not sensitivity
