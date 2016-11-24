@@ -14,11 +14,6 @@ Lint/EndAlignment:
     - 'lib/authlogic/acts_as_authentic/login.rb'
     - 'lib/authlogic/session/scopes.rb'
 
-Lint/ShadowingOuterLocalVariable:
-  Exclude:
-    - 'lib/authlogic/session/cookies.rb'
-    - 'lib/authlogic/session/password.rb'
-
 Lint/UnneededSplatExpansion:
   Enabled: false
 
