@@ -9,11 +9,11 @@ module Authlogic
       def initialize
       end
 
-      def authenticate_with_http_basic(&block)
+      def authenticate_with_http_basic
         yield http_user, http_password
       end
 
-      def authenticate_or_request_with_http_basic(realm = 'DefaultRealm', &block)
+      def authenticate_or_request_with_http_basic(realm = 'DefaultRealm')
         self.realm = realm
         @http_auth_requested = true
         yield http_user, http_password

@@ -6,7 +6,7 @@ module Authlogic
         hash && hash[:value]
       end
 
-      def delete(key, options = {})
+      def delete(key, _options = {})
         super(key)
       end
 

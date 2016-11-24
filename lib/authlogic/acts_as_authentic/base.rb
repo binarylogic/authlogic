@@ -26,7 +26,7 @@ module Authlogic
         #   end
         #
         # See the various sub modules for the configuration they provide.
-        def acts_as_authentic(unsupported_options = nil, &block)
+        def acts_as_authentic(unsupported_options = nil)
           # Stop all configuration if the DB is not set up
           return if !db_setup?
 

@@ -69,7 +69,7 @@ module Authlogic
         # The name of your cookies will be:
         #
         #   secure_account_2_user_credentials
-        def with_scope(options = {}, &block)
+        def with_scope(options = {})
           raise ArgumentError.new("You must provide a block") unless block_given?
           self.scope = options
           result = yield

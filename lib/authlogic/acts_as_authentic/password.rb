@@ -300,7 +300,7 @@ module Authlogic
 
             crypto_providers.each_with_index do |encryptor, index|
               if encryptor_matches?(crypted, encryptor, index, attempted_password, check_against_database)
-                if transition_password?(index, encryptor, crypted, check_against_database)
+                if transition_password?(index, encryptor, check_against_database)
                   transition_password(attempted_password)
                 end
                 after_password_verification
@@ -377,7 +377,7 @@ module Authlogic
             # If the encryptor has a cost and the cost it outdated.
             # If we aren't using database values
             # If we are using database values, only if the password hasn't changed so we don't overwrite any changes
-            def transition_password?(index, encryptor, crypted, check_against_database)
+            def transition_password?(index, encryptor, check_against_database)
               (index > 0 || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(send(crypted_password_field)))) &&
                 (!check_against_database || !send("#{crypted_password_field}_changed?"))
             end

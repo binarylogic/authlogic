@@ -166,7 +166,7 @@ class ActiveSupport::TestCase
       end
     end
 
-    def http_basic_auth_for(user = nil, &block)
+    def http_basic_auth_for(user = nil)
       unless user.blank?
         controller.http_user = user.login
         controller.http_password = password_for(user)

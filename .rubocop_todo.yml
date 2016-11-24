@@ -14,21 +14,6 @@ Lint/EndAlignment:
     - 'lib/authlogic/acts_as_authentic/login.rb'
     - 'lib/authlogic/session/scopes.rb'
 
-# Cop supports --auto-correct.
-# Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods.
-Lint/UnusedMethodArgument:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/base.rb'
-    - 'lib/authlogic/acts_as_authentic/password.rb'
-    - 'lib/authlogic/session/activation.rb'
-    - 'lib/authlogic/session/active_record_trickery.rb'
-    - 'lib/authlogic/session/existence.rb'
-    - 'lib/authlogic/session/scopes.rb'
-    - 'lib/authlogic/test_case/mock_controller.rb'
-    - 'lib/authlogic/test_case/mock_cookie_jar.rb'
-    - 'test/i18n_test.rb'
-    - 'test/test_helper.rb'
-
 Lint/UselessAccessModifier:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/password.rb'
