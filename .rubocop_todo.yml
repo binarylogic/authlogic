@@ -14,9 +14,6 @@ Lint/EndAlignment:
     - 'lib/authlogic/acts_as_authentic/login.rb'
     - 'lib/authlogic/session/scopes.rb'
 
-Lint/UnneededSplatExpansion:
-  Enabled: false
-
 # Cop supports --auto-correct.
 # Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
 Lint/UnusedBlockArgument:
