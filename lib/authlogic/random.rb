@@ -26,7 +26,7 @@ module Authlogic
 
       def friendly_token
         newpass = ""
-        1.upto(20) { |i| newpass << FRIENDLY_CHARS[rand(FRIENDLY_CHARS.size - 1)] }
+        1.upto(20) { newpass << FRIENDLY_CHARS[rand(FRIENDLY_CHARS.size - 1)] }
         newpass
       end
     end

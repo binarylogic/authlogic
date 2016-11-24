@@ -15,14 +15,6 @@ Lint/EndAlignment:
     - 'lib/authlogic/session/scopes.rb'
 
 # Cop supports --auto-correct.
-# Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
-Lint/UnusedBlockArgument:
-  Exclude:
-    - 'lib/authlogic/crypto_providers/wordpress.rb'
-    - 'lib/authlogic/random.rb'
-    - 'lib/authlogic/session/callbacks.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods.
 Lint/UnusedMethodArgument:
   Exclude:
