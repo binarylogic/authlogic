@@ -14,10 +14,6 @@ Lint/EndAlignment:
     - 'lib/authlogic/acts_as_authentic/login.rb'
     - 'lib/authlogic/session/scopes.rb'
 
-Lint/UselessAccessModifier:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/password.rb'
-
 Metrics/AbcSize:
   Max: 82
 

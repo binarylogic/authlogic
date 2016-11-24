@@ -228,15 +228,17 @@ module Authlogic
           end
         end
 
-        private
-
-          METHODS.each do |method|
-            class_eval <<-"end_eval", __FILE__, __LINE__
-              def #{method}
-                run_callbacks(:#{method}) { |result, object| result == false }
-              end
-            end_eval
-          end
+        # TODO: Ideally, once this module is included, the included copies of
+        # the following methods would be private. This cannot be accomplished
+        # by using calling `private` here in the module. Maybe we can set the
+        # privacy inside `included`?
+        METHODS.each do |method|
+          class_eval <<-"end_eval", __FILE__, __LINE__
+            def #{method}
+              run_callbacks(:#{method}) { |result, object| result == false }
+            end
+          end_eval
+        end
       end
 
       # The methods related to the password field.
