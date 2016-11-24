@@ -30,16 +30,11 @@ module Authlogic
 
         # Class level methods for the persistence token.
         module ClassMethods
-          # Resets ALL persistence tokens in the database, which will require all users to reauthenticate.
+          # Resets ALL persistence tokens in the database, which will require
+          # all users to re-authenticate.
           def forget_all
             # Paginate these to save on memory
-            records = nil
-            i = 0
-            begin
-              records = limit(50).offset(i)
-              records.each { |record| record.forget! }
-              i += 50
-            end while !records.blank?
+            find_each(batch_size: 50) { |record| record.forget! }
           end
         end
 
