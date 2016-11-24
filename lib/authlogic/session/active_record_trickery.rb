@@ -24,7 +24,7 @@ module Authlogic
         # How to name the class, works JUST LIKE ActiveRecord, except it uses the following namespace:
         #
         #   authlogic.models.user_session
-        def human_name(*args)
+        def human_name(*)
           I18n.t("models.#{name.underscore}", { :count => 1, :default => name.humanize })
         end
 

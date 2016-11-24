@@ -9,7 +9,7 @@ module Authlogic
     # you are using a supported framework, Authlogic takes care of this for you.
     module Activation
       class NotActivatedError < ::StandardError # :nodoc:
-        def initialize(session)
+        def initialize
           super("You must activate the Authlogic::Session::Base.controller with a controller object before creating objects")
         end
       end
@@ -55,7 +55,7 @@ module Authlogic
       module InstanceMethods
         # Making sure we are activated before we start creating objects
         def initialize(*args)
-          raise NotActivatedError.new(self) unless self.class.activated?
+          raise NotActivatedError unless self.class.activated?
           super
         end
 

@@ -20,7 +20,7 @@ class I18nTest < ActiveSupport::TestCase
 
     assert_nothing_raised do
       Authlogic::I18n.translator = Class.new do
-        def translate(key, options = {})
+        def translate(key, _options = {})
           "Translated: #{key}"
         end
       end.new

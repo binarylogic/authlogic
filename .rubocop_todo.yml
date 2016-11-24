@@ -6,23 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-Lint/AmbiguousOperator:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/password.rb'
-    - 'lib/authlogic/session/callbacks.rb'
-
-# Configuration parameters: AllowSafeAssignment.
-Lint/AssignmentInCondition:
-  Exclude:
-    - 'lib/authlogic/test_case/mock_cookie_jar.rb'
-
-# Cop supports --auto-correct.
-# Configuration parameters: AlignWith, SupportedStyles.
-# SupportedStyles: either, start_of_block, start_of_line
-Lint/BlockAlignment:
-  Exclude:
-    - 'lib/authlogic.rb'
-
 # Cop supports --auto-correct.
 # Configuration parameters: AlignWith, SupportedStyles, AutoCorrect.
 # SupportedStyles: keyword, variable, start_of_line
@@ -30,45 +13,6 @@ Lint/EndAlignment:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/login.rb'
     - 'lib/authlogic/session/scopes.rb'
-
-Lint/Loop:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/persistence_token.rb'
-
-Lint/ShadowingOuterLocalVariable:
-  Exclude:
-    - 'lib/authlogic/session/cookies.rb'
-    - 'lib/authlogic/session/password.rb'
-
-Lint/UnneededSplatExpansion:
-  Enabled: false
-
-# Cop supports --auto-correct.
-# Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
-Lint/UnusedBlockArgument:
-  Exclude:
-    - 'lib/authlogic/crypto_providers/wordpress.rb'
-    - 'lib/authlogic/random.rb'
-    - 'lib/authlogic/session/callbacks.rb'
-
-# Cop supports --auto-correct.
-# Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods.
-Lint/UnusedMethodArgument:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/base.rb'
-    - 'lib/authlogic/acts_as_authentic/password.rb'
-    - 'lib/authlogic/session/activation.rb'
-    - 'lib/authlogic/session/active_record_trickery.rb'
-    - 'lib/authlogic/session/existence.rb'
-    - 'lib/authlogic/session/scopes.rb'
-    - 'lib/authlogic/test_case/mock_controller.rb'
-    - 'lib/authlogic/test_case/mock_cookie_jar.rb'
-    - 'test/i18n_test.rb'
-    - 'test/test_helper.rb'
-
-Lint/UselessAccessModifier:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/password.rb'
 
 Metrics/AbcSize:
   Max: 82

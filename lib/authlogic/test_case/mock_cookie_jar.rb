@@ -6,7 +6,7 @@ module Authlogic
         hash && hash[:value]
       end
 
-      def delete(key, options = {})
+      def delete(key, _options = {})
         super(key)
       end
 
@@ -23,7 +23,8 @@ module Authlogic
       end
 
       def [](val)
-        if signed_message = @parent_jar[val]
+        signed_message = @parent_jar[val]
+        if signed_message
           payload, signature = signed_message.split('--')
           raise "Invalid signature" unless Digest::SHA1.hexdigest(payload) == signature
           payload

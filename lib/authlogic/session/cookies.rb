@@ -95,7 +95,7 @@ module Authlogic
               self.remember_me = values.first.with_indifferent_access[:remember_me]
             end
           else
-            r = values.find { |value| value.is_a?(TrueClass) || value.is_a?(FalseClass) }
+            r = values.find { |val| val.is_a?(TrueClass) || val.is_a?(FalseClass) }
             self.remember_me = r if !r.nil?
           end
         end

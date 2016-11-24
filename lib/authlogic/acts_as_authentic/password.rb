@@ -214,7 +214,7 @@ module Authlogic
 
         def self.included(klass)
           return if klass.crypted_password_field.nil?
-          klass.define_callbacks *METHODS
+          klass.define_callbacks(*METHODS)
 
           # If Rails 3, support the new callback syntax
           if klass.send(klass.respond_to?(:singleton_class) ? :singleton_class : :metaclass).method_defined?(:set_callback)
@@ -228,15 +228,17 @@ module Authlogic
           end
         end
 
-        private
-
-          METHODS.each do |method|
-            class_eval <<-"end_eval", __FILE__, __LINE__
-              def #{method}
-                run_callbacks(:#{method}) { |result, object| result == false }
-              end
-            end_eval
-          end
+        # TODO: Ideally, once this module is included, the included copies of
+        # the following methods would be private. This cannot be accomplished
+        # by using calling `private` here in the module. Maybe we can set the
+        # privacy inside `included`?
+        METHODS.each do |method|
+          class_eval <<-"end_eval", __FILE__, __LINE__
+            def #{method}
+              run_callbacks(:#{method}) { |result, object| result == false }
+            end
+          end_eval
+        end
       end
 
       # The methods related to the password field.
@@ -300,7 +302,7 @@ module Authlogic
 
             crypto_providers.each_with_index do |encryptor, index|
               if encryptor_matches?(crypted, encryptor, index, attempted_password, check_against_database)
-                if transition_password?(index, encryptor, crypted, check_against_database)
+                if transition_password?(index, encryptor, check_against_database)
                   transition_password(attempted_password)
                 end
                 after_password_verification
@@ -377,7 +379,7 @@ module Authlogic
             # If the encryptor has a cost and the cost it outdated.
             # If we aren't using database values
             # If we are using database values, only if the password hasn't changed so we don't overwrite any changes
-            def transition_password?(index, encryptor, crypted, check_against_database)
+            def transition_password?(index, encryptor, check_against_database)
               (index > 0 || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(send(crypted_password_field)))) &&
                 (!check_against_database || !send("#{crypted_password_field}_changed?"))
             end

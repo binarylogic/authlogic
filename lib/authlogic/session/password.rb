@@ -157,9 +157,9 @@ module Authlogic
           values = parse_param_val(value) # add strong parameters check
 
           if values.first.is_a?(Hash)
-            values.first.with_indifferent_access.slice(login_field, password_field).each do |field, value|
-              next if value.blank?
-              send("#{field}=", value)
+            values.first.with_indifferent_access.slice(login_field, password_field).each do |field, val|
+              next if val.blank?
+              send("#{field}=", val)
             end
           end
         end
@@ -259,9 +259,9 @@ module Authlogic
             self.class.verify_password_method
           end
 
-          # In Rails 5 the ActionController::Parameters no longer inherits from HashWithIndifferentAccess.
-          # See: http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#actioncontroller-parameters-no-longer-inherits-from-hashwithindifferentaccess
-          # This method converts the ActionController::Parameters to a Hash
+          # In Rails 5 the ActionController::Parameters no longer inherits from
+          # HashWithIndifferentAccess. (http://bit.ly/2gnK08F) This method
+          # converts the ActionController::Parameters to a Hash.
           def parse_param_val(value)
             if value.first.class.name == "ActionController::Parameters"
               [value.first.to_h]
