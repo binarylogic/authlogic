@@ -104,8 +104,8 @@ module Authlogic
             !skip_session_maintenance &&
               session_class &&
               session_class.activated? &&
-              !session_ids.blank? &&
               maintain_session? &&
+              !session_ids.blank? &&
               persistence_token_changed? &&
           end
 
