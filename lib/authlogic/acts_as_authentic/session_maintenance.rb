@@ -110,10 +110,6 @@ module Authlogic
           end
 
           def maintain_session?
-            # This method will return true or false depending on the action that
-            # is being executed (password change or new user) and the authlogic
-            # configuration.
-            #
             automatically_log_in_new_user? || update_session_with_password_change?
           end
 
