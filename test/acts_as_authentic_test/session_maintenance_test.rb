@@ -19,6 +19,8 @@ module ActsAsAuthenticTest
     end
 
     def test_login_after_create
+      # it should autenticate the new user
+      User.automatically_log_in_new_user true
       user = User.create(
         :login => "awesome",
         :password => "saweeeet",
@@ -27,6 +29,21 @@ module ActsAsAuthenticTest
       )
       assert user.persisted?
       assert UserSession.find
+      logged_in_user = UserSession.find.user
+      assert logged_in_user == user
+
+      # it should not autenticate the new user
+      User.automatically_log_in_new_user false
+      user2 = User.create(
+        :login => "awesome2",
+        :password => "saweeeet2",
+        :password_confirmation => "saweeeet2",
+        :email => "awesome2@awesome.com"
+      )
+      assert user.persisted?
+      logged_in_user = UserSession.find.user
+      refute logged_in_user == user2
+      assert logged_in_user == user
     end
 
     def test_updating_session_with_failed_magic_state
