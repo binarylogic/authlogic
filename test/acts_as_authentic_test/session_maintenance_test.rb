@@ -2,12 +2,20 @@ require 'test_helper'
 
 module ActsAsAuthenticTest
   class SessionMaintenanceTest < ActiveSupport::TestCase
-    def test_maintain_sessions_config
-      assert User.maintain_sessions
-      User.maintain_sessions = false
-      refute User.maintain_sessions
-      User.maintain_sessions true
-      assert User.maintain_sessions
+    def test_automatically_log_in_new_users_config
+      assert User.automatically_log_in_new_user
+      User.automatically_log_in_new_user = false
+      refute User.automatically_log_in_new_user
+      User.automatically_log_in_new_user true
+      assert User.automatically_log_in_new_user
+    end
+
+    def test_update_session_with_password_change_config
+      assert User.update_session_with_password_change
+      User.update_session_with_password_change = false
+      refute User.update_session_with_password_change
+      User.update_session_with_password_change true
+      assert User.update_session_with_password_change
     end
 
     def test_login_after_create
