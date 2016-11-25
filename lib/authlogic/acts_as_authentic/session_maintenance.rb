@@ -106,7 +106,7 @@ module Authlogic
               session_class.activated? &&
               maintain_session? &&
               !session_ids.blank? &&
-              persistence_token_changed? &&
+              persistence_token_changed?
           end
 
           def maintain_session?
