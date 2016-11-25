@@ -105,19 +105,16 @@ module Authlogic
               session_class &&
               session_class.activated? &&
               !session_ids.blank? &&
+              maintain_session? &&
               persistence_token_changed? &&
-              maintain_session_on_action?
           end
 
-          def maintain_session_on_action?
+          def maintain_session?
             # This method will return true or false depending on the action that
             # is being executed (password change or new user) and the authlogic
             # configuration.
             #
-            # action: create_new_user
-            new_record? && self.class.automatically_log_in_new_user ||
-            # action: password_change
-            persistence_token_changed? && self.class.update_session_with_password_change
+            automatically_log_in_new_user? || update_session_with_password_change?
           end
 
           def get_session_information
@@ -166,6 +163,15 @@ module Authlogic
 
           def session_class
             self.class.session_class
+          end
+
+          def automatically_log_in_new_user?
+            new_record? && self.class.automatically_log_in_new_user
+          end
+
+          def update_session_with_password_change?
+            persistence_token_changed? &&
+            self.class.update_session_with_password_change
           end
       end
     end
