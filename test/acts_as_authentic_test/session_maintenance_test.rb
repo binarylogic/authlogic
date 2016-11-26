@@ -6,7 +6,7 @@ module ActsAsAuthenticTest
       assert User.automatically_log_in_new_user
       User.automatically_log_in_new_user = false
       refute User.automatically_log_in_new_user
-      User.automatically_log_in_new_user true
+      User.automatically_log_in_new_user = true
       assert User.automatically_log_in_new_user
     end
 
@@ -14,13 +14,12 @@ module ActsAsAuthenticTest
       assert User.update_session_with_password_change
       User.update_session_with_password_change = false
       refute User.update_session_with_password_change
-      User.update_session_with_password_change true
+      User.update_session_with_password_change = true
       assert User.update_session_with_password_change
     end
 
     def test_login_after_create
-      # it should autenticate the new user
-      User.automatically_log_in_new_user true
+      User.automatically_log_in_new_user = true
       user = User.create(
         :login => "awesome",
         :password => "saweeeet",
@@ -30,20 +29,27 @@ module ActsAsAuthenticTest
       assert user.persisted?
       assert UserSession.find
       logged_in_user = UserSession.find.user
-      assert logged_in_user == user
+      assert_equal logged_in_user, user
+    end
 
-      # it should not autenticate the new user
-      User.automatically_log_in_new_user false
+    def test_no_login_after_create
+      old_user = User.create(
+        :login => "awesome",
+        :password => "saweeeet",
+        :password_confirmation => "saweeeet",
+        :email => "awesome@awesome.com"
+      )
+      User.automatically_log_in_new_user = false
       user2 = User.create(
         :login => "awesome2",
         :password => "saweeeet2",
         :password_confirmation => "saweeeet2",
         :email => "awesome2@awesome.com"
       )
-      assert user.persisted?
+      assert user2.persisted?
       logged_in_user = UserSession.find.user
-      refute logged_in_user == user2
-      assert logged_in_user == user
+      assert_not_equal logged_in_user, user2
+      assert_equal logged_in_user, old_user
     end
 
     def test_updating_session_with_failed_magic_state
@@ -55,6 +61,7 @@ module ActsAsAuthenticTest
     end
 
     def test_update_session_after_password_modify
+      User.update_session_with_password_change = true
       ben = users(:ben)
       UserSession.create(ben)
       old_session_key = controller.session["user_credentials"]
@@ -66,6 +73,21 @@ module ActsAsAuthenticTest
       assert controller.cookies["user_credentials"]
       assert_not_equal controller.session["user_credentials"], old_session_key
       assert_not_equal controller.cookies["user_credentials"], old_cookie_key
+    end
+
+    def test_no_update_session_after_password_modify
+      User.update_session_with_password_change = false
+      ben = users(:ben)
+      UserSession.create(ben)
+      old_session_key = controller.session["user_credentials"]
+      old_cookie_key = controller.cookies["user_credentials"]
+      ben.password = "newpasswd"
+      ben.password_confirmation = "newpasswd"
+      assert ben.save
+      assert controller.session["user_credentials"]
+      assert controller.cookies["user_credentials"]
+      assert_equal controller.session["user_credentials"], old_session_key
+      assert_equal controller.cookies["user_credentials"], old_cookie_key
     end
 
     def test_no_session_update_after_modify
