@@ -74,13 +74,31 @@ You may validate international email addresses by enabling the provided alternat
 c.validates_format_of_email_field_options = {:with => Authlogic::Regex.email_nonascii}
 ```
 
-Also, sessions are automatically maintained. You can switch this on and off with configuration, but the following will automatically log a user in after a successful registration:
+Also, sessions are automatically maintained. The following will automatically log a user in after a successful registration:
 
 ``` ruby
 User.create(params[:user])
 ```
 
-This also updates the session when the user changes his/her password.
+You can switch this on and off with the following configuration:
+
+```ruby
+class User < ActiveRecord::Base
+  acts_as_authentic do |c|
+    c.log_in_after_create = false
+  end # the configuration block is optional
+end
+```
+
+Authlogic also updates the session when the user changes his/her password. You can also switch this on and off with the following configuration:
+
+```ruby
+class User < ActiveRecord::Base
+  acts_as_authentic do |c|
+    c.log_in_after_password_change = false
+  end # the configuration block is optional
+end
+```
 
 Authlogic is very flexible, it has a strong public API and a plethora of hooks to allow you to modify behavior and extend it. Check out the helpful links below to dig deeper.
 

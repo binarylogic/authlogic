@@ -30,25 +30,25 @@ module Authlogic
       end
 
       module Config
-        # In order to turn off automatic maintenance of sessions when creating
-        # a new user, just set this to false.
+        # In order to turn off automatic maintenance of sessions
+        # after create, just set this to false.
         #
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
-        def automatically_log_in_new_user(value = nil)
-          rw_config(:automatically_log_in_new_user, value, true)
+        def log_in_after_create(value = nil)
+          rw_config(:log_in_after_create, value, true)
         end
-        alias_method :automatically_log_in_new_user=, :automatically_log_in_new_user
+        alias_method :log_in_after_create=, :log_in_after_create
 
         # In order to turn off automatic maintenance of sessions when updating
         # the password, just set this to false.
         #
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
-        def update_session_with_password_change(value = nil)
-          rw_config(:update_session_with_password_change, value, true)
+        def log_in_after_password_change(value = nil)
+          rw_config(:log_in_after_password_change, value, true)
         end
-        alias_method :update_session_with_password_change=, :update_session_with_password_change
+        alias_method :log_in_after_password_change=, :log_in_after_password_change
 
         # As you may know, authlogic sessions can be separate by id (See
         # Authlogic::Session::Base#id). You can specify here what session ids
@@ -110,7 +110,7 @@ module Authlogic
           end
 
           def maintain_session?
-            automatically_log_in_new_user? || update_session_with_password_change?
+            log_in_after_create? || log_in_after_password_change?
           end
 
           def get_session_information
@@ -161,13 +161,12 @@ module Authlogic
             self.class.session_class
           end
 
-          def automatically_log_in_new_user?
-            new_record? && self.class.automatically_log_in_new_user
+          def log_in_after_create?
+            new_record? && self.class.log_in_after_create
           end
 
-          def update_session_with_password_change?
-            persistence_token_changed? &&
-            self.class.update_session_with_password_change
+          def log_in_after_password_change?
+            persistence_token_changed? && self.class.log_in_after_password_change
           end
       end
     end
