@@ -12,7 +12,6 @@
 Lint/EndAlignment:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/login.rb'
-    - 'lib/authlogic/session/scopes.rb'
 
 Metrics/AbcSize:
   Max: 82

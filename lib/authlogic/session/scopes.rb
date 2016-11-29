@@ -103,14 +103,23 @@ module Authlogic
             [scope[:id], super].compact.join("_")
           end
 
+          # `args[0]` is the name of an AR method, like
+          # `find_by_single_access_token`.
           def search_for_record(*args)
-            session_scope = if scope[:find_options].is_a?(ActiveRecord::Relation)
+            search_scope.scoping do
+              klass.send(*args)
+            end
+          end
+
+          # Returns an AR relation representing the scope of the search. The
+          # relation is either provided directly by, or defined by
+          # `find_options`.
+          def search_scope
+            if scope[:find_options].is_a?(ActiveRecord::Relation)
               scope[:find_options]
             else
-              klass.send(:where, scope[:find_options] && scope[:find_options][:conditions] || {})
-            end
-            session_scope.scoping do
-              klass.send(*args)
+              conditions = scope[:find_options] && scope[:find_options][:conditions] || {}
+              klass.send(:where, conditions)
             end
           end
       end
