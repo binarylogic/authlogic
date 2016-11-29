@@ -14,7 +14,7 @@ Lint/EndAlignment:
     - 'lib/authlogic/acts_as_authentic/login.rb'
 
 Metrics/AbcSize:
-  Max: 82
+  Max: 43
 
 Metrics/ClassLength:
   Enabled: false
