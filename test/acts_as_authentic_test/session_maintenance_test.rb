@@ -2,24 +2,29 @@ require 'test_helper'
 
 module ActsAsAuthenticTest
   class SessionMaintenanceTest < ActiveSupport::TestCase
+    def setup
+      User.log_in_after_create = true
+      User.log_in_after_password_change = true
+    end
+
     def test_log_in_after_create_config
       assert User.log_in_after_create
-      setup_config(false, false)
+      User.log_in_after_create = false
       refute User.log_in_after_create
-      setup_config(true, false)
+      User.log_in_after_create = true
       assert User.log_in_after_create
     end
 
     def test_log_in_after_password_change_config
       assert User.log_in_after_password_change
-      setup_config(false, false)
+      User.log_in_after_password_change = false
       refute User.log_in_after_password_change
-      setup_config(false, true)
+      User.log_in_after_password_change = true
       assert User.log_in_after_password_change
     end
 
     def test_login_after_create
-      setup_config(true)
+      User.log_in_after_create = true
       user = User.create(
         :login => "awesome",
         :password => "saweeeet",
@@ -39,7 +44,7 @@ module ActsAsAuthenticTest
         :password_confirmation => "saweeeet",
         :email => "awesome@awesome.com"
       )
-      setup_config(false)
+      User.log_in_after_create = false
       user2 = User.create(
         :login => "awesome2",
         :password => "saweeeet2",
@@ -61,7 +66,7 @@ module ActsAsAuthenticTest
     end
 
     def test_update_session_after_password_modify
-      setup_config(false, true)
+      User.log_in_after_password_change = true
       ben = users(:ben)
       UserSession.create(ben)
       old_session_key = controller.session["user_credentials"]
@@ -76,7 +81,7 @@ module ActsAsAuthenticTest
     end
 
     def test_no_update_session_after_password_modify
-      setup_config(true, false)
+      User.log_in_after_password_change = false
       ben = users(:ben)
       UserSession.create(ben)
       old_session_key = controller.session["user_credentials"]
@@ -138,15 +143,6 @@ module ActsAsAuthenticTest
       assert ben.save
       assert UserSession.find
       assert_equal ben, UserSession.find.record
-    end
-
-    private
-
-    # This method makes sure that the config is always correct
-    # before each test
-    def setup_config(after_create = true, after_password_change = true)
-      User.log_in_after_create = after_create
-      User.log_in_after_password_change = after_password_change
     end
   end
 end
