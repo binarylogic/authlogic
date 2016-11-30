@@ -43,7 +43,6 @@ module SessionTest
       end
 
       def test_secure
-        UserSession.secure = true
         assert_equal true, UserSession.secure
         session = UserSession.new
         assert_equal true, session.secure
@@ -55,7 +54,6 @@ module SessionTest
       end
 
       def test_httponly
-        UserSession.httponly = true
         assert_equal true, UserSession.httponly
         session = UserSession.new
         assert_equal true, session.httponly
