@@ -2,6 +2,9 @@
 
 ## 4.0.0 Unreleased
 
+* new
+  * added Authlogic::Session::Cookies.encrypt_cookie option (default: false)
+
 * Breaking Changes
   * Drop support for ruby 1.9.3
   * HTTP Basic Auth is now disabled by default (use allow_http_basic_auth to enable)

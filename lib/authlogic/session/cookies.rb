@@ -80,6 +80,19 @@ module Authlogic
           rw_config(:sign_cookie, value, false)
         end
         alias_method :sign_cookie=, :sign_cookie
+
+        # Should the cookie be encrypted? If the controller adapter supports it, this is a
+        # measure against cookie tampering and privacy.
+        def encrypt_cookie(value = nil)
+          if value && !controller.cookies.respond_to?(:encrypted)
+            raise "Encrypted cookies not supported with #{controller.class}!"
+          end
+          if value && sign_cookie
+            raise "It is recommended to use encrypt_cookie instead of sign_cookie. You may not enable both options."
+          end
+          rw_config(:encrypt_cookie, value, false)
+        end
+        alias_method :encrypt_cookie=, :encrypt_cookie
       end
 
       # The methods available for an Authlogic::Session::Base object that make up the
@@ -189,6 +202,23 @@ module Authlogic
           sign_cookie == true || sign_cookie == "true" || sign_cookie == "1"
         end
 
+        # If the cookie should be encrypted
+        def encrypt_cookie
+          return @encrypt_cookie if defined?(@encrypt_cookie)
+          @encrypt_cookie = self.class.encrypt_cookie
+        end
+
+        # Accepts a boolean as to whether the cookie should be encrypted.  If true
+        # the cookie will be saved in an encrypted state.
+        def encrypt_cookie=(value)
+          @encrypt_cookie = value
+        end
+
+        # See encrypt_cookie
+        def encrypt_cookie?
+          encrypt_cookie == true || encrypt_cookie == "true" || encrypt_cookie == "1"
+        end
+
         private
 
           def cookie_key
@@ -196,7 +226,9 @@ module Authlogic
           end
 
           def cookie_credentials
-            if self.class.sign_cookie
+            if self.class.encrypt_cookie
+              cookie = controller.cookies.encrypted[cookie_key]
+            elsif self.class.sign_cookie
               cookie = controller.cookies.signed[cookie_key]
             else
               cookie = controller.cookies[cookie_key]
@@ -217,7 +249,9 @@ module Authlogic
           end
 
           def save_cookie
-            if sign_cookie?
+            if encrypt_cookie?
+              controller.cookies.encrypted[cookie_key] = generate_cookie_for_saving
+            elsif sign_cookie?
               controller.cookies.signed[cookie_key] = generate_cookie_for_saving
             else
               controller.cookies[cookie_key] = generate_cookie_for_saving
