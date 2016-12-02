@@ -13,22 +13,21 @@ Lint/EndAlignment:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/login.rb'
 
+# Goal: 15
 Metrics/AbcSize:
   Max: 43
 
+# Goal: 6
 Metrics/CyclomaticComplexity:
-  Max: 12
+  Max: 9
 
-# Configuration parameters: AllowHeredoc, AllowURI, URISchemes.
-# URISchemes: http, https
+# Goal: 100
 Metrics/LineLength:
   Max: 120
 
-Metrics/ModuleLength:
-  Enabled: false
-
+# Goal: 7
 Metrics/PerceivedComplexity:
-  Max: 13
+  Max: 9
 
 # Cop supports --auto-correct.
 Performance/RedundantBlockCall:
