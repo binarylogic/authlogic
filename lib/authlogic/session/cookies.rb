@@ -54,20 +54,20 @@ module Authlogic
         # Should the cookie be set as secure?  If true, the cookie will only be sent over
         # SSL connections
         #
-        # * <tt>Default:</tt> false
+        # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
         def secure(value = nil)
-          rw_config(:secure, value, false)
+          rw_config(:secure, value, true)
         end
         alias_method :secure=, :secure
 
         # Should the cookie be set as httponly?  If true, the cookie will not be
         # accessible from javascript
         #
-        # * <tt>Default:</tt> false
+        # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
         def httponly(value = nil)
-          rw_config(:httponly, value, false)
+          rw_config(:httponly, value, true)
         end
         alias_method :httponly=, :httponly
 
@@ -227,16 +227,16 @@ module Authlogic
           def generate_cookie_for_saving
             remember_me_until_value = "::#{remember_me_until.iso8601}" if remember_me?
             {
-              :value => "#{record.persistence_token}::#{record.send(record.class.primary_key)}#{remember_me_until_value}",
-              :expires => remember_me_until,
-              :secure => secure,
-              :httponly => httponly,
-              :domain => controller.cookie_domain
+              value: "#{record.persistence_token}::#{record.send(record.class.primary_key)}#{remember_me_until_value}",
+              expires: remember_me_until,
+              secure: secure,
+              httponly: httponly,
+              domain: controller.cookie_domain
             }
           end
 
           def destroy_cookie
-            controller.cookies.delete cookie_key, :domain => controller.cookie_domain
+            controller.cookies.delete cookie_key, domain: controller.cookie_domain
           end
       end
     end
