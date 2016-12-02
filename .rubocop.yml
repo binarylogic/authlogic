@@ -6,6 +6,14 @@ AllCops:
   # lowest version of MRI that authlogic supports.
   TargetRubyVersion: 2.0
 
+# Compared to metrics like AbcSize, BlockLength has questionable value.
+Metrics/BlockLength:
+  Enabled: false
+
+# Compared to metrics like AbcSize, ClassLength has questionable value.
+Metrics/ClassLength:
+  Enabled: false
+
 # Compared to metrics like AbcSize, MethodLength has questionable value.
 Metrics/MethodLength:
   Enabled: false
@@ -31,3 +39,7 @@ Metrics/MethodLength:
 # The latter is harder to maintain and uses too much horizontal space.
 Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation
+
+# Avoid single-line method definitions.
+Style/EmptyMethod:
+  EnforcedStyle: expanded

@@ -16,9 +16,6 @@ Lint/EndAlignment:
 Metrics/AbcSize:
   Max: 43
 
-Metrics/ClassLength:
-  Enabled: false
-
 Metrics/CyclomaticComplexity:
   Max: 12
 
