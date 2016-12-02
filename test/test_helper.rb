@@ -144,7 +144,9 @@ class ActiveSupport::TestCase
     # models start tests with their original config.
     def config_setup
       [Project, Affiliate, Employee, EmployeeSession, Ldaper, User, UserSession, Company].each do |model|
-        model.class_attribute :original_acts_as_authentic_config unless model.respond_to?(:original_acts_as_authentic_config)
+        unless model.respond_to?(:original_acts_as_authentic_config)
+          model.class_attribute :original_acts_as_authentic_config
+        end
         model.original_acts_as_authentic_config = model.acts_as_authentic_config
       end
     end

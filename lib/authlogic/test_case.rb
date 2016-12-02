@@ -186,7 +186,9 @@ module Authlogic
         end
       end
 
-      Authlogic::Session::Base.controller = (@request && Authlogic::TestCase::RailsRequestAdapter.new(@request)) || controller
+      Authlogic::Session::Base.controller = @request &&
+        Authlogic::TestCase::RailsRequestAdapter.new(@request) ||
+        controller
     end
 
     # The Authlogic::TestCase::MockController object passed to Authlogic to

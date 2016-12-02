@@ -12,8 +12,8 @@ module Authlogic
       end
 
       module Config
-        # This includes a lot of helpful methods for authenticating records which The Authlogic::Session module relies on.
-        # To use it just do:
+        # This includes a lot of helpful methods for authenticating records
+        # which the Authlogic::Session module relies on. To use it just do:
         #
         #   class User < ActiveRecord::Base
         #     acts_as_authentic
@@ -81,7 +81,11 @@ module Authlogic
 
           def first_column_to_exist(*columns_to_check)
             if db_setup?
-              columns_to_check.each { |column_name| return column_name.to_sym if column_names.include?(column_name.to_s) }
+              columns_to_check.each do |column_name|
+                if column_names.include?(column_name.to_s)
+                  return column_name.to_sym
+                end
+              end
             end
             columns_to_check.first && columns_to_check.first.to_sym
           end

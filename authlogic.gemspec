@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'scrypt', '>= 1.2', '< 4.0'
   s.add_development_dependency 'bcrypt', '~> 3.1'
   s.add_development_dependency 'timecop', '~> 0.7'
-  s.add_development_dependency 'rubocop', '~> 0.43.0'
+  s.add_development_dependency 'rubocop', '~> 0.46.0'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

@@ -1,9 +1,10 @@
 module Authlogic
   module ActsAsAuthentic
-    # Sometimes models won't have an explicit "login" or "username" field. Instead they want to use the email field.
-    # In this case, authlogic provides validations to make sure the email submited is actually a valid email. Don't worry,
-    # if you do have a login or username field, Authlogic will still validate your email field. One less thing you have to
-    # worry about.
+    # Sometimes models won't have an explicit "login" or "username" field.
+    # Instead they want to use the email field. In this case, authlogic provides
+    # validations to make sure the email submited is actually a valid email.
+    # Don't worry, if you do have a login or username field, Authlogic will
+    # still validate your email field. One less thing you have to worry about.
     module Email
       def self.included(klass)
         klass.class_eval do
@@ -32,11 +33,13 @@ module Authlogic
         end
         alias_method :validate_email_field=, :validate_email_field
 
-        # A hash of options for the validates_length_of call for the email field. Allows you to change this however you want.
+        # A hash of options for the validates_length_of call for the email
+        # field. Allows you to change this however you want.
         #
-        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so you can completely replace the hash or
-        # merge options into it. Checkout the convenience function merge_validates_length_of_email_field_options to merge
-        # options.</b>
+        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as
+        # possible, so you can completely replace the hash or merge options into
+        # it. Checkout the convenience function
+        # merge_validates_length_of_email_field_options to merge options.</b>
         #
         # * <tt>Default:</tt> {:maximum => 100}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
@@ -45,9 +48,11 @@ module Authlogic
         end
         alias_method :validates_length_of_email_field_options=, :validates_length_of_email_field_options
 
-        # A convenience function to merge options into the validates_length_of_email_field_options. So instead of:
+        # A convenience function to merge options into the
+        # validates_length_of_email_field_options. So instead of:
         #
-        #   self.validates_length_of_email_field_options = validates_length_of_email_field_options.merge(:my_option => my_value)
+        #   self.validates_length_of_email_field_options =
+        #     validates_length_of_email_field_options.merge(:my_option => my_value)
         #
         # You can do this:
         #
@@ -99,7 +104,8 @@ module Authlogic
         end
         alias_method :validates_format_of_email_field_options=, :validates_format_of_email_field_options
 
-        # See merge_validates_length_of_email_field_options. The same thing except for validates_format_of_email_field_options.
+        # See merge_validates_length_of_email_field_options. The same thing
+        # except for validates_format_of_email_field_options.
         def merge_validates_format_of_email_field_options(options = {})
           self.validates_format_of_email_field_options = validates_format_of_email_field_options.merge(options)
         end
