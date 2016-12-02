@@ -19,7 +19,7 @@ Metrics/AbcSize:
 
 # Goal: 6
 Metrics/CyclomaticComplexity:
-  Max: 9
+  Max: 8
 
 # Goal: 100
 Metrics/LineLength:
@@ -27,7 +27,7 @@ Metrics/LineLength:
 
 # Goal: 7
 Metrics/PerceivedComplexity:
-  Max: 9
+  Max: 8
 
 # Cop supports --auto-correct.
 Performance/RedundantBlockCall:
