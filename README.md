@@ -5,6 +5,7 @@
 [![Gem Version](https://badge.fury.io/rb/authlogic.png)](http://badge.fury.io/rb/authlogic)
 [![Build Status](https://travis-ci.org/binarylogic/authlogic.png?branch=master)](https://travis-ci.org/binarylogic/authlogic)
 [![Code Climate](https://codeclimate.com/github/binarylogic/authlogic.png)](https://codeclimate.com/github/binarylogic/authlogic)
+[![Security](https://hakiri.io/github/binarylogic/authlogic/master.svg)](https://hakiri.io/github/binarylogic/authlogic/master)
 
 Authlogic is a clean, simple, and unobtrusive ruby authentication solution.
 
