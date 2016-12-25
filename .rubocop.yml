@@ -6,8 +6,20 @@ AllCops:
   # lowest version of MRI that authlogic supports.
   TargetRubyVersion: 2.0
 
-# Compared to metrics like AbcSize, MethodLength has questionable value.
+# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
+Metrics/BlockLength:
+  Enabled: false
+
+# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
+Metrics/ClassLength:
+  Enabled: false
+
+# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
 Metrics/MethodLength:
+  Enabled: false
+
+# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
+Metrics/ModuleLength:
   Enabled: false
 
 # Please use normal indentation when aligning parameters.
@@ -31,3 +43,7 @@ Metrics/MethodLength:
 # The latter is harder to maintain and uses too much horizontal space.
 Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation
+
+# Avoid single-line method definitions.
+Style/EmptyMethod:
+  EnforcedStyle: expanded

@@ -73,15 +73,22 @@ module Authlogic
         # with configuration. By default they will be banned for 2 hours. During
         # that 2 hour period this method will return true.
         def being_brute_force_protected?
-          exceeded_failed_logins_limit? && (failed_login_ban_for <= 0 ||
-            (attempted_record.respond_to?(:updated_at) && attempted_record.updated_at >= failed_login_ban_for.seconds.ago))
+          exceeded_failed_logins_limit? &&
+            (
+              failed_login_ban_for <= 0 ||
+              attempted_record.respond_to?(:updated_at) &&
+              attempted_record.updated_at >= failed_login_ban_for.seconds.ago
+            )
         end
 
         private
 
           def exceeded_failed_logins_limit?
-            !attempted_record.nil? && attempted_record.respond_to?(:failed_login_count) && consecutive_failed_logins_limit > 0 &&
-              attempted_record.failed_login_count && attempted_record.failed_login_count >= consecutive_failed_logins_limit
+            !attempted_record.nil? &&
+              attempted_record.respond_to?(:failed_login_count) &&
+              consecutive_failed_logins_limit > 0 &&
+              attempted_record.failed_login_count &&
+              attempted_record.failed_login_count >= consecutive_failed_logins_limit
           end
 
           def reset_failed_login_count?

@@ -6,7 +6,7 @@ module Authlogic
     # use this encryption method you must supply it with a key first. In an initializer,
     # or before your application initializes, you should do the following:
     #
-    #   Authlogic::CryptoProviders::AES256.key = "my really long and unique key, preferably a bunch of random characters"
+    #   Authlogic::CryptoProviders::AES256.key = "long, unique, and random key"
     #
     # My final comment is that this is a strong encryption method, but its main weakness
     # is that it's reversible. If you do not need to reverse the hash then you should
@@ -38,7 +38,11 @@ module Authlogic
         private
 
           def aes
-            raise ArgumentError.new("You must provide a key like #{name}.key = my_key before using the #{name}") if @key.blank?
+            if @key.blank?
+              raise ArgumentError.new(
+                "You must provide a key like #{name}.key = my_key before using the #{name}"
+              )
+            end
             @aes ||= OpenSSL::Cipher::Cipher.new("AES-256-ECB")
           end
       end

@@ -137,12 +137,14 @@ module Authlogic
         def validates_confirmation_of_password_field_options(value = nil)
           rw_config(:validates_confirmation_of_password_field_options, value, { :if => :require_password? })
         end
-        alias_method :validates_confirmation_of_password_field_options=, :validates_confirmation_of_password_field_options
+        alias_method :validates_confirmation_of_password_field_options=,
+          :validates_confirmation_of_password_field_options
 
         # See merge_validates_length_of_password_field_options. The same thing, except for
         # validates_confirmation_of_password_field_options
         def merge_validates_confirmation_of_password_field_options(options = {})
-          self.validates_confirmation_of_password_field_options = validates_confirmation_of_password_field_options.merge(options)
+          self.validates_confirmation_of_password_field_options =
+            validates_confirmation_of_password_field_options.merge(options)
         end
 
         # A hash of options for the validates_length_of call for the password_confirmation
@@ -217,7 +219,8 @@ module Authlogic
           klass.define_callbacks(*METHODS)
 
           # If Rails 3, support the new callback syntax
-          if klass.send(klass.respond_to?(:singleton_class) ? :singleton_class : :metaclass).method_defined?(:set_callback)
+          singleton_class_method_name = klass.respond_to?(:singleton_class) ? :singleton_class : :metaclass
+          if klass.send(singleton_class_method_name).method_defined?(:set_callback)
             METHODS.each do |method|
               klass.class_eval <<-"end_eval", __FILE__, __LINE__
                 def self.#{method}(*methods, &block)
@@ -380,8 +383,15 @@ module Authlogic
             # If we aren't using database values
             # If we are using database values, only if the password hasn't changed so we don't overwrite any changes
             def transition_password?(index, encryptor, check_against_database)
-              (index > 0 || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(send(crypted_password_field)))) &&
-                (!check_against_database || !send("#{crypted_password_field}_changed?"))
+              (
+                index > 0 ||
+                (encryptor.respond_to?(:cost_matches?) &&
+                !encryptor.cost_matches?(send(crypted_password_field)))
+              ) &&
+              (
+                !check_against_database ||
+                !send("#{crypted_password_field}_changed?")
+              )
             end
 
             def transition_password(attempted_password)
