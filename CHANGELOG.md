@@ -66,16 +66,20 @@
 
 ## 3.4.0 2014-03-03
 
-* new
+* Breaking Changes
+  * made scrypt the default crypto provider from SHA512
+    (https://github.com/binarylogic/authlogic#upgrading-to-authlogic-340)
+    See UPGRADING.md.
+
+* Added
+  * officially support rails 4 (still supporting rails 3)
   * added cookie signing
   * added request store for better concurency for threaded environments
-
-* changes
-  * BREAKING CHANGE: made scrypt the default crypto provider from SHA512 (https://github.com/binarylogic/authlogic#upgrading-to-authlogic-340)
-  * ditched appraisal
-  * officially support rails 4 (still supporting rails 3)
-  * improved find_with_case default performance
   * added a rack adapter for Rack middleware support
+
+* Fixed
+  * ditched appraisal
+  * improved find_with_case default performance
   * added travis ci support
 
 ## 3.3.0 2014-04-04
