@@ -35,10 +35,10 @@ module Authlogic
 
         # If sessions should be remembered by default or not.
         #
-        # If set to false authlogic sets session coockie that browsers normally
-        # delete when the user closes the browser and it logs out him
-        # Note: The user can configure the browser do not remove session cookies,
-        # in this case he will never be auto log out. There is this option:
+        # If set to false Authlogic only uses the session cookie, which browsers 
+        # normally delete upon closing.
+        # Note: The user can configure the browser to not remove session cookies,
+        # in which case he will never be auto-logged-out. There is this option:
         # - 'Continue where you left off' - in Chrome
         # - 'All windows from last session' - in Safari
         # - 'Show my windows and tabs from last time' - in FireFox
