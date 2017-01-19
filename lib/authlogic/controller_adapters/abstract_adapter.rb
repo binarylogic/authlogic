@@ -58,6 +58,10 @@ module Authlogic
         controller.send(:last_request_update_allowed?)
       end
 
+      def respond_to_missing?(*args)
+        super(*args) || controller.respond_to?(*args)
+      end
+
       private
 
         def method_missing(id, *args, &block)
