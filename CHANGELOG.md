@@ -9,6 +9,7 @@
 
 # Fixed
   * ensure that login field validation uses correct locale (@sskirby)
+  * add a respond_to_missing? in AbstractAdapter that also checks controller respond_to?
 
 ## 3.5.0 2016-08-29
 
