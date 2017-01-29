@@ -7,7 +7,7 @@
   * HTTP Basic Auth is now disabled by default (use allow_http_basic_auth to enable)
   * 'httponly' and 'secure' cookie options are enabled by default now
 
-# Fixed
+* Fixed
   * ensure that login field validation uses correct locale (@sskirby)
   * add a respond_to_missing? in AbstractAdapter that also checks controller respond_to?
 
