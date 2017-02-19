@@ -10,6 +10,8 @@
     log_in_after_create & log_in_after_password_change (@lucasminissale)
 
 * Fixed
+  * Random.friendly_token (used for e.g. perishable token) now returns strings
+    of consistent length, and conforms better to RFC-4648
   * ensure that login field validation uses correct locale (@sskirby)
   * add a respond_to_missing? in AbstractAdapter that also checks controller respond_to?
 
