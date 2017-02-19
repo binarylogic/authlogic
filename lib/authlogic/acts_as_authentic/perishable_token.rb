@@ -1,13 +1,15 @@
 module Authlogic
   module ActsAsAuthentic
-    # This provides a handy token that is "perishable". Meaning the token is
-    # only good for a certain amount of time. This is perfect for resetting
-    # password, confirming accounts, etc. Typically during these actions you
-    # send them this token in via their email. Once they use the token and do
-    # what they need to do, that token should expire. Don't worry about
-    # maintaining this, changing it, or expiring it yourself. Authlogic does all
-    # of this for you. See the sub modules for all of the tools Authlogic
-    # provides to you.
+    # This provides a handy token that is "perishable", meaning the token is
+    # only good for a certain amount of time.
+    #
+    # This is useful for resetting password, confirming accounts, etc. Typically
+    # during these actions you send them this token in an email. Once they use
+    # the token and do what they need to do, that token should expire.
+    #
+    # Don't worry about maintaining the token, changing it, or expiring it
+    # yourself. Authlogic does all of this for you. See the sub modules for all
+    # of the tools Authlogic provides to you.
     module PerishableToken
       def self.included(klass)
         klass.class_eval do
@@ -16,7 +18,7 @@ module Authlogic
         end
       end
 
-      # Change how the perishable token works.
+      # Configure the perishable token.
       module Config
         # When using the find_using_perishable_token method the token can
         # expire. If the token is expired, no record will be returned. Use this
@@ -30,9 +32,8 @@ module Authlogic
         alias_method :perishable_token_valid_for=, :perishable_token_valid_for
 
         # Authlogic tries to expire and change the perishable token as much as
-        # possible, without compromising it's purpose. This is for security
-        # reasons. If you want to manage it yourself, you can stop Authlogic
-        # from getting your in way by setting this to true.
+        # possible, without compromising its purpose. If you want to manage it
+        # yourself, set this to true.
         #
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
@@ -56,7 +57,7 @@ module Authlogic
           end
         end
 
-        # Class level methods for the perishable token
+        # Class methods for the perishable token
         module ClassMethods
           # Use this method to find a record with a perishable token. This
           # method does 2 things for you:
