@@ -40,21 +40,19 @@ module SessionTest
         session = UserSession.create(:login => aaron.login, :password => "wrong")
         assert session.new_session?
         aaron.reload
-
-        # grab old values
-        old_login_count = aaron.login_count
-        old_current_login_at = aaron.current_login_at
-        old_current_login_ip = aaron.current_login_ip
+        assert_equal 0, aaron.login_count
+        assert_nil aaron.current_login_at
+        assert_nil aaron.current_login_ip
 
         session = UserSession.create(:login => aaron.login, :password => "aaronrocks")
         assert session.valid?
 
         aaron.reload
-        assert_equal old_login_count + 1, aaron.login_count
+        assert_equal 1, aaron.login_count
         assert_equal 0, aaron.failed_login_count
-        assert_equal old_current_login_at, aaron.last_login_at
-        assert aaron.current_login_at != old_current_login_at
-        assert_equal old_current_login_ip, aaron.last_login_ip
+        assert_nil aaron.last_login_at
+        assert_not_nil aaron.current_login_at
+        assert_nil aaron.last_login_ip
         assert_equal "1.1.1.1", aaron.current_login_ip
       end
     end
