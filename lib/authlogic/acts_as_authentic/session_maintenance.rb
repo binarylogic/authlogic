@@ -30,17 +30,25 @@ module Authlogic
       end
 
       module Config
-        # This is more of a convenience method. In order to turn off automatic
-        # maintenance of sessions just set this to false, or you can also set
-        # the session_ids method to a blank array. Both accomplish the same
-        # thing. This method is a little clearer in it's intentions though.
+        # In order to turn off automatic maintenance of sessions
+        # after create, just set this to false.
         #
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
-        def maintain_sessions(value = nil)
-          rw_config(:maintain_sessions, value, true)
+        def log_in_after_create(value = nil)
+          rw_config(:log_in_after_create, value, true)
         end
-        alias_method :maintain_sessions=, :maintain_sessions
+        alias_method :log_in_after_create=, :log_in_after_create
+
+        # In order to turn off automatic maintenance of sessions when updating
+        # the password, just set this to false.
+        #
+        # * <tt>Default:</tt> true
+        # * <tt>Accepts:</tt> Boolean
+        def log_in_after_password_change(value = nil)
+          rw_config(:log_in_after_password_change, value, true)
+        end
+        alias_method :log_in_after_password_change=, :log_in_after_password_change
 
         # As you may know, authlogic sessions can be separate by id (See
         # Authlogic::Session::Base#id). You can specify here what session ids
@@ -96,9 +104,13 @@ module Authlogic
             !skip_session_maintenance &&
               session_class &&
               session_class.activated? &&
-              self.class.maintain_sessions == true &&
+              maintain_session? &&
               !session_ids.blank? &&
               persistence_token_changed?
+          end
+
+          def maintain_session?
+            log_in_after_create? || log_in_after_password_change?
           end
 
           def get_session_information
@@ -147,6 +159,14 @@ module Authlogic
 
           def session_class
             self.class.session_class
+          end
+
+          def log_in_after_create?
+            new_record? && self.class.log_in_after_create
+          end
+
+          def log_in_after_password_change?
+            persistence_token_changed? && self.class.log_in_after_password_change
           end
       end
     end

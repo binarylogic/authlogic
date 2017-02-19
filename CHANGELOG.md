@@ -6,6 +6,8 @@
   * Drop support for ruby 1.9.3
   * HTTP Basic Auth is now disabled by default (use allow_http_basic_auth to enable)
   * 'httponly' and 'secure' cookie options are enabled by default now
+  * maintain_sessions config has been removed. It has been split into 2 new options: 
+    log_in_after_create & log_in_after_password_change (@lucasminissale)
 
 * Fixed
   * ensure that login field validation uses correct locale (@sskirby)
