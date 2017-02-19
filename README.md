@@ -195,12 +195,15 @@ class CreateUser < ActiveRecord::Migration
 
       # Authlogic::ActsAsAuthentic::PersistenceToken
       t.string    :persistence_token
+      t.index     :persistence_token, unique: true
 
       # Authlogic::ActsAsAuthentic::SingleAccessToken
       t.string    :single_access_token
+      t.index     :single_access_token, unique: true
 
       # Authlogic::ActsAsAuthentic::PerishableToken
       t.string    :perishable_token
+      t.index     :perishable_token, unique: true
 
       # Authlogic::Session::MagicColumns
       t.integer   :login_count, default: 0, null: false
