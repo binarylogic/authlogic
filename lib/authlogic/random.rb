@@ -9,9 +9,10 @@ module Authlogic
       SecureRandom.hex(64)
     end
 
+    # Returns a string in base64url format as defined by RFC-3548 and RFC-4648.
+    # We call this a "friendly" token because it is short and safe for URLs.
     def friendly_token
-      # use base64url as defined by RFC4648
-      SecureRandom.base64(15).tr('+/=', '').strip.delete("\n")
+      SecureRandom.urlsafe_base64(15)
     end
   end
 end
