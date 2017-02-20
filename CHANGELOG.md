@@ -9,6 +9,10 @@
   * maintain_sessions config has been removed. It has been split into 2 new options: 
     log_in_after_create & log_in_after_password_change (@lucasminissale)
 
+* Added
+  * [#98](https://github.com/binarylogic/authlogic/issues/98)
+    I18n for invalid session error message. (@eugenebolshakov)
+
 * Fixed
   * Random.friendly_token (used for e.g. perishable token) now returns strings
     of consistent length, and conforms better to RFC-4648

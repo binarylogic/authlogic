@@ -71,5 +71,16 @@ module SessionTest
         refute session.record
       end
     end
+
+    class SessionInvalidErrorTest < ActiveSupport::TestCase
+      def test_message
+        session = UserSession.new
+        assert !session.valid?
+        error = Authlogic::Session::Existence::SessionInvalidError.new(session)
+        message = "Your session is invalid and has the following errors: " +
+          session.errors.full_messages.to_sentence
+        assert_equal message, error.message
+      end
+    end
   end
 end
