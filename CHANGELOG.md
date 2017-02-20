@@ -9,6 +9,10 @@
   * maintain_sessions config has been removed. It has been split into 2 new options: 
     log_in_after_create & log_in_after_password_change (@lucasminissale)
 
+* Added
+  * [#98](https://github.com/binarylogic/authlogic/issues/98)
+    I18n for invalid session error message. (@eugenebolshakov)
+
 * Fixed
   * ensure that login field validation uses correct locale (@sskirby)
   * add a respond_to_missing? in AbstractAdapter that also checks controller respond_to?

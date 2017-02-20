@@ -4,7 +4,12 @@ module Authlogic
     module Existence
       class SessionInvalidError < ::StandardError # :nodoc:
         def initialize(session)
-          super("Your session is invalid and has the following errors: #{session.errors.full_messages.to_sentence}")
+          message = I18n.t(
+            'error_messages.session_invalid',
+            default: "Your session is invalid and has the following errors:"
+          )
+          message += " #{session.errors.full_messages.to_sentence}"
+          super message
         end
       end
 

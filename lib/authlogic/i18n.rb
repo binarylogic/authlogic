@@ -46,6 +46,7 @@ module Authlogic
   #       not_approved: Your account is not approved
   #       no_authentication_details: You did not provide any details for authentication.
   #       general_credentials_error: Login/Password combination is not valid
+  #       session_invalid: Your session is invalid and has the following errors:
   #     models:
   #       user_session: UserSession (or whatever name you are using)
   #     attributes:
