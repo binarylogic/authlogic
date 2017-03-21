@@ -42,7 +42,7 @@ module Authlogic
 
         # Does the crypted password match the tokens? Uses the same tokens that were used to encrypt.
         def matches?(crypted, *tokens)
-          encrypt(*tokens) == crypted
+          encrypt(*tokens).to_i(16) == crypted.to_i(16)
         end
       end
     end
