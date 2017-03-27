@@ -6,9 +6,9 @@ A clean, simple, and unobtrusive ruby authentication solution.
 
 ## Sponsors
 
-[![Timber Logging](http://res.cloudinary.com/timber/image/upload/v1490556810/pricing/sponsorship.png)](https://timber.io)
+[![Timber Logging](http://res.cloudinary.com/timber/image/upload/v1490556810/pricing/sponsorship.png)](https://timber.io?utm_source=github&utm_medium=authlogic)
 
-[Tail users](https://timber.io/docs/app/tutorials/tail-a-user/) in your logs!
+[Tail Authlogic users](https://timber.io/docs/app/tutorials/tail-a-user?utm_source=github&utm_medium=authlogic) in your logs!
 
 ## Documentation
 
