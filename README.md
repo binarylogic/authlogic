@@ -4,6 +4,12 @@ A clean, simple, and unobtrusive ruby authentication solution.
 
 [![Gem Version][5]][6] [![Build Status][1]][2] [![Code Climate][7]][8] [![Dependency Status][3]][4]
 
+## Sponsors
+
+[![Timber Logging](http://res.cloudinary.com/timber/image/upload/v1490556810/pricing/sponsorship.png)](https://timber.io)
+
+[Tail users](https://timber.io/docs/app/tutorials/tail-a-user/) in your logs!
+
 ## Documentation
 
 | Version     | Documentation |
