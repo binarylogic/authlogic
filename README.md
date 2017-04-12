@@ -16,7 +16,7 @@ A clean, simple, and unobtrusive ruby authentication solution.
 | ----------- | ------------- |
 | Unreleased  | https://github.com/binarylogic/authlogic/blob/master/README.md |
 | 3.5.0       | https://github.com/binarylogic/authlogic/blob/v3.5.0/README.md |
-| 2.1.11      | https://github.com/binarylogic/authlogic/blob/v2.1.11/README.md |
+| 2.1.11      | https://github.com/binarylogic/authlogic/blob/v2.1.11/README.rdoc |
 | 1.4.3       | https://github.com/binarylogic/authlogic/blob/v1.4.3/README.md |
 
 ## Table of Contents
