@@ -21,6 +21,7 @@ gemfile:
   - test/gemfiles/Gemfile.rails-4.1.x
   - test/gemfiles/Gemfile.rails-4.2.x
   - test/gemfiles/Gemfile.rails-5.0.x
+  - test/gemfiles/Gemfile.rails-5.1.x
   - test/gemfiles/Gemfile.rails-master
 
 matrix:
@@ -29,6 +30,8 @@ matrix:
   exclude:
     - rvm: 2.1.10
       gemfile: test/gemfiles/Gemfile.rails-5.0.x
+    - rvm: 2.1.10
+      gemfile: test/gemfiles/Gemfile.rails-5.1.x
     - rvm: 2.2.6
       gemfile: test/gemfiles/Gemfile.rails-3.2.x
     - rvm: 2.3.3
