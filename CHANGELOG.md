@@ -2,13 +2,22 @@
 
 ## Unreleased
 
-Added
+* Breaking Changes
+  * None
 
-* rails 5.1 support
+* Added
+  * None
 
-Fixed
+* Fixed
+  * None
 
-* ensure that login field validation uses correct locale (@sskirby)
+## 3.6.0 2017-04-28
+
+* Added
+  * rails 5.1 support
+
+* Fixed
+  * ensure that login field validation uses correct locale (@sskirby)
 
 ## 3.5.0 2016-08-29
 
