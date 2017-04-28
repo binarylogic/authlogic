@@ -20,6 +20,17 @@
   * ensure that login field validation uses correct locale (@sskirby)
   * add a respond_to_missing? in AbstractAdapter that also checks controller respond_to?
 
+## 3.6.0 Unreleased
+
+* Breaking Changes
+  * None
+
+* Added
+  * Support rails 5.1
+
+* Fixed
+  * ensure that login field validation uses correct locale (@sskirby)
+
 ## 3.5.0 2016-08-29
 
 * new
