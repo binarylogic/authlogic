@@ -10,6 +10,7 @@
     log_in_after_create & log_in_after_password_change (@lucasminissale)
 
 * Added
+  * Support rails 5.1
   * [#98](https://github.com/binarylogic/authlogic/issues/98)
     I18n for invalid session error message. (@eugenebolshakov)
 
