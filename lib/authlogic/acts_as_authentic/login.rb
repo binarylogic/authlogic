@@ -178,13 +178,13 @@ module Authlogic
             elsif ar_gem_version >= Gem::Version.new('5.0')
               connection.case_sensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
             else
-              if ar_gem_version < Gem::Version.new('4.2')
-                value = connection.case_sensitive_modifier(value)
+              value = if ar_gem_version < Gem::Version.new('4.2')
+                connection.case_sensitive_modifier(value)
               else
-                value = connection.case_sensitive_modifier(value, field.to_s)
-              end
+                connection.case_sensitive_modifier(value, field.to_s)
+                      end
               arel_table[field.to_s].eq(value)
-            end
+                       end
 
             # bind value in rails 5
             if ar_gem_version >= Gem::Version.new('5')
