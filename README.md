@@ -352,6 +352,7 @@ See [Authlogic::TestCase](https://github.com/binarylogic/authlogic/blob/master/l
 * <b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
 * <b>Tutorial</b>: Rails Authentication with Authlogic http://www.sitepoint.com/rails-authentication-with-authlogic
 * <b>Issues:</b> http://github.com/binarylogic/authlogic/issues
+* <b>Chrome is not logging out on browser close</b> https://productforums.google.com/forum/#!topic/chrome/9l-gKYIUg50/discussion
 
 ## 5. Add-ons
 
