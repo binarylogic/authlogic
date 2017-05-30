@@ -3,6 +3,15 @@ module Authlogic
     # This is the base class Authlogic, where all modules are included. For information on functionality see the various
     # sub modules.
     class Base
+      include ActiveModel::Naming
+      def parents
+        []
+      end
+
+      def name
+        self.class.name
+      end
+
       include Foundation
       include Callbacks
 
