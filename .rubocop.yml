@@ -47,3 +47,7 @@ Style/AlignParameters:
 # Avoid single-line method definitions.
 Style/EmptyMethod:
   EnforcedStyle: expanded
+
+# Checks whether the end keywords are aligned properly.
+Lint/EndAlignment:
+  AutoCorrect: true

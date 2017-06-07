@@ -56,7 +56,7 @@ module Authlogic
 
           def validate_magic_states
             return true if attempted_record.nil?
-            [:active, :approved, :confirmed].each do |required_status|
+            %i(active approved confirmed).each do |required_status|
               if attempted_record.respond_to?("#{required_status}?") && !attempted_record.send("#{required_status}?")
                 errors.add(
                   :base,
