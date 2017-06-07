@@ -17,7 +17,7 @@ A clean, simple, and unobtrusive ruby authentication solution.
 | Unreleased  | https://github.com/binarylogic/authlogic/blob/master/README.md |
 | 3.6.0       | https://github.com/binarylogic/authlogic/blob/v3.6.0/README.md |
 | 2.1.11      | https://github.com/binarylogic/authlogic/blob/v2.1.11/README.rdoc |
-| 1.4.3       | https://github.com/binarylogic/authlogic/blob/v1.4.3/README.md |
+| 1.4.3       | https://github.com/binarylogic/authlogic/blob/v1.4.3/README.rdoc |
 
 ## Table of Contents
 
@@ -27,9 +27,9 @@ A clean, simple, and unobtrusive ruby authentication solution.
   - [1.c. How to use this documentation](#1c-how-to-use-this-documentation)
 - [2. Rails](#2-rails)
   - [2.a. The users table](#2a-the-users-table)
-  - [2.b. Controller](#2a-controller)
+  - [2.b. Controller](#2b-controller)
   - [2.c. View](#2c-view)
-  - [2.d. CSRF Protection](2d-csrf-protection)
+  - [2.d. CSRF Protection](#2d-csrf-protection)
 - [3. Testing](#3-testing)
 - [4. Helpful links](#4-helpful-links)
 - [5. Add-ons](#5-add-ons)
@@ -156,7 +156,7 @@ to dig deeper.
 ### 1.c. How to use this documentation
 
 You can find anything you want about Authlogic in the
-[documentation](http://rdoc.info/projects/binarylogic/authlogic), all that you
+[documentation](http://www.rubydoc.info/github/binarylogic/authlogic), all that you
 need to do is understand the basic design behind it.
 
 That being said, there are 2 models involved during authentication. Your Authlogic model and your ActiveRecord model:
@@ -173,7 +173,7 @@ you would look in <b>Authlogic::Session::Timeout</b>. To help you out, I listed
 the following publicly relevant modules with short descriptions. For the sake of
 brevity, there are more modules than listed here, the ones not listed are more
 for internal use, but you can easily read up on them in the
-[documentation](http://rdoc.info/projects/binarylogic/authlogic).
+[documentation](http://www.rubydoc.info/github/binarylogic/authlogic).
 
 ## 2. Rails
 
@@ -345,26 +345,25 @@ See [Authlogic::TestCase](https://github.com/binarylogic/authlogic/blob/master/l
 
 ## 4. Helpful links
 
-* <b>API Reference:</b> http://rdoc.info/projects/binarylogic/authlogic
-* <b>Repository:</b> http://github.com/binarylogic/authlogic/tree/master
+* <b>API Reference:</b> http://www.rubydoc.info/github/binarylogic/authlogic
+* <b>Repository:</b> https://github.com/binarylogic/authlogic/tree/master
 * <b>Railscasts Screencast:</b> http://railscasts.com/episodes/160-authlogic
-* <b>Example repository with tutorial in README:</b> http://github.com/binarylogic/authlogic_example/tree/master
-* <b>Tutorial: Reset passwords with Authlogic the RESTful way:</b> http://www.binarylogic.com/2008/11/16/tutorial-reset-passwords-with-authlogic
-* <b>Tutorial</b>: Rails Authentication with Authlogic http://www.sitepoint.com/rails-authentication-with-authlogic
-* <b>Issues:</b> http://github.com/binarylogic/authlogic/issues
+* <b>Example repository with tutorial in README:</b> https://github.com/binarylogic/authlogic_example/tree/master
+* <b>Tutorial</b>: Rails Authentication with Authlogic https://www.sitepoint.com/rails-authentication-with-authlogic
+* <b>Issues:</b> https://github.com/binarylogic/authlogic/issues
 * <b>Chrome is not logging out on browser close</b> https://productforums.google.com/forum/#!topic/chrome/9l-gKYIUg50/discussion
 
 ## 5. Add-ons
 
-* <b>Authlogic OpenID addon:</b> http://github.com/binarylogic/authlogic_openid
-* <b>Authlogic LDAP addon:</b> http://github.com/binarylogic/authlogic_ldap
-* <b>Authlogic Facebook Connect:</b> http://github.com/kalasjocke/authlogic_facebook_connect
-* <b>Authlogic Facebook Connect (New JS API):</b> http://github.com/studybyte/authlogic_facebook_connect
-* <b>Authlogic Facebook Shim</b> http://github.com/james2m/authlogic_facebook_shim
-* <b>Authlogic OAuth (Twitter):</b> http://github.com/jrallison/authlogic_oauth
-* <b>Authlogic Oauth and OpenID:</b> http://github.com/viatropos/authlogic-connect
-* <b>Authlogic PAM:</b> http://github.com/nbudin/authlogic_pam
-* <b>Authlogic x509:</b> http://github.com/auth-scc/authlogic_x509
+* <b>Authlogic OpenID addon:</b> https://github.com/binarylogic/authlogic_openid
+* <b>Authlogic LDAP addon:</b> https://github.com/binarylogic/authlogic_ldap
+* <b>Authlogic Facebook Connect:</b> https://github.com/kalasjocke/authlogic-facebook-connect
+* <b>Authlogic Facebook Connect (New JS API):</b> https://github.com/studybyte/authlogic_facebook_connect
+* <b>Authlogic Facebook Shim</b> https://github.com/james2m/authlogic_facebook_shim
+* <b>Authlogic OAuth (Twitter):</b> https://github.com/jrallison/authlogic_oauth
+* <b>Authlogic Oauth and OpenID:</b> https://github.com/lancejpollard/authlogic-connect
+* <b>Authlogic PAM:</b> https://github.com/nbudin/authlogic_pam
+* <b>Authlogic x509:</b> https://github.com/auth-scc/authlogic_x509
 
 If you create one of your own, please let us know about it so we can add it to
 this list. Or just fork the project, add your link, and send us a pull request.
