@@ -24,7 +24,7 @@ A clean, simple, and unobtrusive ruby authentication solution.
 - [1. Introduction](#1-introduction)
   - [1.a. Compatibility](#1a-compatibility)
   - [1.b. Overview](#1b-overview)
-  - [1.c. How to use this documentation](#1c-how-to-use-this-documentation)
+  - [1.c. Reference Documentation](#1c-reference-documentation)
 - [2. Rails](#2-rails)
   - [2.a. The users table](#2a-the-users-table)
   - [2.b. Controller](#2b-controller)
@@ -48,9 +48,9 @@ A clean, simple, and unobtrusive ruby authentication solution.
 
 ### 1.b. Overview
 
-It introduces a new type of model. You can have as many as you want, and name
-them whatever you want, just like your other models. In this example, we want to
-authenticate with the User model, which is inferred by the name:
+Authlogic introduces a new type of model. You can have as many as you want, and
+name them whatever you want, just like your other models. In this example, we
+want to authenticate with our `User` model, which is inferred from the name:
 
 ```ruby
 class UserSession < Authlogic::Session::Base
@@ -153,40 +153,32 @@ Authlogic is very flexible, it has a strong public API and a plethora of hooks
 to allow you to modify behavior and extend it. Check out the helpful links below
 to dig deeper.
 
-### 1.c. How to use this documentation
+### 1.c. Reference Documentation
 
-You can find anything you want about Authlogic in the
-[documentation](http://www.rubydoc.info/github/binarylogic/authlogic), all that you
-need to do is understand the basic design behind it.
+This README is just an introduction, but we also have [reference
+documentation](http://www.rubydoc.info/github/binarylogic/authlogic).
 
-That being said, there are 2 models involved during authentication. Your Authlogic model and your ActiveRecord model:
+**To use the reference documentation, you must understand how Authlogic's
+code is organized.** There are 2 models, your Authlogic model and your
+ActiveRecord model:
 
-1. <b>Authlogic::Session</b>, your session models that extend Authlogic::Session::Base.
-2. <b>Authlogic::ActsAsAuthentic</b>, which adds in functionality to your ActiveRecord model when you call acts_as_authentic.
+1. **Authlogic::Session**, your session models that
+  extend `Authlogic::Session::Base`.
+2. **Authlogic::ActsAsAuthentic**, which adds in functionality to your
+  ActiveRecord model when you call `acts_as_authentic`.
 
-Each of the above has its various sub modules that contain common logic. The sub
-modules are responsible for including *everything* related to it: configuration,
-class methods, instance methods, etc.
-
-For example, if you want to timeout users after a certain period of inactivity,
-you would look in <b>Authlogic::Session::Timeout</b>. To help you out, I listed
-the following publicly relevant modules with short descriptions. For the sake of
-brevity, there are more modules than listed here, the ones not listed are more
-for internal use, but you can easily read up on them in the
-[documentation](http://www.rubydoc.info/github/binarylogic/authlogic).
+Each of the above has various modules that are organized by topic: passwords,
+cookies, etc. For example, if you want to timeout users after a certain period
+of inactivity, you would look in `Authlogic::Session::Timeout`.
 
 ## 2. Rails
 
-What if creating sessions worked like an ORM library on the surface...
-
-``` ruby
-UserSession.create(params[:user_session])
-```
+Let's walk through a typical rails setup.
 
 ### 2.a. The users table
 
 If you want to enable all the features of Authlogic, a migration to create a
-+User+ model, for example, might look like this:
+`User` model might look like this:
 
 ``` ruby
 class CreateUser < ActiveRecord::Migration
@@ -233,8 +225,7 @@ end
 
 ### 2.b. Controller
 
-What if your user sessions controller could look just like your other
-controllers?
+Your sessions controller will look just like your other controllers.
 
 ```ruby
 class UserSessionsController < ApplicationController
@@ -259,14 +250,14 @@ class UserSessionsController < ApplicationController
   private
 
   def user_session_params
-    params.require(:user_session).permit(:email, :password)
+    params.require(:user_session).permit(:email, :password, :remember_me)
   end
 end
 ```
 
-As you can see, this fits nicely into the RESTful development pattern.
+As you can see, this fits nicely into the [conventional controller methods][9].
 
-How about persisting the session?
+#### 2.b.1. Helper Methods
 
 ```ruby
 class ApplicationController
@@ -392,3 +383,4 @@ Copyright (c) 2012 Ben Johnson of Binary Logic, released under the MIT license
 [6]: http://badge.fury.io/rb/authlogic
 [7]: https://codeclimate.com/github/binarylogic/authlogic.png
 [8]: https://codeclimate.com/github/binarylogic/authlogic
+[9]: http://guides.rubyonrails.org/routing.html#resource-routing-the-rails-default
