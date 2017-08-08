@@ -10,7 +10,6 @@
     log_in_after_create & log_in_after_password_change (@lucasminissale)
 
 * Added
-  * Support rails 5.1
   * [#98](https://github.com/binarylogic/authlogic/issues/98)
     I18n for invalid session error message. (@eugenebolshakov)
 
@@ -20,7 +19,7 @@
   * ensure that login field validation uses correct locale (@sskirby)
   * add a respond_to_missing? in AbstractAdapter that also checks controller respond_to?
 
-## 3.6.0 Unreleased
+## 3.6.0 2017-04-28
 
 * Breaking Changes
   * None
