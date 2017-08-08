@@ -264,6 +264,25 @@ module Authlogic
           # This method converts the ActionController::Parameters to a Hash
           def parse_param_val(value)
             if value.first.class.name == "ActionController::Parameters"
+              ActiveSupport::Deprecation.warn(
+                <<-STR.strip_heredoc
+                  You have passed an ActionController::Parameters to Authlogic 3.
+                  That's OK for now, but in Authlogic 4, anything other than a
+                  plain Hash will raise an error. Please replace:
+
+                      UserSession.new(user_session_params)
+                      UserSession.create(user_session_params)
+
+                  with
+
+                      UserSession.new(user_session_params.to_h)
+                      UserSession.create(user_session_params.to_h)
+
+                  Why this change? Well, ActionController is not a dependency of
+                  Authlogic. Therefore, Authlogic should not have special code
+                  that knows how to deal with ActionController.
+                STR
+              )
               [value.first.to_h]
             else
               value.is_a?(Array) ? value : [value]
