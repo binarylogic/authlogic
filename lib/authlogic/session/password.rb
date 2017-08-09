@@ -266,7 +266,7 @@ module Authlogic
             if value.first.class.name == "ActionController::Parameters"
               [value.first.to_h]
             else
-              value.is_a?(Array) ? value : [value]
+              Array.wrap(value)
             end
           end
       end
