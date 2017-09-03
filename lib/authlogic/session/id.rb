@@ -12,7 +12,7 @@ module Authlogic
       # Setting the id if it is passed in the credentials.
       def credentials=(value)
         super
-        values = value.is_a?(Array) ? value : [value]
+        values = Array.wrap(value)
         self.id = values.last if values.last.is_a?(Symbol)
       end
 
