@@ -88,12 +88,20 @@ module Authlogic
         # Allows you to set the remember_me option when passing credentials.
         def credentials=(value)
           super
-          values = value.is_a?(Array) ? value : [value]
+
+          # In Rails 5 the ActionController::Parameters no longer inherits from
+          # HashWithIndifferentAccess. (http://bit.ly/2gnK08F) This method
+          # converts the ActionController::Parameters to a Hash.
+          if value.class.name == "ActionController::Parameters"
+            value = value.to_h
+          end
+
+          values = Array.wrap(value)
+
           case values.first
           when Hash
-            if values.first.with_indifferent_access.key?(:remember_me)
-              self.remember_me = values.first.with_indifferent_access[:remember_me]
-            end
+            credentials = values.first.with_indifferent_access
+            self.remember_me = credentials[:remember_me] if credentials.key?(:remember_me)
           else
             r = values.find { |val| val.is_a?(TrueClass) || val.is_a?(FalseClass) }
             self.remember_me = r if !r.nil?
