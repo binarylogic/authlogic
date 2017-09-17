@@ -53,7 +53,7 @@ module Authlogic
         class_eval <<-"end_eval", __FILE__, __LINE__
           def #{name}
             find_options = #{options[:find_options].inspect} || #{options[:relationship_name]}.where(nil)
-            @#{name} ||= Authlogic::AuthenticatesMany::Association.new(#{options[:session_class]}, find_options, #{options[:scope_cookies] ? "self.class.model_name.underscore + '_' + self.send(self.class.primary_key).to_s" : "nil"})
+            @#{name} ||= Authlogic::AuthenticatesMany::Association.new(#{options[:session_class]}, find_options, #{options[:scope_cookies] ? "self.class.model_name.name.underscore + '_' + self.send(self.class.primary_key).to_s" : "nil"})
           end
         end_eval
       end
