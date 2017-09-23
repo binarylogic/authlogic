@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class AuthenticatesManyTest < ActiveSupport::TestCase
-
   def set_company_specific_session_for(company, user)
     id = company.id
     controller.session["company_#{id}_user_credentials"] = user.persistence_token
