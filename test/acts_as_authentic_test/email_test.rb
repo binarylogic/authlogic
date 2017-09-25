@@ -8,7 +8,8 @@ module ActsAsAuthenticTest
       "damien+test1...etc..@mydomain.com",
       "dakota.dux+1@gmail.com",
       "dakota.d'ux@gmail.com",
-      "a&b@c.com"
+      "a&b@c.com",
+      "someuser@somedomain.travelersinsurance"
     ]
 
     BAD_ASCII_EMAILS = [
@@ -16,7 +17,8 @@ module ActsAsAuthenticTest
       "aaaaaaaaaaaaa",
       "question?mark@gmail.com",
       "backslash@g\\mail.com",
-      "<script>alert(123);</script>\nnobody@example.com"
+      "<script>alert(123);</script>\nnobody@example.com",
+      "someuser@somedomain.isreallytoolongandimeanreallytoolong"
     ]
 
     # http://en.wikipedia.org/wiki/ISO/IEC_8859-1#Codepage_layout

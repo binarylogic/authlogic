@@ -9,7 +9,7 @@
   * None
 
 * Fixed
-  * None
+  * Allow tld up to 24 characters per https://data.iana.org/TLD/tlds-alpha-by-domain.txt
 
 ## 3.6.0 2017-04-28
 
