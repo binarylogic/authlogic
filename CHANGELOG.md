@@ -19,6 +19,7 @@
     of consistent length, and conforms better to RFC-4648
   * ensure that login field validation uses correct locale (@sskirby)
   * add a respond_to_missing? in AbstractAdapter that also checks controller respond_to?
+  * [#561](https://github.com/binarylogic/authlogic/issues/561) authenticates_many now works with scope_cookies:true
   * Allow tld up to 24 characters per https://data.iana.org/TLD/tlds-alpha-by-domain.txt 
 
 ## 3.6.0 2017-04-28
