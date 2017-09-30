@@ -43,17 +43,18 @@ module Authlogic
       # * <tt>scope_cookies:</tt> default: false
       #   By the nature of cookies they scope themselves if you are using subdomains to
       #   access accounts. If you aren't using subdomains you need to have separate
-      #   cookies for each account, assuming a user is logging into mroe than one account.
+      #   cookies for each account, assuming a user is logging into more than one account.
       #   Authlogic can take care of this for you by prefixing the name of the cookie and
-      #   sessin with the model id. You just need to tell Authlogic to do this by passing
-      #   this option.
+      #   session with the model id. Because it affects both cookies names and session keys,
+      #   the name `scope_cookies` is misleading. Perhaps simply `scope` or `scoped`
+      #   would have been better.
       def authenticates_many(name, options = {})
         options[:session_class] ||= name.to_s.classify.constantize
         options[:relationship_name] ||= options[:session_class].klass_name.underscore.pluralize
         class_eval <<-"end_eval", __FILE__, __LINE__
           def #{name}
             find_options = #{options[:find_options].inspect} || #{options[:relationship_name]}.where(nil)
-            @#{name} ||= Authlogic::AuthenticatesMany::Association.new(#{options[:session_class]}, find_options, #{options[:scope_cookies] ? "self.class.model_name.underscore + '_' + self.send(self.class.primary_key).to_s" : "nil"})
+            @#{name} ||= Authlogic::AuthenticatesMany::Association.new(#{options[:session_class]}, find_options, #{options[:scope_cookies] ? "self.class.model_name.name.underscore + '_' + self.send(self.class.primary_key).to_s" : "nil"})
           end
         end_eval
       end
