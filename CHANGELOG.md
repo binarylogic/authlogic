@@ -9,6 +9,17 @@
   * None
 
 * Fixed
+  * None
+
+## 3.6.1 2017-09-30
+
+* Breaking Changes
+  * None
+
+* Added
+  * None
+
+* Fixed
   * Allow tld up to 24 characters per https://data.iana.org/TLD/tlds-alpha-by-domain.txt
   * [#561](https://github.com/binarylogic/authlogic/issues/561)
     authenticates_many now works with scope_cookies:true
