@@ -1,22 +1,31 @@
 require 'test_helper'
 
 class AuthenticatesManyTest < ActiveSupport::TestCase
-  def set_company_specific_session_for(company, user)
-    id = company.id
-    controller.session["company_#{id}_user_credentials"] = user.persistence_token
-    controller.session["company_#{id}_user_credentials_id"] = user.id
+  def test_employee_sessions
+    binary_logic = companies(:binary_logic)
+
+    # Drew is a binary_logic employee, authentication succeeds
+    drew = employees(:drew)
+    set_session_for(drew)
+    assert binary_logic.employee_sessions.find
+
+    # Jennifer is not a binary_logic employee, authentication fails
+    jennifer = employees(:jennifer)
+    set_session_for(jennifer)
+    refute binary_logic.employee_sessions.find
   end
 
-  def test_scoping
-    zack = users(:zack)
-    ben = users(:ben)
+  def test_user_sessions
     binary_logic = companies(:binary_logic)
-    set_company_specific_session_for(binary_logic, zack)
 
-    refute binary_logic.user_sessions.find
-
-    set_company_specific_session_for(binary_logic, ben)
-
+    # Ben is a binary_logic user, authentication succeeds
+    ben = users(:ben)
+    set_session_for(ben, binary_logic)
     assert binary_logic.user_sessions.find
+
+    # Zack is not a binary_logic user, authentication fails
+    zack = users(:zack)
+    set_session_for(zack, binary_logic)
+    refute binary_logic.user_sessions.find
   end
 end
