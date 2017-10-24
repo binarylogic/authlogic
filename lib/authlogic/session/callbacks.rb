@@ -121,7 +121,20 @@ module Authlogic
 
         def save_record(alternate_record = nil)
           r = alternate_record || record
-          r.save_without_session_maintenance(:validate => false) if r && r.changed? && !r.readonly?
+          return unless r
+
+          ensure_valid_new_record(r) if r.new_record?
+
+          if r.errors.blank? && r.changed? && !r.readonly?
+            r.save_without_session_maintenance(:validate => false)
+          else
+            r
+          end
+        end
+
+        def ensure_valid_new_record(r)
+          return if r.valid?
+          r.errors.each { |k, v| errors.add(k, v) }
         end
     end
   end

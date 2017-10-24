@@ -45,6 +45,7 @@
   * change callback for rails 5 support
   * converts the ActionController::Parameters to a Hash for rails 5 support
   * check last_request_at_threshold even if last_request_at_update_allowed returns true (@rofreg)
+  * ensure the validity of the `attemped_record` to save when is a new_record on the `save_record` call. Populate the `errors` in order to be properly handle by the bangs (save! and create!) methods (@cavi21)
 
 ## 3.4.6 2015
 
