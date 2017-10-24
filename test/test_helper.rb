@@ -115,7 +115,11 @@ require_relative 'libs/user'
 require_relative 'libs/user_session'
 require_relative 'libs/company'
 
-Authlogic::CryptoProviders::AES256.key = "myafdsfddddddddddddddddddddddddddddddddddddddddddddddd"
+# Recent change, 2017-10-23: We had used a 54-letter string here. In the default
+# encoding, UTF-8, that's 54 bytes, which is clearly incorrect for an algorithm
+# with a 256-bit key, but I guess it worked. With the release of ruby 2.4 (and
+# thus openssl gem 2.0), it is more strict, and must be exactly 32 bytes.
+Authlogic::CryptoProviders::AES256.key = ::OpenSSL::Random.random_bytes(32)
 
 class ActiveSupport::TestCase
   include ActiveRecord::TestFixtures
