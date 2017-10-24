@@ -3,7 +3,7 @@
 ## 4.0.0 Unreleased
 
 * Breaking Changes
-  * Drop support for ruby 1.9.3
+  * Drop support for ruby < 2.2
   * Drop support for rails < 4.2
   * HTTP Basic Auth is now disabled by default (use allow_http_basic_auth to enable)
   * 'httponly' and 'secure' cookie options are enabled by default now
