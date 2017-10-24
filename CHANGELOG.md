@@ -7,7 +7,7 @@
   * Drop support for rails < 4.2
   * HTTP Basic Auth is now disabled by default (use allow_http_basic_auth to enable)
   * 'httponly' and 'secure' cookie options are enabled by default now
-  * maintain_sessions config has been removed. It has been split into 2 new options: 
+  * maintain_sessions config has been removed. It has been split into 2 new options:
     log_in_after_create & log_in_after_password_change (@lucasminissale)
 
 * Added
@@ -21,7 +21,7 @@
   * ensure that login field validation uses correct locale (@sskirby)
   * add a respond_to_missing? in AbstractAdapter that also checks controller respond_to?
   * [#561](https://github.com/binarylogic/authlogic/issues/561) authenticates_many now works with scope_cookies:true
-  * Allow tld up to 24 characters per https://data.iana.org/TLD/tlds-alpha-by-domain.txt 
+  * Allow tld up to 24 characters per https://data.iana.org/TLD/tlds-alpha-by-domain.txt
 
 ## 3.6.0 2017-04-28
 
