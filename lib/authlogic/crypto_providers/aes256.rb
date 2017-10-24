@@ -43,7 +43,22 @@ module Authlogic
                 "You must provide a key like #{name}.key = my_key before using the #{name}"
               )
             end
-            @aes ||= OpenSSL::Cipher::Cipher.new("AES-256-ECB")
+
+            @aes ||= openssl_cipher_class.new("AES-256-ECB")
+          end
+
+          # `::OpenSSL::Cipher::Cipher` has been deprecated since at least 2014,
+          # in favor of `::OpenSSL::Cipher`, but a deprecation warning was not
+          # printed until 2016
+          # (https://github.com/ruby/openssl/commit/5c20a4c014) when openssl
+          # became a gem. Its first release as a gem was 2.0.0, in ruby 2.4.
+          # (See https://github.com/ruby/ruby/blob/v2_4_0/NEWS)
+          def openssl_cipher_class
+            if ::Gem::Version.new(::OpenSSL::VERSION) < ::Gem::Version.new("2.0.0")
+              ::OpenSSL::Cipher::Cipher
+            else
+              ::OpenSSL::Cipher
+            end
           end
       end
     end
