@@ -1,3 +1,4 @@
+require "byebug"
 require "rubygems"
 require "minitest/autorun"
 require "active_record"
