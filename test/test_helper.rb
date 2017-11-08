@@ -9,7 +9,7 @@ require "i18n"
 I18n.load_path << File.dirname(__FILE__) + '/i18n/lol.yml'
 
 # ActiveRecord::Schema.verbose = false
-ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
+ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 logger = Logger.new(STDOUT)
 logger.level = Logger::FATAL
 ActiveRecord::Base.logger = logger
@@ -23,7 +23,7 @@ if ActiveSupport.respond_to?(:test_order)
 end
 
 ActiveRecord::Base.default_timezone = :local
-ActiveRecord::Schema.define(:version => 1) do
+ActiveRecord::Schema.define(version: 1) do
   create_table :companies do |t|
     t.datetime  :created_at
     t.datetime  :updated_at
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string    :name
   end
 
-  create_table :projects_users, :id => false do |t|
+  create_table :projects_users, id: false do |t|
     t.integer :project_id
     t.integer :user_id
   end
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table :users do |t|
     t.datetime  :created_at
     t.datetime  :updated_at
-    t.integer   :lock_version, :default => 0
+    t.integer   :lock_version, default: 0
     t.integer   :company_id
     t.string    :login
     t.string    :crypted_password
@@ -56,16 +56,16 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string    :email
     t.string    :first_name
     t.string    :last_name
-    t.integer   :login_count, :default => 0, :null => false
-    t.integer   :failed_login_count, :default => 0, :null => false
+    t.integer   :login_count, default: 0, null: false
+    t.integer   :failed_login_count, default: 0, null: false
     t.datetime  :last_request_at
     t.datetime  :current_login_at
     t.datetime  :last_login_at
     t.string    :current_login_ip
     t.string    :last_login_ip
-    t.boolean   :active, :default => true
-    t.boolean   :approved, :default => true
-    t.boolean   :confirmed, :default => true
+    t.boolean   :active, default: true
+    t.boolean   :approved, default: true
+    t.boolean   :confirmed, default: true
   end
 
   create_table :employees do |t|
@@ -78,7 +78,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.string    :persistence_token
     t.string    :first_name
     t.string    :last_name
-    t.integer   :login_count, :default => 0, :null => false
+    t.integer   :login_count, default: 0, null: false
     t.datetime  :last_request_at
     t.datetime  :current_login_at
     t.datetime  :last_login_at
@@ -183,7 +183,7 @@ class ActiveSupport::TestCase
     end
 
     def set_cookie_for(user)
-      controller.cookies["user_credentials"] = { :value => "#{user.persistence_token}::#{user.id}", :expires => nil }
+      controller.cookies["user_credentials"] = { value: "#{user.persistence_token}::#{user.id}", expires: nil }
     end
 
     def unset_cookie

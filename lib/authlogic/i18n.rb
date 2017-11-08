@@ -84,7 +84,7 @@ module Authlogic
       # for the message. The second is options, see the rails I18n library for a list of
       # options used.
       def translate(key, options = {})
-        translator.translate key, { :scope => I18n.scope }.merge(options)
+        translator.translate key, { scope: I18n.scope }.merge(options)
       end
       alias :t :translate
     end

@@ -83,7 +83,7 @@ module Authlogic
               :base,
               I18n.t(
                 'error_messages.no_authentication_details',
-                :default => "You did not provide any details for authentication."
+                default: "You did not provide any details for authentication."
               )
             )
           end

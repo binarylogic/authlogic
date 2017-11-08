@@ -25,7 +25,7 @@ module Authlogic
         klass.class_eval do
           extend Config
           include InstanceMethods
-          validate :validate_magic_states, :unless => :disable_magic_states?
+          validate :validate_magic_states, unless: :disable_magic_states?
         end
       end
 
@@ -62,7 +62,7 @@ module Authlogic
                   :base,
                   I18n.t(
                     "error_messages.not_#{required_status}",
-                    :default => "Your account is not #{required_status}"
+                    default: "Your account is not #{required_status}"
                   )
                 )
                 return false

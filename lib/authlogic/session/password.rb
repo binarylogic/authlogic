@@ -6,7 +6,7 @@ module Authlogic
         klass.class_eval do
           extend Config
           include InstanceMethods
-          validate :validate_by_password, :if => :authenticating_with_password?
+          validate :validate_by_password, if: :authenticating_with_password?
 
           class << self
             attr_accessor :configured_password_methods
@@ -202,10 +202,10 @@ module Authlogic
 
             # check for blank fields
             if send(login_field).blank?
-              errors.add(login_field, I18n.t('error_messages.login_blank', :default => "cannot be blank"))
+              errors.add(login_field, I18n.t('error_messages.login_blank', default: "cannot be blank"))
             end
             if send("protected_#{password_field}").blank?
-              errors.add(password_field, I18n.t('error_messages.password_blank', :default => "cannot be blank"))
+              errors.add(password_field, I18n.t('error_messages.password_blank', default: "cannot be blank"))
             end
             return if errors.count > 0
 
@@ -213,7 +213,7 @@ module Authlogic
             if attempted_record.blank?
               generalize_credentials_error_messages? ?
                 add_general_credentials_error :
-                errors.add(login_field, I18n.t('error_messages.login_not_found', :default => "is not valid"))
+                errors.add(login_field, I18n.t('error_messages.login_not_found', default: "is not valid"))
               return
             end
 
@@ -222,7 +222,7 @@ module Authlogic
               self.invalid_password = true
               generalize_credentials_error_messages? ?
                 add_general_credentials_error :
-                errors.add(password_field, I18n.t('error_messages.password_invalid', :default => "is not valid"))
+                errors.add(password_field, I18n.t('error_messages.password_invalid', default: "is not valid"))
               return
             end
           end
@@ -244,7 +244,7 @@ module Authlogic
             else
               "#{login_field.to_s.humanize}/Password combination is not valid"
             end
-            errors.add(:base, I18n.t('error_messages.general_credentials_error', :default => error_message))
+            errors.add(:base, I18n.t('error_messages.general_credentials_error', default: error_message))
           end
 
           def generalize_credentials_error_messages?

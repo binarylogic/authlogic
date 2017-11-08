@@ -25,7 +25,7 @@ module Authlogic
         #
         #   authlogic.models.user_session
         def human_name(*)
-          I18n.t("models.#{name.underscore}", { :count => 1, :default => name.humanize })
+          I18n.t("models.#{name.underscore}", { count: 1, default: name.humanize })
         end
 
         def i18n_scope

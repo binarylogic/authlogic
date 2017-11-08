@@ -43,7 +43,7 @@ module Authlogic
       private
 
         def scope_options
-          { :find_options => find_options, :id => id }
+          { find_options: find_options, id: id }
         end
     end
   end

@@ -77,8 +77,8 @@ module Authlogic
       module Methods
         def self.included(klass)
           klass.class_eval do
-            before_save :get_session_information, :if => :update_sessions?
-            before_save :maintain_sessions, :if => :update_sessions?
+            before_save :get_session_information, if: :update_sessions?
+            before_save :maintain_sessions, if: :update_sessions?
           end
         end
 

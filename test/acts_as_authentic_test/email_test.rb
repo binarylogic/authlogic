@@ -83,22 +83,22 @@ module ActsAsAuthenticTest
     end
 
     def test_validates_length_of_email_field_options_config
-      assert_equal({ :maximum => 100 }, User.validates_length_of_email_field_options)
-      assert_equal({ :maximum => 100 }, Employee.validates_length_of_email_field_options)
+      assert_equal({ maximum: 100 }, User.validates_length_of_email_field_options)
+      assert_equal({ maximum: 100 }, Employee.validates_length_of_email_field_options)
 
-      User.validates_length_of_email_field_options = { :yes => "no" }
-      assert_equal({ :yes => "no" }, User.validates_length_of_email_field_options)
-      User.validates_length_of_email_field_options({ :within => 6..100 })
-      assert_equal({ :within => 6..100 }, User.validates_length_of_email_field_options)
+      User.validates_length_of_email_field_options = { yes: "no" }
+      assert_equal({ yes: "no" }, User.validates_length_of_email_field_options)
+      User.validates_length_of_email_field_options({ within: 6..100 })
+      assert_equal({ within: 6..100 }, User.validates_length_of_email_field_options)
     end
 
     def test_validates_format_of_email_field_options_config
       default = {
-        :with => Authlogic::Regex.email,
-        :message => proc do
+        with: Authlogic::Regex.email,
+        message: proc do
           I18n.t(
             'error_messages.email_invalid',
-            :default => "should look like an email address."
+            default: "should look like an email address."
           )
         end
       }
@@ -116,17 +116,17 @@ module ActsAsAuthenticTest
       assert_equal default_message, message.call
       assert_equal default, options
 
-      User.validates_format_of_email_field_options = { :yes => "no" }
-      assert_equal({ :yes => "no" }, User.validates_format_of_email_field_options)
+      User.validates_format_of_email_field_options = { yes: "no" }
+      assert_equal({ yes: "no" }, User.validates_format_of_email_field_options)
       User.validates_format_of_email_field_options default
       assert_equal default, User.validates_format_of_email_field_options
 
       with_email_nonascii = {
-        :with => Authlogic::Regex.email_nonascii,
-        :message => Proc.new do
+        with: Authlogic::Regex.email_nonascii,
+        message: Proc.new do
           I18n.t(
             'error_messages.email_invalid_international',
-            :default => "should look like an international email address."
+            default: "should look like an international email address."
           )
         end
       }
@@ -157,14 +157,14 @@ module ActsAsAuthenticTest
 
     def test_validates_uniqueness_of_email_field_options_config
       default = {
-        :case_sensitive => false,
-        :scope => Employee.validations_scope,
-        :if => "#{Employee.email_field}_changed?".to_sym
+        case_sensitive: false,
+        scope: Employee.validations_scope,
+        if: "#{Employee.email_field}_changed?".to_sym
       }
       assert_equal default, Employee.validates_uniqueness_of_email_field_options
 
-      Employee.validates_uniqueness_of_email_field_options = { :yes => "no" }
-      assert_equal({ :yes => "no" }, Employee.validates_uniqueness_of_email_field_options)
+      Employee.validates_uniqueness_of_email_field_options = { yes: "no" }
+      assert_equal({ yes: "no" }, Employee.validates_uniqueness_of_email_field_options)
       Employee.validates_uniqueness_of_email_field_options default
       assert_equal default, Employee.validates_uniqueness_of_email_field_options
     end

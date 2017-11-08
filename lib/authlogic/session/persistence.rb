@@ -34,7 +34,7 @@ module Authlogic
         #
         # See the id method for more information on ids.
         def find(id = nil, priority_record = nil)
-          session = new({ :priority_record => priority_record }, id)
+          session = new({ priority_record: priority_record }, id)
           session.priority_record = priority_record
           if session.persisting?
             session

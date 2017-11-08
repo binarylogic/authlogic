@@ -107,7 +107,7 @@ module Authlogic
         # * <tt>Default:</tt> {:minimum => 8, :if => :require_password?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_password_field_options(value = nil)
-          rw_config(:validates_length_of_password_field_options, value, { :minimum => 8, :if => :require_password? })
+          rw_config(:validates_length_of_password_field_options, value, { minimum: 8, if: :require_password? })
         end
         alias_method :validates_length_of_password_field_options=, :validates_length_of_password_field_options
 
@@ -135,7 +135,7 @@ module Authlogic
         # * <tt>Default:</tt> {:if => :require_password?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_confirmation_of
         def validates_confirmation_of_password_field_options(value = nil)
-          rw_config(:validates_confirmation_of_password_field_options, value, { :if => :require_password? })
+          rw_config(:validates_confirmation_of_password_field_options, value, { if: :require_password? })
         end
         alias_method :validates_confirmation_of_password_field_options=,
           :validates_confirmation_of_password_field_options
@@ -327,7 +327,7 @@ module Authlogic
           # Resets the password to a random friendly token and then saves the record.
           def reset_password!
             reset_password
-            save_without_session_maintenance(:validate => false)
+            save_without_session_maintenance(validate: false)
           end
           alias_method :randomize_password!, :reset_password!
 
@@ -396,7 +396,7 @@ module Authlogic
 
             def transition_password(attempted_password)
               self.password = attempted_password
-              save(:validate => false)
+              save(validate: false)
             end
 
             def require_password?

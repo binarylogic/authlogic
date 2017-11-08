@@ -10,7 +10,7 @@ module Authlogic
           persist :persist_by_session
           after_save :update_session
           after_destroy :update_session
-          after_persisting :update_session, :unless => :single_access?
+          after_persisting :update_session, unless: :single_access?
         end
       end
 

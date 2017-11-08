@@ -5,22 +5,22 @@ module SessionTest
     class ClassMethodsTest < ActiveSupport::TestCase
       def test_create_with_good_credentials
         ben = users(:ben)
-        session = UserSession.create(:login => ben.login, :password => "benrocks")
+        session = UserSession.create(login: ben.login, password: "benrocks")
         refute session.new_session?
       end
 
       def test_create_with_bad_credentials
-        session = UserSession.create(:login => "somelogin", :password => "badpw2")
+        session = UserSession.create(login: "somelogin", password: "badpw2")
         assert session.new_session?
       end
 
       def test_create_bang
         ben = users(:ben)
         err = assert_raise(Authlogic::Session::Existence::SessionInvalidError) do
-          UserSession.create!(:login => ben.login, :password => "badpw")
+          UserSession.create!(login: ben.login, password: "badpw")
         end
         assert_includes err.message, "Password is not valid"
-        refute UserSession.create!(:login => ben.login, :password => "benrocks").new_session?
+        refute UserSession.create!(login: ben.login, password: "benrocks").new_session?
       end
     end
 
