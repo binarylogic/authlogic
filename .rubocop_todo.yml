@@ -112,10 +112,6 @@ Style/ExtraSpacing:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
-# Configuration parameters: MinBodyLength.
-Style/GuardClause:
-  Enabled: false
-
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, UseHashRocketsWithSymbolValues, PreferHashRocketsForNonAlnumEndingSymbols.
 # SupportedStyles: ruby19, ruby19_no_mixed_keys, hash_rockets

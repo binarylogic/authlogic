@@ -51,3 +51,8 @@ Style/AlignParameters:
 # Avoid single-line method definitions.
 Style/EmptyMethod:
   EnforcedStyle: expanded
+
+# The decision of when to use a guard clause to improve readability is too
+# subtle for a linter.
+Style/GuardClause:
+  Enabled: false
