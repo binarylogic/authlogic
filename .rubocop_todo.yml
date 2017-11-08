@@ -113,13 +113,6 @@ Style/FrozenStringLiteralComment:
   Enabled: false
 
 # Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
-# SupportedStyles: special_inside_parentheses, consistent, align_brackets
-Style/IndentArray:
-  Exclude:
-    - 'lib/authlogic.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: IndentationWidth.
 Style/IndentAssignment:
   Exclude:
