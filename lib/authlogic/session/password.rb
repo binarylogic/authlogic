@@ -239,11 +239,11 @@ module Authlogic
 
           def add_general_credentials_error
             error_message =
-            if self.class.generalize_credentials_error_messages.is_a? String
-              self.class.generalize_credentials_error_messages
-            else
-              "#{login_field.to_s.humanize}/Password combination is not valid"
-            end
+              if self.class.generalize_credentials_error_messages.is_a? String
+                self.class.generalize_credentials_error_messages
+              else
+                "#{login_field.to_s.humanize}/Password combination is not valid"
+              end
             errors.add(:base, I18n.t('error_messages.general_credentials_error', default: error_message))
           end
 

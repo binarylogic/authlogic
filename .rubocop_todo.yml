@@ -113,12 +113,6 @@ Style/FrozenStringLiteralComment:
   Enabled: false
 
 # Cop supports --auto-correct.
-# Configuration parameters: IndentationWidth.
-Style/IndentAssignment:
-  Exclude:
-    - 'lib/authlogic/session/password.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: normal, rails
 Style/IndentationConsistency:
