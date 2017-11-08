@@ -46,7 +46,7 @@ module Authlogic
       # All methods relating to the perishable token.
       module Methods
         def self.included(klass)
-          return if !klass.column_names.include?("perishable_token")
+          return unless klass.column_names.include?("perishable_token")
 
           klass.class_eval do
             extend ClassMethods

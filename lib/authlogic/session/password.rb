@@ -130,7 +130,7 @@ module Authlogic
       # Password related instance methods
       module InstanceMethods
         def initialize(*args)
-          if !self.class.configured_password_methods
+          unless self.class.configured_password_methods
             configure_password_methods
             self.class.configured_password_methods = true
           end
@@ -188,13 +188,13 @@ module Authlogic
 
           def configure_password_methods
             if login_field
-              self.class.send(:attr_writer, login_field) if !respond_to?("#{login_field}=")
-              self.class.send(:attr_reader, login_field) if !respond_to?(login_field)
+              self.class.send(:attr_writer, login_field) unless respond_to?("#{login_field}=")
+              self.class.send(:attr_reader, login_field) unless respond_to?(login_field)
             end
 
             if password_field
-              self.class.send(:attr_writer, password_field) if !respond_to?("#{password_field}=")
-              self.class.send(:define_method, password_field) {} if !respond_to?(password_field)
+              self.class.send(:attr_writer, password_field) unless respond_to?("#{password_field}=")
+              self.class.send(:define_method, password_field) {} unless respond_to?(password_field)
 
               # The password should not be accessible publicly. This way forms
               # using form_for don't fill the password with the attempted
@@ -232,7 +232,7 @@ module Authlogic
             end
 
             # check for invalid password
-            if !attempted_record.send(verify_password_method, send("protected_#{password_field}"))
+            unless attempted_record.send(verify_password_method, send("protected_#{password_field}"))
               self.invalid_password = true
               add_invalid_password_error
               return

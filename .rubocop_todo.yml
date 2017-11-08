@@ -52,24 +52,6 @@ Style/MixinUsage:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/base.rb'
 
-# Offense count: 17
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: both, prefix, postfix
-Style/NegatedIf:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/base.rb'
-    - 'lib/authlogic/acts_as_authentic/logged_in_status.rb'
-    - 'lib/authlogic/acts_as_authentic/perishable_token.rb'
-    - 'lib/authlogic/acts_as_authentic/restful_authentication.rb'
-    - 'lib/authlogic/acts_as_authentic/single_access_token.rb'
-    - 'lib/authlogic/session/active_record_trickery.rb'
-    - 'lib/authlogic/session/cookies.rb'
-    - 'lib/authlogic/session/klass.rb'
-    - 'lib/authlogic/session/params.rb'
-    - 'lib/authlogic/session/password.rb'
-    - 'lib/authlogic/session/persistence.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, MinBodyLength, SupportedStyles.

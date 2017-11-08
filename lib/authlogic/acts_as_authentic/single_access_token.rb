@@ -29,7 +29,7 @@ module Authlogic
       # All method, for the single_access token aspect of acts_as_authentic.
       module Methods
         def self.included(klass)
-          return if !klass.column_names.include?("single_access_token")
+          return unless klass.column_names.include?("single_access_token")
 
           klass.class_eval do
             include InstanceMethods

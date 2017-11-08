@@ -96,7 +96,7 @@ module Authlogic
             end
           else
             r = values.find { |val| val.is_a?(TrueClass) || val.is_a?(FalseClass) }
-            self.remember_me = r if !r.nil?
+            self.remember_me = r unless r.nil?
           end
         end
 

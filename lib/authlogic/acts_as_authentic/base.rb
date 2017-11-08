@@ -28,9 +28,9 @@ module Authlogic
         # See the various sub modules for the configuration they provide.
         def acts_as_authentic(unsupported_options = nil)
           # Stop all configuration if the DB is not set up
-          return if !db_setup?
+          return unless db_setup?
 
-          if !unsupported_options.nil?
+          unless unsupported_options.nil?
             raise ArgumentError.new(
               "You are using the old v1.X.X configuration method for " \
                 "Authlogic. Instead of passing a hash of configuration " \
