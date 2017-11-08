@@ -107,13 +107,6 @@ Style/ExtraSpacing:
     - 'test/acts_as_authentic_test/email_test.rb'
 
 # Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
-# SupportedStyles: consistent, special_for_inner_method_call, special_for_inner_method_call_in_parentheses
-Style/FirstParameterIndentation:
-  Exclude:
-    - 'lib/authlogic/session/brute_force_protection.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: when_needed, always
 Style/FrozenStringLiteralComment:
