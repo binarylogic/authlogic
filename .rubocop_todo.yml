@@ -36,11 +36,6 @@ Style/Alias:
   Enabled: false
 
 # Cop supports --auto-correct.
-Style/AlignArray:
-  Exclude:
-    - 'test/acts_as_authentic_test/email_test.rb'
-
-# Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: always, conditionals
 Style/AndOr:

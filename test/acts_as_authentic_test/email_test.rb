@@ -45,7 +45,7 @@ module ActsAsAuthenticTest
 
     BAD_UTF8_EMAILS = [
       "",
-              ".みんな",                                                    #  https://github.com/binarylogic/authlogic/issues/176#issuecomment-55829320
+      ".みんな",                                                    #  https://github.com/binarylogic/authlogic/issues/176#issuecomment-55829320
       'δκιμή@παράδεγμα.δ',          # short TLD
       "öm(@ava.fi",                 # L paren
       "é)@domain.com",              # R paren
