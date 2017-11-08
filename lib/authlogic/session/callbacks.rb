@@ -100,11 +100,11 @@ module Authlogic
         # If Rails 3, support the new callback syntax
         if base.singleton_class.method_defined?(:set_callback)
           METHODS.each do |method|
-            base.class_eval <<-"end_eval", __FILE__, __LINE__
+            base.class_eval <<-EOS, __FILE__, __LINE__
               def self.#{method}(*methods, &block)
                 set_callback :#{method}, *methods, &block
               end
-            end_eval
+            EOS
           end
         end
       end
@@ -112,11 +112,11 @@ module Authlogic
       private
 
         METHODS.each do |method|
-          class_eval <<-"end_eval", __FILE__, __LINE__
+          class_eval <<-EOS, __FILE__, __LINE__
             def #{method}
               run_callbacks(:#{method})
             end
-          end_eval
+          EOS
         end
 
         def save_record(alternate_record = nil)

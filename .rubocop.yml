@@ -55,6 +55,12 @@ Metrics/ModuleLength:
 Naming/AccessorMethodName:
   Enabled: false
 
+# Having a consistent delimiter, like EOS, improves reading speed. The delimiter
+# is syntactic noise, just like a quotation mark, and inconsistent naming would
+# hurt reading speed, just as inconsistent quoting would.
+Naming/HeredocDelimiterNaming:
+  Enabled: false
+
 # Avoid single-line method definitions.
 Style/EmptyMethod:
   EnforcedStyle: expanded

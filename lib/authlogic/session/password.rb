@@ -184,12 +184,12 @@ module Authlogic
               # using form_for don't fill the password with the attempted
               # password. To prevent this we just create this method that is
               # private.
-              self.class.class_eval <<-"end_eval", __FILE__, __LINE__
+              self.class.class_eval <<-EOS, __FILE__, __LINE__
                 private
                   def protected_#{password_field}
                     @#{password_field}
                   end
-              end_eval
+              EOS
             end
           end
 
