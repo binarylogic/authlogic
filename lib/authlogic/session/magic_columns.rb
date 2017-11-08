@@ -105,7 +105,7 @@ module Authlogic
           #   end
           #
           # You can do whatever you want with that method.
-          def set_last_request_at? # :doc:
+          def set_last_request_at?
             if !record || !klass.column_names.include?("last_request_at")
               return false
             end

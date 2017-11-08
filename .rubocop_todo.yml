@@ -36,11 +36,6 @@ Style/ClassVars:
   Exclude:
     - 'lib/authlogic/i18n.rb'
 
-# Offense count: 1
-Style/CommentedKeyword:
-  Exclude:
-    - 'lib/authlogic/session/magic_columns.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, SingleLineConditionsOnly, IncludeTernaryExpressions.
