@@ -3,7 +3,7 @@ require 'test_helper'
 module SessionTest
   class CallbacksTest < ActiveSupport::TestCase
     def setup
-     WackyUserSession.reset_callbacks(:persist)
+      WackyUserSession.reset_callbacks(:persist)
     end
 
     def test_no_callbacks
