@@ -4,27 +4,7 @@ AllCops:
   # You can run the authlogic test suite with any supported version of MRI, but the
   # linter will only care about this `TargetRubyVersion`. This should be set to the
   # lowest version of MRI that authlogic supports.
-  TargetRubyVersion: 2.0
-
-# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
-Metrics/BlockLength:
-  Enabled: false
-
-# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
-Metrics/ClassLength:
-  Enabled: false
-
-# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
-Metrics/MethodLength:
-  Enabled: false
-
-# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
-Metrics/ModuleLength:
-  Enabled: false
-
-# Sometimes prefixing a method name with get_ or set_ is a reasonable choice.
-Style/AccessorMethodName:
-  Enabled: false
+  TargetRubyVersion: 2.1
 
 # Please use normal indentation when aligning parameters.
 #
@@ -45,8 +25,28 @@ Style/AccessorMethodName:
 #                 b)
 #
 # The latter is harder to maintain and uses too much horizontal space.
-Style/AlignParameters:
+Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
+
+# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
+Metrics/BlockLength:
+  Enabled: false
+
+# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
+Metrics/ClassLength:
+  Enabled: false
+
+# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
+Metrics/MethodLength:
+  Enabled: false
+
+# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
+Metrics/ModuleLength:
+  Enabled: false
+
+# Sometimes prefixing a method name with get_ or set_ is a reasonable choice.
+Naming/AccessorMethodName:
+  Enabled: false
 
 # Avoid single-line method definitions.
 Style/EmptyMethod:
