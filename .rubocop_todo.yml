@@ -52,17 +52,6 @@ Style/MixinUsage:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/base.rb'
 
-# Offense count: 11
-# Cop supports --auto-correct.
-Style/MutableConstant:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/password.rb'
-    - 'lib/authlogic/crypto_providers/scrypt.rb'
-    - 'lib/authlogic/crypto_providers/wordpress.rb'
-    - 'lib/authlogic/session/callbacks.rb'
-    - 'test/acts_as_authentic_test/email_test.rb'
-    - 'test/acts_as_authentic_test/logged_in_status_test.rb'
-
 # Offense count: 17
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

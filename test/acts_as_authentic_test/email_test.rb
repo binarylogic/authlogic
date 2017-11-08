@@ -9,7 +9,7 @@ module ActsAsAuthenticTest
       "dakota.d'ux@gmail.com",
       "a&b@c.com",
       "someuser@somedomain.travelersinsurance"
-    ]
+    ].freeze
 
     BAD_ASCII_EMAILS = [
       "",
@@ -18,13 +18,13 @@ module ActsAsAuthenticTest
       "backslash@g\\mail.com",
       "<script>alert(123);</script>\nnobody@example.com",
       "someuser@somedomain.isreallytoolongandimeanreallytoolong"
-    ]
+    ].freeze
 
     # http://en.wikipedia.org/wiki/ISO/IEC_8859-1#Codepage_layout
     GOOD_ISO88591_EMAILS = [
       "töm.öm@dömain.fi",  # https://github.com/binarylogic/authlogic/issues/176
       "Pelé@examplé.com",  # http://en.wikipedia.org/wiki/Email_address#Internationalization_examples
-    ]
+    ].freeze
 
     BAD_ISO88591_EMAILS = [
       "",
@@ -33,7 +33,7 @@ module ActsAsAuthenticTest
       "é[@example.com",  # L bracket
       "question?mark@gmail.com",  # question mark
       "back\\slash@gmail.com",    # backslash
-    ]
+    ].freeze
 
     GOOD_UTF8_EMAILS = [
       "δκιμή@παράδεγμα.δοκμή", # http://en.wikipedia.org/wiki/Email_address#Internationalization_examples
@@ -41,7 +41,7 @@ module ActsAsAuthenticTest
       "甲斐@黒川.日買",                     # http://en.wikipedia.org/wiki/Email_address#Internationalization_examples
       "чебурша@ящик-с-пельнами.рф", # Contains dashes in domain head
       "企斐@黒川.みんな", #  https://github.com/binarylogic/authlogic/issues/176#issuecomment-55829320
-    ]
+    ].freeze
 
     BAD_UTF8_EMAILS = [
       "",
@@ -60,7 +60,7 @@ module ActsAsAuthenticTest
       "我?本@屋企.香港", # question mark
       "чебурша@ьн\\ами.рф", # backslash
       "user@domain.com%0A<script>alert('hello')</script>"
-    ]
+    ].freeze
 
     def test_email_field_config
       assert_equal :email, User.email_field

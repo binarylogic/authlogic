@@ -212,7 +212,7 @@ module Authlogic
         METHODS = [
           "before_password_set", "after_password_set",
           "before_password_verification", "after_password_verification"
-        ]
+        ].freeze
 
         def self.included(klass)
           return if klass.crypted_password_field.nil?

@@ -77,7 +77,7 @@ module Authlogic
         "after_save",
         "before_destroy",
         "after_destroy"
-      ]
+      ].freeze
 
       def self.included(base) #:nodoc:
         base.send :include, ActiveSupport::Callbacks

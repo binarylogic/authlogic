@@ -12,6 +12,7 @@
   * Methods in Authlogic::Random are now module methods, and are no longer
     instance methods. Previously, there were both. Do not use Authlogic::Random
     as a mixin.
+  * Our mutable constants (e.g. arrays, hashes) are now frozen.
 
 * Added
   * Support for ruby 2.4, specifically openssl gem 2.0
