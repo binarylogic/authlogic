@@ -36,14 +36,6 @@ Style/ClassVars:
   Exclude:
     - 'lib/authlogic/i18n.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, SingleLineConditionsOnly, IncludeTernaryExpressions.
-# SupportedStyles: assign_to_condition, assign_inside_condition
-Style/ConditionalAssignment:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/login.rb'
-
 # Offense count: 31
 Style/Documentation:
   Enabled: false
