@@ -184,7 +184,7 @@ module Authlogic
                            value = connection.case_sensitive_modifier(value, field.to_s)
                          end
                          arel_table[field.to_s].eq(value)
-            end
+                       end
 
             # bind value in rails 5
             if ar_gem_version >= Gem::Version.new('5')
