@@ -29,11 +29,6 @@ Metrics/LineLength:
 Metrics/PerceivedComplexity:
   Max: 8
 
-Style/AccessorMethodName:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/session_maintenance.rb'
-    - 'test/test_helper.rb'
-
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: prefer_alias, prefer_alias_method

@@ -22,6 +22,10 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
+# Sometimes prefixing a method name with get_ or set_ is a reasonable choice.
+Style/AccessorMethodName:
+  Enabled: false
+
 # Please use normal indentation when aligning parameters.
 #
 # Good:
