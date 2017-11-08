@@ -38,8 +38,6 @@ module Authlogic
           session.priority_record = priority_record
           if session.persisting?
             session
-          else
-            nil
           end
         end
       end
