@@ -36,16 +36,16 @@ module ActsAsAuthenticTest
     ]
 
     GOOD_UTF8_EMAILS = [
-      "δκιμή@παράδεγμα.δοκμή",            # http://en.wikipedia.org/wiki/Email_address#Internationalization_examples
+      "δκιμή@παράδεγμα.δοκμή", # http://en.wikipedia.org/wiki/Email_address#Internationalization_examples
       "我本@屋企.香港",                     # http://en.wikipedia.org/wiki/Email_address#Internationalization_examples
       "甲斐@黒川.日買",                     # http://en.wikipedia.org/wiki/Email_address#Internationalization_examples
-      "чебурша@ящик-с-пельнами.рф",       # Contains dashes in domain head
-      "企斐@黒川.みんな",                                              #  https://github.com/binarylogic/authlogic/issues/176#issuecomment-55829320
+      "чебурша@ящик-с-пельнами.рф", # Contains dashes in domain head
+      "企斐@黒川.みんな", #  https://github.com/binarylogic/authlogic/issues/176#issuecomment-55829320
     ]
 
     BAD_UTF8_EMAILS = [
       "",
-      ".みんな",                                                    #  https://github.com/binarylogic/authlogic/issues/176#issuecomment-55829320
+      ".みんな", #  https://github.com/binarylogic/authlogic/issues/176#issuecomment-55829320
       'δκιμή@παράδεγμα.δ',          # short TLD
       "öm(@ava.fi",                 # L paren
       "é)@domain.com",              # R paren
@@ -53,12 +53,12 @@ module ActsAsAuthenticTest
       "δ]@πράιγμα.δοκμή",           # R bracket
       "我\.香港",                    # slash
       "甲;.日本",                    # semicolon
-      "ч:@ящик-с-пельнами.рф",      # colon
-      "斐,.みんな",                                           #  comma
+      "ч:@ящик-с-пельнами.рф", # colon
+      "斐,.みんな", #  comma
       "香<.香港",                    # less than
       "我>.香港",                    # greater than
-      "我?本@屋企.香港",              # question mark
-      "чебурша@ьн\\ами.рф",         # backslash
+      "我?本@屋企.香港", # question mark
+      "чебурша@ьн\\ами.рф", # backslash
       "user@domain.com%0A<script>alert('hello')</script>"
     ]
 
