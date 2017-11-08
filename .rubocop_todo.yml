@@ -43,7 +43,6 @@ Style/ClassVars:
 Style/ConditionalAssignment:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/login.rb'
-    - 'lib/authlogic/session/cookies.rb'
 
 # Offense count: 31
 Style/Documentation:
