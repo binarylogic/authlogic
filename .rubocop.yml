@@ -52,7 +52,11 @@ Style/AlignParameters:
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
-# The decision of when to use a guard clause to improve readability is too
-# subtle for a linter.
+# Too subtle to lint.
 Style/GuardClause:
+  Enabled: false
+
+# Too subtle to lint. A multi-line conditional may improve readability, even if
+# a postfix conditional would satisfy `Metrics/LineLength`.
+Style/IfUnlessModifier:
   Enabled: false
