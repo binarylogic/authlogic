@@ -124,11 +124,7 @@ module ActsAsAuthenticTest
       u.password_confirmation = "abcdefghij"
       refute u.valid?
 
-      if ActiveModel.respond_to?(:version) and ActiveModel.version.segments.first >= 4
-        assert u.errors[:password_confirmation].include?("doesn't match Password")
-      else
-        assert u.errors[:password].include?("doesn't match confirmation")
-      end
+      assert u.errors[:password_confirmation].include?("doesn't match Password")
     end
 
     def test_validates_length_of_password_confirmation
