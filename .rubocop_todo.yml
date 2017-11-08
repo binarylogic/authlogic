@@ -31,13 +31,6 @@ Metrics/PerceivedComplexity:
 Style/Alias:
   Enabled: false
 
-# Offense count: 1
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: nested, compact
-Style/ClassAndModuleChildren:
-  Exclude:
-    - 'test/test_helper.rb'
-
 # Offense count: 5
 Style/ClassVars:
   Exclude:

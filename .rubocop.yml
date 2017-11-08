@@ -77,3 +77,8 @@ Style/IfUnlessModifier:
 # Too subtle to lint. Use semantic style, but prefer `}.x` over `end.x`.
 Style/BlockDelimiters:
   Enabled: false
+
+# Use the nested style because it is safer. It is easier to make mistakes with
+# the compact style.
+Style/ClassAndModuleChildren:
+  EnforcedStyle: nested
