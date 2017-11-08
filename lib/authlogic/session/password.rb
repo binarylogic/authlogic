@@ -170,6 +170,22 @@ module Authlogic
 
         private
 
+          def add_invalid_password_error
+            if generalize_credentials_error_messages?
+              add_general_credentials_error
+            else
+              errors.add(password_field, I18n.t('error_messages.password_invalid', default: "is not valid"))
+            end
+          end
+
+          def add_login_not_found_error
+            if generalize_credentials_error_messages?
+              add_general_credentials_error
+            else
+              errors.add(login_field, I18n.t('error_messages.login_not_found', default: "is not valid"))
+            end
+          end
+
           def configure_password_methods
             if login_field
               self.class.send(:attr_writer, login_field) if !respond_to?("#{login_field}=")
@@ -211,18 +227,14 @@ module Authlogic
 
             self.attempted_record = search_for_record(find_by_login_method, send(login_field))
             if attempted_record.blank?
-              generalize_credentials_error_messages? ?
-                add_general_credentials_error :
-                errors.add(login_field, I18n.t('error_messages.login_not_found', default: "is not valid"))
+              add_login_not_found_error
               return
             end
 
             # check for invalid password
             if !attempted_record.send(verify_password_method, send("protected_#{password_field}"))
               self.invalid_password = true
-              generalize_credentials_error_messages? ?
-                add_general_credentials_error :
-                errors.add(password_field, I18n.t('error_messages.password_invalid', default: "is not valid"))
+              add_invalid_password_error
               return
             end
           end

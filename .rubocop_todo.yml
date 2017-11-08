@@ -52,12 +52,6 @@ Style/MixinUsage:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/base.rb'
 
-# Offense count: 3
-Style/MultilineTernaryOperator:
-  Exclude:
-    - 'lib/authlogic/session/password.rb'
-    - 'lib/authlogic/session/session.rb'
-
 # Offense count: 11
 # Cop supports --auto-correct.
 Style/MutableConstant:
