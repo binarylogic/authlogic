@@ -65,11 +65,15 @@ Naming/HeredocDelimiterNaming:
 Style/EmptyMethod:
   EnforcedStyle: expanded
 
-# Too subtle to lint.
+# Too subtle to lint. Guard clauses are great, use them if they help.
 Style/GuardClause:
   Enabled: false
 
 # Too subtle to lint. A multi-line conditional may improve readability, even if
 # a postfix conditional would satisfy `Metrics/LineLength`.
 Style/IfUnlessModifier:
+  Enabled: false
+
+# Too subtle to lint. Use semantic style, but prefer `}.x` over `end.x`.
+Style/BlockDelimiters:
   Enabled: false
