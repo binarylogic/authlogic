@@ -88,7 +88,7 @@ module ActsAsAuthenticTest
 
       User.validates_length_of_email_field_options = { yes: "no" }
       assert_equal({ yes: "no" }, User.validates_length_of_email_field_options)
-      User.validates_length_of_email_field_options({ within: 6..100 })
+      User.validates_length_of_email_field_options(within: 6..100)
       assert_equal({ within: 6..100 }, User.validates_length_of_email_field_options)
     end
 

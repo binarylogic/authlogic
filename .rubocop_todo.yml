@@ -31,19 +31,6 @@ Metrics/PerceivedComplexity:
 Style/Alias:
   Enabled: false
 
-# Offense count: 11
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: braces, no_braces, context_dependent
-Style/BracesAroundHashParameters:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/email.rb'
-    - 'lib/authlogic/acts_as_authentic/login.rb'
-    - 'lib/authlogic/acts_as_authentic/password.rb'
-    - 'lib/authlogic/session/active_record_trickery.rb'
-    - 'test/acts_as_authentic_test/email_test.rb'
-    - 'test/acts_as_authentic_test/login_test.rb'
-
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: nested, compact

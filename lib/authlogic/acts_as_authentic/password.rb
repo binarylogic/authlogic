@@ -107,7 +107,7 @@ module Authlogic
         # * <tt>Default:</tt> {:minimum => 8, :if => :require_password?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_password_field_options(value = nil)
-          rw_config(:validates_length_of_password_field_options, value, { minimum: 8, if: :require_password? })
+          rw_config(:validates_length_of_password_field_options, value, minimum: 8, if: :require_password?)
         end
         alias_method :validates_length_of_password_field_options=, :validates_length_of_password_field_options
 
@@ -135,7 +135,7 @@ module Authlogic
         # * <tt>Default:</tt> {:if => :require_password?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_confirmation_of
         def validates_confirmation_of_password_field_options(value = nil)
-          rw_config(:validates_confirmation_of_password_field_options, value, { if: :require_password? })
+          rw_config(:validates_confirmation_of_password_field_options, value, if: :require_password?)
         end
         alias_method :validates_confirmation_of_password_field_options=,
           :validates_confirmation_of_password_field_options
