@@ -388,10 +388,10 @@ module Authlogic
                 (encryptor.respond_to?(:cost_matches?) &&
                 !encryptor.cost_matches?(send(crypted_password_field)))
               ) &&
-              (
-                !check_against_database ||
-                !send("#{crypted_password_field}_changed?")
-              )
+                (
+                  !check_against_database ||
+                  !send("#{crypted_password_field}_changed?")
+                )
             end
 
             def transition_password(attempted_password)

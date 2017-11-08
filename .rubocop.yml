@@ -32,6 +32,9 @@ Layout/AlignParameters:
 Layout/IndentationConsistency:
   EnforcedStyle: rails
 
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
 # Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
 Metrics/BlockLength:
   Enabled: false
