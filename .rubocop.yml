@@ -82,3 +82,8 @@ Style/BlockDelimiters:
 # the compact style.
 Style/ClassAndModuleChildren:
   EnforcedStyle: nested
+
+# Both `module_function` and `extend_self` are legitimate. Most importantly,
+# they are different (http://bit.ly/2hSQAGm)
+Style/ModuleFunction:
+  Enabled: false

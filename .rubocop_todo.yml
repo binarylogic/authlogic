@@ -52,13 +52,6 @@ Style/MixinUsage:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/base.rb'
 
-# Offense count: 1
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: module_function, extend_self
-Style/ModuleFunction:
-  Exclude:
-    - 'lib/authlogic/random.rb'
-
 # Offense count: 3
 Style/MultilineTernaryOperator:
   Exclude:
