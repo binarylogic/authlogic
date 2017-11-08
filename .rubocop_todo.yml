@@ -29,11 +29,6 @@ Metrics/LineLength:
 Metrics/PerceivedComplexity:
   Max: 8
 
-# Cop supports --auto-correct.
-Performance/RedundantBlockCall:
-  Exclude:
-    - 'lib/authlogic/controller_adapters/abstract_adapter.rb'
-
 Style/AccessorMethodName:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/session_maintenance.rb'
