@@ -27,7 +27,7 @@ module Authlogic
       # All methods for the logged in status feature seat.
       module Methods
         def self.included(klass)
-          return if !klass.column_names.include?("last_request_at")
+          return unless klass.column_names.include?("last_request_at")
 
           klass.class_eval do
             include InstanceMethods

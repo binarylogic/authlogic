@@ -26,10 +26,10 @@ module ActsAsAuthenticTest
     def test_login_after_create
       User.log_in_after_create = true
       user = User.create(
-        :login => "awesome",
-        :password => "saweeeet",
-        :password_confirmation => "saweeeet",
-        :email => "awesome@awesome.com"
+        login: "awesome",
+        password: "saweeeet",
+        password_confirmation: "saweeeet",
+        email: "awesome@awesome.com"
       )
       assert user.persisted?
       assert UserSession.find
@@ -39,17 +39,17 @@ module ActsAsAuthenticTest
 
     def test_no_login_after_create
       old_user = User.create(
-        :login => "awesome",
-        :password => "saweeeet",
-        :password_confirmation => "saweeeet",
-        :email => "awesome@awesome.com"
+        login: "awesome",
+        password: "saweeeet",
+        password_confirmation: "saweeeet",
+        email: "awesome@awesome.com"
       )
       User.log_in_after_create = false
       user2 = User.create(
-        :login => "awesome2",
-        :password => "saweeeet2",
-        :password_confirmation => "saweeeet2",
-        :email => "awesome2@awesome.com"
+        login: "awesome2",
+        password: "saweeeet2",
+        password_confirmation: "saweeeet2",
+        email: "awesome2@awesome.com"
       )
       assert user2.persisted?
       logged_in_user = UserSession.find.user
@@ -112,10 +112,10 @@ module ActsAsAuthenticTest
       old_session_key = controller.session["user_credentials"]
       old_cookie_key = controller.cookies["user_credentials"]
       user = User.create(
-        :login => "awesome",
-        :password => "saweet", # Password is too short, user invalid
-        :password_confirmation => "saweet",
-        :email => "awesome@saweet.com"
+        login: "awesome",
+        password: "saweet", # Password is too short, user invalid
+        password_confirmation: "saweet",
+        email: "awesome@saweet.com"
       )
       refute user.persisted?
       assert_equal controller.session["user_credentials"], old_session_key

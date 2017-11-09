@@ -4,23 +4,7 @@ AllCops:
   # You can run the authlogic test suite with any supported version of MRI, but the
   # linter will only care about this `TargetRubyVersion`. This should be set to the
   # lowest version of MRI that authlogic supports.
-  TargetRubyVersion: 2.0
-
-# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
-Metrics/BlockLength:
-  Enabled: false
-
-# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
-Metrics/ClassLength:
-  Enabled: false
-
-# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
-Metrics/MethodLength:
-  Enabled: false
-
-# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
-Metrics/ModuleLength:
-  Enabled: false
+  TargetRubyVersion: 2.1
 
 # Please use normal indentation when aligning parameters.
 #
@@ -41,9 +25,65 @@ Metrics/ModuleLength:
 #                 b)
 #
 # The latter is harder to maintain and uses too much horizontal space.
-Style/AlignParameters:
+Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
+
+# This project uses rails-style method indentation, ie. indent after `private`.
+Layout/IndentationConsistency:
+  EnforcedStyle: rails
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
+Metrics/BlockLength:
+  Enabled: false
+
+# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
+Metrics/ClassLength:
+  Enabled: false
+
+# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
+Metrics/MethodLength:
+  Enabled: false
+
+# Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
+Metrics/ModuleLength:
+  Enabled: false
+
+# Sometimes prefixing a method name with get_ or set_ is a reasonable choice.
+Naming/AccessorMethodName:
+  Enabled: false
+
+# Having a consistent delimiter, like EOS, improves reading speed. The delimiter
+# is syntactic noise, just like a quotation mark, and inconsistent naming would
+# hurt reading speed, just as inconsistent quoting would.
+Naming/HeredocDelimiterNaming:
+  Enabled: false
 
 # Avoid single-line method definitions.
 Style/EmptyMethod:
   EnforcedStyle: expanded
+
+# Too subtle to lint. Guard clauses are great, use them if they help.
+Style/GuardClause:
+  Enabled: false
+
+# Too subtle to lint. A multi-line conditional may improve readability, even if
+# a postfix conditional would satisfy `Metrics/LineLength`.
+Style/IfUnlessModifier:
+  Enabled: false
+
+# Too subtle to lint. Use semantic style, but prefer `}.x` over `end.x`.
+Style/BlockDelimiters:
+  Enabled: false
+
+# Use the nested style because it is safer. It is easier to make mistakes with
+# the compact style.
+Style/ClassAndModuleChildren:
+  EnforcedStyle: nested
+
+# Both `module_function` and `extend_self` are legitimate. Most importantly,
+# they are different (http://bit.ly/2hSQAGm)
+Style/ModuleFunction:
+  Enabled: false

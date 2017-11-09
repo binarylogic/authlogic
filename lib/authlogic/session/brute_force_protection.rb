@@ -25,8 +25,8 @@ module Authlogic
         klass.class_eval do
           extend Config
           include InstanceMethods
-          validate :reset_failed_login_count, :if => :reset_failed_login_count?
-          validate :validate_failed_logins, :if => :being_brute_force_protected?
+          validate :reset_failed_login_count, if: :reset_failed_login_count?
+          validate :validate_failed_logins, if: :being_brute_force_protected?
         end
       end
 
@@ -107,7 +107,7 @@ module Authlogic
               :base,
               I18n.t(
                 'error_messages.consecutive_failed_logins_limit_exceeded',
-                :default => "Consecutive failed logins limit exceeded, account has been" +
+                default: "Consecutive failed logins limit exceeded, account has been" +
                   (failed_login_ban_for == 0 ? "" : " temporarily") +
                   " disabled."
               )

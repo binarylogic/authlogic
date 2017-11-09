@@ -34,12 +34,10 @@ module Authlogic
         #
         # See the id method for more information on ids.
         def find(id = nil, priority_record = nil)
-          session = new({ :priority_record => priority_record }, id)
+          session = new({ priority_record: priority_record }, id)
           session.priority_record = priority_record
           if session.persisting?
             session
-          else
-            nil
           end
         end
       end
@@ -49,7 +47,7 @@ module Authlogic
         # in order to be logged in. If the session has no associated record, it will try to find a record and persist
         # the session. This is the method that the class level method find uses to ultimately persist the session.
         def persisting?
-          return true if !record.nil?
+          return true unless record.nil?
           self.attempted_record = nil
           self.remember_me = !cookie_credentials.nil? && !cookie_credentials[2].nil?
           before_persisting

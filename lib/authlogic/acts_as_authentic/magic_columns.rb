@@ -17,15 +17,15 @@ module Authlogic
           klass.class_eval do
             if column_names.include?("login_count")
               validates_numericality_of :login_count,
-                :only_integer => true,
-                :greater_than_or_equal_to => 0,
-                :allow_nil => true
+                only_integer: true,
+                greater_than_or_equal_to: 0,
+                allow_nil: true
             end
             if column_names.include?("failed_login_count")
               validates_numericality_of :failed_login_count,
-                :only_integer => true,
-                :greater_than_or_equal_to => 0,
-                :allow_nil => true
+                only_integer: true,
+                greater_than_or_equal_to: 0,
+                allow_nil: true
             end
           end
         end

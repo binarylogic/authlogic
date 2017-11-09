@@ -9,6 +9,10 @@
   * 'httponly' and 'secure' cookie options are enabled by default now
   * maintain_sessions config has been removed. It has been split into 2 new options:
     log_in_after_create & log_in_after_password_change (@lucasminissale)
+  * Methods in Authlogic::Random are now module methods, and are no longer
+    instance methods. Previously, there were both. Do not use Authlogic::Random
+    as a mixin.
+  * Our mutable constants (e.g. arrays, hashes) are now frozen.
 
 * Added
   * Support for ruby 2.4, specifically openssl gem 2.0

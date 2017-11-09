@@ -77,7 +77,7 @@ module Authlogic
         private
 
           def persist_by_params
-            return false if !params_enabled?
+            return false unless params_enabled?
             self.unauthorized_record = search_for_record("find_by_single_access_token", params_credentials)
             self.single_access = valid?
           end

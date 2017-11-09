@@ -30,20 +30,20 @@ module Authlogic
       end
 
       [:create, :create!, :find, :new].each do |method|
-        class_eval <<-"end_eval", __FILE__, __LINE__
+        class_eval <<-EOS, __FILE__, __LINE__
           def #{method}(*args)
             klass.with_scope(scope_options) do
               klass.#{method}(*args)
             end
           end
-        end_eval
+        EOS
       end
       alias_method :build, :new
 
       private
 
         def scope_options
-          { :find_options => find_options, :id => id }
+          { find_options: find_options, id: id }
         end
     end
   end

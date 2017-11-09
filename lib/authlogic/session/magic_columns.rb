@@ -19,10 +19,10 @@ module Authlogic
         klass.class_eval do
           extend Config
           include InstanceMethods
-          after_persisting :set_last_request_at, :if => :set_last_request_at?
+          after_persisting :set_last_request_at, if: :set_last_request_at?
           validate :increase_failed_login_count
           before_save :update_info
-          before_save :set_last_request_at, :if => :set_last_request_at?
+          before_save :set_last_request_at, if: :set_last_request_at?
         end
       end
 
@@ -105,7 +105,7 @@ module Authlogic
           #   end
           #
           # You can do whatever you want with that method.
-          def set_last_request_at? # :doc:
+          def set_last_request_at?
             if !record || !klass.column_names.include?("last_request_at")
               return false
             end

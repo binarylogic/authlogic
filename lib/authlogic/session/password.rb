@@ -6,7 +6,7 @@ module Authlogic
         klass.class_eval do
           extend Config
           include InstanceMethods
-          validate :validate_by_password, :if => :authenticating_with_password?
+          validate :validate_by_password, if: :authenticating_with_password?
 
           class << self
             attr_accessor :configured_password_methods
@@ -130,7 +130,7 @@ module Authlogic
       # Password related instance methods
       module InstanceMethods
         def initialize(*args)
-          if !self.class.configured_password_methods
+          unless self.class.configured_password_methods
             configure_password_methods
             self.class.configured_password_methods = true
           end
@@ -170,26 +170,42 @@ module Authlogic
 
         private
 
+          def add_invalid_password_error
+            if generalize_credentials_error_messages?
+              add_general_credentials_error
+            else
+              errors.add(password_field, I18n.t('error_messages.password_invalid', default: "is not valid"))
+            end
+          end
+
+          def add_login_not_found_error
+            if generalize_credentials_error_messages?
+              add_general_credentials_error
+            else
+              errors.add(login_field, I18n.t('error_messages.login_not_found', default: "is not valid"))
+            end
+          end
+
           def configure_password_methods
             if login_field
-              self.class.send(:attr_writer, login_field) if !respond_to?("#{login_field}=")
-              self.class.send(:attr_reader, login_field) if !respond_to?(login_field)
+              self.class.send(:attr_writer, login_field) unless respond_to?("#{login_field}=")
+              self.class.send(:attr_reader, login_field) unless respond_to?(login_field)
             end
 
             if password_field
-              self.class.send(:attr_writer, password_field) if !respond_to?("#{password_field}=")
-              self.class.send(:define_method, password_field) {} if !respond_to?(password_field)
+              self.class.send(:attr_writer, password_field) unless respond_to?("#{password_field}=")
+              self.class.send(:define_method, password_field) {} unless respond_to?(password_field)
 
               # The password should not be accessible publicly. This way forms
               # using form_for don't fill the password with the attempted
               # password. To prevent this we just create this method that is
               # private.
-              self.class.class_eval <<-"end_eval", __FILE__, __LINE__
+              self.class.class_eval <<-EOS, __FILE__, __LINE__
                 private
                   def protected_#{password_field}
                     @#{password_field}
                   end
-              end_eval
+              EOS
             end
           end
 
@@ -202,27 +218,23 @@ module Authlogic
 
             # check for blank fields
             if send(login_field).blank?
-              errors.add(login_field, I18n.t('error_messages.login_blank', :default => "cannot be blank"))
+              errors.add(login_field, I18n.t('error_messages.login_blank', default: "cannot be blank"))
             end
             if send("protected_#{password_field}").blank?
-              errors.add(password_field, I18n.t('error_messages.password_blank', :default => "cannot be blank"))
+              errors.add(password_field, I18n.t('error_messages.password_blank', default: "cannot be blank"))
             end
             return if errors.count > 0
 
             self.attempted_record = search_for_record(find_by_login_method, send(login_field))
             if attempted_record.blank?
-              generalize_credentials_error_messages? ?
-                add_general_credentials_error :
-                errors.add(login_field, I18n.t('error_messages.login_not_found', :default => "is not valid"))
+              add_login_not_found_error
               return
             end
 
             # check for invalid password
-            if !attempted_record.send(verify_password_method, send("protected_#{password_field}"))
+            unless attempted_record.send(verify_password_method, send("protected_#{password_field}"))
               self.invalid_password = true
-              generalize_credentials_error_messages? ?
-                add_general_credentials_error :
-                errors.add(password_field, I18n.t('error_messages.password_invalid', :default => "is not valid"))
+              add_invalid_password_error
               return
             end
           end
@@ -239,12 +251,12 @@ module Authlogic
 
           def add_general_credentials_error
             error_message =
-            if self.class.generalize_credentials_error_messages.is_a? String
-              self.class.generalize_credentials_error_messages
-            else
-              "#{login_field.to_s.humanize}/Password combination is not valid"
-            end
-            errors.add(:base, I18n.t('error_messages.general_credentials_error', :default => error_message))
+              if self.class.generalize_credentials_error_messages.is_a? String
+                self.class.generalize_credentials_error_messages
+              else
+                "#{login_field.to_s.humanize}/Password combination is not valid"
+              end
+            errors.add(:base, I18n.t('error_messages.general_credentials_error', default: error_message))
           end
 
           def generalize_credentials_error_messages?

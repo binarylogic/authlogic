@@ -40,7 +40,7 @@ module Authlogic
         # * <tt>Default:</tt> {:within => 3..100}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_login_field_options(value = nil)
-          rw_config(:validates_length_of_login_field_options, value, { :within => 3..100 })
+          rw_config(:validates_length_of_login_field_options, value, within: 3..100)
         end
         alias_method :validates_length_of_login_field_options=, :validates_length_of_login_field_options
 
@@ -82,15 +82,13 @@ module Authlogic
           rw_config(
             :validates_format_of_login_field_options,
             value,
-            {
-              :with => Authlogic::Regex.login,
-              :message => proc do
-                I18n.t(
-                  'error_messages.login_invalid',
-                  :default => "should use only letters, numbers, spaces, and .-_@+ please."
-                )
-              end
-            }
+            with: Authlogic::Regex.login,
+            message: proc do
+                       I18n.t(
+                         'error_messages.login_invalid',
+                         default: "should use only letters, numbers, spaces, and .-_@+ please."
+                       )
+                     end
           )
         end
         alias_method :validates_format_of_login_field_options=, :validates_format_of_login_field_options
@@ -122,11 +120,9 @@ module Authlogic
           rw_config(
             :validates_uniqueness_of_login_field_options,
             value,
-            {
-              :case_sensitive => false,
-              :scope => validations_scope,
-              :if => "#{login_field}_changed?".to_sym
-            }
+            case_sensitive: false,
+            scope: validations_scope,
+            if: "#{login_field}_changed?".to_sym
           )
         end
         alias_method(
@@ -174,17 +170,13 @@ module Authlogic
             ar_gem_version = Gem::Version.new(ActiveRecord::VERSION::STRING)
 
             relation = if not sensitive
-              connection.case_insensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
-            elsif ar_gem_version >= Gem::Version.new('5.0')
-              connection.case_sensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
-            else
-              if ar_gem_version < Gem::Version.new('4.2')
-                value = connection.case_sensitive_modifier(value)
-              else
-                value = connection.case_sensitive_modifier(value, field.to_s)
-              end
-              arel_table[field.to_s].eq(value)
-            end
+                         connection.case_insensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
+                       elsif ar_gem_version >= Gem::Version.new('5.0')
+                         connection.case_sensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
+                       else
+                         value = connection.case_sensitive_modifier(value, field.to_s)
+                         arel_table[field.to_s].eq(value)
+                       end
 
             # bind value in rails 5
             if ar_gem_version >= Gem::Version.new('5')

@@ -96,7 +96,7 @@ module Authlogic
             end
           else
             r = values.find { |val| val.is_a?(TrueClass) || val.is_a?(FalseClass) }
-            self.remember_me = r if !r.nil?
+            self.remember_me = r unless r.nil?
           end
         end
 
@@ -196,12 +196,16 @@ module Authlogic
           end
 
           def cookie_credentials
-            if self.class.sign_cookie
-              cookie = controller.cookies.signed[cookie_key]
-            else
-              cookie = controller.cookies[cookie_key]
-            end
+            cookie = cookie_jar[cookie_key]
             cookie && cookie.split("::")
+          end
+
+          def cookie_jar
+            if self.class.sign_cookie
+              controller.cookies.signed
+            else
+              controller.cookies
+            end
           end
 
           # Tries to validate the session from information in the cookie

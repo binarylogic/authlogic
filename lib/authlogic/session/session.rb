@@ -10,7 +10,7 @@ module Authlogic
           persist :persist_by_session
           after_save :update_session
           after_destroy :update_session
-          after_persisting :update_session, :unless => :single_access?
+          after_persisting :update_session, unless: :single_access?
         end
       end
 
@@ -34,18 +34,24 @@ module Authlogic
           def persist_by_session
             persistence_token, record_id = session_credentials
             if !persistence_token.nil?
-              # Allow finding by persistence token, because when records are created the
-              # session is maintained in a before_save, when there is no id. This is done
-              # for performance reasons and to save on queries.
-              record = record_id.nil? ?
-                search_for_record("find_by_persistence_token", persistence_token.to_s) :
-                search_for_record("find_by_#{klass.primary_key}", record_id.to_s)
+              record = persist_by_session_search(persistence_token, record_id)
               if record && record.persistence_token == persistence_token
                 self.unauthorized_record = record
               end
               valid?
             else
               false
+            end
+          end
+
+          # Allow finding by persistence token, because when records are created
+          # the session is maintained in a before_save, when there is no id.
+          # This is done for performance reasons and to save on queries.
+          def persist_by_session_search(persistence_token, record_id)
+            if record_id.nil?
+              search_for_record("find_by_persistence_token", persistence_token.to_s)
+            else
+              search_for_record("find_by_#{klass.primary_key}", record_id.to_s)
             end
           end
 

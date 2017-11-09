@@ -27,7 +27,7 @@ module SessionTest
       def test_valid_increase_failed_login_count
         ben = users(:ben)
         old_failed_login_count = ben.failed_login_count
-        session = UserSession.create(:login => ben.login, :password => "wrong")
+        session = UserSession.create(login: ben.login, password: "wrong")
         assert session.new_session?
         ben.reload
         assert_equal old_failed_login_count + 1, ben.failed_login_count
@@ -37,14 +37,14 @@ module SessionTest
         aaron = users(:aaron)
 
         # increase failed login count
-        session = UserSession.create(:login => aaron.login, :password => "wrong")
+        session = UserSession.create(login: aaron.login, password: "wrong")
         assert session.new_session?
         aaron.reload
         assert_equal 0, aaron.login_count
         assert_nil aaron.current_login_at
         assert_nil aaron.current_login_ip
 
-        session = UserSession.create(:login => aaron.login, :password => "aaronrocks")
+        session = UserSession.create(login: aaron.login, password: "aaronrocks")
         assert session.valid?
 
         aaron.reload

@@ -44,7 +44,7 @@ module Authlogic
         # * <tt>Default:</tt> {:maximum => 100}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_email_field_options(value = nil)
-          rw_config(:validates_length_of_email_field_options, value, { :maximum => 100 })
+          rw_config(:validates_length_of_email_field_options, value, maximum: 100)
         end
         alias_method :validates_length_of_email_field_options=, :validates_length_of_email_field_options
 
@@ -91,15 +91,13 @@ module Authlogic
           rw_config(
             :validates_format_of_email_field_options,
             value,
-            {
-              :with => Authlogic::Regex.email,
-              :message => Proc.new do
-                I18n.t(
-                  'error_messages.email_invalid',
-                  :default => "should look like an email address."
-                )
-              end
-            }
+            with: Authlogic::Regex.email,
+            message: Proc.new do
+                       I18n.t(
+                         'error_messages.email_invalid',
+                         default: "should look like an email address."
+                       )
+                     end
           )
         end
         alias_method :validates_format_of_email_field_options=, :validates_format_of_email_field_options
@@ -132,11 +130,9 @@ module Authlogic
           rw_config(
             :validates_uniqueness_of_email_field_options,
             value,
-            {
-              :case_sensitive => false,
-              :scope => validations_scope,
-              :if => "#{email_field}_changed?".to_sym
-            }
+            case_sensitive: false,
+            scope: validations_scope,
+            if: "#{email_field}_changed?".to_sym
           )
         end
         alias_method(

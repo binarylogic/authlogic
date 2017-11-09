@@ -22,21 +22,21 @@ module SessionTest
       def test_generalize_credentials_error_mesages_set_to_false
         UserSession.generalize_credentials_error_messages false
         refute UserSession.generalize_credentials_error_messages
-        session = UserSession.create(:login => users(:ben).login, :password => "invalud-password")
+        session = UserSession.create(login: users(:ben).login, password: "invalud-password")
         assert_equal ["Password is not valid"], session.errors.full_messages
       end
 
       def test_generalize_credentials_error_messages_set_to_true
         UserSession.generalize_credentials_error_messages true
         assert UserSession.generalize_credentials_error_messages
-        session = UserSession.create(:login => users(:ben).login, :password => "invalud-password")
+        session = UserSession.create(login: users(:ben).login, password: "invalud-password")
         assert_equal ["Login/Password combination is not valid"], session.errors.full_messages
       end
 
       def test_generalize_credentials_error_messages_set_to_string
         UserSession.generalize_credentials_error_messages = "Custom Error Message"
         assert UserSession.generalize_credentials_error_messages
-        session = UserSession.create(:login => users(:ben).login, :password => "invalud-password")
+        session = UserSession.create(login: users(:ben).login, password: "invalud-password")
         assert_equal ["Custom Error Message"], session.errors.full_messages
       end
 
@@ -79,21 +79,21 @@ module SessionTest
 
       def test_credentials
         session = UserSession.new
-        session.credentials = { :login => "login", :password => "pass" }
+        session.credentials = { login: "login", password: "pass" }
         assert_equal "login", session.login
         assert_nil session.password
         assert_equal "pass", session.send(:protected_password)
-        assert_equal({ :password => "<protected>", :login => "login" }, session.credentials)
+        assert_equal({ password: "<protected>", login: "login" }, session.credentials)
       end
 
       def test_credentials_are_params_safe
         session = UserSession.new
-        assert_nothing_raised { session.credentials = { :hacker_method => "error!" } }
+        assert_nothing_raised { session.credentials = { hacker_method: "error!" } }
       end
 
       def test_save_with_credentials
         aaron = users(:aaron)
-        session = UserSession.new(:login => aaron.login, :password => "aaronrocks")
+        session = UserSession.new(login: aaron.login, password: "aaronrocks")
         assert session.save
         refute session.new_session?
         assert_equal 1, session.record.login_count

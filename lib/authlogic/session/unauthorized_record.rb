@@ -15,7 +15,7 @@ module Authlogic
       def self.included(klass)
         klass.class_eval do
           attr_accessor :unauthorized_record
-          validate :validate_by_unauthorized_record, :if => :authenticating_with_unauthorized_record?
+          validate :validate_by_unauthorized_record, if: :authenticating_with_unauthorized_record?
         end
       end
 
