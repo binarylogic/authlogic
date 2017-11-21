@@ -84,6 +84,17 @@ module SessionTest
         assert_equal true, session.remember_me
       end
 
+      if ActiveRecord.version >= Gem::Version.new("5.0")
+        require 'action_controller'
+        def test_credentials_with_actioncontroller_parameters
+          session = UserSession.new
+          session.credentials = ActionController::Parameters
+            .new(remember_me: true)
+            .permit(:remember_me)
+          assert_equal true, session.remember_me
+        end
+      end
+
       def test_remember_me
         session = UserSession.new
         assert_equal false, session.remember_me

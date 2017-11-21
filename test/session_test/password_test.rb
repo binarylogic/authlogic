@@ -86,6 +86,18 @@ module SessionTest
         assert_equal({ password: "<protected>", login: "login" }, session.credentials)
       end
 
+      if ActiveRecord.version >= Gem::Version.new("5.0")
+        require 'action_controller'
+        def test_credentials_with_actioncontroller_parameters
+          session = UserSession.new
+          session.credentials = ActionController::Parameters
+            .new(login: "login", password: "pass")
+            .permit(:login, :password)
+          assert_equal "login", session.login
+          assert_equal "pass", session.send(:protected_password)
+        end
+      end
+
       def test_credentials_are_params_safe
         session = UserSession.new
         assert_nothing_raised { session.credentials = { hacker_method: "error!" } }

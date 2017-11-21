@@ -15,7 +15,7 @@ module Authlogic
       #   session.credentials = [real_user_object, priority_user_object]
       def credentials=(value)
         super
-        values = value.is_a?(Array) ? value : [value]
+        values = Array.wrap(value)
         self.priority_record = values[1] if values[1].class < ::ActiveRecord::Base
       end
 
