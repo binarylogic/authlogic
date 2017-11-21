@@ -11,7 +11,7 @@ before_install:
   - gem update bundler
 
 rvm:
-  - 2.1.10
+  - 2.2.8
   - 2.4.2
 
 gemfile:
@@ -20,11 +20,6 @@ gemfile:
   - test/gemfiles/Gemfile.rails-5.1.x
 
 matrix:
-  exclude:
-    - rvm: 2.1.10
-      gemfile: test/gemfiles/Gemfile.rails-5.0.x
-    - rvm: 2.1.10
-      gemfile: test/gemfiles/Gemfile.rails-5.1.x
   fast_finish: true
 
 sudo: false

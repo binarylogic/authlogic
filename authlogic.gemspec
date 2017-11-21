@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.description = 'A clean, simple, and unobtrusive ruby authentication solution.'
   s.license = 'MIT'
 
-  s.required_ruby_version = '>= 2.1.0'
+  s.required_ruby_version = '>= 2.2.0'
   s.add_dependency 'activerecord', ['>= 4.2', '< 5.2']
   s.add_dependency 'activesupport', ['>= 4.2', '< 5.2']
   s.add_dependency 'request_store', '~> 1.0'
