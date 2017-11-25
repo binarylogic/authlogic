@@ -2,6 +2,9 @@ module Authlogic
   module Session
     # Handles authenticating via a traditional username and password.
     module Password
+      E_CREDENTIAL_PARAMS_MISSING = 'The following parameter(s) were missing from '\
+                                    'the supplied credentials: %s.'.freeze
+
       def self.included(klass)
         klass.class_eval do
           extend Config
@@ -152,24 +155,23 @@ module Authlogic
 
         # Accepts the login_field / password_field credentials combination in
         # hash form.
-        def credentials=(value)
+        def credentials=(credentials)
           super
-          values = value.is_a?(Array) ? value.first : value
+          credentials = credentials.is_a?(Array) ? credentials.first : credentials
 
-          if values.respond_to? :keys
-            values = values.with_indifferent_access if values.is_a?(Hash)
-            values = values.slice(login_field, password_field)
-            missing_values = [login_field.to_s, password_field.to_s] - values.keys.map(&:to_s)
+          if credentials.respond_to? :keys
+            credentials = credentials.with_indifferent_access if credentials.is_a?(Hash)
 
-            if missing_values.empty?
-              values.each do |field, value|
+            required_credentials = credentials.slice(*required_credential_keys)
+            missing_credentials = required_credential_keys.map(&:to_s) - required_credentials.keys.map(&:to_s)
+
+            if missing_credentials.empty?
+              required_credentials.each do |key, value|
                 next if value.blank?
-                send("#{field}=", value)
+                send("#{key}=", value)
               end
             else
-              raise ArgumentError.new "The following parameter(s) were missing from the supplied "\
-                                      "credentials: #{missing_values.join(', ')}. "\
-                                      "Have you supplied or permitted these parameters?"
+              raise ArgumentError.new format(E_CREDENTIAL_PARAMS_MISSING, missing_credentials.join(', '))
             end
           end
         end
@@ -267,6 +269,10 @@ module Authlogic
 
           def verify_password_method
             self.class.verify_password_method
+          end
+
+          def required_credential_keys
+            [login_field, password_field]
           end
       end
     end
