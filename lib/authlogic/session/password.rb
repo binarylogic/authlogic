@@ -2,6 +2,9 @@ module Authlogic
   module Session
     # Handles authenticating via a traditional username and password.
     module Password
+      E_CREDENTIAL_PARAMS_MISSING = 'The following parameter(s) were missing from '\
+                                    'the supplied credentials: %s.'.freeze
+
       def self.included(klass)
         klass.class_eval do
           extend Config
@@ -152,14 +155,23 @@ module Authlogic
 
         # Accepts the login_field / password_field credentials combination in
         # hash form.
-        def credentials=(value)
+        def credentials=(credentials)
           super
-          values = parse_param_val(value) # add strong parameters check
+          credentials = credentials.is_a?(Array) ? credentials.first : credentials
 
-          if values.first.is_a?(Hash)
-            values.first.with_indifferent_access.slice(login_field, password_field).each do |field, value|
-              next if value.blank?
-              send("#{field}=", value)
+          if credentials.respond_to? :keys
+            credentials = credentials.with_indifferent_access if credentials.is_a?(Hash)
+
+            required_credentials = credentials.slice(*required_credential_keys)
+            missing_credentials = required_credential_keys.map(&:to_s) - required_credentials.keys.map(&:to_s)
+
+            if missing_credentials.empty?
+              required_credentials.each do |key, value|
+                next if value.blank?
+                send("#{key}=", value)
+              end
+            else
+              raise ArgumentError.new format(E_CREDENTIAL_PARAMS_MISSING, missing_credentials.join(', '))
             end
           end
         end
@@ -259,34 +271,8 @@ module Authlogic
             self.class.verify_password_method
           end
 
-          # In Rails 5 the ActionController::Parameters no longer inherits from HashWithIndifferentAccess.
-          # See: http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#actioncontroller-parameters-no-longer-inherits-from-hashwithindifferentaccess
-          # This method converts the ActionController::Parameters to a Hash
-          def parse_param_val(value)
-            if value.first.class.name == "ActionController::Parameters"
-              ActiveSupport::Deprecation.warn(
-                <<-STR.strip_heredoc
-                  You have passed an ActionController::Parameters to Authlogic 3.
-                  That's OK for now, but in Authlogic 4, anything other than a
-                  plain Hash will raise an error. Please replace:
-
-                      UserSession.new(user_session_params)
-                      UserSession.create(user_session_params)
-
-                  with
-
-                      UserSession.new(user_session_params.to_h)
-                      UserSession.create(user_session_params.to_h)
-
-                  Why this change? Well, ActionController is not a dependency of
-                  Authlogic. Therefore, Authlogic should not have special code
-                  that knows how to deal with ActionController.
-                STR
-              )
-              [value.first.to_h]
-            else
-              value.is_a?(Array) ? value : [value]
-            end
+          def required_credential_keys
+            [login_field, password_field]
           end
       end
     end

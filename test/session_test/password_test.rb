@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'action_controller/metal/strong_parameters'
 
 module SessionTest
   module PasswordTest
@@ -84,6 +85,33 @@ module SessionTest
         assert_nil session.password
         assert_equal "pass", session.send(:protected_password)
         assert_equal({ :password => "<protected>", :login => "login" }, session.credentials)
+      end
+
+      def test_action_controller_parameters_credentials
+        session = UserSession.new
+        session.credentials = ActionController::Parameters.new(
+          user: {
+            login: 'login',
+            password: 'pass'
+          }
+        ).require(:user).permit(:login, :password)
+
+        assert_equal "login", session.login
+        assert_nil session.password
+        assert_equal "pass", session.send(:protected_password)
+        assert_equal({ :password => "<protected>", :login => "login" }, session.credentials)
+      end
+
+      def test_non_permitted_action_controller_parameters_credentials
+        session = UserSession.new
+        assert_raise(ArgumentError) do
+          session.credentials = ActionController::Parameters.new(
+            user: {
+              login: 'login',
+              password: 'pass'
+            }
+          ).require(:user)
+        end
       end
 
       def test_credentials_are_params_safe
