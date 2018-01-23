@@ -4,7 +4,12 @@ module Authlogic
     module Existence
       class SessionInvalidError < ::StandardError # :nodoc:
         def initialize(session)
-          super("Your session is invalid and has the following errors: #{session.errors.full_messages.to_sentence}")
+          message = I18n.t(
+            'error_messages.session_invalid',
+            default: "Your session is invalid and has the following errors:"
+          )
+          message += " #{session.errors.full_messages.to_sentence}"
+          super message
         end
       end
 
@@ -60,7 +65,7 @@ module Authlogic
         # After you have specified all of the details for your session you can try to save it. This will
         # run validation checks and find the associated record, if all validation passes. If validation
         # does not pass, the save will fail and the errors will be stored in the errors object.
-        def save(&block)
+        def save
           result = nil
           if valid?
             self.record = attempted_record

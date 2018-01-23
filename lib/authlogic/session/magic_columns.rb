@@ -19,10 +19,10 @@ module Authlogic
         klass.class_eval do
           extend Config
           include InstanceMethods
-          after_persisting :set_last_request_at, :if => :set_last_request_at?
+          after_persisting :set_last_request_at, if: :set_last_request_at?
           validate :increase_failed_login_count
           before_save :update_info
-          before_save :set_last_request_at, :if => :set_last_request_at?
+          before_save :set_last_request_at, if: :set_last_request_at?
         end
       end
 
@@ -47,6 +47,12 @@ module Authlogic
       module InstanceMethods
         private
 
+          def clear_failed_login_count
+            if record.respond_to?(:failed_login_count)
+              record.failed_login_count = 0
+            end
+          end
+
           def increase_failed_login_count
             if invalid_password? && attempted_record.respond_to?(:failed_login_count)
               attempted_record.failed_login_count ||= 0
@@ -54,23 +60,30 @@ module Authlogic
             end
           end
 
-          def update_info
+          def increment_login_cout
             if record.respond_to?(:login_count)
               record.login_count = (record.login_count.blank? ? 1 : record.login_count + 1)
             end
+          end
 
-            if record.respond_to?(:failed_login_count)
-              record.failed_login_count = 0
-            end
+          def update_info
+            increment_login_cout
+            clear_failed_login_count
+            update_login_timestamps
+            update_login_ip_addresses
+          end
 
-            if record.respond_to?(:current_login_at)
-              record.last_login_at = record.current_login_at if record.respond_to?(:last_login_at)
-              record.current_login_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
-            end
-
+          def update_login_ip_addresses
             if record.respond_to?(:current_login_ip)
               record.last_login_ip = record.current_login_ip if record.respond_to?(:last_login_ip)
               record.current_login_ip = controller.request.ip
+            end
+          end
+
+          def update_login_timestamps
+            if record.respond_to?(:current_login_at)
+              record.last_login_at = record.current_login_at if record.respond_to?(:last_login_at)
+              record.current_login_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
             end
           end
 
@@ -92,7 +105,7 @@ module Authlogic
           #   end
           #
           # You can do whatever you want with that method.
-          def set_last_request_at? # :doc:
+          def set_last_request_at?
             if !record || !klass.column_names.include?("last_request_at")
               return false
             end

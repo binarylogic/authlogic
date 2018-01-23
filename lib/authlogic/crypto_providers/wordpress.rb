@@ -3,13 +3,13 @@ module Authlogic
   module CryptoProviders
     class Wordpress
       class << self
-        ITOA64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+        ITOA64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.freeze
 
         def matches?(crypted, *tokens)
           stretches = 1 << ITOA64.index(crypted[3, 1])
           plain, salt = *tokens
           hashed = Digest::MD5.digest(salt + plain)
-          stretches.times do |i|
+          stretches.times do
             hashed = Digest::MD5.digest(hashed + plain)
           end
           crypted[0, 12] + encode_64(hashed, 16) == crypted

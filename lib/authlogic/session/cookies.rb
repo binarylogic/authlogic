@@ -54,10 +54,10 @@ module Authlogic
         # Should the cookie be set as secure?  If true, the cookie will only be sent over
         # SSL connections
         #
-        # * <tt>Default:</tt> false
+        # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
         def secure(value = nil)
-          rw_config(:secure, value, false)
+          rw_config(:secure, value, true)
         end
         alias_method :secure=, :secure
 
@@ -73,10 +73,10 @@ module Authlogic
         # Should the cookie be set as httponly?  If true, the cookie will not be
         # accessible from javascript
         #
-        # * <tt>Default:</tt> false
+        # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
         def httponly(value = nil)
-          rw_config(:httponly, value, false)
+          rw_config(:httponly, value, true)
         end
         alias_method :httponly=, :httponly
 
@@ -104,8 +104,8 @@ module Authlogic
               self.remember_me = values.first.with_indifferent_access[:remember_me]
             end
           else
-            r = values.find { |value| value.is_a?(TrueClass) || value.is_a?(FalseClass) }
-            self.remember_me = r if !r.nil?
+            r = values.find { |val| val.is_a?(TrueClass) || val.is_a?(FalseClass) }
+            self.remember_me = r unless r.nil?
           end
         end
 
@@ -221,10 +221,15 @@ module Authlogic
           end
 
           def cookie_credentials
+            cookie = cookie_jar[cookie_key]
+            cookie && cookie.split("::")
+          end
+
+          def cookie_jar
             if self.class.sign_cookie
-              cookie = controller.cookies.signed[cookie_key]
+              controller.cookies.signed
             else
-              cookie = controller.cookies[cookie_key]
+              controller.cookies
             end
 
             if cookie =~ /::/
@@ -257,16 +262,16 @@ module Authlogic
 
           def generate_cookie_for_saving
             {
-              :value => cookie_value,
-              :expires => remember_me_until,
-              :secure => secure,
-              :httponly => httponly,
-              :domain => controller.cookie_domain
+              value: cookie_value,
+              expires: remember_me_until,
+              secure: secure,
+              httponly: httponly,
+              domain: controller.cookie_domain
             }
           end
 
           def destroy_cookie
-            controller.cookies.delete cookie_key, :domain => controller.cookie_domain
+            controller.cookies.delete cookie_key, domain: controller.cookie_domain
           end
 
           def cookie_value

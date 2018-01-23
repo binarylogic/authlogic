@@ -19,7 +19,7 @@ module Authlogic
     #   end
     class SCrypt
       class << self
-        DEFAULTS = { :key_len => 32, :salt_size => 8, :max_time => 0.2, :max_mem => 1024 * 1024, :max_memfrac => 0.5 }
+        DEFAULTS = { key_len: 32, salt_size: 8, max_time: 0.2, max_mem: 1024 * 1024, max_memfrac: 0.5 }.freeze
 
         attr_writer :key_len, :salt_size, :max_time, :max_mem, :max_memfrac
         # Key length - length in bytes of generated key, from 16 to 512.
@@ -51,11 +51,11 @@ module Authlogic
         def encrypt(*tokens)
           ::SCrypt::Password.create(
             join_tokens(tokens),
-            :key_len => key_len,
-            :salt_size => salt_size,
-            :max_mem => max_mem,
-            :max_memfrac => max_memfrac,
-            :max_time => max_time
+            key_len: key_len,
+            salt_size: salt_size,
+            max_mem: max_mem,
+            max_memfrac: max_memfrac,
+            max_time: max_time
           )
         end
 

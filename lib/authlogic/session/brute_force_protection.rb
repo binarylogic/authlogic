@@ -25,8 +25,8 @@ module Authlogic
         klass.class_eval do
           extend Config
           include InstanceMethods
-          validate :reset_failed_login_count, :if => :reset_failed_login_count?
-          validate :validate_failed_logins, :if => :being_brute_force_protected?
+          validate :reset_failed_login_count, if: :reset_failed_login_count?
+          validate :validate_failed_logins, if: :being_brute_force_protected?
         end
       end
 
@@ -73,15 +73,22 @@ module Authlogic
         # with configuration. By default they will be banned for 2 hours. During
         # that 2 hour period this method will return true.
         def being_brute_force_protected?
-          exceeded_failed_logins_limit? && (failed_login_ban_for <= 0 ||
-            (attempted_record.respond_to?(:updated_at) && attempted_record.updated_at >= failed_login_ban_for.seconds.ago))
+          exceeded_failed_logins_limit? &&
+            (
+              failed_login_ban_for <= 0 ||
+              attempted_record.respond_to?(:updated_at) &&
+              attempted_record.updated_at >= failed_login_ban_for.seconds.ago
+            )
         end
 
         private
 
           def exceeded_failed_logins_limit?
-            !attempted_record.nil? && attempted_record.respond_to?(:failed_login_count) && consecutive_failed_logins_limit > 0 &&
-              attempted_record.failed_login_count && attempted_record.failed_login_count >= consecutive_failed_logins_limit
+            !attempted_record.nil? &&
+              attempted_record.respond_to?(:failed_login_count) &&
+              consecutive_failed_logins_limit > 0 &&
+              attempted_record.failed_login_count &&
+              attempted_record.failed_login_count >= consecutive_failed_logins_limit
           end
 
           def reset_failed_login_count?
@@ -100,7 +107,7 @@ module Authlogic
               :base,
               I18n.t(
                 'error_messages.consecutive_failed_logins_limit_exceeded',
-                :default => "Consecutive failed logins limit exceeded, account has been" +
+                default: "Consecutive failed logins limit exceeded, account has been" +
                   (failed_login_ban_for == 0 ? "" : " temporarily") +
                   " disabled."
               )

@@ -6,7 +6,7 @@ module Authlogic
     # use this encryption method you must supply it with a key first. In an initializer,
     # or before your application initializes, you should do the following:
     #
-    #   Authlogic::CryptoProviders::AES256.key = "my really long and unique key, preferably a bunch of random characters"
+    #   Authlogic::CryptoProviders::AES256.key = "long, unique, and random key"
     #
     # My final comment is that this is a strong encryption method, but its main weakness
     # is that it's reversible. If you do not need to reverse the hash then you should
@@ -38,8 +38,27 @@ module Authlogic
         private
 
           def aes
-            raise ArgumentError.new("You must provide a key like #{name}.key = my_key before using the #{name}") if @key.blank?
-            @aes ||= OpenSSL::Cipher::Cipher.new("AES-256-ECB")
+            if @key.blank?
+              raise ArgumentError.new(
+                "You must provide a key like #{name}.key = my_key before using the #{name}"
+              )
+            end
+
+            @aes ||= openssl_cipher_class.new("AES-256-ECB")
+          end
+
+          # `::OpenSSL::Cipher::Cipher` has been deprecated since at least 2014,
+          # in favor of `::OpenSSL::Cipher`, but a deprecation warning was not
+          # printed until 2016
+          # (https://github.com/ruby/openssl/commit/5c20a4c014) when openssl
+          # became a gem. Its first release as a gem was 2.0.0, in ruby 2.4.
+          # (See https://github.com/ruby/ruby/blob/v2_4_0/NEWS)
+          def openssl_cipher_class
+            if ::Gem::Version.new(::OpenSSL::VERSION) < ::Gem::Version.new("2.0.0")
+              ::OpenSSL::Cipher::Cipher
+            else
+              ::OpenSSL::Cipher
+            end
           end
       end
     end

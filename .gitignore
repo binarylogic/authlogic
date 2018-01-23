@@ -12,3 +12,4 @@ test/gemfiles/Gemfile*.lock
 Gemfile.lock
 .ruby-gemset
 .ruby-version
+.byebug_history

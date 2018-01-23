@@ -2,7 +2,7 @@ require 'test_helper'
 
 module SessionTest
   module CookiesTest
-    class ConfiTest < ActiveSupport::TestCase
+    class ConfigTest < ActiveSupport::TestCase
       def test_cookie_key
         UserSession.cookie_key = "my_cookie_key"
         assert_equal "my_cookie_key", UserSession.cookie_key
@@ -43,7 +43,6 @@ module SessionTest
       end
 
       def test_secure
-        UserSession.secure = true
         assert_equal true, UserSession.secure
         session = UserSession.new
         assert_equal true, session.secure
@@ -67,7 +66,6 @@ module SessionTest
       end
 
       def test_httponly
-        UserSession.httponly = true
         assert_equal true, UserSession.httponly
         session = UserSession.new
         assert_equal true, session.httponly
@@ -94,7 +92,7 @@ module SessionTest
     class InstanceMethodsTest < ActiveSupport::TestCase
       def test_credentials
         session = UserSession.new
-        session.credentials = { :remember_me => true }
+        session.credentials = { remember_me: true }
         assert_equal true, session.remember_me
       end
 

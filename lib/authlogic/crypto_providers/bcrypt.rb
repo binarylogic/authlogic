@@ -66,7 +66,7 @@ module Authlogic
 
         # Creates a BCrypt hash for the password passed.
         def encrypt(*tokens)
-          ::BCrypt::Password.create(join_tokens(tokens), :cost => cost)
+          ::BCrypt::Password.create(join_tokens(tokens), cost: cost)
         end
 
         # Does the hash match the tokens? Uses the same tokens that were used to

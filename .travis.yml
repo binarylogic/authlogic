@@ -7,28 +7,19 @@ language: ruby
 # TODO: There's probably a way to configure the bundle path
 
 before_install:
+  - gem update --system
   - gem update bundler
 
 rvm:
-  - 2.1.9
-  - 2.2.5
-  - 2.3.1
+  - 2.2.8
+  - 2.4.2
 
 gemfile:
-  - test/gemfiles/Gemfile.rails-3.2.x
-  - test/gemfiles/Gemfile.rails-4.0.x
-  - test/gemfiles/Gemfile.rails-4.1.x
   - test/gemfiles/Gemfile.rails-4.2.x
   - test/gemfiles/Gemfile.rails-5.0.x
+  - test/gemfiles/Gemfile.rails-5.1.x
 
 matrix:
-  exclude:
-    - rvm: 2.1.9
-      gemfile: test/gemfiles/Gemfile.rails-5.0.x
-    - rvm: 2.2.5
-      gemfile: test/gemfiles/Gemfile.rails-3.2.x
-    - rvm: 2.3.1
-      gemfile: test/gemfiles/Gemfile.rails-3.2.x
   fast_finish: true
 
 sudo: false

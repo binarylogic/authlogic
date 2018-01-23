@@ -46,6 +46,7 @@ module Authlogic
   #       not_approved: Your account is not approved
   #       no_authentication_details: You did not provide any details for authentication.
   #       general_credentials_error: Login/Password combination is not valid
+  #       session_invalid: Your session is invalid and has the following errors:
   #     models:
   #       user_session: UserSession (or whatever name you are using)
   #     attributes:
@@ -83,7 +84,7 @@ module Authlogic
       # for the message. The second is options, see the rails I18n library for a list of
       # options used.
       def translate(key, options = {})
-        translator.translate key, { :scope => I18n.scope }.merge(options)
+        translator.translate key, { scope: I18n.scope }.merge(options)
       end
       alias :t :translate
     end

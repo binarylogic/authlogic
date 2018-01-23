@@ -11,14 +11,20 @@ Gem::Specification.new do |s|
   s.description = 'A clean, simple, and unobtrusive ruby authentication solution.'
   s.license = 'MIT'
 
-  s.required_ruby_version = '>= 2.0.0'
-  s.add_dependency 'activerecord', ['>= 3.2', '< 5.1']
-  s.add_dependency 'activesupport', ['>= 3.2', '< 5.1']
+  s.required_ruby_version = '>= 2.2.0'
+  s.add_dependency 'activerecord', ['>= 4.2', '< 5.2']
+  s.add_dependency 'activesupport', ['>= 4.2', '< 5.2']
   s.add_dependency 'request_store', '~> 1.0'
   s.add_dependency 'scrypt', '>= 1.2', '< 4.0'
   s.add_development_dependency 'bcrypt', '~> 3.1'
+
+  # byebug 9.1 drops support for ruby 2.1, so we must stay < 9.1 for now.
+  # We are currently discussing the dropping ruby 2.1:
+  # https://github.com/binarylogic/authlogic/pull/572
+  s.add_development_dependency 'byebug', '~> 9.0.6'
+
+  s.add_development_dependency 'rubocop', '~> 0.51.0'
   s.add_development_dependency 'timecop', '~> 0.7'
-  s.add_development_dependency 'rubocop', '~> 0.43.0'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

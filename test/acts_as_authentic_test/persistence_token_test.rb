@@ -29,6 +29,8 @@ module ActsAsAuthenticTest
     end
 
     def test_forget_all
+      UserSession.allow_http_basic_auth = true
+
       http_basic_auth_for(users(:ben)) { UserSession.find }
       http_basic_auth_for(users(:zack)) { UserSession.find(:ziggity_zack) }
       assert UserSession.find
@@ -39,6 +41,8 @@ module ActsAsAuthenticTest
     end
 
     def test_forget
+      UserSession.allow_http_basic_auth = true
+
       ben = users(:ben)
       zack = users(:zack)
       http_basic_auth_for(ben) { UserSession.find }

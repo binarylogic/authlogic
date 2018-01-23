@@ -48,7 +48,7 @@ module Authlogic
         #
         #   session.record
         def initialize(*args)
-          if !self.class.configured_klass_methods
+          unless self.class.configured_klass_methods
             self.class.send(:alias_method, klass_name.demodulize.underscore.to_sym, :record)
             self.class.configured_klass_methods = true
           end

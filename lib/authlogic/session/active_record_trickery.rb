@@ -10,7 +10,7 @@ module Authlogic
         klass.extend ActiveModel::Translation
 
         # Support ActiveModel::Name#name for Rails versions before 4.0.
-        if !klass.model_name.respond_to?(:name)
+        unless klass.model_name.respond_to?(:name)
           ActiveModel::Name.module_eval do
             alias_method :name, :to_s
           end
@@ -24,8 +24,8 @@ module Authlogic
         # How to name the class, works JUST LIKE ActiveRecord, except it uses the following namespace:
         #
         #   authlogic.models.user_session
-        def human_name(*args)
-          I18n.t("models.#{name.underscore}", { :count => 1, :default => name.humanize })
+        def human_name(*)
+          I18n.t("models.#{name.underscore}", count: 1, default: name.humanize)
         end
 
         def i18n_scope

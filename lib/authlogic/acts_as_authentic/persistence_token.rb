@@ -18,28 +18,23 @@ module Authlogic
 
             if respond_to?(:after_password_set) && respond_to?(:after_password_verification)
               after_password_set :reset_persistence_token
-              after_password_verification :reset_persistence_token!, :if => :reset_persistence_token?
+              after_password_verification :reset_persistence_token!, if: :reset_persistence_token?
             end
 
             validates_presence_of :persistence_token
-            validates_uniqueness_of :persistence_token, :if => :persistence_token_changed?
+            validates_uniqueness_of :persistence_token, if: :persistence_token_changed?
 
-            before_validation :reset_persistence_token, :if => :reset_persistence_token?
+            before_validation :reset_persistence_token, if: :reset_persistence_token?
           end
         end
 
         # Class level methods for the persistence token.
         module ClassMethods
-          # Resets ALL persistence tokens in the database, which will require all users to reauthenticate.
+          # Resets ALL persistence tokens in the database, which will require
+          # all users to re-authenticate.
           def forget_all
             # Paginate these to save on memory
-            records = nil
-            i = 0
-            begin
-              records = limit(50).offset(i)
-              records.each { |record| record.forget! }
-              i += 50
-            end while !records.blank?
+            find_each(batch_size: 50) { |record| record.forget! }
           end
         end
 
@@ -53,7 +48,7 @@ module Authlogic
           # Same as reset_persistence_token, but then saves the record.
           def reset_persistence_token!
             reset_persistence_token
-            save_without_session_maintenance(:validate => false)
+            save_without_session_maintenance(validate: false)
           end
           alias_method :forget!, :reset_persistence_token!
 

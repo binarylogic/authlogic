@@ -25,13 +25,16 @@ Please ask usage questions on
 
 ## Development
 
+Most local development should be done using the oldest supported version of
+ruby. See `required_ruby_version` in the gemspec.
+
 ### Testing
 
-Tests can be ran against different versions of Rails like so:
+Tests can be run against different versions of Rails like so:
 
 ```
-BUNDLE_GEMFILE=test/gemfiles/Gemfile.rails-3.2.x bundle install
-BUNDLE_GEMFILE=test/gemfiles/Gemfile.rails-3.2.x bundle exec rake
+BUNDLE_GEMFILE=test/gemfiles/Gemfile.rails-4.2.x bundle install
+BUNDLE_GEMFILE=test/gemfiles/Gemfile.rails-4.2.x bundle exec rake
 ```
 
 ### Linting
@@ -48,3 +51,13 @@ To run the tests without linting, use `rake test`.
 ```
 BUNDLE_GEMFILE=test/gemfiles/Gemfile.rails-3.2.x bundle exec rake test
 ```
+
+### Release
+
+1. Update version number in gemspec
+1. Add release date to changelog entry
+1. Commit
+1. git tag -a -m "v3.6.0" "v3.6.0"
+1. git push --tags origin 3-stable # or whatever branch
+1. gem build authlogic.gemspec
+1. gem push authlogic-3.6.0

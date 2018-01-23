@@ -107,7 +107,7 @@ module Authlogic
         # * <tt>Default:</tt> {:minimum => 8, :if => :require_password?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_password_field_options(value = nil)
-          rw_config(:validates_length_of_password_field_options, value, { :minimum => 8, :if => :require_password? })
+          rw_config(:validates_length_of_password_field_options, value, minimum: 8, if: :require_password?)
         end
         alias_method :validates_length_of_password_field_options=, :validates_length_of_password_field_options
 
@@ -135,14 +135,16 @@ module Authlogic
         # * <tt>Default:</tt> {:if => :require_password?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_confirmation_of
         def validates_confirmation_of_password_field_options(value = nil)
-          rw_config(:validates_confirmation_of_password_field_options, value, { :if => :require_password? })
+          rw_config(:validates_confirmation_of_password_field_options, value, if: :require_password?)
         end
-        alias_method :validates_confirmation_of_password_field_options=, :validates_confirmation_of_password_field_options
+        alias_method :validates_confirmation_of_password_field_options=,
+          :validates_confirmation_of_password_field_options
 
         # See merge_validates_length_of_password_field_options. The same thing, except for
         # validates_confirmation_of_password_field_options
         def merge_validates_confirmation_of_password_field_options(options = {})
-          self.validates_confirmation_of_password_field_options = validates_confirmation_of_password_field_options.merge(options)
+          self.validates_confirmation_of_password_field_options =
+            validates_confirmation_of_password_field_options.merge(options)
         end
 
         # A hash of options for the validates_length_of call for the password_confirmation
@@ -210,33 +212,36 @@ module Authlogic
         METHODS = [
           "before_password_set", "after_password_set",
           "before_password_verification", "after_password_verification"
-        ]
+        ].freeze
 
         def self.included(klass)
           return if klass.crypted_password_field.nil?
-          klass.define_callbacks *METHODS
+          klass.define_callbacks(*METHODS)
 
           # If Rails 3, support the new callback syntax
-          if klass.send(klass.respond_to?(:singleton_class) ? :singleton_class : :metaclass).method_defined?(:set_callback)
+          singleton_class_method_name = klass.respond_to?(:singleton_class) ? :singleton_class : :metaclass
+          if klass.send(singleton_class_method_name).method_defined?(:set_callback)
             METHODS.each do |method|
-              klass.class_eval <<-"end_eval", __FILE__, __LINE__
+              klass.class_eval <<-EOS, __FILE__, __LINE__
                 def self.#{method}(*methods, &block)
                   set_callback :#{method}, *methods, &block
                 end
-              end_eval
+              EOS
             end
           end
         end
 
-        private
-
-          METHODS.each do |method|
-            class_eval <<-"end_eval", __FILE__, __LINE__
-              def #{method}
-                run_callbacks(:#{method}) { |result, object| result == false }
-              end
-            end_eval
-          end
+        # TODO: Ideally, once this module is included, the included copies of
+        # the following methods would be private. This cannot be accomplished
+        # by using calling `private` here in the module. Maybe we can set the
+        # privacy inside `included`?
+        METHODS.each do |method|
+          class_eval <<-EOS, __FILE__, __LINE__
+            def #{method}
+              run_callbacks(:#{method}) { |result, object| result == false }
+            end
+          EOS
+        end
       end
 
       # The methods related to the password field.
@@ -300,7 +305,7 @@ module Authlogic
 
             crypto_providers.each_with_index do |encryptor, index|
               if encryptor_matches?(crypted, encryptor, index, attempted_password, check_against_database)
-                if transition_password?(index, encryptor, crypted, check_against_database)
+                if transition_password?(index, encryptor, check_against_database)
                   transition_password(attempted_password)
                 end
                 after_password_verification
@@ -322,7 +327,7 @@ module Authlogic
           # Resets the password to a random friendly token and then saves the record.
           def reset_password!
             reset_password
-            save_without_session_maintenance(:validate => false)
+            save_without_session_maintenance(validate: false)
           end
           alias_method :randomize_password!, :reset_password!
 
@@ -377,14 +382,21 @@ module Authlogic
             # If the encryptor has a cost and the cost it outdated.
             # If we aren't using database values
             # If we are using database values, only if the password hasn't changed so we don't overwrite any changes
-            def transition_password?(index, encryptor, crypted, check_against_database)
-              (index > 0 || (encryptor.respond_to?(:cost_matches?) && !encryptor.cost_matches?(send(crypted_password_field)))) &&
-                (!check_against_database || !send("#{crypted_password_field}_changed?"))
+            def transition_password?(index, encryptor, check_against_database)
+              (
+                index > 0 ||
+                (encryptor.respond_to?(:cost_matches?) &&
+                !encryptor.cost_matches?(send(crypted_password_field)))
+              ) &&
+                (
+                  !check_against_database ||
+                  !send("#{crypted_password_field}_changed?")
+                )
             end
 
             def transition_password(attempted_password)
               self.password = attempted_password
-              save(:validate => false)
+              save(validate: false)
             end
 
             def require_password?
