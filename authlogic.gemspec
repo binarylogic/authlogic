@@ -13,7 +13,6 @@ Gem::Specification.new do |s|
 
   s.license = 'MIT'
 
-  s.required_ruby_version = '>= 2.2.2'
   s.add_dependency 'activerecord', ['>= 3.2', '< 5.3']
   s.add_dependency 'activesupport', ['>= 3.2', '< 5.3']
   s.add_dependency 'request_store', '~> 1.0'
