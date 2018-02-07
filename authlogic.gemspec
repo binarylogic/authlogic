@@ -13,8 +13,9 @@ Gem::Specification.new do |s|
 
   s.license = 'MIT'
 
-  s.add_dependency 'activerecord', ['>= 3.2', '< 5.2']
-  s.add_dependency 'activesupport', ['>= 3.2', '< 5.2']
+  s.required_ruby_version = '>= 2.2.2'
+  s.add_dependency 'activerecord', ['>= 3.2', '< 5.3']
+  s.add_dependency 'activesupport', ['>= 3.2', '< 5.3']
   s.add_dependency 'request_store', '~> 1.0'
   s.add_dependency 'scrypt', '>= 1.2', '< 4.0'
   s.add_development_dependency 'bcrypt', '~> 3.1'
