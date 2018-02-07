@@ -97,7 +97,7 @@ Style/Proc:
 # Configuration parameters: SupportedStyles.
 # SupportedStyles: compact, exploded
 Style/RaiseArgs:
-  EnforcedStyle: compact
+  Enabled: false
 
 # Offense count: 3
 # Cop supports --auto-correct.

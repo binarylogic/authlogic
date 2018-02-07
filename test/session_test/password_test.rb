@@ -86,9 +86,31 @@ module SessionTest
         assert_equal({ password: "<protected>", login: "login" }, session.credentials)
       end
 
+      def test_non_permitted_action_controller_parameters_credentials
+        session = UserSession.new
+        invalid_credentials = { login: 'login' } # missing key: password
+        e = assert_raises(::Authlogic::Session::Password::CredentialKeyError) do
+          session.credentials = invalid_credentials
+        end
+        assert_equal(
+          'The following parameter(s) were missing ' \
+          'from the supplied credentials: password.',
+          e.message
+        )
+      end
+
+      # TODO: Do a better job of demonstrating that `send(:hacker_method)` does
+      # not occur. Perhaps use a `Minitest::Mock`?
       def test_credentials_are_params_safe
         session = UserSession.new
-        assert_nothing_raised { session.credentials = { hacker_method: "error!" } }
+        e = assert_raises(::Authlogic::Session::Password::CredentialKeyError) do
+          session.credentials = { hacker_method: "error!" }
+        end
+        assert_equal(
+          'The following parameter(s) were missing ' \
+          'from the supplied credentials: login, password.',
+          e.message
+        )
       end
 
       def test_save_with_credentials

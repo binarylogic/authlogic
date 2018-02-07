@@ -2,6 +2,17 @@ module Authlogic
   module Session
     # Handles authenticating via a traditional username and password.
     module Password
+      # Raised when the provided credentails lack one or more required keys.
+      # It's OK for e.g. password to be blank, but there still must be a key
+      # matching `password_field`.
+      class CredentialKeyError < ::StandardError
+      end
+
+      E_CREDENTIAL_PARAMS_MISSING = <<-EOS.squish.freeze
+        The following parameter(s) were missing from
+        the supplied credentials: %s.
+      EOS
+
       def self.included(klass)
         klass.class_eval do
           extend Config
@@ -150,16 +161,48 @@ module Authlogic
           end
         end
 
-        # Accepts the login_field / password_field credentials combination in
-        # hash form.
+        # Accepts the login_field / password_field credentials. `value` can be
+        # any of the following:
+        #
+        # ```
+        # { :login => "my login", :password => "my password", :remember_me => true }
+        # [my_user_object, true]
+        # [{ :login => "my login", :password => "my password", :remember_me => true }, :my_id]
+        # [my_user_object, true, :my_id]
+        # [{ priority_record: my_object }, :my_id]
+        # ```
+        #
+        # See `Foundation::InstanceMethods#credentials=` for further explanation.
+        #
+        # It's common to provide an ActiveSupport::Parameters instead of a Hash.
+        # We don't officially support that, but as long as you `permit` the
+        # expected keys (login_field, password_field) it's OK.
         def credentials=(value)
           super
-          values = parse_param_val(value) # add strong parameters check
+          potential_hash = value.is_a?(Array) ? value.first : value
 
-          if values.first.is_a?(Hash)
-            values.first.with_indifferent_access.slice(login_field, password_field).each do |field, val|
-              next if val.blank?
-              send("#{field}=", val)
+          # nil is allowed only for backwards compatibility. It's not really
+          # useful to do, e.g. `UserSession.new` with no arguments in practice.
+          return if potential_hash.nil?
+
+          if potential_hash.respond_to?(:to_h)
+            hash = potential_hash.to_h.with_indifferent_access
+            if hash.key?(:priority_record)
+              # noop. We're probably doing a `UserSession.find` with no
+              # arguments. See #find in session/persistence.rb
+            else
+              required_credentials = hash.slice(*required_credential_keys)
+              missing_credentials = required_credential_keys.map(&:to_s) - required_credentials.keys.map(&:to_s)
+              unless missing_credentials.empty?
+                raise(
+                  CredentialKeyError,
+                  format(E_CREDENTIAL_PARAMS_MISSING, missing_credentials.join(', '))
+                )
+              end
+              required_credentials.each do |field, val|
+                next if val.blank?
+                send("#{field}=", val)
+              end
             end
           end
         end
@@ -267,19 +310,12 @@ module Authlogic
             self.class.password_field
           end
 
-          def verify_password_method
-            self.class.verify_password_method
+          def required_credential_keys
+            [login_field, password_field]
           end
 
-          # In Rails 5 the ActionController::Parameters no longer inherits from
-          # HashWithIndifferentAccess. (http://bit.ly/2gnK08F) This method
-          # converts the ActionController::Parameters to a Hash.
-          def parse_param_val(value)
-            if value.first.class.name == "ActionController::Parameters"
-              [value.first.to_h]
-            else
-              Array.wrap(value)
-            end
+          def verify_password_method
+            self.class.verify_password_method
           end
       end
     end
