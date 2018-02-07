@@ -2,6 +2,12 @@ module Authlogic
   module Session
     # Handles authenticating via a traditional username and password.
     module Password
+      # Raised when the provided credentails lack one or more required keys.
+      # It's OK for e.g. password to be blank, but there still must be a key
+      # matching `password_field`.
+      class CredentialKeyError < ::StandardError
+      end
+
       E_CREDENTIAL_PARAMS_MISSING = <<-EOS.squish.freeze
         The following parameter(s) were missing from
         the supplied credentials: %s.
@@ -188,7 +194,10 @@ module Authlogic
               required_credentials = hash.slice(*required_credential_keys)
               missing_credentials = required_credential_keys.map(&:to_s) - required_credentials.keys.map(&:to_s)
               unless missing_credentials.empty?
-                raise ArgumentError, format(E_CREDENTIAL_PARAMS_MISSING, missing_credentials.join(', '))
+                raise(
+                  CredentialKeyError,
+                  format(E_CREDENTIAL_PARAMS_MISSING, missing_credentials.join(', '))
+                )
               end
               required_credentials.each do |field, val|
                 next if val.blank?

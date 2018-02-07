@@ -89,7 +89,7 @@ module SessionTest
       def test_non_permitted_action_controller_parameters_credentials
         session = UserSession.new
         invalid_credentials = { login: 'login' } # missing key: password
-        e = assert_raises(ArgumentError) do
+        e = assert_raises(::Authlogic::Session::Password::CredentialKeyError) do
           session.credentials = invalid_credentials
         end
         assert_equal(
@@ -103,7 +103,7 @@ module SessionTest
       # not occur. Perhaps use a `Minitest::Mock`?
       def test_credentials_are_params_safe
         session = UserSession.new
-        e = assert_raises(ArgumentError) do
+        e = assert_raises(::Authlogic::Session::Password::CredentialKeyError) do
           session.credentials = { hacker_method: "error!" }
         end
         assert_equal(

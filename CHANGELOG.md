@@ -2,13 +2,18 @@
 
 ## 4.0.0 Unreleased
 
-* Breaking Changes
+* Breaking Changes, Major
   * Drop support for ruby < 2.2
   * Drop support for rails < 4.2
   * HTTP Basic Auth is now disabled by default (use allow_http_basic_auth to enable)
   * 'httponly' and 'secure' cookie options are enabled by default now
   * maintain_sessions config has been removed. It has been split into 2 new options:
     log_in_after_create & log_in_after_password_change (@lucasminissale)
+  * [#577](https://github.com/binarylogic/authlogic/pull/577) Password
+    authentication (eg. UserSession.new, .create) will now raise an
+    error if `login_field` or `password_field` are mising.
+
+* Breaking Changes, Minor
   * Methods in Authlogic::Random are now module methods, and are no longer
     instance methods. Previously, there were both. Do not use Authlogic::Random
     as a mixin.
