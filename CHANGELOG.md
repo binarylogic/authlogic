@@ -1,12 +1,12 @@
 # Changelog
 
-## Unreleased
+## 3.7.0 2018-02-07
 
 * Breaking Changes
   * None
 
 * Added
-  * None
+  * Deprecated ActionController::Parameters as arguments to credentials=(), will be removed in 4.0. (https://github.com/binarylogic/authlogic/pull/558)
 
 * Fixed
   * None
