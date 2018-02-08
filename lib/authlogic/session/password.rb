@@ -152,10 +152,15 @@ module Authlogic
 
         # Accepts the login_field / password_field credentials combination in
         # hash form.
+        #
+        # You must pass an actual Hash, `ActionController::Parameters` is
+        # specifically not allowed.
+        #
+        # See `Authlogic::Session::Foundation#credentials=` for an overview of
+        # all method signatures.
         def credentials=(value)
           super
-          values = parse_param_val(value) # add strong parameters check
-
+          values = Array.wrap(value)
           if values.first.is_a?(Hash)
             values.first.with_indifferent_access.slice(login_field, password_field).each do |field, val|
               next if val.blank?
@@ -269,17 +274,6 @@ module Authlogic
 
           def verify_password_method
             self.class.verify_password_method
-          end
-
-          # In Rails 5 the ActionController::Parameters no longer inherits from
-          # HashWithIndifferentAccess. (http://bit.ly/2gnK08F) This method
-          # converts the ActionController::Parameters to a Hash.
-          def parse_param_val(value)
-            if value.first.class.name == "ActionController::Parameters"
-              [value.first.to_h]
-            else
-              Array.wrap(value)
-            end
           end
       end
     end
