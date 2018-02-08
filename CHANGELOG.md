@@ -19,7 +19,7 @@
   * Our mutable constants (e.g. arrays, hashes) are now frozen.
 
 * Added
-  * Support for rails 5.2
+  * [#581](https://github.com/binarylogic/authlogic/pull/581) Support for rails 5.2
   * Support for ruby 2.4, specifically openssl gem 2.0
   * [#98](https://github.com/binarylogic/authlogic/issues/98)
     I18n for invalid session error message. (@eugenebolshakov)
@@ -31,6 +31,18 @@
   * add a respond_to_missing? in AbstractAdapter that also checks controller respond_to?
   * [#561](https://github.com/binarylogic/authlogic/issues/561) authenticates_many now works with scope_cookies:true
   * Allow tld up to 24 characters per https://data.iana.org/TLD/tlds-alpha-by-domain.txt
+
+## 3.8.0 2018-02-07
+
+* Breaking Changes
+  * None
+
+* Added
+  * [#582](https://github.com/binarylogic/authlogic/pull/582) Support rails 5.2
+  * [#583](https://github.com/binarylogic/authlogic/pull/583) Support openssl gem 2.0
+
+* Fixed
+  * None
 
 ## 3.7.0 2018-02-07
 
