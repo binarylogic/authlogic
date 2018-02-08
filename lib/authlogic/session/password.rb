@@ -127,8 +127,40 @@ module Authlogic
         alias_method :verify_password_method=, :verify_password_method
       end
 
-      # Password related instance methods
+      # Password-related instance methods
       module InstanceMethods
+        E_AC_PARAMETERS = <<-STR.strip_heredoc.freeze
+          You have passed an ActionController::Parameters to Authlogic 3. That's
+          OK for now, but in Authlogic 4, it will raise an error. Please
+          replace:
+
+              UserSession.new(user_session_params)
+              UserSession.create(user_session_params)
+
+          with
+
+              UserSession.new(user_session_params.to_h)
+              UserSession.create(user_session_params.to_h)
+
+          And don't forget to `permit`!
+
+          During the transition of rails to Strong Parameters, it has been
+          common for Authlogic users to forget to `permit` their params. They
+          would pass their params into Authlogic, we'd call `to_h`, and they'd
+          be surprised when authentication failed.
+
+          In 2018, people are still making this mistake. We'd like to help them
+          and make authlogic a little simpler at the same time, so in Authlogic
+          3.7.0, we deprecated the use of ActionController::Parameters.
+
+          We discussed this issue thoroughly between late 2016 and early
+          2018. Notable discussions include:
+
+          - https://github.com/binarylogic/authlogic/issues/512
+          - https://github.com/binarylogic/authlogic/pull/558
+          - https://github.com/binarylogic/authlogic/pull/577
+        STR
+
         def initialize(*args)
           if !self.class.configured_password_methods
             configure_password_methods
@@ -264,25 +296,7 @@ module Authlogic
           # This method converts the ActionController::Parameters to a Hash
           def parse_param_val(value)
             if value.first.class.name == "ActionController::Parameters"
-              ActiveSupport::Deprecation.warn(
-                <<-STR.strip_heredoc
-                  You have passed an ActionController::Parameters to Authlogic 3.
-                  That's OK for now, but in Authlogic 4, anything other than a
-                  plain Hash will raise an error. Please replace:
-
-                      UserSession.new(user_session_params)
-                      UserSession.create(user_session_params)
-
-                  with
-
-                      UserSession.new(user_session_params.to_h)
-                      UserSession.create(user_session_params.to_h)
-
-                  Why this change? Well, ActionController is not a dependency of
-                  Authlogic. Therefore, Authlogic should not have special code
-                  that knows how to deal with ActionController.
-                STR
-              )
+              ActiveSupport::Deprecation.warn(E_AC_PARAMETERS)
               [value.first.to_h]
             else
               value.is_a?(Array) ? value : [value]
