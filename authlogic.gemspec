@@ -3,13 +3,12 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "authlogic"
-  s.version     = "3.7.0"
+  s.version     = "3.8.0"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Ben Johnson"]
   s.email       = ["bjohnson@binarylogic.com"]
   s.homepage    = "http://github.com/binarylogic/authlogic"
   s.summary     = 'A clean, simple, and unobtrusive ruby authentication solution.'
-  s.description = 'A clean, simple, and unobtrusive ruby authentication solution.'
 
   s.license = 'MIT'
 
