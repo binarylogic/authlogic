@@ -12,6 +12,37 @@ module Authlogic
       end
 
       module InstanceMethods
+        E_AC_PARAMETERS = <<-EOS.strip_heredoc.freeze
+          Passing an ActionController::Parameters to Authlogic is not allowed.
+
+          In Authlogic 3, especially during the transition of rails to Strong
+          Parameters, it was common for Authlogic users to forget to `permit`
+          their params. They would pass their params into Authlogic, we'd call
+          `to_h`, and they'd be surprised when authentication failed.
+
+          In 2018, people are still making this mistake. We'd like to help them
+          and make authlogic a little simpler at the same time, so in Authlogic
+          3.7.0, we deprecated the use of ActionController::Parameters. Instead,
+          pass a plain Hash. Please replace:
+
+              UserSession.new(user_session_params)
+              UserSession.create(user_session_params)
+
+          with
+
+              UserSession.new(user_session_params.to_h)
+              UserSession.create(user_session_params.to_h)
+
+          And don't forget to `permit`!
+
+          We discussed this issue thoroughly between late 2016 and early
+          2018. Notable discussions include:
+
+          - https://github.com/binarylogic/authlogic/issues/512
+          - https://github.com/binarylogic/authlogic/pull/558
+          - https://github.com/binarylogic/authlogic/pull/577
+        EOS
+
         def initialize(*args)
           self.credentials = args
         end
@@ -27,7 +58,10 @@ module Authlogic
         #
         #   session.credentials = {:login => "my login", :password => "my password", :remember_me => true}
         #
-        # or you can pass an array of objects:
+        # You must pass an actual Hash, `ActionController::Parameters` is
+        # specifically not allowed.
+        #
+        # You can pass an array of objects:
         #
         #   session.credentials = [my_user_object, true]
         #
@@ -38,6 +72,10 @@ module Authlogic
         #   session.credentials = [{:login => "my login", :password => "my password", :remember_me => true}, :my_id]
         #   session.credentials = [my_user_object, true, :my_id]
         def credentials=(values)
+          normalized = Array.wrap(values)
+          if normalized.first.class.name == "ActionController::Parameters"
+            raise TypeError.new(E_AC_PARAMETERS)
+          end
         end
 
         def inspect
