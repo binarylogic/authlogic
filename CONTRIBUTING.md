@@ -37,6 +37,13 @@ BUNDLE_GEMFILE=test/gemfiles/Gemfile.rails-4.2.x bundle install
 BUNDLE_GEMFILE=test/gemfiles/Gemfile.rails-4.2.x bundle exec rake
 ```
 
+To run a single test:
+
+```
+BUNDLE_GEMFILE=test/gemfiles/Gemfile.rails-4.2.x \
+  bundle exec ruby –I test path/to/test.rb
+```
+
 ### Linting
 
 Running `rake` also runs a linter, rubocop. Contributions must pass both
