@@ -31,6 +31,32 @@
   * [#561](https://github.com/binarylogic/authlogic/issues/561) authenticates_many now works with scope_cookies:true
   * Allow tld up to 24 characters per https://data.iana.org/TLD/tlds-alpha-by-domain.txt
 
+## 3.7.0 2018-02-07
+
+* Breaking Changes
+  * None
+
+* Added
+  * [#580](https://github.com/binarylogic/authlogic/pull/580) Deprecated
+    `ActionController::Parameters`, will be removed in 4.0.0
+
+* Fixed
+  * None
+
+## 3.6.1 2017-09-30
+
+* Breaking Changes
+  * None
+
+* Added
+  * None
+
+* Fixed
+  * Allow TLD up to 24 characters per
+    https://data.iana.org/TLD/tlds-alpha-by-domain.txt
+  * [#561](https://github.com/binarylogic/authlogic/issues/561)
+    authenticates_many now works with scope_cookies:true
+
 ## 3.6.0 2017-04-28
 
 * Breaking Changes
