@@ -41,7 +41,7 @@ A clean, simple, and unobtrusive ruby authentication solution.
 
 | Version    | branches         | tag     | ruby     | activerecord  |
 | ---------- | ---------------- | ------- | -------- | ------------- |
-| Unreleased | master, 4-stable |         | >= 2.2.0 | >= 4.2, < 5.2 |
+| Unreleased | master, 4-stable |         | >= 2.2.0 | >= 4.2, < 5.3 |
 | 3          | 3-stable         | v3.6.0  | >= 1.9.3 | >= 3.2, < 5.2 |
 | 2          | rails2           | v2.1.11 | >= 1.9.3 | ~> 2.3.0      |
 | 1          | ?                | v1.4.3  | ?        | ?             |
