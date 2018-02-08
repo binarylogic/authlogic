@@ -53,24 +53,32 @@ module Authlogic
           []
         end
 
-        # Set your credentials before you save your session. You can pass a hash of
-        # credentials:
+        # Set your credentials before you save your session. There are many
+        # method signatures.
         #
-        #   session.credentials = {:login => "my login", :password => "my password", :remember_me => true}
+        # ```
+        # # A hash of credentials is most common
+        # session.credentials = { login: "foo", password: "bar", remember_me: true }
         #
-        # You must pass an actual Hash, `ActionController::Parameters` is
-        # specifically not allowed.
+        # # You must pass an actual Hash, `ActionController::Parameters` is
+        # # specifically not allowed.
         #
-        # You can pass an array of objects:
+        # # You can pass an array of objects:
+        # session.credentials = [my_user_object, true]
         #
-        #   session.credentials = [my_user_object, true]
+        # # If you need to set an id (see `Authlogic::Session::Id`) pass it
+        # # last. It needs be the last item in the array you pass, since the id
+        # # is something that you control yourself, it should never be set from
+        # # a hash or a form. Examples:
+        # session.credentials = [
+        #   {:login => "foo", :password => "bar", :remember_me => true},
+        #   :my_id
+        # ]
+        # session.credentials = [my_user_object, true, :my_id]
         #
-        # and if you need to set an id, just pass it last. This value need be the last
-        # item in the array you pass, since the id is something that you control yourself,
-        # it should never be set from a hash or a form. Examples:
-        #
-        #   session.credentials = [{:login => "my login", :password => "my password", :remember_me => true}, :my_id]
-        #   session.credentials = [my_user_object, true, :my_id]
+        # # Finally, there's priority_record
+        # [{ priority_record: my_object }, :my_id]
+        # ```
         def credentials=(values)
           normalized = Array.wrap(values)
           if normalized.first.class.name == "ActionController::Parameters"
