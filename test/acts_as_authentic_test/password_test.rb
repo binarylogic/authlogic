@@ -107,7 +107,12 @@ module ActsAsAuthenticTest
     end
 
     def test_validates_length_of_password
-      u = User.new(login: "abcde", email: "abcde@test.com", password: "abcdefgh", password_confirmation: "abcdefgh")
+      u = User.new(
+        login: "abcde",
+        email: "abcde@test.com",
+        password: "abcdefgh",
+        password_confirmation: "abcdefgh"
+      )
       assert u.valid?
 
       u.password = u.password_confirmation = "abcdef"
@@ -118,7 +123,12 @@ module ActsAsAuthenticTest
     end
 
     def test_validates_confirmation_of_password
-      u = User.new(login: "abcde", email: "abcde@test.com", password: "abcdefgh", password_confirmation: "abcdefgh")
+      u = User.new(
+        login: "abcde",
+        email: "abcde@test.com",
+        password: "abcdefgh",
+        password_confirmation: "abcdefgh"
+      )
       assert u.valid?
 
       u.password_confirmation = "abcdefghij"
@@ -223,7 +233,11 @@ module ActsAsAuthenticTest
 
     private
 
-      def transition_password_to(crypto_provider, records, from_crypto_providers = Authlogic::CryptoProviders::Sha512)
+      def transition_password_to(
+        crypto_provider,
+        records,
+        from_crypto_providers = Authlogic::CryptoProviders::Sha512
+      )
         records = [records] unless records.is_a?(Array)
         User.acts_as_authentic do |c|
           c.crypto_provider = crypto_provider

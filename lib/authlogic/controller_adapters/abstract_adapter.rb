@@ -3,6 +3,9 @@ module Authlogic
     # Allows you to use Authlogic in any framework you want, not just rails. See the RailsAdapter
     # for an example of how to adapt Authlogic to work with your framework.
     class AbstractAdapter
+      E_COOKIE_DOMAIN_ADAPTER = "The cookie_domain method has not been " \
+        "implemented by the controller adapter".freeze
+
       attr_accessor :controller
 
       def initialize(controller)
@@ -23,7 +26,7 @@ module Authlogic
       end
 
       def cookie_domain
-        raise NotImplementedError.new("The cookie_domain method has not been implemented by the controller adapter")
+        raise NotImplementedError.new(E_COOKIE_DOMAIN_ADAPTER)
       end
 
       def params

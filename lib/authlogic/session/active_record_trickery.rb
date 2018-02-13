@@ -1,9 +1,11 @@
 module Authlogic
   module Session
-    # Authlogic looks like ActiveRecord, sounds like ActiveRecord, but its not ActiveRecord. That's the goal here.
-    # This is useful for the various rails helper methods such as form_for, error_messages_for, or any method that
-    # expects an ActiveRecord object. The point is to disguise the object as an ActiveRecord object so we can take
-    # advantage of the many ActiveRecord tools.
+    # Authlogic looks like ActiveRecord, sounds like ActiveRecord, but its not
+    # ActiveRecord. That's the goal here. This is useful for the various rails
+    # helper methods such as form_for, error_messages_for, or any method that
+    # expects an ActiveRecord object. The point is to disguise the object as an
+    # ActiveRecord object so we can take advantage of the many ActiveRecord
+    # tools.
     module ActiveRecordTrickery
       def self.included(klass)
         klass.extend ActiveModel::Naming
@@ -21,7 +23,8 @@ module Authlogic
       end
 
       module ClassMethods
-        # How to name the class, works JUST LIKE ActiveRecord, except it uses the following namespace:
+        # How to name the class, works JUST LIKE ActiveRecord, except it uses
+        # the following namespace:
         #
         #   authlogic.models.user_session
         def human_name(*)
@@ -34,7 +37,8 @@ module Authlogic
       end
 
       module InstanceMethods
-        # Don't use this yourself, this is to just trick some of the helpers since this is the method it calls.
+        # Don't use this yourself, this is to just trick some of the helpers
+        # since this is the method it calls.
         def new_record?
           new_session?
         end

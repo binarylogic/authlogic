@@ -1,3 +1,5 @@
+require 'authlogic/acts_as_authentic/queries/find_with_case'
+
 module Authlogic
   module ActsAsAuthentic
     # Handles everything related to the login field.
@@ -54,7 +56,8 @@ module Authlogic
         #
         #   merge_validates_length_of_login_field_options :my_option => my_value
         def merge_validates_length_of_login_field_options(options = {})
-          self.validates_length_of_login_field_options = validates_length_of_login_field_options.merge(options)
+          self.validates_length_of_login_field_options =
+            validates_length_of_login_field_options.merge(options)
         end
 
         # A hash of options for the validates_format_of call for the login
@@ -96,7 +99,8 @@ module Authlogic
         # See merge_validates_length_of_login_field_options. The same thing,
         # except for validates_format_of_login_field_options
         def merge_validates_format_of_login_field_options(options = {})
-          self.validates_format_of_login_field_options = validates_format_of_login_field_options.merge(options)
+          self.validates_format_of_login_field_options =
+            validates_format_of_login_field_options.merge(options)
         end
 
         # A hash of options for the validates_uniqueness_of call for the login
@@ -156,35 +160,29 @@ module Authlogic
         # The above also applies for using email as your login, except that you
         # need to set the :case_sensitive in
         # validates_uniqueness_of_email_field_options to false.
+        #
+        # @api public
         def find_by_smart_case_login_field(login)
           if login_field
-            find_with_case(login_field, login, validates_uniqueness_of_login_field_options[:case_sensitive] != false)
+            find_with_case(
+              login_field,
+              login,
+              validates_uniqueness_of_login_field_options[:case_sensitive] != false
+            )
           else
-            find_with_case(email_field, login, validates_uniqueness_of_email_field_options[:case_sensitive] != false)
+            find_with_case(
+              email_field,
+              login,
+              validates_uniqueness_of_email_field_options[:case_sensitive] != false
+            )
           end
         end
 
         private
 
+          # @api private
           def find_with_case(field, value, sensitive)
-            ar_gem_version = Gem::Version.new(ActiveRecord::VERSION::STRING)
-
-            relation = if not sensitive
-                         connection.case_insensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
-                       elsif ar_gem_version >= Gem::Version.new('5.0')
-                         connection.case_sensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
-                       else
-                         value = connection.case_sensitive_modifier(value, field.to_s)
-                         arel_table[field.to_s].eq(value)
-                       end
-
-            # bind value in rails 5
-            if ar_gem_version >= Gem::Version.new('5')
-              bind = ActiveRecord::Relation::QueryAttribute.new(field.to_s, value, ActiveRecord::Type::Value.new)
-              where(relation, bind).first
-            else
-              where(relation).first
-            end
+            Queries::FindWithCase.new(self, field, value, sensitive).execute
           end
       end
 
