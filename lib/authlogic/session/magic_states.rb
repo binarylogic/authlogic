@@ -54,10 +54,17 @@ module Authlogic
             self.class.disable_magic_states == true
           end
 
+          # @api private
+          def required_magic_states_for(record)
+            [:active, :approved, :confirmed].select { |state|
+              record.respond_to?("#{state}?")
+            }
+          end
+
           def validate_magic_states
             return true if attempted_record.nil?
-            [:active, :approved, :confirmed].each do |required_status|
-              if attempted_record.respond_to?("#{required_status}?") && !attempted_record.send("#{required_status}?")
+            required_magic_states_for(attempted_record).each do |required_status|
+              unless attempted_record.send("#{required_status}?")
                 errors.add(
                   :base,
                   I18n.t(
