@@ -66,7 +66,11 @@ module Authlogic
         # * <tt>Accepts:</tt> String of a request type, or :all or :any to
         #   allow single access authentication for any and all request types
         def single_access_allowed_request_types(value = nil)
-          rw_config(:single_access_allowed_request_types, value, ["application/rss+xml", "application/atom+xml"])
+          rw_config(
+            :single_access_allowed_request_types,
+            value,
+            ["application/rss+xml", "application/atom+xml"]
+          )
         end
         alias_method :single_access_allowed_request_types=, :single_access_allowed_request_types
       end

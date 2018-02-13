@@ -43,12 +43,15 @@ module Authlogic
           acts_as_authentic_modules.each { |mod| include mod }
         end
 
-        # Since this part of Authlogic deals with another class, ActiveRecord, we can't just start including things
-        # in ActiveRecord itself. A lot of these module includes need to be triggered by the acts_as_authentic method
-        # call. For example, you don't want to start adding in email validations and what not into a model that has
-        # nothing to do with Authlogic.
+        # Since this part of Authlogic deals with another class, ActiveRecord,
+        # we can't just start including things in ActiveRecord itself. A lot of
+        # these module includes need to be triggered by the acts_as_authentic
+        # method call. For example, you don't want to start adding in email
+        # validations and what not into a model that has nothing to do with
+        # Authlogic.
         #
-        # That being said, this is your tool for extending Authlogic and "hooking" into the acts_as_authentic call.
+        # That being said, this is your tool for extending Authlogic and
+        # "hooking" into the acts_as_authentic call.
         def add_acts_as_authentic_module(mod, action = :append)
           modules = acts_as_authentic_modules.clone
           case action

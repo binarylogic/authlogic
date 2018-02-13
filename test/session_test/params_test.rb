@@ -16,7 +16,10 @@ module SessionTest
         assert_equal ["my request type"], UserSession.single_access_allowed_request_types
 
         UserSession.single_access_allowed_request_types ["application/rss+xml", "application/atom+xml"]
-        assert_equal ["application/rss+xml", "application/atom+xml"], UserSession.single_access_allowed_request_types
+        assert_equal(
+          ["application/rss+xml", "application/atom+xml"],
+          UserSession.single_access_allowed_request_types
+        )
       end
     end
 

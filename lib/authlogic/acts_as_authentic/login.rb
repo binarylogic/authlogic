@@ -56,7 +56,8 @@ module Authlogic
         #
         #   merge_validates_length_of_login_field_options :my_option => my_value
         def merge_validates_length_of_login_field_options(options = {})
-          self.validates_length_of_login_field_options = validates_length_of_login_field_options.merge(options)
+          self.validates_length_of_login_field_options =
+            validates_length_of_login_field_options.merge(options)
         end
 
         # A hash of options for the validates_format_of call for the login
@@ -98,7 +99,8 @@ module Authlogic
         # See merge_validates_length_of_login_field_options. The same thing,
         # except for validates_format_of_login_field_options
         def merge_validates_format_of_login_field_options(options = {})
-          self.validates_format_of_login_field_options = validates_format_of_login_field_options.merge(options)
+          self.validates_format_of_login_field_options =
+            validates_format_of_login_field_options.merge(options)
         end
 
         # A hash of options for the validates_uniqueness_of call for the login
@@ -162,9 +164,17 @@ module Authlogic
         # @api public
         def find_by_smart_case_login_field(login)
           if login_field
-            find_with_case(login_field, login, validates_uniqueness_of_login_field_options[:case_sensitive] != false)
+            find_with_case(
+              login_field,
+              login,
+              validates_uniqueness_of_login_field_options[:case_sensitive] != false
+            )
           else
-            find_with_case(email_field, login, validates_uniqueness_of_email_field_options[:case_sensitive] != false)
+            find_with_case(
+              email_field,
+              login,
+              validates_uniqueness_of_email_field_options[:case_sensitive] != false
+            )
           end
         end
 

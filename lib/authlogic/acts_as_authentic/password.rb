@@ -121,7 +121,8 @@ module Authlogic
         #
         #   merge_validates_length_of_password_field_options :my_option => my_value
         def merge_validates_length_of_password_field_options(options = {})
-          self.validates_length_of_password_field_options = validates_length_of_password_field_options.merge(options)
+          self.validates_length_of_password_field_options =
+            validates_length_of_password_field_options.merge(options)
         end
 
         # A hash of options for the validates_confirmation_of call for the password field.
@@ -256,8 +257,14 @@ module Authlogic
               validates_length_of :password, validates_length_of_password_field_options
 
               if require_password_confirmation
-                validates_confirmation_of :password, validates_confirmation_of_password_field_options
-                validates_length_of :password_confirmation, validates_length_of_password_confirmation_field_options
+                validates_confirmation_of(
+                  :password,
+                  validates_confirmation_of_password_field_options
+                )
+                validates_length_of(
+                  :password_confirmation,
+                  validates_length_of_password_confirmation_field_options
+                )
               end
             end
 
@@ -378,10 +385,13 @@ module Authlogic
             end
 
             # Determines if we need to transition the password.
-            # If the index > 0 then we are using an "transition from" crypto provider.
-            # If the encryptor has a cost and the cost it outdated.
-            # If we aren't using database values
-            # If we are using database values, only if the password hasn't changed so we don't overwrite any changes
+            #
+            # - If the index > 0 then we are using an "transition from" crypto
+            #   provider.
+            # - If the encryptor has a cost and the cost it outdated.
+            # - If we aren't using database values
+            # - If we are using database values, only if the password hasn't
+            #   changed so we don't overwrite any changes
             def transition_password?(index, encryptor, check_against_database)
               (
                 index > 0 ||

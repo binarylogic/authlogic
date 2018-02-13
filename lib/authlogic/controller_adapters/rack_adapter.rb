@@ -56,10 +56,14 @@ module Authlogic
         Authlogic::Session::Base.controller = self
       end
 
-      # Rack Requests stores cookies with not just the value, but also with flags and expire information in the hash.
-      # Authlogic does not like this, so we drop everything except the cookie value
+      # Rack Requests stores cookies with not just the value, but also with
+      # flags and expire information in the hash. Authlogic does not like this,
+      # so we drop everything except the cookie value.
       def cookies
-        controller.cookies.map { |key, value_hash| { key => value_hash[:value] } }.inject(:merge) || {}
+        controller
+          .cookies
+          .map { |key, value_hash| { key => value_hash[:value] } }
+          .inject(:merge) || {}
       end
     end
   end

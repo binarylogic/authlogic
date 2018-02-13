@@ -58,7 +58,6 @@ module Authlogic
               @model_class.arel_table[@field].eq(value)
             end
           end
-        end
       end
     end
   end

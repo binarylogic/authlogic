@@ -1,8 +1,10 @@
 module Authlogic
   module Session
-    # The point of this module is to avoid the StaleObjectError raised when lock_version is implemented in ActiveRecord.
-    # We accomplish this by using a "priority record". Meaning this record is used if possible, it gets priority.
-    # This way we don't save a record behind the scenes thus making an object being used stale.
+    # The point of this module is to avoid the StaleObjectError raised when
+    # lock_version is implemented in ActiveRecord. We accomplish this by using a
+    # "priority record". Meaning this record is used if possible, it gets
+    # priority. This way we don't save a record behind the scenes thus making an
+    # object being used stale.
     module PriorityRecord
       def self.included(klass)
         klass.class_eval do
@@ -10,7 +12,8 @@ module Authlogic
         end
       end
 
-      # Setting priority record if it is passed. The only way it can be passed is through an array:
+      # Setting priority record if it is passed. The only way it can be passed
+      # is through an array:
       #
       #   session.credentials = [real_user_object, priority_user_object]
       def credentials=(value)

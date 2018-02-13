@@ -58,7 +58,8 @@ module Authlogic
         #
         #   merge_validates_length_of_email_field_options :my_option => my_value
         def merge_validates_length_of_email_field_options(options = {})
-          self.validates_length_of_email_field_options = validates_length_of_email_field_options.merge(options)
+          self.validates_length_of_email_field_options =
+            validates_length_of_email_field_options.merge(options)
         end
 
         # A hash of options for the validates_format_of call for the email
@@ -105,7 +106,8 @@ module Authlogic
         # See merge_validates_length_of_email_field_options. The same thing
         # except for validates_format_of_email_field_options.
         def merge_validates_format_of_email_field_options(options = {})
-          self.validates_format_of_email_field_options = validates_format_of_email_field_options.merge(options)
+          self.validates_format_of_email_field_options =
+            validates_format_of_email_field_options.merge(options)
         end
 
         # A hash of options for the validates_uniqueness_of call for the email
