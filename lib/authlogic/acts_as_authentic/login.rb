@@ -1,3 +1,5 @@
+require 'authlogic/acts_as_authentic/queries/find_with_case'
+
 module Authlogic
   module ActsAsAuthentic
     # Handles everything related to the login field.
@@ -156,6 +158,8 @@ module Authlogic
         # The above also applies for using email as your login, except that you
         # need to set the :case_sensitive in
         # validates_uniqueness_of_email_field_options to false.
+        #
+        # @api public
         def find_by_smart_case_login_field(login)
           if login_field
             find_with_case(login_field, login, validates_uniqueness_of_login_field_options[:case_sensitive] != false)
@@ -166,25 +170,9 @@ module Authlogic
 
         private
 
+          # @api private
           def find_with_case(field, value, sensitive)
-            ar_gem_version = Gem::Version.new(ActiveRecord::VERSION::STRING)
-
-            relation = if not sensitive
-                         connection.case_insensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
-                       elsif ar_gem_version >= Gem::Version.new('5.0')
-                         connection.case_sensitive_comparison(arel_table, field.to_s, columns_hash[field.to_s], value)
-                       else
-                         value = connection.case_sensitive_modifier(value, field.to_s)
-                         arel_table[field.to_s].eq(value)
-                       end
-
-            # bind value in rails 5
-            if ar_gem_version >= Gem::Version.new('5')
-              bind = ActiveRecord::Relation::QueryAttribute.new(field.to_s, value, ActiveRecord::Type::Value.new)
-              where(relation, bind).first
-            else
-              where(relation).first
-            end
+            Queries::FindWithCase.new(self, field, value, sensitive).execute
           end
       end
 
