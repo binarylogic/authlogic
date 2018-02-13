@@ -45,11 +45,19 @@ module Authlogic
         private
 
           def set_restful_authentication_config
-            crypto_provider_key = act_like_restful_authentication ? :crypto_provider : :transition_from_crypto_providers
-            self.send("#{crypto_provider_key}=", CryptoProviders::Sha1)
+            self.restful_auth_crypto_provider = CryptoProviders::Sha1
             if !defined?(::REST_AUTH_SITE_KEY) || ::REST_AUTH_SITE_KEY.nil?
               class_eval("::REST_AUTH_SITE_KEY = ''") unless defined?(::REST_AUTH_SITE_KEY)
               CryptoProviders::Sha1.stretches = 1
+            end
+          end
+
+          # @api private
+          def restful_auth_crypto_provider=(provider)
+            if act_like_restful_authentication
+              self.crypto_provider = provider
+            else
+              self.transition_from_crypto_providers = provider
             end
           end
       end
