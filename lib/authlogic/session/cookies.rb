@@ -3,6 +3,8 @@ module Authlogic
     # Handles all authentication that deals with cookies, such as persisting,
     # saving, and destroying.
     module Cookies
+      VALID_SAME_SITE_VALUES = [nil, 'Lax', 'Strict'].freeze
+
       def self.included(klass)
         klass.class_eval do
           extend Config
@@ -70,6 +72,20 @@ module Authlogic
           rw_config(:httponly, value, true)
         end
         alias_method :httponly=, :httponly
+
+        # Should the cookie be prevented from being send along with cross-site
+        # requests?
+        #
+        # * <tt>Default:</tt> nil
+        # * <tt>Accepts:</tt> String, one of nil, 'Lax' or 'Strict'
+        def same_site(value = nil)
+          unless VALID_SAME_SITE_VALUES.include?(value)
+            msg = "Invalid same_site value: #{value}. Valid: #{VALID_SAME_SITE_VALUES.inspect}"
+            raise ArgumentError.new(msg)
+          end
+          rw_config(:same_site, value)
+        end
+        alias_method :same_site=, :same_site
 
         # Should the cookie be signed? If the controller adapter supports it, this is a
         # measure against cookie tampering.
@@ -172,6 +188,21 @@ module Authlogic
           httponly == true || httponly == "true" || httponly == "1"
         end
 
+        # If the cookie should be marked as SameSite with 'Lax' or 'Strict' flag.
+        def same_site
+          return @same_site if defined?(@same_site)
+          @same_site = self.class.same_site(nil)
+        end
+
+        # Accepts nil, 'Lax' or 'Strict' as possible flags.
+        def same_site=(value)
+          unless VALID_SAME_SITE_VALUES.include?(value)
+            msg = "Invalid same_site value: #{value}. Valid: #{VALID_SAME_SITE_VALUES.inspect}"
+            raise ArgumentError.new(msg)
+          end
+          @same_site = value
+        end
+
         # If the cookie should be signed
         def sign_cookie
           return @sign_cookie if defined?(@sign_cookie)
@@ -240,6 +271,7 @@ module Authlogic
               expires: remember_me_until,
               secure: secure,
               httponly: httponly,
+              same_site: same_site,
               domain: controller.cookie_domain
             }
           end
