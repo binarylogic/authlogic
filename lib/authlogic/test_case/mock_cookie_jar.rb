@@ -1,5 +1,6 @@
 module Authlogic
   module TestCase
+    # A mock of `ActionDispatch::Cookies::CookieJar`.
     class MockCookieJar < Hash # :nodoc:
       attr_accessor :set_cookies
 

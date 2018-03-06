@@ -13,6 +13,8 @@ module Authlogic
         controller.authenticate_with_http_basic(&block)
       end
 
+      # Returns a `ActionDispatch::Cookies::CookieJar`. See the AC guide
+      # http://guides.rubyonrails.org/action_controller_overview.html#cookies
       def cookies
         controller.send(:cookies)
       end
