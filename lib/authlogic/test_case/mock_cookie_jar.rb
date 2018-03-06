@@ -1,9 +1,16 @@
 module Authlogic
   module TestCase
     class MockCookieJar < Hash # :nodoc:
+      attr_accessor :set_cookies
+
       def [](key)
         hash = super
         hash && hash[:value]
+      end
+
+      def []=(key, options)
+        (@set_cookies ||= {})[key.to_s] = options
+        super
       end
 
       def delete(key, _options = {})
