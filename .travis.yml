@@ -11,8 +11,8 @@ before_install:
   - gem update bundler
 
 rvm:
-  - 2.2.8
-  - 2.4.2
+  - 2.2.9
+  - 2.5.0
 
 gemfile:
   - test/gemfiles/Gemfile.rails-4.2.x
