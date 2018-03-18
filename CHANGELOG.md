@@ -1,6 +1,15 @@
 # Changelog
 
-## 4.0.0 Unreleased
+## Unreleased
+
+* Breaking Changes
+  * None
+* Added
+  * None
+* Fixed
+  * None
+
+## 4.0.0 (2018-03-18)
 
 * Breaking Changes, Major
   * Drop support for ruby < 2.2
@@ -19,6 +28,7 @@
   * Our mutable constants (e.g. arrays, hashes) are now frozen.
 
 * Added
+  * `Authlogic.gem_version`
   * [#586](https://github.com/binarylogic/authlogic/pull/586) Support for SameSite cookies
   * [#581](https://github.com/binarylogic/authlogic/pull/581) Support for rails 5.2
   * Support for ruby 2.4, specifically openssl gem 2.0
