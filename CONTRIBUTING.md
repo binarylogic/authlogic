@@ -63,8 +63,8 @@ BUNDLE_GEMFILE=test/gemfiles/Gemfile.rails-3.2.x bundle exec rake test
 
 1. Update version number in gemspec
 1. Add release date to changelog entry
-1. Commit
-1. git tag -a -m "v3.6.0" "v3.6.0"
+1. Commit with message like "Release 3.6.0"
+1. git tag -a -m "v3.6.0" "v3.6.0" # or whatever number
 1. git push --tags origin 3-stable # or whatever branch
 1. gem build authlogic.gemspec
 1. gem push authlogic-3.6.0

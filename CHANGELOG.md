@@ -1,6 +1,15 @@
 # Changelog
 
-## 4.0.0 Unreleased
+## Unreleased
+
+* Breaking Changes
+  * None
+* Added
+  * None
+* Fixed
+  * None
+
+## 4.0.0 (2018-03-18)
 
 * Breaking Changes, Major
   * Drop support for ruby < 2.2
