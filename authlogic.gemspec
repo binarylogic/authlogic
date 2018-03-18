@@ -1,8 +1,9 @@
 $:.push File.expand_path("../lib", __FILE__)
+require "authlogic/version"
 
-Gem::Specification.new do |s|
+::Gem::Specification.new do |s|
   s.name = "authlogic"
-  s.version = "3.5.0"
+  s.version = ::Authlogic.gem_version.to_s
   s.platform = ::Gem::Platform::RUBY
   s.authors = [
     "Ben Johnson",

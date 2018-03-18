@@ -19,6 +19,7 @@
   * Our mutable constants (e.g. arrays, hashes) are now frozen.
 
 * Added
+  * `Authlogic.gem_version`
   * [#586](https://github.com/binarylogic/authlogic/pull/586) Support for SameSite cookies
   * [#581](https://github.com/binarylogic/authlogic/pull/581) Support for rails 5.2
   * Support for ruby 2.4, specifically openssl gem 2.0

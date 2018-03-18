@@ -104,7 +104,7 @@ ActiveRecord::Schema.define(version: 1) do
   end
 end
 
-require_relative '../lib/authlogic' unless defined?(Authlogic)
+require_relative '../lib/authlogic'
 require_relative '../lib/authlogic/test_case'
 require_relative 'libs/project'
 require_relative 'libs/affiliate'
