@@ -7,7 +7,17 @@
 * Added
   * None
 * Fixed
-  * Remove side effects on ActiveRecord.gem_version
+  * None
+
+## 4.0.1 (2018-03-20)
+
+* Breaking Changes
+  * None
+* Added
+  * None
+* Fixed
+  * [#590](https://github.com/binarylogic/authlogic/pull/590) -
+    Fix "cannot modify frozen gem" re: ActiveRecord.gem_version
 
 ## 4.0.0 (2018-03-18)
 

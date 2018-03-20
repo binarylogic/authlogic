@@ -6,9 +6,9 @@ module Authlogic
       # The query used by public-API method `find_by_smart_case_login_field`.
       # @api private
       class FindWithCase
-        # Since freezing modifies the object in place, and since
-        # ActiveRecord.gem_version is a constant, we dup it to avoid side
-        # effects outside Authlogic
+        # Dup ActiveRecord.gem_version before freezing, in case someone
+        # else wants to modify it. Freezing modifies an object in place.
+        # https://github.com/binarylogic/authlogic/pull/590
         AR_GEM_VERSION = ActiveRecord.gem_version.dup.freeze
 
         # @api private
