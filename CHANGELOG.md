@@ -7,7 +7,7 @@
 * Added
   * None
 * Fixed
-  * None
+  * Remove side effects on ActiveRecord.gem_version
 
 ## 4.0.0 (2018-03-18)
 
