@@ -11,14 +11,14 @@ module Authlogic
     # and by reading this website:
     # http://www.regular-expressions.info/email.html, which is an excellent
     # resource for regular expressions.
-    def self.email
-      @email_regex ||= begin
-        email_name_regex  = '[A-Z0-9_\.&%\+\-\']+'
-        domain_head_regex = '(?:[A-Z0-9\-]+\.)+'
-        domain_tld_regex  = '(?:[A-Z]{2,25})'
-        /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/i
-      end
-    end
+    EMAIL = /
+      \A
+      [A-Z0-9_.&%+\-']+   # mailbox
+      @
+      (?:[A-Z0-9\-]+\.)+  # subdomains
+      (?:[A-Z]{2,25})     # TLD
+      \z
+    /ix
 
     # A draft regular expression for internationalized email addresses. Given
     # that the standard may be in flux, this simply emulates @email_regex but
@@ -34,23 +34,46 @@ module Authlogic
     # http://www.unicode.org/faq/idn.html
     # http://ruby-doc.org/core-2.1.5/Regexp.html#class-Regexp-label-Character+Classes
     # http://en.wikipedia.org/wiki/Unicode_character_property#General_Category
-    def self.email_nonascii
-      @email_nonascii_regex ||= begin
-        # TODO: Rewrite this as a single regex without string interpolation,
-        # but spread it over multiple lines using "x mode" /pattern/x.
-        # "x mode" allows for comments.
-        email_name_regex = '[^[:cntrl:][@\[\]\^ \!\"#$\(\)*,/:;<=>\?`{|}~\\\]]+'
-        domain_head_regex = '(?:[^[:cntrl:][@\[\]\^ \!\"#$&\(\)*,/:;<=>\?`{|}~\\\_\.%\+\']]+\.)+'
-        crazy_character_class = '[@\[\]\^ \!\"#$&\(\)*,/:;<=>\?`{|}~\\\_\.%\+\-\'0-9]]'
-        domain_tld_regex = '(?:[^[:cntrl:]' + crazy_character_class + '{2,25})'
-        /\A#{email_name_regex}@#{domain_head_regex}#{domain_tld_regex}\z/
-      end
-    end
+    EMAIL_NONASCII = /
+      \A
+      [^[:cntrl:][@\[\]\^ \!"\#$\(\)*,\/:;<=>?`{|}~\\]]+                        # mailbox
+      @
+      (?:[^[:cntrl:][@\[\]\^ \!\"\#$&\(\)*,\/:;<=>\?`{|}~\\_.%+']]+\.)+         # subdomains
+      (?:[^[:cntrl:][@\[\]\^ \!\"\#$&\(\)*,\/:;<=>\?`{|}~\\_.%+\-'0-9]]{2,25})  # TLD
+      \z
+    /x
 
     # A simple regular expression that only allows for letters, numbers, spaces, and
     # .-_@+. Just a standard login / username regular expression.
+    LOGIN = /\A[a-zA-Z0-9_][a-zA-Z0-9\.+\-_@ ]+\z/
+
+    # Accessing the above constants using the following methods is deprecated.
+
+    # @deprecated
+    def self.email
+      ::ActiveSupport::Deprecation.warn(
+        'Authlogic::Regex.email is deprecated, use Authlogic::Regex::EMAIL',
+        caller(1)
+      )
+      EMAIL
+    end
+
+    # @deprecated
+    def self.email_nonascii
+      ::ActiveSupport::Deprecation.warn(
+        'Authlogic::Regex.email_nonascii is deprecated, use Authlogic::Regex::EMAIL_NONASCII',
+        caller(1)
+      )
+      EMAIL_NONASCII
+    end
+
+    # @deprecated
     def self.login
-      /\A[a-zA-Z0-9_][a-zA-Z0-9\.+\-_@ ]+\z/
+      ::ActiveSupport::Deprecation.warn(
+        'Authlogic::Regex.login is deprecated, use Authlogic::Regex::LOGIN',
+        caller(1)
+      )
+      LOGIN
     end
   end
 end
