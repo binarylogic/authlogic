@@ -88,7 +88,7 @@ module Authlogic
           rw_config(
             :validates_format_of_login_field_options,
             value,
-            with: Authlogic::Regex.login,
+            with: Authlogic::Regex::LOGIN,
             message: proc do
                        I18n.t(
                          'error_messages.login_invalid',

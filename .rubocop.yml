@@ -99,3 +99,8 @@ Style/ClassAndModuleChildren:
 # they are different (http://bit.ly/2hSQAGm)
 Style/ModuleFunction:
   Enabled: false
+
+# The decision of when to use slashes `/foo/` or percent-r `%r{foo}` is too
+# subtle to lint. Use whichever requires fewer backslash escapes.
+Style/RegexpLiteral:
+  AllowInnerSlashes: true

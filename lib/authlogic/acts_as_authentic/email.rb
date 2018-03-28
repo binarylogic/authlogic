@@ -99,7 +99,7 @@ module Authlogic
           rw_config(
             :validates_format_of_email_field_options,
             value,
-            with: Authlogic::Regex.email,
+            with: Authlogic::Regex::EMAIL,
             message: Proc.new do
                        I18n.t(
                          'error_messages.email_invalid',
