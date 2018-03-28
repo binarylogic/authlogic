@@ -14,15 +14,12 @@ Metrics/AbcSize:
 Metrics/CyclomaticComplexity:
   Max: 8
 
-# Offense count: 579
-# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
-# URISchemes: http, https
-Metrics/LineLength:
-  Max: 110
-
 # Offense count: 3
 Metrics/PerceivedComplexity:
   Max: 8
+
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
 
 # Offense count: 60
 # Cop supports --auto-correct.

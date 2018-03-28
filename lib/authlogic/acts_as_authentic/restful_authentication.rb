@@ -40,14 +40,19 @@ module Authlogic
           set_restful_authentication_config if value
           r
         end
-        alias_method :transition_from_restful_authentication=, :transition_from_restful_authentication
+        alias_method(
+          :transition_from_restful_authentication=,
+          :transition_from_restful_authentication
+        )
 
         private
 
           def set_restful_authentication_config
             self.restful_auth_crypto_provider = CryptoProviders::Sha1
             if !defined?(::REST_AUTH_SITE_KEY) || ::REST_AUTH_SITE_KEY.nil?
-              class_eval("::REST_AUTH_SITE_KEY = ''") unless defined?(::REST_AUTH_SITE_KEY)
+              unless defined?(::REST_AUTH_SITE_KEY)
+                class_eval("::REST_AUTH_SITE_KEY = ''", __FILE__, __LINE__)
+              end
               CryptoProviders::Sha1.stretches = 1
             end
           end

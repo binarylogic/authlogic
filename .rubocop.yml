@@ -4,7 +4,7 @@ AllCops:
   # You can run the authlogic test suite with any supported version of MRI, but the
   # linter will only care about this `TargetRubyVersion`. This should be set to the
   # lowest version of MRI that authlogic supports.
-  TargetRubyVersion: 2.1
+  TargetRubyVersion: 2.2
 
 # Please use normal indentation when aligning parameters.
 #
@@ -32,6 +32,9 @@ Layout/AlignParameters:
 Layout/IndentationConsistency:
   EnforcedStyle: rails
 
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
 Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
 
@@ -42,6 +45,10 @@ Metrics/BlockLength:
 # Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
 Metrics/ClassLength:
   Enabled: false
+
+# Aim for 80, but 100 is OK.
+Metrics/LineLength:
+  Max: 100
 
 # Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
 Metrics/MethodLength:
@@ -64,6 +71,11 @@ Naming/HeredocDelimiterNaming:
 # Avoid single-line method definitions.
 Style/EmptyMethod:
   EnforcedStyle: expanded
+
+# Avoid annotated tokens except in desperately complicated format strings.
+# In 99% of format strings they actually make it less readable.
+Style/FormatStringToken:
+  Enabled: false
 
 # Too subtle to lint. Guard clauses are great, use them if they help.
 Style/GuardClause:

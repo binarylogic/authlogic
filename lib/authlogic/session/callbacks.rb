@@ -90,7 +90,9 @@ module Authlogic
             terminator: ->(_target, result_lambda) { result_lambda.call == true }
           )
         elsif Gem::Version.new(ActiveSupport::VERSION::STRING) >= Gem::Version.new('4.1')
-          base.define_callbacks(*METHODS + [{ terminator: ->(_target, result) { result == false } }])
+          base.define_callbacks(
+            *METHODS + [{ terminator: ->(_target, result) { result == false } }]
+          )
           base.define_callbacks('persist', terminator: ->(_target, result) { result == true })
         else
           base.define_callbacks(*METHODS + [{ terminator: 'result == false' }])
@@ -100,7 +102,7 @@ module Authlogic
         # If Rails 3, support the new callback syntax
         if base.singleton_class.method_defined?(:set_callback)
           METHODS.each do |method|
-            base.class_eval <<-EOS, __FILE__, __LINE__
+            base.class_eval <<-EOS, __FILE__, __LINE__ + 1
               def self.#{method}(*methods, &block)
                 set_callback :#{method}, *methods, &block
               end
@@ -112,7 +114,7 @@ module Authlogic
       private
 
         METHODS.each do |method|
-          class_eval <<-EOS, __FILE__, __LINE__
+          class_eval <<-EOS, __FILE__, __LINE__ + 1
             def #{method}
               run_callbacks(:#{method})
             end

@@ -16,10 +16,18 @@ module Authlogic
     #   require "benchmark"
     #
     #   Benchmark.bm(18) do |x|
-    #     x.report("BCrypt (cost = 10:") { 100.times { BCrypt::Password.create("mypass", :cost => 10) } }
-    #     x.report("BCrypt (cost = 4:") { 100.times { BCrypt::Password.create("mypass", :cost => 4) } }
-    #     x.report("Sha512:") { 100.times { Digest::SHA512.hexdigest("mypass") } }
-    #     x.report("Sha1:") { 100.times { Digest::SHA1.hexdigest("mypass") } }
+    #     x.report("BCrypt (cost = 10:") {
+    #       100.times { BCrypt::Password.create("mypass", :cost => 10) }
+    #     }
+    #     x.report("BCrypt (cost = 4:") {
+    #       100.times { BCrypt::Password.create("mypass", :cost => 4) }
+    #     }
+    #     x.report("Sha512:") {
+    #       100.times { Digest::SHA512.hexdigest("mypass") }
+    #     }
+    #     x.report("Sha1:") {
+    #       100.times { Digest::SHA1.hexdigest("mypass") }
+    #     }
     #   end
     #
     #                            user     system      total        real

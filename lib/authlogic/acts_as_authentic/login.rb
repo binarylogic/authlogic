@@ -44,7 +44,10 @@ module Authlogic
         def validates_length_of_login_field_options(value = nil)
           rw_config(:validates_length_of_login_field_options, value, within: 3..100)
         end
-        alias_method :validates_length_of_login_field_options=, :validates_length_of_login_field_options
+        alias_method(
+          :validates_length_of_login_field_options=,
+          :validates_length_of_login_field_options
+        )
 
         # A convenience function to merge options into the
         # validates_length_of_login_field_options. So instead of:
@@ -94,7 +97,10 @@ module Authlogic
                      end
           )
         end
-        alias_method :validates_format_of_login_field_options=, :validates_format_of_login_field_options
+        alias_method(
+          :validates_format_of_login_field_options=,
+          :validates_format_of_login_field_options
+        )
 
         # See merge_validates_length_of_login_field_options. The same thing,
         # except for validates_format_of_login_field_options

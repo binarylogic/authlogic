@@ -25,10 +25,10 @@ module Authlogic
           RequestStore.store[:authlogic_scope]
         end
 
-        # What with_scopes focuses on is scoping the query when finding the object and the
-        # name of the cookie / session. It works very similar to
-        # ActiveRecord::Base#with_scopes. It accepts a hash with any of the following
-        # options:
+        # What with_scopes focuses on is scoping the query when finding the
+        # object and the name of the cookie / session. It works very similar to
+        # ActiveRecord::Base#with_scopes. It accepts a hash with any of the
+        # following options:
         #
         # * <tt>find_options:</tt> any options you can pass into ActiveRecord::Base.find.
         #   This is used when trying to find the record.
@@ -37,21 +37,27 @@ module Authlogic
         #
         # Here is how you use it:
         #
-        #   UserSession.with_scope(:find_options => {:conditions => "account_id = 2"}, :id => "account_2") do
-        #     UserSession.find
-        #   end
+        # ```
+        # UserSession.with_scope(find_options: {conditions: "account_id = 2"}, id: "account_2") do
+        #   UserSession.find
+        # end
+        # ```
         #
-        # Essentially what the above does is scope the searching of the object with the
-        # sql you provided. So instead of:
+        # Essentially what the above does is scope the searching of the object
+        # with the sql you provided. So instead of:
         #
-        #   User.where("login = 'ben'").first
+        # ```
+        # User.where("login = 'ben'").first
+        # ```
         #
         # it would be:
         #
-        #   User.where("login = 'ben' and account_id = 2").first
+        # ```
+        # User.where("login = 'ben' and account_id = 2").first
+        # ```
         #
-        # You will also notice the :id option. This works just like the id method. It
-        # scopes your cookies. So the name of your cookie will be:
+        # You will also notice the :id option. This works just like the id
+        # method. It scopes your cookies. So the name of your cookie will be:
         #
         #   account_2_user_credentials
         #
@@ -59,9 +65,13 @@ module Authlogic
         #
         #   user_credentials
         #
-        # What is also nifty about scoping with an :id is that it merges your id's. So if you do:
+        # What is also nifty about scoping with an :id is that it merges your
+        # id's. So if you do:
         #
-        #   UserSession.with_scope(:find_options => {:conditions => "account_id = 2"}, :id => "account_2") do
+        #   UserSession.with_scope(
+        #     find_options: { conditions: "account_id = 2"},
+        #     id: "account_2"
+        #   ) do
         #     session = UserSession.new
         #     session.id = :secure
         #   end

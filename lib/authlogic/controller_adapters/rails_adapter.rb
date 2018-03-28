@@ -64,4 +64,7 @@ module Authlogic
   end
 end
 
-ActionController::Base.send(:include, Authlogic::ControllerAdapters::RailsAdapter::RailsImplementation)
+ActionController::Base.send(
+  :include,
+  Authlogic::ControllerAdapters::RailsAdapter::RailsImplementation
+)

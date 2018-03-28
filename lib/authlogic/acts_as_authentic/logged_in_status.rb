@@ -1,9 +1,10 @@
 module Authlogic
   module ActsAsAuthentic
-    # Since web applications are stateless there is not sure fire way to tell if a user is logged in or not,
-    # from the database perspective. The best way to do this is to provide a "timeout" based on inactivity.
-    # So if that user is inactive for a certain amount of time we assume they are logged out. That's what this
-    # module is all about.
+    # Since web applications are stateless there is not sure fire way to tell if
+    # a user is logged in or not, from the database perspective. The best way to
+    # do this is to provide a "timeout" based on inactivity. So if that user is
+    # inactive for a certain amount of time we assume they are logged out.
+    # That's what this module is all about.
     module LoggedInStatus
       def self.included(klass)
         klass.class_eval do
@@ -56,7 +57,10 @@ module Authlogic
           # Returns true if the last_request_at > logged_in_timeout.
           def logged_in?
             unless respond_to?(:last_request_at)
-              raise "Can not determine the records login state because there is no last_request_at column"
+              raise(
+                "Can not determine the records login state because " \
+                  "there is no last_request_at column"
+              )
             end
             !last_request_at.nil? && last_request_at > logged_in_timeout.seconds.ago
           end

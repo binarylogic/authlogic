@@ -22,7 +22,13 @@ module Authlogic
           rw_config(
             :crypted_password_field,
             value,
-            first_column_to_exist(nil, :crypted_password, :encrypted_password, :password_hash, :pw_hash)
+            first_column_to_exist(
+              nil,
+              :crypted_password,
+              :encrypted_password,
+              :password_hash,
+              :pw_hash
+            )
           )
         end
         alias_method :crypted_password_field=, :crypted_password_field
@@ -99,17 +105,25 @@ module Authlogic
         # A hash of options for the validates_length_of call for the password field.
         # Allows you to change this however you want.
         #
-        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so
-        # you can completely replace the hash or merge options into it. Checkout the
-        # convenience function merge_validates_length_of_password_field_options to merge
-        # options.</b>
+        # **Keep in mind this is ruby. I wanted to keep this as flexible as
+        # possible, so you can completely replace the hash or merge options into
+        # it. Checkout the convenience function
+        # merge_validates_length_of_password_field_options to merge options.**
         #
         # * <tt>Default:</tt> {:minimum => 8, :if => :require_password?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
         def validates_length_of_password_field_options(value = nil)
-          rw_config(:validates_length_of_password_field_options, value, minimum: 8, if: :require_password?)
+          rw_config(
+            :validates_length_of_password_field_options,
+            value,
+            minimum: 8,
+            if: :require_password?
+          )
         end
-        alias_method :validates_length_of_password_field_options=, :validates_length_of_password_field_options
+        alias_method(
+          :validates_length_of_password_field_options=,
+          :validates_length_of_password_field_options
+        )
 
         # A convenience function to merge options into the
         # validates_length_of_login_field_options. So instead of:
@@ -125,18 +139,22 @@ module Authlogic
             validates_length_of_password_field_options.merge(options)
         end
 
-        # A hash of options for the validates_confirmation_of call for the password field.
-        # Allows you to change this however you want.
+        # A hash of options for the validates_confirmation_of call for the
+        # password field. Allows you to change this however you want.
         #
-        # <b>Keep in mind this is ruby. I wanted to keep this as flexible as possible, so
-        # you can completely replace the hash or merge options into it. Checkout the
-        # convenience function merge_validates_length_of_password_field_options to merge
-        # options.</b>
+        # **Keep in mind this is ruby. I wanted to keep this as flexible as
+        # possible, so you can completely replace the hash or merge options into
+        # it. Checkout the convenience function
+        # merge_validates_length_of_password_field_options to merge options.**
         #
         # * <tt>Default:</tt> {:if => :require_password?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_confirmation_of
         def validates_confirmation_of_password_field_options(value = nil)
-          rw_config(:validates_confirmation_of_password_field_options, value, if: :require_password?)
+          rw_config(
+            :validates_confirmation_of_password_field_options,
+            value,
+            if: :require_password?
+          )
         end
         alias_method :validates_confirmation_of_password_field_options=,
           :validates_confirmation_of_password_field_options
@@ -188,22 +206,29 @@ module Authlogic
         end
         alias_method :crypto_provider=, :crypto_provider
 
-        # Let's say you originally encrypted your passwords with Sha1. Sha1 is starting to
-        # join the party with MD5 and you want to switch to something stronger. No
-        # problem, just specify your new and improved algorithm with the crypt_provider
-        # option and then let Authlogic know you are transitioning from Sha1 using this
-        # option. Authlogic will take care of everything, including transitioning your
-        # users to the new algorithm. The next time a user logs in, they will be granted
-        # access using the old algorithm and their password will be resaved with the new
-        # algorithm. All new users will obviously use the new algorithm as well.
+        # Let's say you originally encrypted your passwords with Sha1. Sha1 is
+        # starting to join the party with MD5 and you want to switch to
+        # something stronger. No problem, just specify your new and improved
+        # algorithm with the crypt_provider option and then let Authlogic know
+        # you are transitioning from Sha1 using this option. Authlogic will take
+        # care of everything, including transitioning your users to the new
+        # algorithm. The next time a user logs in, they will be granted access
+        # using the old algorithm and their password will be resaved with the
+        # new algorithm. All new users will obviously use the new algorithm as
+        # well.
         #
-        # Lastly, if you want to transition again, you can pass an array of crypto
-        # providers. So you can transition from as many algorithms as you want.
+        # Lastly, if you want to transition again, you can pass an array of
+        # crypto providers. So you can transition from as many algorithms as you
+        # want.
         #
         # * <tt>Default:</tt> nil
         # * <tt>Accepts:</tt> Class or Array
         def transition_from_crypto_providers(value = nil)
-          rw_config(:transition_from_crypto_providers, (!value.nil? && [value].flatten.compact) || value, [])
+          rw_config(
+            :transition_from_crypto_providers,
+            (!value.nil? && [value].flatten.compact) || value,
+            []
+          )
         end
         alias_method :transition_from_crypto_providers=, :transition_from_crypto_providers
       end
@@ -220,10 +245,9 @@ module Authlogic
           klass.define_callbacks(*METHODS)
 
           # If Rails 3, support the new callback syntax
-          singleton_class_method_name = klass.respond_to?(:singleton_class) ? :singleton_class : :metaclass
-          if klass.send(singleton_class_method_name).method_defined?(:set_callback)
+          if klass.singleton_class.method_defined?(:set_callback)
             METHODS.each do |method|
-              klass.class_eval <<-EOS, __FILE__, __LINE__
+              klass.class_eval <<-EOS, __FILE__, __LINE__ + 1
                 def self.#{method}(*methods, &block)
                   set_callback :#{method}, *methods, &block
                 end
@@ -237,7 +261,7 @@ module Authlogic
         # by using calling `private` here in the module. Maybe we can set the
         # privacy inside `included`?
         METHODS.each do |method|
-          class_eval <<-EOS, __FILE__, __LINE__
+          class_eval <<-EOS, __FILE__, __LINE__ + 1
             def #{method}
               run_callbacks(:#{method}) { |result, object| result == false }
             end
@@ -284,11 +308,15 @@ module Authlogic
             return if ignore_blank_passwords? && pass.blank?
             before_password_set
             @password = pass
-            send("#{password_salt_field}=", Authlogic::Random.friendly_token) if password_salt_field
-            encryptor_arguments_type = act_like_restful_authentication? ? :restful_authentication : nil
+            if password_salt_field
+              send("#{password_salt_field}=", Authlogic::Random.friendly_token)
+            end
+            encryptor_args_type = act_like_restful_authentication? ? :restful_authentication : nil
             send(
               "#{crypted_password_field}=",
-              crypto_provider.encrypt(*encrypt_arguments(@password, false, encryptor_arguments_type))
+              crypto_provider.encrypt(
+                *encrypt_arguments(@password, false, encryptor_args_type)
+              )
             )
             @password_changed = true
             after_password_set
@@ -299,7 +327,10 @@ module Authlogic
           # check_passwords_against_database. See that method for more information, but
           # basically it just tells Authlogic to check the password against the value in
           # the database or the value in the object.
-          def valid_password?(attempted_password, check_against_database = check_passwords_against_database?)
+          def valid_password?(
+            attempted_password,
+            check_against_database = check_passwords_against_database?
+          )
             crypted =
               if check_against_database && send("#{crypted_password_field}_changed?")
                 send("#{crypted_password_field}_was")
@@ -311,7 +342,13 @@ module Authlogic
             before_password_verification
 
             crypto_providers.each_with_index do |encryptor, index|
-              if encryptor_matches?(crypted, encryptor, index, attempted_password, check_against_database)
+              if encryptor_matches?(
+                crypted,
+                encryptor,
+                index,
+                attempted_password,
+                check_against_database
+              )
                 if transition_password?(index, encryptor, check_against_database)
                   transition_password(attempted_password)
                 end
@@ -372,7 +409,13 @@ module Authlogic
             end
 
             # Given `encryptor`, does `attempted_password` match the `crypted` password?
-            def encryptor_matches?(crypted, encryptor, index, attempted_password, check_against_database)
+            def encryptor_matches?(
+              crypted,
+              encryptor,
+              index,
+              attempted_password,
+              check_against_database
+            )
               # The arguments_type for the transitioning from restful_authentication
               acting_restful = act_like_restful_authentication? && index == 0
               transitioning = transition_from_restful_authentication? &&
@@ -380,7 +423,11 @@ module Authlogic
                 encryptor == Authlogic::CryptoProviders::Sha1
               restful = acting_restful || transitioning
               arguments_type = restful ? :restful_authentication : nil
-              encryptor_args = encrypt_arguments(attempted_password, check_against_database, arguments_type)
+              encryptor_args = encrypt_arguments(
+                attempted_password,
+                check_against_database,
+                arguments_type
+              )
               encryptor.matches?(crypted, *encryptor_args)
             end
 
