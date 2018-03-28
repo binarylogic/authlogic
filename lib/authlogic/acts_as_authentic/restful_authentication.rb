@@ -40,7 +40,10 @@ module Authlogic
           set_restful_authentication_config if value
           r
         end
-        alias_method :transition_from_restful_authentication=, :transition_from_restful_authentication
+        alias_method(
+          :transition_from_restful_authentication=,
+          :transition_from_restful_authentication
+        )
 
         private
 

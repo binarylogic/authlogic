@@ -43,7 +43,8 @@ module Authlogic
         alias_method :last_request_at_threshold=, :last_request_at_threshold
       end
 
-      # The methods available for an Authlogic::Session::Base object that make up the magic columns feature.
+      # The methods available for an Authlogic::Session::Base object that make
+      # up the magic columns feature.
       module InstanceMethods
         private
 
@@ -109,7 +110,8 @@ module Authlogic
             if !record || !klass.column_names.include?("last_request_at")
               return false
             end
-            if controller.responds_to_last_request_update_allowed? && !controller.last_request_update_allowed?
+            if controller.responds_to_last_request_update_allowed? &&
+                !controller.last_request_update_allowed?
               return false
             end
             record.last_request_at.blank? ||

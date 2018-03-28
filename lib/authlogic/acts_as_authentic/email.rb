@@ -46,7 +46,10 @@ module Authlogic
         def validates_length_of_email_field_options(value = nil)
           rw_config(:validates_length_of_email_field_options, value, maximum: 100)
         end
-        alias_method :validates_length_of_email_field_options=, :validates_length_of_email_field_options
+        alias_method(
+          :validates_length_of_email_field_options=,
+          :validates_length_of_email_field_options
+        )
 
         # A convenience function to merge options into the
         # validates_length_of_email_field_options. So instead of:
@@ -73,7 +76,11 @@ module Authlogic
         # To validate international email addresses, enable the provided
         # alternate regex:
         #
-        # * <tt>validates_format_of_email_field_options({:with => Authlogic::Regex.email_nonascii})</tt>
+        # ```
+        # validates_format_of_email_field_options(
+        #   with: Authlogic::Regex.email_nonascii
+        # )
+        # ```
         #
         # * <tt>Default:</tt>
         #
@@ -101,7 +108,10 @@ module Authlogic
                      end
           )
         end
-        alias_method :validates_format_of_email_field_options=, :validates_format_of_email_field_options
+        alias_method(
+          :validates_format_of_email_field_options=,
+          :validates_format_of_email_field_options
+        )
 
         # See merge_validates_length_of_email_field_options. The same thing
         # except for validates_format_of_email_field_options.

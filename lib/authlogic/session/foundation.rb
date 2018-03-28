@@ -87,7 +87,11 @@ module Authlogic
         end
 
         def inspect
-          "#<#{self.class.name}: #{credentials.blank? ? "no credentials provided" : credentials.inspect}>"
+          format(
+            '#<%s: %s>',
+            self.class.name,
+            credentials.blank? ? "no credentials provided" : credentials.inspect
+          )
         end
 
         private

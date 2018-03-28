@@ -82,13 +82,20 @@ module Authlogic
 
           def persist_by_params
             return false unless params_enabled?
-            self.unauthorized_record = search_for_record("find_by_single_access_token", params_credentials)
+            self.unauthorized_record = search_for_record(
+              "find_by_single_access_token",
+              params_credentials
+            )
             self.single_access = valid?
           end
 
           def params_enabled?
-            return false if !params_credentials || !klass.column_names.include?("single_access_token")
-            return controller.single_access_allowed? if controller.responds_to_single_access_allowed?
+            if !params_credentials || !klass.column_names.include?("single_access_token")
+              return false
+            end
+            if controller.responds_to_single_access_allowed?
+              return controller.single_access_allowed?
+            end
 
             case single_access_allowed_request_types
             when Array

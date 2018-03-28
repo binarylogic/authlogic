@@ -162,7 +162,11 @@ module Authlogic
           super
           values = Array.wrap(value)
           if values.first.is_a?(Hash)
-            values.first.with_indifferent_access.slice(login_field, password_field).each do |field, val|
+            sliced = values
+              .first
+              .with_indifferent_access
+              .slice(login_field, password_field)
+            sliced.each do |field, val|
               next if val.blank?
               send("#{field}=", val)
             end
@@ -179,7 +183,10 @@ module Authlogic
             if generalize_credentials_error_messages?
               add_general_credentials_error
             else
-              errors.add(password_field, I18n.t('error_messages.password_invalid', default: "is not valid"))
+              errors.add(
+                password_field,
+                I18n.t('error_messages.password_invalid', default: "is not valid")
+              )
             end
           end
 
@@ -187,7 +194,10 @@ module Authlogic
             if generalize_credentials_error_messages?
               add_general_credentials_error
             else
-              errors.add(login_field, I18n.t('error_messages.login_not_found', default: "is not valid"))
+              errors.add(
+                login_field,
+                I18n.t('error_messages.login_not_found', default: "is not valid")
+              )
             end
           end
 
@@ -223,10 +233,16 @@ module Authlogic
 
             # check for blank fields
             if send(login_field).blank?
-              errors.add(login_field, I18n.t('error_messages.login_blank', default: "cannot be blank"))
+              errors.add(
+                login_field,
+                I18n.t('error_messages.login_blank', default: "cannot be blank")
+              )
             end
             if send("protected_#{password_field}").blank?
-              errors.add(password_field, I18n.t('error_messages.password_blank', default: "cannot be blank"))
+              errors.add(
+                password_field,
+                I18n.t('error_messages.password_blank', default: "cannot be blank")
+              )
             end
             return if errors.count > 0
 
@@ -237,7 +253,10 @@ module Authlogic
             end
 
             # check for invalid password
-            unless attempted_record.send(verify_password_method, send("protected_#{password_field}"))
+            unless attempted_record.send(
+              verify_password_method,
+              send("protected_#{password_field}")
+            )
               self.invalid_password = true
               add_invalid_password_error
               return
@@ -261,7 +280,10 @@ module Authlogic
               else
                 "#{login_field.to_s.humanize}/Password combination is not valid"
               end
-            errors.add(:base, I18n.t('error_messages.general_credentials_error', default: error_message))
+            errors.add(
+              :base,
+              I18n.t('error_messages.general_credentials_error', default: error_message)
+            )
           end
 
           def generalize_credentials_error_messages?

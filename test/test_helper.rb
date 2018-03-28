@@ -149,7 +149,16 @@ module ActiveSupport
       # tests until Rails 4.1 was added for testing. This ensures that all the
       # models start tests with their original config.
       def config_setup
-        [Project, Affiliate, Employee, EmployeeSession, Ldaper, User, UserSession, Company].each do |model|
+        [
+          Project,
+          Affiliate,
+          Employee,
+          EmployeeSession,
+          Ldaper,
+          User,
+          UserSession,
+          Company
+        ].each do |model|
           unless model.respond_to?(:original_acts_as_authentic_config)
             model.class_attribute :original_acts_as_authentic_config
           end
@@ -158,7 +167,16 @@ module ActiveSupport
       end
 
       def config_teardown
-        [Project, Affiliate, Employee, EmployeeSession, Ldaper, User, UserSession, Company].each do |model|
+        [
+          Project,
+          Affiliate,
+          Employee,
+          EmployeeSession,
+          Ldaper,
+          User,
+          UserSession,
+          Company
+        ].each do |model|
           model.acts_as_authentic_config = model.original_acts_as_authentic_config
         end
       end

@@ -1,35 +1,40 @@
 require "authlogic/i18n/translator"
 
 module Authlogic
-  # This class allows any message in Authlogic to use internationalization. In earlier
-  # versions of Authlogic each message was translated via configuration. This cluttered up
-  # the configuration and cluttered up Authlogic. So all translation has been extracted
-  # out into this class. Now all messages pass through this class, making it much easier
-  # to implement in I18n library / plugin you want. Use this as a layer that sits between
-  # Authlogic and whatever I18n library you want to use.
+  # This class allows any message in Authlogic to use internationalization. In
+  # earlier versions of Authlogic each message was translated via configuration.
+  # This cluttered up the configuration and cluttered up Authlogic. So all
+  # translation has been extracted out into this class. Now all messages pass
+  # through this class, making it much easier to implement in I18n library /
+  # plugin you want. Use this as a layer that sits between Authlogic and
+  # whatever I18n library you want to use.
   #
-  # By default this uses the rails I18n library, if it exists. If it doesn't exist it just
-  # returns the default English message. The Authlogic I18n class works EXACTLY like the
-  # rails I18n class. This is because the arguments are delegated to this class.
+  # By default this uses the rails I18n library, if it exists. If it doesn't
+  # exist it just returns the default English message. The Authlogic I18n class
+  # works EXACTLY like the rails I18n class. This is because the arguments are
+  # delegated to this class.
   #
   # Here is how all messages are translated internally with Authlogic:
   #
   #   Authlogic::I18n.t('error_messages.password_invalid', :default => "is invalid")
   #
-  # If you use a different I18n library just replace the build-in I18n::Translator class
-  # with your own. For example:
+  # If you use a different I18n library just replace the build-in
+  # I18n::Translator class with your own. For example:
   #
   #   class MyAuthlogicI18nTranslator
   #     def translate(key, options = {})
-  #       # you will have key which will be something like: "error_messages.password_invalid"
-  #       # you will also have options[:default], which will be the default English version of the message
+  #       # you will have key which will be something like:
+  #       # "error_messages.password_invalid"
+  #       # you will also have options[:default], which will be the default
+  #       # English version of the message
   #       # do whatever you want here with the arguments passed to you.
   #     end
   #   end
   #
   #   Authlogic::I18n.translator = MyAuthlogicI18nTranslator.new
   #
-  # That it's! Here is a complete list of the keys that are passed. Just define these however you wish:
+  # That it's! Here is a complete list of the keys that are passed. Just define
+  # these however you wish:
   #
   #   authlogic:
   #     error_messages:
@@ -81,9 +86,9 @@ module Authlogic
         @@translator = translator
       end
 
-      # All message translation is passed to this method. The first argument is the key
-      # for the message. The second is options, see the rails I18n library for a list of
-      # options used.
+      # All message translation is passed to this method. The first argument is
+      # the key for the message. The second is options, see the rails I18n
+      # library for a list of options used.
       def translate(key, options = {})
         translator.translate key, { scope: I18n.scope }.merge(options)
       end

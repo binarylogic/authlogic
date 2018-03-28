@@ -28,7 +28,8 @@ module Authlogic
         #     @current_user = current_user_session && current_user_session.user
         #   end
         #
-        # Also, this method accepts a single parameter as the id, to find session that you marked with an id:
+        # Also, this method accepts a single parameter as the id, to find
+        # session that you marked with an id:
         #
         #   UserSession.find(:secure)
         #

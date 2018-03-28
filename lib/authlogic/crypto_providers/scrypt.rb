@@ -19,7 +19,13 @@ module Authlogic
     #   end
     class SCrypt
       class << self
-        DEFAULTS = { key_len: 32, salt_size: 8, max_time: 0.2, max_mem: 1024 * 1024, max_memfrac: 0.5 }.freeze
+        DEFAULTS = {
+          key_len: 32,
+          salt_size: 8,
+          max_time: 0.2,
+          max_mem: 1024 * 1024,
+          max_memfrac: 0.5
+        }.freeze
 
         attr_writer :key_len, :salt_size, :max_time, :max_mem, :max_memfrac
         # Key length - length in bytes of generated key, from 16 to 512.
@@ -42,7 +48,8 @@ module Authlogic
           @max_mem ||= DEFAULTS[:max_mem]
         end
 
-        # Max memory fraction - maximum memory out of all available. Always greater than zero and <= 0.5.
+        # Max memory fraction - maximum memory out of all available. Always
+        # greater than zero and <= 0.5.
         def max_memfrac
           @max_memfrac ||= DEFAULTS[:max_memfrac]
         end

@@ -27,7 +27,11 @@ module Authlogic
         # * <tt>Default:</tt> 10.minutes
         # * <tt>Accepts:</tt> Fixnum
         def perishable_token_valid_for(value = nil)
-          rw_config(:perishable_token_valid_for, (!value.nil? && value.to_i) || value, 10.minutes.to_i)
+          rw_config(
+            :perishable_token_valid_for,
+            (!value.nil? && value.to_i) || value,
+            10.minutes.to_i
+          )
         end
         alias_method :perishable_token_valid_for=, :perishable_token_valid_for
 

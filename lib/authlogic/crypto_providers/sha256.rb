@@ -43,7 +43,8 @@ module Authlogic
           digest
         end
 
-        # Does the crypted password match the tokens? Uses the same tokens that were used to encrypt.
+        # Does the crypted password match the tokens? Uses the same tokens that
+        # were used to encrypt.
         def matches?(crypted, *tokens)
           encrypt(*tokens) == crypted
         end

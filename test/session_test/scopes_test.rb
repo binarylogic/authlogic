@@ -28,7 +28,10 @@ module SessionTest
       assert_raise(ArgumentError) { UserSession.with_scope }
 
       UserSession.with_scope(find_options: { conditions: "awesome = 1" }, id: "some_id") do
-        assert_equal({ find_options: { conditions: "awesome = 1" }, id: "some_id" }, UserSession.scope)
+        assert_equal(
+          { find_options: { conditions: "awesome = 1" }, id: "some_id" },
+          UserSession.scope
+        )
       end
 
       assert_nil UserSession.scope
@@ -37,7 +40,10 @@ module SessionTest
     def test_initialize
       UserSession.with_scope(find_options: { conditions: "awesome = 1" }, id: "some_id") do
         session = UserSession.new
-        assert_equal({ find_options: { conditions: "awesome = 1" }, id: "some_id" }, session.scope)
+        assert_equal(
+          { find_options: { conditions: "awesome = 1" }, id: "some_id" },
+          session.scope
+        )
         session.id = :another_id
         assert_equal "another_id_some_id_test", session.send(:build_key, "test")
       end

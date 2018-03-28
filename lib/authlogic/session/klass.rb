@@ -42,7 +42,8 @@ module Authlogic
       end
 
       module InstanceMethods
-        # Creating an alias method for the "record" method based on the klass name, so that we can do:
+        # Creating an alias method for the "record" method based on the klass
+        # name, so that we can do:
         #
         #   session.user
         #

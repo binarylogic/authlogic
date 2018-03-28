@@ -90,7 +90,9 @@ module Authlogic
             terminator: ->(_target, result_lambda) { result_lambda.call == true }
           )
         elsif Gem::Version.new(ActiveSupport::VERSION::STRING) >= Gem::Version.new('4.1')
-          base.define_callbacks(*METHODS + [{ terminator: ->(_target, result) { result == false } }])
+          base.define_callbacks(
+            *METHODS + [{ terminator: ->(_target, result) { result == false } }]
+          )
           base.define_callbacks('persist', terminator: ->(_target, result) { result == true })
         else
           base.define_callbacks(*METHODS + [{ terminator: 'result == false' }])

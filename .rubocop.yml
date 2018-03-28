@@ -32,6 +32,9 @@ Layout/AlignParameters:
 Layout/IndentationConsistency:
   EnforcedStyle: rails
 
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
 Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
 
@@ -42,6 +45,10 @@ Metrics/BlockLength:
 # Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
 Metrics/ClassLength:
   Enabled: false
+
+# Aim for 80, but 100 is OK.
+Metrics/LineLength:
+  Max: 100
 
 # Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
 Metrics/MethodLength:

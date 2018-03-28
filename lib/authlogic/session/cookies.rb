@@ -244,7 +244,9 @@ module Authlogic
             persistence_token, record_id = cookie_credentials
             if persistence_token.present?
               record = search_for_record("find_by_#{klass.primary_key}", record_id)
-              self.unauthorized_record = record if record && record.persistence_token == persistence_token
+              if record && record.persistence_token == persistence_token
+                self.unauthorized_record = record
+              end
               valid?
             else
               false
