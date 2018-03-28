@@ -220,8 +220,7 @@ module Authlogic
           klass.define_callbacks(*METHODS)
 
           # If Rails 3, support the new callback syntax
-          singleton_class_method_name = klass.respond_to?(:singleton_class) ? :singleton_class : :metaclass
-          if klass.send(singleton_class_method_name).method_defined?(:set_callback)
+          if klass.singleton_class.method_defined?(:set_callback)
             METHODS.each do |method|
               klass.class_eval <<-EOS, __FILE__, __LINE__ + 1
                 def self.#{method}(*methods, &block)
