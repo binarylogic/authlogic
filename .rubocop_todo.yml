@@ -24,6 +24,9 @@ Metrics/LineLength:
 Metrics/PerceivedComplexity:
   Max: 8
 
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
 # Offense count: 60
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

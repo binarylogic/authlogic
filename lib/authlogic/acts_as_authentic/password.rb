@@ -223,7 +223,7 @@ module Authlogic
           singleton_class_method_name = klass.respond_to?(:singleton_class) ? :singleton_class : :metaclass
           if klass.send(singleton_class_method_name).method_defined?(:set_callback)
             METHODS.each do |method|
-              klass.class_eval <<-EOS, __FILE__, __LINE__
+              klass.class_eval <<-EOS, __FILE__, __LINE__ + 1
                 def self.#{method}(*methods, &block)
                   set_callback :#{method}, *methods, &block
                 end
@@ -237,7 +237,7 @@ module Authlogic
         # by using calling `private` here in the module. Maybe we can set the
         # privacy inside `included`?
         METHODS.each do |method|
-          class_eval <<-EOS, __FILE__, __LINE__
+          class_eval <<-EOS, __FILE__, __LINE__ + 1
             def #{method}
               run_callbacks(:#{method}) { |result, object| result == false }
             end

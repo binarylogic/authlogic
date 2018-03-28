@@ -1,4 +1,4 @@
-$:.push File.expand_path("../lib", __FILE__)
+$:.push File.expand_path('lib', __dir__)
 require "authlogic/version"
 
 ::Gem::Specification.new do |s|
@@ -26,7 +26,7 @@ require "authlogic/version"
   s.add_dependency 'scrypt', '>= 1.2', '< 4.0'
   s.add_development_dependency 'bcrypt', '~> 3.1'
   s.add_development_dependency 'byebug', '~> 10.0'
-  s.add_development_dependency 'rubocop', '~> 0.51.0'
+  s.add_development_dependency 'rubocop', '~> 0.54.0'
   s.add_development_dependency 'timecop', '~> 0.7'
 
   s.files = `git ls-files`.split("\n")
