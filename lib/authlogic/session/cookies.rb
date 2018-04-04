@@ -37,6 +37,19 @@ module Authlogic
 
         # If sessions should be remembered by default or not.
         #
+        # If set to false Authlogic only uses the session cookie, which browsers 
+        # normally delete upon closing.
+        # Note: The user can configure the browser to not remove session cookies,
+        # in which case he will never be auto-logged-out. There is this option:
+        # - 'Continue where you left off' - in Chrome
+        # - 'All windows from last session' - in Safari
+        # - 'Show my windows and tabs from last time' - in FireFox
+        #
+        # If set to true authlogic sets coockie with expiration
+        #
+        # Note: if you use Rails then log out behaviour depends on Rails session
+        # configuration too, as authlogic duplicates his session in Rails session
+        #
         # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
         def remember_me(value = nil)
