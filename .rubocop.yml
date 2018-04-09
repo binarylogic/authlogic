@@ -111,3 +111,9 @@ Style/ModuleFunction:
 # subtle to lint. Use whichever requires fewer backslash escapes.
 Style/RegexpLiteral:
   AllowInnerSlashes: true
+
+# We use words, like `$LOAD_PATH`, because they are much less confusing that
+# arcane symbols like `$:`. Unfortunately, we must then `require "English"` in
+# a few places, but it's worth it so that we can read our code.
+Style/SpecialGlobalVars:
+  EnforcedStyle: use_english_names
