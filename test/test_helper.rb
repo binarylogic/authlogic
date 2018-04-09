@@ -104,16 +104,18 @@ ActiveRecord::Schema.define(version: 1) do
   end
 end
 
-require_relative '../lib/authlogic'
-require_relative '../lib/authlogic/test_case'
-require_relative 'libs/project'
-require_relative 'libs/affiliate'
-require_relative 'libs/employee'
-require_relative 'libs/employee_session'
-require_relative 'libs/ldaper'
-require_relative 'libs/user'
-require_relative 'libs/user_session'
-require_relative 'libs/company'
+require 'English'
+$LOAD_PATH.unshift(File.expand_path("../lib", __dir__))
+require 'authlogic'
+require 'authlogic/test_case'
+require 'libs/project'
+require 'libs/affiliate'
+require 'libs/employee'
+require 'libs/employee_session'
+require 'libs/ldaper'
+require 'libs/user'
+require 'libs/user_session'
+require 'libs/company'
 
 # Recent change, 2017-10-23: We had used a 54-letter string here. In the default
 # encoding, UTF-8, that's 54 bytes, which is clearly incorrect for an algorithm
