@@ -44,6 +44,13 @@ BUNDLE_GEMFILE=test/gemfiles/Gemfile.rails-4.2.x \
   bundle exec ruby –I test path/to/test.rb
 ```
 
+Bundler can be omitted, and the latest installed version of a gem dependency
+will be used. This is only suitable for certain unit tests.
+
+```
+ruby –I test path/to/test.rb
+```
+
 ### Linting
 
 Running `rake` also runs a linter, rubocop. Contributions must pass both

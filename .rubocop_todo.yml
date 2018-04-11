@@ -8,7 +8,7 @@
 
 # Offense count: 58
 Metrics/AbcSize:
-  Max: 43
+  Max: 32
 
 # Offense count: 4
 Metrics/CyclomaticComplexity:
@@ -125,13 +125,6 @@ Style/RedundantSelf:
 Style/RescueModifier:
   Exclude:
     - 'lib/authlogic/acts_as_authentic/session_maintenance.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: SupportedStyles.
-# SupportedStyles: use_perl_names, use_english_names
-Style/SpecialGlobalVars:
-  EnforcedStyle: use_perl_names
 
 # Offense count: 507
 # Cop supports --auto-correct.

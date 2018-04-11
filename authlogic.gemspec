@@ -1,4 +1,5 @@
-$:.push File.expand_path('lib', __dir__)
+require "English"
+$LOAD_PATH.push File.expand_path('lib', __dir__)
 require "authlogic/version"
 
 ::Gem::Specification.new do |s|
