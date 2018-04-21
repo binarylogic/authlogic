@@ -185,7 +185,7 @@ module Authlogic
             else
               errors.add(
                 password_field,
-                I18n.t('error_messages.password_invalid', default: "is not valid")
+                I18n.t("error_messages.password_invalid", default: "is not valid")
               )
             end
           end
@@ -196,7 +196,7 @@ module Authlogic
             else
               errors.add(
                 login_field,
-                I18n.t('error_messages.login_not_found', default: "is not valid")
+                I18n.t("error_messages.login_not_found", default: "is not valid")
               )
             end
           end
@@ -235,13 +235,13 @@ module Authlogic
             if send(login_field).blank?
               errors.add(
                 login_field,
-                I18n.t('error_messages.login_blank', default: "cannot be blank")
+                I18n.t("error_messages.login_blank", default: "cannot be blank")
               )
             end
             if send("protected_#{password_field}").blank?
               errors.add(
                 password_field,
-                I18n.t('error_messages.password_blank', default: "cannot be blank")
+                I18n.t("error_messages.password_blank", default: "cannot be blank")
               )
             end
             return if errors.count > 0
@@ -282,7 +282,7 @@ module Authlogic
               end
             errors.add(
               :base,
-              I18n.t('error_messages.general_credentials_error', default: error_message)
+              I18n.t("error_messages.general_credentials_error", default: error_message)
             )
           end
 

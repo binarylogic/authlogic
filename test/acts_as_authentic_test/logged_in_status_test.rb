@@ -1,8 +1,8 @@
-require 'test_helper'
+require "test_helper"
 
 module ActsAsAuthenticTest
   class LoggedInStatusTest < ActiveSupport::TestCase
-    ERROR_MSG = 'Multiple calls to %s should result in different relations'.freeze
+    ERROR_MSG = "Multiple calls to %s should result in different relations".freeze
 
     def test_logged_in_timeout_config
       assert_equal 10.minutes.to_i, User.logged_in_timeout
@@ -25,7 +25,7 @@ module ActsAsAuthenticTest
       query1 = User.logged_in.to_sql
       sleep 0.1
       query2 = User.logged_in.to_sql
-      assert query1 != query2, ERROR_MSG % '#logged_in'
+      assert query1 != query2, ERROR_MSG % "#logged_in"
 
       assert_equal 0, User.logged_in.count
       user = User.first
@@ -43,7 +43,7 @@ module ActsAsAuthenticTest
 
       # for rails 5 I've changed the where_values to to_sql to compare
 
-      assert User.logged_in.to_sql != User.logged_out.to_sql, ERROR_MSG % '#logged_out'
+      assert User.logged_in.to_sql != User.logged_out.to_sql, ERROR_MSG % "#logged_out"
 
       assert_equal 3, User.logged_out.count
       User.first.update_attribute(:last_request_at, Time.now)

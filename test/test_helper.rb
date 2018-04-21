@@ -6,7 +6,7 @@ require "active_record/fixtures"
 require "timecop"
 require "i18n"
 
-I18n.load_path << File.dirname(__FILE__) + '/i18n/lol.yml'
+I18n.load_path << File.dirname(__FILE__) + "/i18n/lol.yml"
 
 # ActiveRecord::Schema.verbose = false
 ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
@@ -14,7 +14,7 @@ logger = Logger.new(STDOUT)
 logger.level = Logger::FATAL
 ActiveRecord::Base.logger = logger
 
-if (ActiveRecord::VERSION::STRING < '4.1')
+if ActiveRecord::VERSION::STRING < "4.1"
   ActiveRecord::Base.configurations = true
 end
 
@@ -104,18 +104,18 @@ ActiveRecord::Schema.define(version: 1) do
   end
 end
 
-require 'English'
+require "English"
 $LOAD_PATH.unshift(File.expand_path("../lib", __dir__))
-require 'authlogic'
-require 'authlogic/test_case'
-require 'libs/project'
-require 'libs/affiliate'
-require 'libs/employee'
-require 'libs/employee_session'
-require 'libs/ldaper'
-require 'libs/user'
-require 'libs/user_session'
-require 'libs/company'
+require "authlogic"
+require "authlogic/test_case"
+require "libs/project"
+require "libs/affiliate"
+require "libs/employee"
+require "libs/employee_session"
+require "libs/ldaper"
+require "libs/user"
+require "libs/user_session"
+require "libs/company"
 
 # Recent change, 2017-10-23: We had used a 54-letter string here. In the default
 # encoding, UTF-8, that's 54 bytes, which is clearly incorrect for an algorithm

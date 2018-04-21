@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class RandomTest < ActiveSupport::TestCase
   def test_that_hex_tokens_are_unique

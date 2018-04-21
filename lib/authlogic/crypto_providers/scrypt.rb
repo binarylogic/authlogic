@@ -80,11 +80,9 @@ module Authlogic
           end
 
           def new_from_hash(hash)
-            begin
-              ::SCrypt::Password.new(hash)
-            rescue ::SCrypt::Errors::InvalidHash
-              return nil
-            end
+            ::SCrypt::Password.new(hash)
+          rescue ::SCrypt::Errors::InvalidHash
+            nil
           end
       end
     end

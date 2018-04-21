@@ -75,12 +75,10 @@ module Authlogic
         private
 
           def db_setup?
-            begin
-              column_names
-              true
-            rescue StandardError
-              false
-            end
+            column_names
+            true
+          rescue StandardError
+            false
           end
 
           def first_column_to_exist(*columns_to_check)

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module CryptoProviderTest
   class BCryptTest < ActiveSupport::TestCase

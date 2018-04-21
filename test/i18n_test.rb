@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class I18nTest < ActiveSupport::TestCase
   def test_uses_authlogic_as_scope_by_default
@@ -6,8 +6,8 @@ class I18nTest < ActiveSupport::TestCase
   end
 
   def test_can_set_scope
-    assert_nothing_raised { Authlogic::I18n.scope = [:a, :b] }
-    assert_equal [:a, :b], Authlogic::I18n.scope
+    assert_nothing_raised { Authlogic::I18n.scope = %i[a b] }
+    assert_equal %i[a b], Authlogic::I18n.scope
     Authlogic::I18n.scope = :authlogic
   end
 

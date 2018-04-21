@@ -32,7 +32,7 @@ module Authlogic
         end
 
         def session
-          env['rack.session']
+          env["rack.session"]
         end
 
         def method_missing(meth, *args, &block)
@@ -42,7 +42,7 @@ module Authlogic
 
       class Adapter < AbstractAdapter
         def cookie_domain
-          env['SERVER_NAME']
+          env["SERVER_NAME"]
         end
 
         module Implementation

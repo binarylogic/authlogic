@@ -117,3 +117,6 @@ Style/RegexpLiteral:
 # a few places, but it's worth it so that we can read our code.
 Style/SpecialGlobalVars:
   EnforcedStyle: use_english_names
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes

@@ -18,7 +18,7 @@ module Authlogic
   # You may also want to checkout Authlogic::ActsAsAuthentic::Scope to scope your model.
   module AuthenticatesMany
     module Base
-      # Allows you set essentially set up a relationship with your sessions. See module
+      # Allows you to set up a relationship with your sessions. See module
       # definition above for more details.
       #
       # === Options
@@ -57,7 +57,11 @@ module Authlogic
         class_eval <<-EOS, __FILE__, __LINE__ + 1
           def #{name}
             find_options = #{options[:find_options].inspect} || #{options[:relationship_name]}.where(nil)
-            @#{name} ||= Authlogic::AuthenticatesMany::Association.new(#{options[:session_class]}, find_options, #{options[:scope_cookies] ? "self.class.model_name.name.underscore + '_' + self.send(self.class.primary_key).to_s" : "nil"})
+            @#{name} ||= Authlogic::AuthenticatesMany::Association.new(
+              #{options[:session_class]},
+              find_options,
+              #{options[:scope_cookies] ? "self.class.model_name.name.underscore + '_' + self.send(self.class.primary_key).to_s" : 'nil'}
+            )
           end
         EOS
       end

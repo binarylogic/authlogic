@@ -1,7 +1,7 @@
-require 'test_helper'
+require "test_helper"
 
 ::ActiveSupport::Deprecation.silence do
-  require 'authlogic/crypto_providers/wordpress'
+  require "authlogic/crypto_providers/wordpress"
 end
 
 module CryptoProviderTest

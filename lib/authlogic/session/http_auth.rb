@@ -64,7 +64,7 @@ module Authlogic
         # * <tt>Default:</tt> 'Application'
         # * <tt>Accepts:</tt> String
         def http_basic_auth_realm(value = nil)
-          rw_config(:http_basic_auth_realm, value, 'Application')
+          rw_config(:http_basic_auth_realm, value, "Application")
         end
         alias_method :http_basic_auth_realm=, :http_basic_auth_realm
       end
@@ -78,7 +78,7 @@ module Authlogic
           end
 
           def persist_by_http_auth
-            login_proc = Proc.new do |login, password|
+            login_proc = proc do |login, password|
               if !login.blank? && !password.blank?
                 send("#{login_field}=", login)
                 send("#{password_field}=", password)

@@ -6,7 +6,7 @@ module Authlogic
       class SessionInvalidError < ::StandardError # :nodoc:
         def initialize(session)
           message = I18n.t(
-            'error_messages.session_invalid',
+            "error_messages.session_invalid",
             default: "Your session is invalid and has the following errors:"
           )
           message += " #{session.errors.full_messages.to_sentence}"

@@ -100,9 +100,9 @@ module Authlogic
             :validates_format_of_email_field_options,
             value,
             with: Authlogic::Regex::EMAIL,
-            message: Proc.new do
+            message: proc do
                        I18n.t(
-                         'error_messages.email_invalid',
+                         "error_messages.email_invalid",
                          default: "should look like an email address."
                        )
                      end

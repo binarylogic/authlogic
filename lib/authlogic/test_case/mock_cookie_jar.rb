@@ -33,7 +33,7 @@ module Authlogic
       def [](val)
         signed_message = @parent_jar[val]
         if signed_message
-          payload, signature = signed_message.split('--')
+          payload, signature = signed_message.split("--")
           raise "Invalid signature" unless Digest::SHA1.hexdigest(payload) == signature
           payload
         end

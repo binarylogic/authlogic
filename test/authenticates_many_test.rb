@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class AuthenticatesManyTest < ActiveSupport::TestCase
   def test_employee_sessions

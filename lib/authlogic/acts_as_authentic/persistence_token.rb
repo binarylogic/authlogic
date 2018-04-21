@@ -34,7 +34,7 @@ module Authlogic
           # all users to re-authenticate.
           def forget_all
             # Paginate these to save on memory
-            find_each(batch_size: 50) { |record| record.forget! }
+            find_each(batch_size: 50, &:forget!)
           end
         end
 

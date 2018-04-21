@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module SessionTest
   module CookiesTest
@@ -68,15 +68,15 @@ module SessionTest
         assert_nil UserSession.same_site
         assert_nil UserSession.new.same_site
 
-        UserSession.same_site 'Strict'
-        assert_equal 'Strict', UserSession.same_site
+        UserSession.same_site "Strict"
+        assert_equal "Strict", UserSession.same_site
         session = UserSession.new
-        assert_equal 'Strict', session.same_site
-        session.same_site = 'Lax'
-        assert_equal 'Lax', session.same_site
+        assert_equal "Strict", session.same_site
+        session.same_site = "Lax"
+        assert_equal "Lax", session.same_site
 
-        assert_raise(ArgumentError) { UserSession.same_site 'foo' }
-        assert_raise(ArgumentError) { UserSession.new.same_site 'foo' }
+        assert_raise(ArgumentError) { UserSession.same_site "foo" }
+        assert_raise(ArgumentError) { UserSession.new.same_site "foo" }
       end
 
       def test_sign_cookie
@@ -203,11 +203,11 @@ module SessionTest
 
       def test_after_save_save_cookie_with_same_site
         session = UserSession.new(users(:ben))
-        session.same_site = 'Strict'
+        session.same_site = "Strict"
         assert session.save
         assert_equal(
-          'Strict',
-          controller.cookies.set_cookies['user_credentials'][:same_site]
+          "Strict",
+          controller.cookies.set_cookies["user_credentials"][:same_site]
         )
       end
 

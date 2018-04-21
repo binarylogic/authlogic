@@ -1,4 +1,4 @@
-require 'action_controller'
+require "action_controller"
 
 module Authlogic
   module ControllerAdapters
@@ -20,7 +20,7 @@ module Authlogic
       end
 
       def cookie_domain
-        @cookie_domain_key ||= Rails::VERSION::STRING >= '2.3' ? :domain : :session_domain
+        @cookie_domain_key ||= Rails::VERSION::STRING >= "2.3" ? :domain : :session_domain
         controller.request.session_options[@cookie_domain_key]
       end
 

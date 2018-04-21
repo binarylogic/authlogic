@@ -103,11 +103,9 @@ module Authlogic
           end
 
           def new_from_hash(hash)
-            begin
-              ::BCrypt::Password.new(hash)
-            rescue ::BCrypt::Errors::InvalidHash
-              return nil
-            end
+            ::BCrypt::Password.new(hash)
+          rescue ::BCrypt::Errors::InvalidHash
+            nil
           end
       end
     end

@@ -88,7 +88,7 @@ module Authlogic
 
         def inspect
           format(
-            '#<%s: %s>',
+            "#<%s: %s>",
             self.class.name,
             credentials.blank? ? "no credentials provided" : credentials.inspect
           )

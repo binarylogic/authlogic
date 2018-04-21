@@ -68,7 +68,11 @@ module Authlogic
         # * <tt>Default:</tt> "#{klass.name}Session".constantize
         # * <tt>Accepts:</tt> Class
         def session_class(value = nil)
-          const = "#{base_class.name}Session".constantize rescue nil
+          const = begin
+                    "#{base_class.name}Session".constantize
+                  rescue NameError
+                    nil
+                  end
           rw_config(:session_class, value, const)
         end
         alias_method :session_class=, :session_class
@@ -139,7 +143,7 @@ module Authlogic
             session_id = session_ids.first
             session_class.create(*[self, self, session_id].compact)
 
-            return true
+            true
           end
 
           def update_sessions
@@ -150,7 +154,7 @@ module Authlogic
               stale_session.save
             end
 
-            return true
+            true
           end
 
           def session_ids

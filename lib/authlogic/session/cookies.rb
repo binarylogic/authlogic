@@ -3,7 +3,7 @@ module Authlogic
     # Handles all authentication that deals with cookies, such as persisting,
     # saving, and destroying.
     module Cookies
-      VALID_SAME_SITE_VALUES = [nil, 'Lax', 'Strict'].freeze
+      VALID_SAME_SITE_VALUES = [nil, "Lax", "Strict"].freeze
 
       def self.included(klass)
         klass.class_eval do
