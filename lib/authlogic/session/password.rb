@@ -119,7 +119,7 @@ module Authlogic
         # should be an instance method. It should also be prepared to accept a
         # raw password and a crytped password.
         #
-        # * <tt>Default:</tt> "valid_password?"
+        # * <tt>Default:</tt> "valid_password?" defined in acts_as_authentic/password.rb
         # * <tt>Accepts:</tt> Symbol or String
         def verify_password_method(value = nil)
           rw_config(:verify_password_method, value, "valid_password?")
@@ -228,10 +228,21 @@ module Authlogic
             login_field && (!send(login_field).nil? || !send("protected_#{password_field}").nil?)
           end
 
+          # In keeping with the metaphor of ActiveRecord, verification of the
+          # password is referred to as a "validation".
           def validate_by_password
             self.invalid_password = false
+            validate_by_password__blank_fields
+            return if errors.count > 0
+            self.attempted_record = search_for_record(find_by_login_method, send(login_field))
+            if attempted_record.blank?
+              add_login_not_found_error
+              return
+            end
+            validate_by_password__invalid_password
+          end
 
-            # check for blank fields
+          def validate_by_password__blank_fields
             if send(login_field).blank?
               errors.add(
                 login_field,
@@ -244,22 +255,18 @@ module Authlogic
                 I18n.t("error_messages.password_blank", default: "cannot be blank")
               )
             end
-            return if errors.count > 0
+          end
 
-            self.attempted_record = search_for_record(find_by_login_method, send(login_field))
-            if attempted_record.blank?
-              add_login_not_found_error
-              return
-            end
-
-            # check for invalid password
+          # Verify the password, usually using `valid_password?` in
+          # `acts_as_authentic/password.rb`. If it cannot be verified, we
+          # refer to it as "invalid".
+          def validate_by_password__invalid_password
             unless attempted_record.send(
               verify_password_method,
               send("protected_#{password_field}")
             )
               self.invalid_password = true
               add_invalid_password_error
-              return
             end
           end
 
