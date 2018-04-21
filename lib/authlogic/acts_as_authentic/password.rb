@@ -299,6 +299,7 @@ module Authlogic
           end
         end
 
+        # :nodoc:
         module InstanceMethods
           # The password
           def password

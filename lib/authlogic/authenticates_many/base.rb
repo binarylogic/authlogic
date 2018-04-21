@@ -17,6 +17,7 @@ module Authlogic
   # Checkout the authenticates_many method for a list of options.
   # You may also want to checkout Authlogic::ActsAsAuthentic::Scope to scope your model.
   module AuthenticatesMany
+    # These methods become class methods of ::ActiveRecord::Base.
     module Base
       # Allows you to set up a relationship with your sessions. See module
       # definition above for more details.
