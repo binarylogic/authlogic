@@ -81,6 +81,7 @@ module Authlogic
 
       def self.included(base) #:nodoc:
         base.send :include, ActiveSupport::Callbacks
+
         if Gem::Version.new(ActiveSupport::VERSION::STRING) >= Gem::Version.new("5")
           base.define_callbacks(
             *METHODS + [{ terminator: ->(_target, result_lambda) { result_lambda.call == false } }]
@@ -89,25 +90,29 @@ module Authlogic
             "persist",
             terminator: ->(_target, result_lambda) { result_lambda.call == true }
           )
-        elsif Gem::Version.new(ActiveSupport::VERSION::STRING) >= Gem::Version.new("4.1")
+        else
           base.define_callbacks(
             *METHODS + [{ terminator: ->(_target, result) { result == false } }]
           )
           base.define_callbacks("persist", terminator: ->(_target, result) { result == true })
-        else
-          base.define_callbacks(*METHODS + [{ terminator: "result == false" }])
-          base.define_callbacks("persist", terminator: "result == true")
         end
 
-        # If Rails 3, support the new callback syntax
-        if base.singleton_class.method_defined?(:set_callback)
-          METHODS.each do |method|
-            base.class_eval <<-EOS, __FILE__, __LINE__ + 1
-              def self.#{method}(*methods, &block)
-                set_callback :#{method}, *methods, &block
-              end
-            EOS
-          end
+        # Now we define the "callback installation methods". These class methods
+        # will be used by other modules to install their callbacks. Examples:
+        #
+        # ```
+        # # Timeout.included
+        # before_persisting :reset_stale_state
+        #
+        # # Session::Password.included
+        # validate :validate_by_password, if: :authenticating_with_password?
+        # ```
+        METHODS.each do |method|
+          base.class_eval <<-EOS, __FILE__, __LINE__ + 1
+            def self.#{method}(*methods, &block)
+              set_callback :#{method}, *methods, &block
+            end
+          EOS
         end
       end
 
