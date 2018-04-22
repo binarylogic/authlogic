@@ -337,13 +337,7 @@ module Authlogic
             attempted_password,
             check_against_database = check_passwords_against_database?
           )
-            crypted =
-              if check_against_database && send("#{crypted_password_field}_changed?")
-                send("#{crypted_password_field}_was")
-              else
-                send(crypted_password_field)
-              end
-
+            crypted = crypted_password_to_validate_against(check_against_database)
             return false if attempted_password.blank? || crypted.blank?
             before_password_verification
 
@@ -381,6 +375,14 @@ module Authlogic
           alias_method :randomize_password!, :reset_password!
 
           private
+
+            def crypted_password_to_validate_against(check_against_database)
+              if check_against_database && send("#{crypted_password_field}_changed?")
+                send("#{crypted_password_field}_was")
+              else
+                send(crypted_password_field)
+              end
+            end
 
             def check_passwords_against_database?
               self.class.check_passwords_against_database == true

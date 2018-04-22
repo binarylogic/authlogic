@@ -201,31 +201,36 @@ module Authlogic
             end
           end
 
-          def configure_password_methods
-            if login_field
-              self.class.send(:attr_writer, login_field) unless respond_to?("#{login_field}=")
-              self.class.send(:attr_reader, login_field) unless respond_to?(login_field)
-            end
-
-            if password_field
-              self.class.send(:attr_writer, password_field) unless respond_to?("#{password_field}=")
-              self.class.send(:define_method, password_field) {} unless respond_to?(password_field)
-
-              # The password should not be accessible publicly. This way forms
-              # using form_for don't fill the password with the attempted
-              # password. To prevent this we just create this method that is
-              # private.
-              self.class.class_eval <<-EOS, __FILE__, __LINE__ + 1
-                private
-                  def protected_#{password_field}
-                    @#{password_field}
-                  end
-              EOS
-            end
-          end
-
           def authenticating_with_password?
             login_field && (!send(login_field).nil? || !send("protected_#{password_field}").nil?)
+          end
+
+          def configure_password_methods
+            define_login_field_methods
+            define_password_field_methods
+          end
+
+          def define_login_field_methods
+            return unless login_field
+            self.class.send(:attr_writer, login_field) unless respond_to?("#{login_field}=")
+            self.class.send(:attr_reader, login_field) unless respond_to?(login_field)
+          end
+
+          def define_password_field_methods
+            return unless password_field
+            self.class.send(:attr_writer, password_field) unless respond_to?("#{password_field}=")
+            self.class.send(:define_method, password_field) {} unless respond_to?(password_field)
+
+            # The password should not be accessible publicly. This way forms
+            # using form_for don't fill the password with the attempted
+            # password. To prevent this we just create this method that is
+            # private.
+            self.class.class_eval <<-EOS, __FILE__, __LINE__ + 1
+              private
+                def protected_#{password_field}
+                  @#{password_field}
+                end
+            EOS
           end
 
           # In keeping with the metaphor of ActiveRecord, verification of the

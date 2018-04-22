@@ -56,6 +56,12 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Enabled: false
 
+Metrics/CyclomaticComplexity:
+  Exclude:
+    # crypto_providers/wordpress is deprecated so we will not attempt to
+    # improve its quality.
+    - lib/authlogic/crypto_providers/wordpress.rb
+
 # Aim for 80, but 100 is OK.
 Metrics/LineLength:
   Max: 100
