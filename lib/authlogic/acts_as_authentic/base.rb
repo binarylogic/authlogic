@@ -106,7 +106,11 @@ end
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::Password
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::PerishableToken
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::PersistenceToken
+
+# RestfulAuthentication is deprecated. See comments in
+# acts_as_authentic/restful_authentication.rb
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::RestfulAuthentication
+
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::SessionMaintenance
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::SingleAccessToken
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::ValidationsScope

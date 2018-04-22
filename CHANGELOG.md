@@ -10,6 +10,7 @@
   * None
 * Deprecated
   * crypto_providers/wordpress.rb, without replacement
+  * restful_authentication, without replacement
 
 ## 4.0.1 (2018-03-20)
 

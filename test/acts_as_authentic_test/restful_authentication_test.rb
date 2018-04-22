@@ -2,6 +2,15 @@ require "test_helper"
 
 module ActsAsAuthenticTest
   class RestfulAuthenticationTest < ActiveSupport::TestCase
+    def setup
+      @old_deprecation_behavior = ::ActiveSupport::Deprecation.behavior
+      ::ActiveSupport::Deprecation.behavior = :silence
+    end
+
+    def teardown
+      ::ActiveSupport::Deprecation.behavior = @old_deprecation_behavior
+    end
+
     def test_act_like_restful_authentication_config
       refute User.act_like_restful_authentication
       refute Employee.act_like_restful_authentication
