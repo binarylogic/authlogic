@@ -41,7 +41,7 @@ To run a single test:
 
 ```
 BUNDLE_GEMFILE=test/gemfiles/Gemfile.rails-4.2.x \
-  bundle exec ruby –I test path/to/test.rb
+  bundle exec ruby -I test path/to/test.rb
 ```
 
 Bundler can be omitted, and the latest installed version of a gem dependency
