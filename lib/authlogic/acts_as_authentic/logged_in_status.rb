@@ -53,6 +53,7 @@ module Authlogic
           end
         end
 
+        # :nodoc:
         module InstanceMethods
           # Returns true if the last_request_at > logged_in_timeout.
           def logged_in?

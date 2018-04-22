@@ -12,6 +12,8 @@ module Authlogic
       end
 
       # All configuration for the single_access token aspect of acts_as_authentic.
+      #
+      # These methods become class methods of ::ActiveRecord::Base.
       module Config
         # The single access token is used for authentication via URLs, such as a private
         # feed. That being said, if the user changes their password, that token probably
@@ -30,6 +32,9 @@ module Authlogic
       end
 
       # All method, for the single_access token aspect of acts_as_authentic.
+      #
+      # This module, as one of the `acts_as_authentic_modules`, is only included
+      # into an ActiveRecord model if that model calls `acts_as_authentic`.
       module Methods
         def self.included(klass)
           return unless klass.column_names.include?("single_access_token")
@@ -47,6 +52,7 @@ module Authlogic
           end
         end
 
+        # :nodoc:
         module InstanceMethods
           # Resets the single_access_token to a random friendly token.
           def reset_single_access_token

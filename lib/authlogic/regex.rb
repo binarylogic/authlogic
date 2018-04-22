@@ -52,7 +52,7 @@ module Authlogic
     # @deprecated
     def self.email
       ::ActiveSupport::Deprecation.warn(
-        'Authlogic::Regex.email is deprecated, use Authlogic::Regex::EMAIL',
+        "Authlogic::Regex.email is deprecated, use Authlogic::Regex::EMAIL",
         caller(1)
       )
       EMAIL
@@ -61,7 +61,7 @@ module Authlogic
     # @deprecated
     def self.email_nonascii
       ::ActiveSupport::Deprecation.warn(
-        'Authlogic::Regex.email_nonascii is deprecated, use Authlogic::Regex::EMAIL_NONASCII',
+        "Authlogic::Regex.email_nonascii is deprecated, use Authlogic::Regex::EMAIL_NONASCII",
         caller(1)
       )
       EMAIL_NONASCII
@@ -70,7 +70,7 @@ module Authlogic
     # @deprecated
     def self.login
       ::ActiveSupport::Deprecation.warn(
-        'Authlogic::Regex.login is deprecated, use Authlogic::Regex::LOGIN',
+        "Authlogic::Regex.login is deprecated, use Authlogic::Regex::LOGIN",
         caller(1)
       )
       LOGIN

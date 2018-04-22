@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 # We forbid the use of AC::Parameters, and we have a test to that effect, but we
 # do not want a development dependency on `actionpack`, so we define it here.

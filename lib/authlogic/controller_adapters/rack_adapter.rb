@@ -48,7 +48,7 @@ module Authlogic
           end
 
           def remote_ip
-            self.ip
+            ip
           end
         end
 

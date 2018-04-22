@@ -8,7 +8,7 @@
 
 # Offense count: 58
 Metrics/AbcSize:
-  Max: 32
+  Max: 28
 
 # Offense count: 4
 Metrics/CyclomaticComplexity:
@@ -35,7 +35,25 @@ Style/ClassVars:
 
 # Offense count: 31
 Style/Documentation:
-  Enabled: false
+  Exclude:
+    # Permanent exclusion
+    - test/**/*
+
+    # Temporary exclustions
+    - lib/authlogic/config.rb
+    - lib/authlogic/controller_adapters/sinatra_adapter.rb
+    - lib/authlogic/crypto_providers.rb
+    - lib/authlogic/i18n/translator.rb
+    - lib/authlogic/session/activation.rb
+    - lib/authlogic/session/active_record_trickery.rb
+    - lib/authlogic/session/existence.rb
+    - lib/authlogic/session/foundation.rb
+    - lib/authlogic/session/klass.rb
+    - lib/authlogic/session/persistence.rb
+    - lib/authlogic/session/scopes.rb
+    - lib/authlogic/test_case.rb
+    - lib/authlogic/test_case/mock_cookie_jar.rb
+    - lib/authlogic/version.rb
 
 # Offense count: 4
 Style/MethodMissing:
@@ -44,122 +62,9 @@ Style/MethodMissing:
     - 'lib/authlogic/controller_adapters/sinatra_adapter.rb'
     - 'lib/authlogic/test_case/mock_request.rb'
 
-# Offense count: 1
-Style/MixinUsage:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/base.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, MinBodyLength, SupportedStyles.
-# SupportedStyles: skip_modifier_ifs, always
-Style/Next:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/password.rb'
-    - 'lib/authlogic/session/magic_states.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/Not:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/login.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: AutoCorrect, EnforcedStyle, SupportedStyles.
-# SupportedStyles: predicate, comparison
-Style/NumericPredicate:
-  Exclude:
-    - 'spec/**/*'
-    - 'lib/authlogic/acts_as_authentic/password.rb'
-    - 'lib/authlogic/session/brute_force_protection.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: AllowSafeAssignment.
-Style/ParenthesesAroundCondition:
-  Exclude:
-    - 'test/test_helper.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/Proc:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/email.rb'
-    - 'lib/authlogic/session/http_auth.rb'
-    - 'test/acts_as_authentic_test/email_test.rb'
-
 # Offense count: 7
 # Cop supports --auto-correct.
 # Configuration parameters: SupportedStyles.
 # SupportedStyles: compact, exploded
 Style/RaiseArgs:
   EnforcedStyle: compact
-
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/RedundantBegin:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/base.rb'
-    - 'lib/authlogic/crypto_providers/bcrypt.rb'
-    - 'lib/authlogic/crypto_providers/scrypt.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: AllowMultipleReturnValues.
-Style/RedundantReturn:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/session_maintenance.rb'
-    - 'test/libs/user_session.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/RedundantSelf:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/perishable_token.rb'
-    - 'lib/authlogic/acts_as_authentic/restful_authentication.rb'
-    - 'lib/authlogic/controller_adapters/rack_adapter.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/RescueModifier:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/session_maintenance.rb'
-
-# Offense count: 507
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, ConsistentQuotesInMultiline.
-# SupportedStyles: single_quotes, double_quotes
-Style/StringLiterals:
-  Enabled: false
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: single_quotes, double_quotes
-Style/StringLiteralsInInterpolation:
-  Exclude:
-    - 'lib/authlogic/authenticates_many/base.rb'
-    - 'lib/authlogic/session/foundation.rb'
-
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: MinSize, SupportedStyles.
-# SupportedStyles: percent, brackets
-Style/SymbolArray:
-  EnforcedStyle: brackets
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: IgnoredMethods.
-# IgnoredMethods: respond_to, define_method
-Style/SymbolProc:
-  Exclude:
-    - 'lib/authlogic/acts_as_authentic/persistence_token.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: SupportedStyles, MinSize, WordRegex.
-# SupportedStyles: percent, brackets
-Style/WordArray:
-  EnforcedStyle: brackets

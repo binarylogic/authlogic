@@ -119,7 +119,7 @@ module Authlogic
         # should be an instance method. It should also be prepared to accept a
         # raw password and a crytped password.
         #
-        # * <tt>Default:</tt> "valid_password?"
+        # * <tt>Default:</tt> "valid_password?" defined in acts_as_authentic/password.rb
         # * <tt>Accepts:</tt> Symbol or String
         def verify_password_method(value = nil)
           rw_config(:verify_password_method, value, "valid_password?")
@@ -185,7 +185,7 @@ module Authlogic
             else
               errors.add(
                 password_field,
-                I18n.t('error_messages.password_invalid', default: "is not valid")
+                I18n.t("error_messages.password_invalid", default: "is not valid")
               )
             end
           end
@@ -196,7 +196,7 @@ module Authlogic
             else
               errors.add(
                 login_field,
-                I18n.t('error_messages.login_not_found', default: "is not valid")
+                I18n.t("error_messages.login_not_found", default: "is not valid")
               )
             end
           end
@@ -228,38 +228,45 @@ module Authlogic
             login_field && (!send(login_field).nil? || !send("protected_#{password_field}").nil?)
           end
 
+          # In keeping with the metaphor of ActiveRecord, verification of the
+          # password is referred to as a "validation".
           def validate_by_password
             self.invalid_password = false
-
-            # check for blank fields
-            if send(login_field).blank?
-              errors.add(
-                login_field,
-                I18n.t('error_messages.login_blank', default: "cannot be blank")
-              )
-            end
-            if send("protected_#{password_field}").blank?
-              errors.add(
-                password_field,
-                I18n.t('error_messages.password_blank', default: "cannot be blank")
-              )
-            end
+            validate_by_password__blank_fields
             return if errors.count > 0
-
             self.attempted_record = search_for_record(find_by_login_method, send(login_field))
             if attempted_record.blank?
               add_login_not_found_error
               return
             end
+            validate_by_password__invalid_password
+          end
 
-            # check for invalid password
+          def validate_by_password__blank_fields
+            if send(login_field).blank?
+              errors.add(
+                login_field,
+                I18n.t("error_messages.login_blank", default: "cannot be blank")
+              )
+            end
+            if send("protected_#{password_field}").blank?
+              errors.add(
+                password_field,
+                I18n.t("error_messages.password_blank", default: "cannot be blank")
+              )
+            end
+          end
+
+          # Verify the password, usually using `valid_password?` in
+          # `acts_as_authentic/password.rb`. If it cannot be verified, we
+          # refer to it as "invalid".
+          def validate_by_password__invalid_password
             unless attempted_record.send(
               verify_password_method,
               send("protected_#{password_field}")
             )
               self.invalid_password = true
               add_invalid_password_error
-              return
             end
           end
 
@@ -282,7 +289,7 @@ module Authlogic
               end
             errors.add(
               :base,
-              I18n.t('error_messages.general_credentials_error', default: error_message)
+              I18n.t("error_messages.general_credentials_error", default: error_message)
             )
           end
 

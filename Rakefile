@@ -1,12 +1,12 @@
-require 'rubygems'
-require 'bundler'
+require "rubygems"
+require "bundler"
 
 Bundler.setup
 
-require 'rake/testtask'
+require "rake/testtask"
 Rake::TestTask.new(:test) do |test|
-  test.libs << 'test'
-  test.pattern = 'test/**/*_test.rb'
+  test.libs << "test"
+  test.pattern = "test/**/*_test.rb"
   test.verbose = false
 
   # Set interpreter warning level to 1 (medium). Level 2 produces hundreds of warnings
@@ -18,4 +18,4 @@ end
 require "rubocop/rake_task"
 RuboCop::RakeTask.new
 
-task default: [:rubocop, :test]
+task default: %i[rubocop test]

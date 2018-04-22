@@ -11,7 +11,7 @@ module Authlogic
         controller &&
           controller.respond_to?(:env) &&
           controller.env.is_a?(Hash) &&
-          controller.env['REMOTE_ADDR'] ||
+          controller.env["REMOTE_ADDR"] ||
           "1.1.1.1"
       end
 

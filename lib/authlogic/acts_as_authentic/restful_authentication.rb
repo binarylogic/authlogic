@@ -10,6 +10,8 @@ module Authlogic
         end
       end
 
+      # Configures the restful_authentication aspect of acts_as_authentic.
+      # These methods become class methods of ::ActiveRecord::Base.
       module Config
         # Switching an existing app to Authlogic from restful_authentication? No
         # problem, just set this true and your users won't know anything
@@ -67,6 +69,7 @@ module Authlogic
           end
       end
 
+      # :nodoc:
       module InstanceMethods
         private
 

@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module SessionTest
   class HttpAuthTest < ActiveSupport::TestCase
@@ -20,9 +20,9 @@ module SessionTest
       end
 
       def test_http_basic_auth_realm
-        assert_equal 'Application', UserSession.http_basic_auth_realm
-        UserSession.http_basic_auth_realm = 'TestRealm'
-        assert_equal 'TestRealm', UserSession.http_basic_auth_realm
+        assert_equal "Application", UserSession.http_basic_auth_realm
+        UserSession.http_basic_auth_realm = "TestRealm"
+        assert_equal "TestRealm", UserSession.http_basic_auth_realm
       end
     end
 
@@ -43,13 +43,13 @@ module SessionTest
         end
         unset_session
         UserSession.request_http_basic_auth = true
-        UserSession.http_basic_auth_realm = 'PersistTestRealm'
+        UserSession.http_basic_auth_realm = "PersistTestRealm"
         http_basic_auth_for(aaron) do
           assert session = UserSession.find
           assert_equal aaron, session.record
           assert_equal aaron.login, session.login
           assert_equal "aaronrocks", session.send(:protected_password)
-          assert_equal 'PersistTestRealm', controller.realm
+          assert_equal "PersistTestRealm", controller.realm
           assert controller.http_auth_requested?
         end
       end

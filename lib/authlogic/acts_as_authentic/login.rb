@@ -1,4 +1,4 @@
-require 'authlogic/acts_as_authentic/queries/find_with_case'
+require "authlogic/acts_as_authentic/queries/find_with_case"
 
 module Authlogic
   module ActsAsAuthentic
@@ -91,7 +91,7 @@ module Authlogic
             with: Authlogic::Regex::LOGIN,
             message: proc do
                        I18n.t(
-                         'error_messages.login_invalid',
+                         "error_messages.login_invalid",
                          default: "should use only letters, numbers, spaces, and .-_@+ please."
                        )
                      end

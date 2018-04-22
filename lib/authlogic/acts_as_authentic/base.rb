@@ -11,6 +11,8 @@ module Authlogic
         end
       end
 
+      # The primary configuration of a model (often, `User`) for use with
+      # authlogic. These methods become class methods of ::ActiveRecord::Base.
       module Config
         # This includes a lot of helpful methods for authenticating records
         # which the Authlogic::Session module relies on. To use it just do:
@@ -75,12 +77,10 @@ module Authlogic
         private
 
           def db_setup?
-            begin
-              column_names
-              true
-            rescue StandardError
-              false
-            end
+            column_names
+            true
+          rescue StandardError
+            false
           end
 
           def first_column_to_exist(*columns_to_check)

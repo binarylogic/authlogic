@@ -29,6 +29,8 @@ module Authlogic
         end
       end
 
+      # Configuration for the session maintenance aspect of acts_as_authentic.
+      # These methods become class methods of ::ActiveRecord::Base.
       module Config
         # In order to turn off automatic maintenance of sessions
         # after create, just set this to false.
@@ -68,12 +70,18 @@ module Authlogic
         # * <tt>Default:</tt> "#{klass.name}Session".constantize
         # * <tt>Accepts:</tt> Class
         def session_class(value = nil)
-          const = "#{base_class.name}Session".constantize rescue nil
+          const = begin
+                    "#{base_class.name}Session".constantize
+                  rescue NameError
+                    nil
+                  end
           rw_config(:session_class, value, const)
         end
         alias_method :session_class=, :session_class
       end
 
+      # This module, as one of the `acts_as_authentic_modules`, is only included
+      # into an ActiveRecord model if that model calls `acts_as_authentic`.
       module Methods
         def self.included(klass)
           klass.class_eval do
@@ -139,7 +147,7 @@ module Authlogic
             session_id = session_ids.first
             session_class.create(*[self, self, session_id].compact)
 
-            return true
+            true
           end
 
           def update_sessions
@@ -150,7 +158,7 @@ module Authlogic
               stale_session.save
             end
 
-            return true
+            true
           end
 
           def session_ids

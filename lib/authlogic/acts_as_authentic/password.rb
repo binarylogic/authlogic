@@ -235,9 +235,12 @@ module Authlogic
 
       # Callbacks / hooks to allow other modules to modify the behavior of this module.
       module Callbacks
-        METHODS = [
-          "before_password_set", "after_password_set",
-          "before_password_verification", "after_password_verification"
+        # Does the order of this array matter?
+        METHODS = %w[
+          before_password_set
+          after_password_set
+          before_password_verification
+          after_password_verification
         ].freeze
 
         def self.included(klass)
@@ -296,6 +299,7 @@ module Authlogic
           end
         end
 
+        # :nodoc:
         module InstanceMethods
           # The password
           def password
@@ -342,19 +346,18 @@ module Authlogic
             before_password_verification
 
             crypto_providers.each_with_index do |encryptor, index|
-              if encryptor_matches?(
+              next unless encryptor_matches?(
                 crypted,
                 encryptor,
                 index,
                 attempted_password,
                 check_against_database
               )
-                if transition_password?(index, encryptor, check_against_database)
-                  transition_password(attempted_password)
-                end
-                after_password_verification
-                return true
+              if transition_password?(index, encryptor, check_against_database)
+                transition_password(attempted_password)
               end
+              after_password_verification
+              return true
             end
 
             false
@@ -417,7 +420,7 @@ module Authlogic
               check_against_database
             )
               # The arguments_type for the transitioning from restful_authentication
-              acting_restful = act_like_restful_authentication? && index == 0
+              acting_restful = act_like_restful_authentication? && index.zero?
               transitioning = transition_from_restful_authentication? &&
                 index > 0 &&
                 encryptor == Authlogic::CryptoProviders::Sha1

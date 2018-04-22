@@ -102,7 +102,7 @@ module Authlogic
               single_access_allowed_request_types.include?(controller.request_content_type) ||
                 single_access_allowed_request_types.include?(:all)
             else
-              [:all, :any].include?(single_access_allowed_request_types)
+              %i[all any].include?(single_access_allowed_request_types)
             end
           end
 

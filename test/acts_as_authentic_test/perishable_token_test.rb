@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module ActsAsAuthenticTest
   class PerishableTokenTest < ActiveSupport::TestCase
@@ -89,7 +89,7 @@ module ActsAsAuthenticTest
 
     def test_find_perishable_token_with_bang
       assert_raises ActiveRecord::RecordNotFound do
-        User.find_using_perishable_token!('some_bad_value')
+        User.find_using_perishable_token!("some_bad_value")
       end
     end
   end

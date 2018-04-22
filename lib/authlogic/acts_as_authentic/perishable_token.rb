@@ -73,7 +73,7 @@ module Authlogic
           # second parameter:
           #
           #   User.find_using_perishable_token(token, 1.hour)
-          def find_using_perishable_token(token, age = self.perishable_token_valid_for)
+          def find_using_perishable_token(token, age = perishable_token_valid_for)
             return if token.blank?
             age = age.to_i
 

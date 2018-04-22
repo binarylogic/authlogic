@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module SessionTest
   class CallbacksTest < ActiveSupport::TestCase
@@ -16,7 +16,7 @@ module SessionTest
     def test_true_callback_cancelling_later_callbacks
       WackyUserSession.persist :persist_by_true, :persist_by_false
       assert_equal(
-        [:persist_by_true, :persist_by_false],
+        %i[persist_by_true persist_by_false],
         WackyUserSession._persist_callbacks.map(&:filter)
       )
 
@@ -28,7 +28,7 @@ module SessionTest
     def test_false_callback_continuing_to_later_callbacks
       WackyUserSession.persist :persist_by_false, :persist_by_true
       assert_equal(
-        [:persist_by_false, :persist_by_true],
+        %i[persist_by_false persist_by_true],
         WackyUserSession._persist_callbacks.map(&:filter)
       )
 

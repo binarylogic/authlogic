@@ -29,7 +29,7 @@ module Authlogic
         self.id = id
       end
 
-      [:create, :create!, :find, :new].each do |method|
+      %i[create create! find new].each do |method|
         class_eval <<-EOS, __FILE__, __LINE__ + 1
           def #{method}(*args)
             klass.with_scope(scope_options) do

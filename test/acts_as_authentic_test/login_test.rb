@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module ActsAsAuthenticTest
   # Tests for configuration option: `validates_format_of_login_field_options`
@@ -36,7 +36,7 @@ module ActsAsAuthenticTest
         with: /\A[a-zA-Z0-9_][a-zA-Z0-9\.+\-_@ ]+\z/,
         message: proc do
           I18n.t(
-            'error_messages.login_invalid',
+            "error_messages.login_invalid",
             default: "should use only letters, numbers, spaces, and .-_@+ please."
           )
         end

@@ -1,4 +1,4 @@
-require 'request_store'
+require "request_store"
 
 module Authlogic
   module Session

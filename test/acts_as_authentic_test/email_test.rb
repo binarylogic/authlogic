@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 module ActsAsAuthenticTest
   class EmailTest < ActiveSupport::TestCase
@@ -46,7 +46,7 @@ module ActsAsAuthenticTest
     BAD_UTF8_EMAILS = [
       "",
       ".みんな", #  https://github.com/binarylogic/authlogic/issues/176#issuecomment-55829320
-      'δκιμή@παράδεγμα.δ',          # short TLD
+      "δκιμή@παράδεγμα.δ",          # short TLD
       "öm(@ava.fi",                 # L paren
       "é)@domain.com",              # R paren
       "é[@example.com",             # L bracket
@@ -97,7 +97,7 @@ module ActsAsAuthenticTest
         with: Authlogic::Regex::EMAIL,
         message: proc do
           I18n.t(
-            'error_messages.email_invalid',
+            "error_messages.email_invalid",
             default: "should look like an email address."
           )
         end
@@ -123,9 +123,9 @@ module ActsAsAuthenticTest
 
       with_email_nonascii = {
         with: Authlogic::Regex::EMAIL_NONASCII,
-        message: Proc.new do
+        message: proc do
           I18n.t(
-            'error_messages.email_invalid_international',
+            "error_messages.email_invalid_international",
             default: "should look like an international email address."
           )
         end
@@ -140,11 +140,11 @@ module ActsAsAuthenticTest
       # ensure we successfully loaded the test locale
       assert I18n.available_locales.include?(:lol), "Test locale failed to load"
 
-      I18n.with_locale('lol') do
+      I18n.with_locale("lol") do
         message = I18n.t("authlogic.error_messages.email_invalid")
 
         cat = User.new
-        cat.email = 'meow'
+        cat.email = "meow"
         cat.valid?
 
         # filter duplicate error messages

@@ -28,7 +28,7 @@ module Authlogic
 
           # @api private
           def bind(relation)
-            if AR_GEM_VERSION >= Gem::Version.new('5')
+            if AR_GEM_VERSION >= Gem::Version.new("5")
               bind = ActiveRecord::Relation::QueryAttribute.new(
                 @field,
                 @value,
@@ -49,7 +49,7 @@ module Authlogic
                 @model_class.columns_hash[@field],
                 @value
               )
-            elsif AR_GEM_VERSION >= Gem::Version.new('5.0')
+            elsif AR_GEM_VERSION >= Gem::Version.new("5.0")
               @model_class.connection.case_sensitive_comparison(
                 @model_class.arel_table,
                 @field,

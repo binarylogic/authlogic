@@ -56,7 +56,7 @@ module Authlogic
 
           # @api private
           def required_magic_states_for(record)
-            [:active, :approved, :confirmed].select { |state|
+            %i[active approved confirmed].select { |state|
               record.respond_to?("#{state}?")
             }
           end
@@ -64,16 +64,15 @@ module Authlogic
           def validate_magic_states
             return true if attempted_record.nil?
             required_magic_states_for(attempted_record).each do |required_status|
-              unless attempted_record.send("#{required_status}?")
-                errors.add(
-                  :base,
-                  I18n.t(
-                    "error_messages.not_#{required_status}",
-                    default: "Your account is not #{required_status}"
-                  )
+              next if attempted_record.send("#{required_status}?")
+              errors.add(
+                :base,
+                I18n.t(
+                  "error_messages.not_#{required_status}",
+                  default: "Your account is not #{required_status}"
                 )
-                return false
-              end
+              )
+              return false
             end
             true
           end
