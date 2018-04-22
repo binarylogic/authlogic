@@ -7,5 +7,7 @@ module Authlogic
     autoload :BCrypt, "authlogic/crypto_providers/bcrypt"
     autoload :AES256, "authlogic/crypto_providers/aes256"
     autoload :SCrypt, "authlogic/crypto_providers/scrypt"
+    # crypto_providers/wordpress.rb has never been autoloaded, and now it is
+    # deprecated.
   end
 end
