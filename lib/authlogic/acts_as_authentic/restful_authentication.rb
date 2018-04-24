@@ -13,6 +13,15 @@ module Authlogic
       # Configures the restful_authentication aspect of acts_as_authentic.
       # These methods become class methods of ::ActiveRecord::Base.
       module Config
+        DPR_MSG = <<-STR.squish
+          Support for transitioning to authlogic from restful_authentication
+          (%s) is deprecated without replacement. restful_authentication is no
+          longer used in the ruby community, and the transition away from it is
+          complete. There is only one version of restful_authentication on
+          rubygems.org, it was released in 2009, and it's only compatible with
+          rails 2.3. It has been nine years since it was released.
+        STR
+
         # Switching an existing app to Authlogic from restful_authentication? No
         # problem, just set this true and your users won't know anything
         # changed. From your database perspective nothing will change at all.
@@ -28,7 +37,14 @@ module Authlogic
           set_restful_authentication_config if value
           r
         end
-        alias_method :act_like_restful_authentication=, :act_like_restful_authentication
+
+        def act_like_restful_authentication=(value = nil)
+          ::ActiveSupport::Deprecation.warn(
+            format(DPR_MSG, "act_like_restful_authentication="),
+            caller(1)
+          )
+          act_like_restful_authentication(value)
+        end
 
         # This works just like act_like_restful_authentication except that it
         # will start transitioning your users to the algorithm you specify with
@@ -42,10 +58,14 @@ module Authlogic
           set_restful_authentication_config if value
           r
         end
-        alias_method(
-          :transition_from_restful_authentication=,
-          :transition_from_restful_authentication
-        )
+
+        def transition_from_restful_authentication=(value = nil)
+          ::ActiveSupport::Deprecation.warn(
+            format(DPR_MSG, "transition_from_restful_authentication="),
+            caller(1)
+          )
+          transition_from_restful_authentication(value)
+        end
 
         private
 
