@@ -8,6 +8,15 @@
   * None
 * Fixed
   * None
+
+## 4.1.0 (2018-04-24)
+
+* Breaking Changes
+  * None
+* Added
+  * None
+* Fixed
+  * None
 * Deprecated
   * crypto_providers/wordpress.rb, without replacement
   * restful_authentication, without replacement
