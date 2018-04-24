@@ -6,9 +6,9 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 58
+# Goal: 15.0
 Metrics/AbcSize:
-  Max: 28
+  Max: 19.7
 
 # Offense count: 3
 Metrics/PerceivedComplexity:

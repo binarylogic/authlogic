@@ -226,9 +226,18 @@ module Authlogic
           build_key(self.class.cookie_key)
         end
 
+        # Returns an array of cookie elements. See cookie format in
+        # `generate_cookie_for_saving`. If no cookie is found, returns nil.
         def cookie_credentials
           cookie = cookie_jar[cookie_key]
           cookie && cookie.split("::")
+        end
+
+        # The third element of the cookie indicates whether the user wanted
+        # to be remembered (Actually, it's a timestamp, `remember_me_until`)
+        # See cookie format in `generate_cookie_for_saving`.
+        def cookie_credentials_remember_me?
+          !cookie_credentials.nil? && !cookie_credentials[2].nil?
         end
 
         def cookie_jar
