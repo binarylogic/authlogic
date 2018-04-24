@@ -67,9 +67,9 @@ module Authlogic
 
       private
 
-        def method_missing(id, *args, &block)
-          controller.send(id, *args, &block)
-        end
+      def method_missing(id, *args, &block)
+        controller.send(id, *args, &block)
+      end
     end
   end
 end

@@ -60,13 +60,13 @@ module Authlogic
 
         private
 
-          def klass
-            self.class.klass
-          end
+        def klass
+          self.class.klass
+        end
 
-          def klass_name
-            self.class.klass_name
-          end
+        def klass_name
+          self.class.klass_name
+        end
       end
     end
   end

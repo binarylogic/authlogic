@@ -24,15 +24,15 @@ module Authlogic
 
       private
 
-        def attempted_record=(value)
-          value = priority_record if value == priority_record
-          super
-        end
+      def attempted_record=(value)
+        value = priority_record if value == priority_record
+        super
+      end
 
-        def save_record(alternate_record = nil)
-          r = alternate_record || record
-          super if r != priority_record
-        end
+      def save_record(alternate_record = nil)
+        r = alternate_record || record
+        super if r != priority_record
+      end
     end
   end
 end

@@ -54,9 +54,9 @@ module Authlogic
 
           private
 
-            def reset_persistence_token?
-              persistence_token.blank?
-            end
+          def reset_persistence_token?
+            persistence_token.blank?
+          end
         end
       end
     end

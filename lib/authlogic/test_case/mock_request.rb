@@ -17,8 +17,8 @@ module Authlogic
 
       private
 
-        def method_missing(*args, &block)
-        end
+      def method_missing(*args, &block)
+      end
     end
   end
 end

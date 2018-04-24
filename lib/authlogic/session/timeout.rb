@@ -83,20 +83,20 @@ module Authlogic
 
         private
 
-          def reset_stale_state
-            self.stale_record = nil
-          end
+        def reset_stale_state
+          self.stale_record = nil
+        end
 
-          def enforce_timeout
-            if stale?
-              self.stale_record = record
-              self.record = nil
-            end
+        def enforce_timeout
+          if stale?
+            self.stale_record = record
+            self.record = nil
           end
+        end
 
-          def logout_on_timeout?
-            self.class.logout_on_timeout == true
-          end
+        def logout_on_timeout?
+          self.class.logout_on_timeout == true
+        end
       end
     end
   end

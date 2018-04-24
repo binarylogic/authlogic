@@ -118,18 +118,18 @@ module Authlogic
 
       private
 
-        METHODS.each do |method|
-          class_eval <<-EOS, __FILE__, __LINE__ + 1
+      METHODS.each do |method|
+        class_eval <<-EOS, __FILE__, __LINE__ + 1
             def #{method}
               run_callbacks(:#{method})
             end
           EOS
-        end
+      end
 
-        def save_record(alternate_record = nil)
-          r = alternate_record || record
-          r.save_without_session_maintenance(validate: false) if r && r.changed? && !r.readonly?
-        end
+      def save_record(alternate_record = nil)
+        r = alternate_record || record
+        r.save_without_session_maintenance(validate: false) if r && r.changed? && !r.readonly?
+      end
     end
   end
 end

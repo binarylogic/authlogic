@@ -69,24 +69,24 @@ module Authlogic
 
         private
 
-          def set_restful_authentication_config
-            self.restful_auth_crypto_provider = CryptoProviders::Sha1
-            if !defined?(::REST_AUTH_SITE_KEY) || ::REST_AUTH_SITE_KEY.nil?
-              unless defined?(::REST_AUTH_SITE_KEY)
-                class_eval("::REST_AUTH_SITE_KEY = ''", __FILE__, __LINE__)
-              end
-              CryptoProviders::Sha1.stretches = 1
+        def set_restful_authentication_config
+          self.restful_auth_crypto_provider = CryptoProviders::Sha1
+          if !defined?(::REST_AUTH_SITE_KEY) || ::REST_AUTH_SITE_KEY.nil?
+            unless defined?(::REST_AUTH_SITE_KEY)
+              class_eval("::REST_AUTH_SITE_KEY = ''", __FILE__, __LINE__)
             end
+            CryptoProviders::Sha1.stretches = 1
           end
+        end
 
-          # @api private
-          def restful_auth_crypto_provider=(provider)
-            if act_like_restful_authentication
-              self.crypto_provider = provider
-            else
-              self.transition_from_crypto_providers = provider
-            end
+        # @api private
+        def restful_auth_crypto_provider=(provider)
+          if act_like_restful_authentication
+            self.crypto_provider = provider
+          else
+            self.transition_from_crypto_providers = provider
           end
+        end
       end
 
       # :nodoc:

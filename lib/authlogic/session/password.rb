@@ -179,136 +179,136 @@ module Authlogic
 
         private
 
-          def add_invalid_password_error
-            if generalize_credentials_error_messages?
-              add_general_credentials_error
-            else
-              errors.add(
-                password_field,
-                I18n.t("error_messages.password_invalid", default: "is not valid")
-              )
-            end
+        def add_invalid_password_error
+          if generalize_credentials_error_messages?
+            add_general_credentials_error
+          else
+            errors.add(
+              password_field,
+              I18n.t("error_messages.password_invalid", default: "is not valid")
+            )
           end
+        end
 
-          def add_login_not_found_error
-            if generalize_credentials_error_messages?
-              add_general_credentials_error
-            else
-              errors.add(
-                login_field,
-                I18n.t("error_messages.login_not_found", default: "is not valid")
-              )
-            end
+        def add_login_not_found_error
+          if generalize_credentials_error_messages?
+            add_general_credentials_error
+          else
+            errors.add(
+              login_field,
+              I18n.t("error_messages.login_not_found", default: "is not valid")
+            )
           end
+        end
 
-          def authenticating_with_password?
-            login_field && (!send(login_field).nil? || !send("protected_#{password_field}").nil?)
-          end
+        def authenticating_with_password?
+          login_field && (!send(login_field).nil? || !send("protected_#{password_field}").nil?)
+        end
 
-          def configure_password_methods
-            define_login_field_methods
-            define_password_field_methods
-          end
+        def configure_password_methods
+          define_login_field_methods
+          define_password_field_methods
+        end
 
-          def define_login_field_methods
-            return unless login_field
-            self.class.send(:attr_writer, login_field) unless respond_to?("#{login_field}=")
-            self.class.send(:attr_reader, login_field) unless respond_to?(login_field)
-          end
+        def define_login_field_methods
+          return unless login_field
+          self.class.send(:attr_writer, login_field) unless respond_to?("#{login_field}=")
+          self.class.send(:attr_reader, login_field) unless respond_to?(login_field)
+        end
 
-          def define_password_field_methods
-            return unless password_field
-            self.class.send(:attr_writer, password_field) unless respond_to?("#{password_field}=")
-            self.class.send(:define_method, password_field) {} unless respond_to?(password_field)
+        def define_password_field_methods
+          return unless password_field
+          self.class.send(:attr_writer, password_field) unless respond_to?("#{password_field}=")
+          self.class.send(:define_method, password_field) {} unless respond_to?(password_field)
 
-            # The password should not be accessible publicly. This way forms
-            # using form_for don't fill the password with the attempted
-            # password. To prevent this we just create this method that is
-            # private.
-            self.class.class_eval <<-EOS, __FILE__, __LINE__ + 1
+          # The password should not be accessible publicly. This way forms
+          # using form_for don't fill the password with the attempted
+          # password. To prevent this we just create this method that is
+          # private.
+          self.class.class_eval <<-EOS, __FILE__, __LINE__ + 1
               private
                 def protected_#{password_field}
                   @#{password_field}
                 end
             EOS
+        end
+
+        # In keeping with the metaphor of ActiveRecord, verification of the
+        # password is referred to as a "validation".
+        def validate_by_password
+          self.invalid_password = false
+          validate_by_password__blank_fields
+          return if errors.count > 0
+          self.attempted_record = search_for_record(find_by_login_method, send(login_field))
+          if attempted_record.blank?
+            add_login_not_found_error
+            return
           end
+          validate_by_password__invalid_password
+        end
 
-          # In keeping with the metaphor of ActiveRecord, verification of the
-          # password is referred to as a "validation".
-          def validate_by_password
-            self.invalid_password = false
-            validate_by_password__blank_fields
-            return if errors.count > 0
-            self.attempted_record = search_for_record(find_by_login_method, send(login_field))
-            if attempted_record.blank?
-              add_login_not_found_error
-              return
-            end
-            validate_by_password__invalid_password
-          end
-
-          def validate_by_password__blank_fields
-            if send(login_field).blank?
-              errors.add(
-                login_field,
-                I18n.t("error_messages.login_blank", default: "cannot be blank")
-              )
-            end
-            if send("protected_#{password_field}").blank?
-              errors.add(
-                password_field,
-                I18n.t("error_messages.password_blank", default: "cannot be blank")
-              )
-            end
-          end
-
-          # Verify the password, usually using `valid_password?` in
-          # `acts_as_authentic/password.rb`. If it cannot be verified, we
-          # refer to it as "invalid".
-          def validate_by_password__invalid_password
-            unless attempted_record.send(
-              verify_password_method,
-              send("protected_#{password_field}")
-            )
-              self.invalid_password = true
-              add_invalid_password_error
-            end
-          end
-
-          attr_accessor :invalid_password
-
-          def find_by_login_method
-            self.class.find_by_login_method
-          end
-
-          def login_field
-            self.class.login_field
-          end
-
-          def add_general_credentials_error
-            error_message =
-              if self.class.generalize_credentials_error_messages.is_a? String
-                self.class.generalize_credentials_error_messages
-              else
-                "#{login_field.to_s.humanize}/Password combination is not valid"
-              end
+        def validate_by_password__blank_fields
+          if send(login_field).blank?
             errors.add(
-              :base,
-              I18n.t("error_messages.general_credentials_error", default: error_message)
+              login_field,
+              I18n.t("error_messages.login_blank", default: "cannot be blank")
             )
           end
-
-          def generalize_credentials_error_messages?
-            self.class.generalize_credentials_error_messages
+          if send("protected_#{password_field}").blank?
+            errors.add(
+              password_field,
+              I18n.t("error_messages.password_blank", default: "cannot be blank")
+            )
           end
+        end
 
-          def password_field
-            self.class.password_field
+        # Verify the password, usually using `valid_password?` in
+        # `acts_as_authentic/password.rb`. If it cannot be verified, we
+        # refer to it as "invalid".
+        def validate_by_password__invalid_password
+          unless attempted_record.send(
+            verify_password_method,
+            send("protected_#{password_field}")
+          )
+            self.invalid_password = true
+            add_invalid_password_error
           end
+        end
 
-          def verify_password_method
-            self.class.verify_password_method
-          end
+        attr_accessor :invalid_password
+
+        def find_by_login_method
+          self.class.find_by_login_method
+        end
+
+        def login_field
+          self.class.login_field
+        end
+
+        def add_general_credentials_error
+          error_message =
+            if self.class.generalize_credentials_error_messages.is_a? String
+              self.class.generalize_credentials_error_messages
+            else
+              "#{login_field.to_s.humanize}/Password combination is not valid"
+            end
+          errors.add(
+            :base,
+            I18n.t("error_messages.general_credentials_error", default: error_message)
+          )
+        end
+
+        def generalize_credentials_error_messages?
+          self.class.generalize_credentials_error_messages
+        end
+
+        def password_field
+          self.class.password_field
+        end
+
+        def verify_password_method
+          self.class.verify_password_method
+        end
       end
     end
   end

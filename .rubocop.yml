@@ -28,10 +28,6 @@ AllCops:
 Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 
-# This project uses rails-style method indentation, ie. indent after `private`.
-Layout/IndentationConsistency:
-  EnforcedStyle: rails
-
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 

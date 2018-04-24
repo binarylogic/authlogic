@@ -83,44 +83,44 @@ module Authlogic
 
         private
 
-          def exceeded_failed_logins_limit?
-            !attempted_record.nil? &&
-              attempted_record.respond_to?(:failed_login_count) &&
-              consecutive_failed_logins_limit > 0 &&
-              attempted_record.failed_login_count &&
-              attempted_record.failed_login_count >= consecutive_failed_logins_limit
-          end
+        def exceeded_failed_logins_limit?
+          !attempted_record.nil? &&
+            attempted_record.respond_to?(:failed_login_count) &&
+            consecutive_failed_logins_limit > 0 &&
+            attempted_record.failed_login_count &&
+            attempted_record.failed_login_count >= consecutive_failed_logins_limit
+        end
 
-          def reset_failed_login_count?
-            exceeded_failed_logins_limit? && !being_brute_force_protected?
-          end
+        def reset_failed_login_count?
+          exceeded_failed_logins_limit? && !being_brute_force_protected?
+        end
 
-          def reset_failed_login_count
-            attempted_record.failed_login_count = 0
-          end
+        def reset_failed_login_count
+          attempted_record.failed_login_count = 0
+        end
 
-          def validate_failed_logins
-            # Clear all other error messages, as they are irrelevant at this point and can
-            # only provide additional information that is not needed
-            errors.clear
-            errors.add(
-              :base,
-              I18n.t(
-                "error_messages.consecutive_failed_logins_limit_exceeded",
-                default: "Consecutive failed logins limit exceeded, account has been" +
-                  (failed_login_ban_for.zero? ? "" : " temporarily") +
-                  " disabled."
-              )
+        def validate_failed_logins
+          # Clear all other error messages, as they are irrelevant at this point and can
+          # only provide additional information that is not needed
+          errors.clear
+          errors.add(
+            :base,
+            I18n.t(
+              "error_messages.consecutive_failed_logins_limit_exceeded",
+              default: "Consecutive failed logins limit exceeded, account has been" +
+                (failed_login_ban_for.zero? ? "" : " temporarily") +
+                " disabled."
             )
-          end
+          )
+        end
 
-          def consecutive_failed_logins_limit
-            self.class.consecutive_failed_logins_limit
-          end
+        def consecutive_failed_logins_limit
+          self.class.consecutive_failed_logins_limit
+        end
 
-          def failed_login_ban_for
-            self.class.failed_login_ban_for
-          end
+        def failed_login_ban_for
+          self.class.failed_login_ban_for
+        end
       end
     end
   end

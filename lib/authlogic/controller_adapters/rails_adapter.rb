@@ -56,9 +56,9 @@ module Authlogic
 
         private
 
-          def activate_authlogic
-            Authlogic::Session::Base.controller = RailsAdapter.new(self)
-          end
+        def activate_authlogic
+          Authlogic::Session::Base.controller = RailsAdapter.new(self)
+        end
       end
     end
   end

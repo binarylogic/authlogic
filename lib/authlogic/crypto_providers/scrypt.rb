@@ -75,15 +75,15 @@ module Authlogic
 
         private
 
-          def join_tokens(tokens)
-            tokens.flatten.join
-          end
+        def join_tokens(tokens)
+          tokens.flatten.join
+        end
 
-          def new_from_hash(hash)
-            ::SCrypt::Password.new(hash)
-          rescue ::SCrypt::Errors::InvalidHash
-            nil
-          end
+        def new_from_hash(hash)
+          ::SCrypt::Password.new(hash)
+        rescue ::SCrypt::Errors::InvalidHash
+          nil
+        end
       end
     end
   end

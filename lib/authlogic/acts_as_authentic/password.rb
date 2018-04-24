@@ -376,124 +376,124 @@ module Authlogic
 
           private
 
-            def crypted_password_to_validate_against(check_against_database)
-              if check_against_database && send("#{crypted_password_field}_changed?")
-                send("#{crypted_password_field}_was")
-              else
-                send(crypted_password_field)
-              end
+          def crypted_password_to_validate_against(check_against_database)
+            if check_against_database && send("#{crypted_password_field}_changed?")
+              send("#{crypted_password_field}_was")
+            else
+              send(crypted_password_field)
+            end
+          end
+
+          def check_passwords_against_database?
+            self.class.check_passwords_against_database == true
+          end
+
+          def crypto_providers
+            [crypto_provider] + transition_from_crypto_providers
+          end
+
+          # Returns an array of arguments to be passed to a crypto provider, either its
+          # `matches?` or its `encrypt` method.
+          def encrypt_arguments(raw_password, check_against_database, arguments_type = nil)
+            salt = nil
+            if password_salt_field
+              salt =
+                if check_against_database && send("#{password_salt_field}_changed?")
+                  send("#{password_salt_field}_was")
+                else
+                  send(password_salt_field)
+                end
             end
 
-            def check_passwords_against_database?
-              self.class.check_passwords_against_database == true
+            case arguments_type
+            when :restful_authentication
+              [REST_AUTH_SITE_KEY, salt, raw_password, REST_AUTH_SITE_KEY].compact
+            when nil
+              [raw_password, salt].compact
+            else
+              raise "Invalid encryptor arguments_type: #{arguments_type}"
             end
+          end
 
-            def crypto_providers
-              [crypto_provider] + transition_from_crypto_providers
-            end
-
-            # Returns an array of arguments to be passed to a crypto provider, either its
-            # `matches?` or its `encrypt` method.
-            def encrypt_arguments(raw_password, check_against_database, arguments_type = nil)
-              salt = nil
-              if password_salt_field
-                salt =
-                  if check_against_database && send("#{password_salt_field}_changed?")
-                    send("#{password_salt_field}_was")
-                  else
-                    send(password_salt_field)
-                  end
-              end
-
-              case arguments_type
-              when :restful_authentication
-                [REST_AUTH_SITE_KEY, salt, raw_password, REST_AUTH_SITE_KEY].compact
-              when nil
-                [raw_password, salt].compact
-              else
-                raise "Invalid encryptor arguments_type: #{arguments_type}"
-              end
-            end
-
-            # Given `encryptor`, does `attempted_password` match the `crypted` password?
-            def encryptor_matches?(
-              crypted,
-              encryptor,
-              index,
+          # Given `encryptor`, does `attempted_password` match the `crypted` password?
+          def encryptor_matches?(
+            crypted,
+            encryptor,
+            index,
+            attempted_password,
+            check_against_database
+          )
+            # The arguments_type for the transitioning from restful_authentication
+            acting_restful = act_like_restful_authentication? && index.zero?
+            transitioning = transition_from_restful_authentication? &&
+              index > 0 &&
+              encryptor == Authlogic::CryptoProviders::Sha1
+            restful = acting_restful || transitioning
+            arguments_type = restful ? :restful_authentication : nil
+            encryptor_args = encrypt_arguments(
               attempted_password,
-              check_against_database
+              check_against_database,
+              arguments_type
             )
-              # The arguments_type for the transitioning from restful_authentication
-              acting_restful = act_like_restful_authentication? && index.zero?
-              transitioning = transition_from_restful_authentication? &&
-                index > 0 &&
-                encryptor == Authlogic::CryptoProviders::Sha1
-              restful = acting_restful || transitioning
-              arguments_type = restful ? :restful_authentication : nil
-              encryptor_args = encrypt_arguments(
-                attempted_password,
-                check_against_database,
-                arguments_type
-              )
-              encryptor.matches?(crypted, *encryptor_args)
-            end
+            encryptor.matches?(crypted, *encryptor_args)
+          end
 
-            # Determines if we need to transition the password.
-            #
-            # - If the index > 0 then we are using an "transition from" crypto
-            #   provider.
-            # - If the encryptor has a cost and the cost it outdated.
-            # - If we aren't using database values
-            # - If we are using database values, only if the password hasn't
-            #   changed so we don't overwrite any changes
-            def transition_password?(index, encryptor, check_against_database)
+          # Determines if we need to transition the password.
+          #
+          # - If the index > 0 then we are using an "transition from" crypto
+          #   provider.
+          # - If the encryptor has a cost and the cost it outdated.
+          # - If we aren't using database values
+          # - If we are using database values, only if the password hasn't
+          #   changed so we don't overwrite any changes
+          def transition_password?(index, encryptor, check_against_database)
+            (
+              index > 0 ||
+              (encryptor.respond_to?(:cost_matches?) &&
+              !encryptor.cost_matches?(send(crypted_password_field)))
+            ) &&
               (
-                index > 0 ||
-                (encryptor.respond_to?(:cost_matches?) &&
-                !encryptor.cost_matches?(send(crypted_password_field)))
-              ) &&
-                (
-                  !check_against_database ||
-                  !send("#{crypted_password_field}_changed?")
-                )
-            end
+                !check_against_database ||
+                !send("#{crypted_password_field}_changed?")
+              )
+          end
 
-            def transition_password(attempted_password)
-              self.password = attempted_password
-              save(validate: false)
-            end
+          def transition_password(attempted_password)
+            self.password = attempted_password
+            save(validate: false)
+          end
 
-            def require_password?
-              new_record? || password_changed? || send(crypted_password_field).blank?
-            end
+          def require_password?
+            new_record? || password_changed? || send(crypted_password_field).blank?
+          end
 
-            def ignore_blank_passwords?
-              self.class.ignore_blank_passwords == true
-            end
+          def ignore_blank_passwords?
+            self.class.ignore_blank_passwords == true
+          end
 
-            def password_changed?
-              @password_changed == true
-            end
+          def password_changed?
+            @password_changed == true
+          end
 
-            def reset_password_changed
-              @password_changed = nil
-            end
+          def reset_password_changed
+            @password_changed = nil
+          end
 
-            def crypted_password_field
-              self.class.crypted_password_field
-            end
+          def crypted_password_field
+            self.class.crypted_password_field
+          end
 
-            def password_salt_field
-              self.class.password_salt_field
-            end
+          def password_salt_field
+            self.class.password_salt_field
+          end
 
-            def crypto_provider
-              self.class.crypto_provider
-            end
+          def crypto_provider
+            self.class.crypto_provider
+          end
 
-            def transition_from_crypto_providers
-              self.class.transition_from_crypto_providers
-            end
+          def transition_from_crypto_providers
+            self.class.transition_from_crypto_providers
+          end
         end
       end
     end
