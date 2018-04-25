@@ -53,6 +53,18 @@ module SessionTest
         assert_equal false, session.secure
       end
 
+      def test_protect_from_replay
+        UserSession.protect_from_replay = true
+        assert_equal true, UserSession.protect_from_replay
+        session = UserSession.new
+        assert_equal true, session.protect_from_replay
+
+        UserSession.protect_from_replay false
+        assert_equal false, UserSession.protect_from_replay
+        session = UserSession.new
+        assert_equal false, session.protect_from_replay
+      end
+
       def test_httponly
         assert_equal true, UserSession.httponly
         session = UserSession.new

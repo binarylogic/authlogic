@@ -63,6 +63,15 @@ module Authlogic
         end
         alias_method :secure=, :secure
 
+        # Should the cookie be protected from replay?
+        #
+        # * <tt>Default:</tt> false
+        # * <tt>Accepts:</tt> Boolean
+        def protect_from_replay(value = nil)
+          rw_config(:protect_from_replay, value, false)
+        end
+        alias_method :protect_from_replay=, :protect_from_replay
+
         # Should the cookie be set as httponly?  If true, the cookie will not be
         # accessible from javascript
         #
@@ -171,6 +180,22 @@ module Authlogic
           secure == true || secure == "true" || secure == "1"
         end
 
+        # If the cookie should be protected from replay
+        def protect_from_replay
+          return @protect_from_replay if defined?(@protect_from_replay)
+          @protect_from_replay = self.class.protect_from_replay
+        end
+
+        # Accepts a boolean as to whether the cookie should be protected from replay
+        def protect_from_replay=(value)
+          @protect_from_replay = value
+        end
+
+        # See protect_from_replay
+        def protect_from_replay?
+          protect_from_replay == true || protect_from_replay == "true" || protect_from_replay == "1"
+        end
+
         # If the cookie should be marked as httponly (not accessible via javascript)
         def httponly
           return @httponly if defined?(@httponly)
@@ -237,6 +262,13 @@ module Authlogic
             else
               controller.cookies
             end
+
+            if cookie =~ /::/
+              return cookie.split('::')
+            elsif cookie
+              return decrypt_cookie(cookie).split('::')
+            end
+            nil
           end
 
           # Tries to validate the session from information in the cookie
@@ -262,14 +294,8 @@ module Authlogic
           end
 
           def generate_cookie_for_saving
-            value = format(
-              "%s::%s%s",
-              record.persistence_token,
-              record.send(record.class.primary_key),
-              remember_me? ? "::#{remember_me_until.iso8601}" : ""
-            )
             {
-              value: value,
+              value: cookie_value,
               expires: remember_me_until,
               secure: secure,
               httponly: httponly,
@@ -280,6 +306,36 @@ module Authlogic
 
           def destroy_cookie
             controller.cookies.delete cookie_key, domain: controller.cookie_domain
+          end
+
+          def cookie_value
+            if protect_from_replay? && !remember_me?
+              @cookie_value ||= encrypt_cookie(raw_cookie)
+            else
+              @cookie_value ||= raw_cookie
+            end
+          end
+
+          def raw_cookie
+            remember_me_until_value = "::#{remember_me_until.iso8601}" if remember_me?
+            "#{record.persistence_token}::#{record.send(record.class.primary_key)}#{remember_me_until_value}"
+          end
+
+          def encrypt_cookie(value)
+            [aes_cipher(value, :encrypt)].pack('m')
+          end
+
+          def decrypt_cookie(value)
+            aes_cipher(value.unpack('m').first, :decrypt)
+          end
+
+          def aes_cipher(value, action = :encrypt)
+            action = :encrypt unless [:encrypt, :decrypt].include?(action)
+            aes = OpenSSL::Cipher::Cipher.new("AES-256-ECB")
+            aes.send(action)
+            aes.key = Digest::MD5.hexdigest(controller.session[:session_id])
+            aes.update(value)
+            aes.final
           end
       end
     end
