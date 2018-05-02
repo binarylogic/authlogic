@@ -222,65 +222,74 @@ module Authlogic
 
         private
 
-          def cookie_key
-            build_key(self.class.cookie_key)
-          end
+        def cookie_key
+          build_key(self.class.cookie_key)
+        end
 
-          def cookie_credentials
-            cookie = cookie_jar[cookie_key]
-            cookie && cookie.split("::")
-          end
+        # Returns an array of cookie elements. See cookie format in
+        # `generate_cookie_for_saving`. If no cookie is found, returns nil.
+        def cookie_credentials
+          cookie = cookie_jar[cookie_key]
+          cookie && cookie.split("::")
+        end
 
-          def cookie_jar
-            if self.class.sign_cookie
-              controller.cookies.signed
-            else
-              controller.cookies
+        # The third element of the cookie indicates whether the user wanted
+        # to be remembered (Actually, it's a timestamp, `remember_me_until`)
+        # See cookie format in `generate_cookie_for_saving`.
+        def cookie_credentials_remember_me?
+          !cookie_credentials.nil? && !cookie_credentials[2].nil?
+        end
+
+        def cookie_jar
+          if self.class.sign_cookie
+            controller.cookies.signed
+          else
+            controller.cookies
+          end
+        end
+
+        # Tries to validate the session from information in the cookie
+        def persist_by_cookie
+          persistence_token, record_id = cookie_credentials
+          if persistence_token.present?
+            record = search_for_record("find_by_#{klass.primary_key}", record_id)
+            if record && record.persistence_token == persistence_token
+              self.unauthorized_record = record
             end
+            valid?
+          else
+            false
           end
+        end
 
-          # Tries to validate the session from information in the cookie
-          def persist_by_cookie
-            persistence_token, record_id = cookie_credentials
-            if persistence_token.present?
-              record = search_for_record("find_by_#{klass.primary_key}", record_id)
-              if record && record.persistence_token == persistence_token
-                self.unauthorized_record = record
-              end
-              valid?
-            else
-              false
-            end
+        def save_cookie
+          if sign_cookie?
+            controller.cookies.signed[cookie_key] = generate_cookie_for_saving
+          else
+            controller.cookies[cookie_key] = generate_cookie_for_saving
           end
+        end
 
-          def save_cookie
-            if sign_cookie?
-              controller.cookies.signed[cookie_key] = generate_cookie_for_saving
-            else
-              controller.cookies[cookie_key] = generate_cookie_for_saving
-            end
-          end
+        def generate_cookie_for_saving
+          value = format(
+            "%s::%s%s",
+            record.persistence_token,
+            record.send(record.class.primary_key),
+            remember_me? ? "::#{remember_me_until.iso8601}" : ""
+          )
+          {
+            value: value,
+            expires: remember_me_until,
+            secure: secure,
+            httponly: httponly,
+            same_site: same_site,
+            domain: controller.cookie_domain
+          }
+        end
 
-          def generate_cookie_for_saving
-            value = format(
-              "%s::%s%s",
-              record.persistence_token,
-              record.send(record.class.primary_key),
-              remember_me? ? "::#{remember_me_until.iso8601}" : ""
-            )
-            {
-              value: value,
-              expires: remember_me_until,
-              secure: secure,
-              httponly: httponly,
-              same_site: same_site,
-              domain: controller.cookie_domain
-            }
-          end
-
-          def destroy_cookie
-            controller.cookies.delete cookie_key, domain: controller.cookie_domain
-          end
+        def destroy_cookie
+          controller.cookies.delete cookie_key, domain: controller.cookie_domain
+        end
       end
     end
   end

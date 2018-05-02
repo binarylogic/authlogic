@@ -67,13 +67,13 @@ module Authlogic
 
           protected
 
-            def reset_single_access_token?
-              single_access_token.blank?
-            end
+          def reset_single_access_token?
+            single_access_token.blank?
+          end
 
-            def change_single_access_token_with_password?
-              self.class.change_single_access_token_with_password == true
-            end
+          def change_single_access_token_with_password?
+            self.class.change_single_access_token_with_password == true
+          end
         end
       end
     end

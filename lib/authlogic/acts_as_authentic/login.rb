@@ -186,10 +186,10 @@ module Authlogic
 
         private
 
-          # @api private
-          def find_with_case(field, value, sensitive)
-            Queries::FindWithCase.new(self, field, value, sensitive).execute
-          end
+        # @api private
+        def find_with_case(field, value, sensitive)
+          Queries::FindWithCase.new(self, field, value, sensitive).execute
+        end
       end
 
       # All methods relating to the login field

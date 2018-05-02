@@ -98,15 +98,15 @@ module Authlogic
 
         private
 
-          def join_tokens(tokens)
-            tokens.flatten.join
-          end
+        def join_tokens(tokens)
+          tokens.flatten.join
+        end
 
-          def new_from_hash(hash)
-            ::BCrypt::Password.new(hash)
-          rescue ::BCrypt::Errors::InvalidHash
-            nil
-          end
+        def new_from_hash(hash)
+          ::BCrypt::Password.new(hash)
+        rescue ::BCrypt::Errors::InvalidHash
+          nil
+        end
       end
     end
   end

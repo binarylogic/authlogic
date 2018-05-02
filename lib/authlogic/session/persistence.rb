@@ -10,9 +10,10 @@ module Authlogic
       end
 
       module ClassMethods
-        # This is how you persist a session. This finds the record for the current session using
-        # a variety of methods. It basically tries to "log in" the user without the user having
-        # to explicitly log in. Check out the other Authlogic::Session modules for more information.
+        # This is how you persist a session. This finds the record for the
+        # current session using a variety of methods. It basically tries to "log
+        # in" the user without the user having to explicitly log in. Check out
+        # the other Authlogic::Session modules for more information.
         #
         # The best way to use this method is something like:
         #
@@ -56,7 +57,7 @@ module Authlogic
         def persisting?
           return true unless record.nil?
           self.attempted_record = nil
-          self.remember_me = !cookie_credentials.nil? && !cookie_credentials[2].nil?
+          self.remember_me = cookie_credentials_remember_me?
           before_persisting
           persist
           ensure_authentication_attempted

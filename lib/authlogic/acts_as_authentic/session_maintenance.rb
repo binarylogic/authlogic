@@ -100,82 +100,82 @@ module Authlogic
 
         private
 
-          def skip_session_maintenance=(value)
-            @skip_session_maintenance = value
+        def skip_session_maintenance=(value)
+          @skip_session_maintenance = value
+        end
+
+        def skip_session_maintenance
+          @skip_session_maintenance ||= false
+        end
+
+        def update_sessions?
+          !skip_session_maintenance &&
+            session_class &&
+            session_class.activated? &&
+            maintain_session? &&
+            !session_ids.blank? &&
+            persistence_token_changed?
+        end
+
+        def maintain_session?
+          log_in_after_create? || log_in_after_password_change?
+        end
+
+        def get_session_information
+          # Need to determine if we are completely logged out, or logged in as
+          # another user.
+          @_sessions = []
+
+          session_ids.each do |session_id|
+            session = session_class.find(session_id, self)
+            @_sessions << session if session && session.record
+          end
+        end
+
+        def maintain_sessions
+          if @_sessions.empty?
+            create_session
+          else
+            update_sessions
+          end
+        end
+
+        def create_session
+          # We only want to automatically login into the first session, since
+          # this is the main session. The other sessions are sessions that
+          # need to be created after logging into the main session.
+          session_id = session_ids.first
+          session_class.create(*[self, self, session_id].compact)
+
+          true
+        end
+
+        def update_sessions
+          # We found sessions above, let's update them with the new info
+          @_sessions.each do |stale_session|
+            next if stale_session.record != self
+            stale_session.unauthorized_record = self
+            stale_session.save
           end
 
-          def skip_session_maintenance
-            @skip_session_maintenance ||= false
-          end
+          true
+        end
 
-          def update_sessions?
-            !skip_session_maintenance &&
-              session_class &&
-              session_class.activated? &&
-              maintain_session? &&
-              !session_ids.blank? &&
-              persistence_token_changed?
-          end
+        def session_ids
+          self.class.session_ids
+        end
 
-          def maintain_session?
-            log_in_after_create? || log_in_after_password_change?
-          end
+        def session_class
+          self.class.session_class
+        end
 
-          def get_session_information
-            # Need to determine if we are completely logged out, or logged in as
-            # another user.
-            @_sessions = []
+        def log_in_after_create?
+          new_record? && self.class.log_in_after_create
+        end
 
-            session_ids.each do |session_id|
-              session = session_class.find(session_id, self)
-              @_sessions << session if session && session.record
-            end
-          end
-
-          def maintain_sessions
-            if @_sessions.empty?
-              create_session
-            else
-              update_sessions
-            end
-          end
-
-          def create_session
-            # We only want to automatically login into the first session, since
-            # this is the main session. The other sessions are sessions that
-            # need to be created after logging into the main session.
-            session_id = session_ids.first
-            session_class.create(*[self, self, session_id].compact)
-
-            true
-          end
-
-          def update_sessions
-            # We found sessions above, let's update them with the new info
-            @_sessions.each do |stale_session|
-              next if stale_session.record != self
-              stale_session.unauthorized_record = self
-              stale_session.save
-            end
-
-            true
-          end
-
-          def session_ids
-            self.class.session_ids
-          end
-
-          def session_class
-            self.class.session_class
-          end
-
-          def log_in_after_create?
-            new_record? && self.class.log_in_after_create
-          end
-
-          def log_in_after_password_change?
-            persistence_token_changed? && self.class.log_in_after_password_change
-          end
+        def log_in_after_password_change?
+          persistence_token_changed? && self.class.log_in_after_password_change
+        end
       end
     end
   end

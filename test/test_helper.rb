@@ -146,116 +146,116 @@ module ActiveSupport
 
     private
 
-      # Many of the tests change Authlogic config for the test models. Some tests
-      # were not resetting the config after tests, which didn't surface as broken
-      # tests until Rails 4.1 was added for testing. This ensures that all the
-      # models start tests with their original config.
-      def config_setup
-        [
-          Project,
-          Affiliate,
-          Employee,
-          EmployeeSession,
-          Ldaper,
-          User,
-          UserSession,
-          Company
-        ].each do |model|
-          unless model.respond_to?(:original_acts_as_authentic_config)
-            model.class_attribute :original_acts_as_authentic_config
-          end
-          model.original_acts_as_authentic_config = model.acts_as_authentic_config
+    # Many of the tests change Authlogic config for the test models. Some tests
+    # were not resetting the config after tests, which didn't surface as broken
+    # tests until Rails 4.1 was added for testing. This ensures that all the
+    # models start tests with their original config.
+    def config_setup
+      [
+        Project,
+        Affiliate,
+        Employee,
+        EmployeeSession,
+        Ldaper,
+        User,
+        UserSession,
+        Company
+      ].each do |model|
+        unless model.respond_to?(:original_acts_as_authentic_config)
+          model.class_attribute :original_acts_as_authentic_config
         end
+        model.original_acts_as_authentic_config = model.acts_as_authentic_config
       end
+    end
 
-      def config_teardown
-        [
-          Project,
-          Affiliate,
-          Employee,
-          EmployeeSession,
-          Ldaper,
-          User,
-          UserSession,
-          Company
-        ].each do |model|
-          model.acts_as_authentic_config = model.original_acts_as_authentic_config
-        end
+    def config_teardown
+      [
+        Project,
+        Affiliate,
+        Employee,
+        EmployeeSession,
+        Ldaper,
+        User,
+        UserSession,
+        Company
+      ].each do |model|
+        model.acts_as_authentic_config = model.original_acts_as_authentic_config
       end
+    end
 
-      def password_for(user)
-        case user
-        when users(:ben)
-          "benrocks"
-        when users(:zack)
-          "zackrocks"
-        when users(:aaron)
-          "aaronrocks"
-        end
+    def password_for(user)
+      case user
+      when users(:ben)
+        "benrocks"
+      when users(:zack)
+        "zackrocks"
+      when users(:aaron)
+        "aaronrocks"
       end
+    end
 
-      def http_basic_auth_for(user = nil)
-        unless user.blank?
-          controller.http_user = user.login
-          controller.http_password = password_for(user)
-        end
-        yield
-        controller.http_user = controller.http_password = controller.realm = nil
+    def http_basic_auth_for(user = nil)
+      unless user.blank?
+        controller.http_user = user.login
+        controller.http_password = password_for(user)
       end
+      yield
+      controller.http_user = controller.http_password = controller.realm = nil
+    end
 
-      def set_cookie_for(user)
-        controller.cookies["user_credentials"] = {
-          value: "#{user.persistence_token}::#{user.id}",
-          expires: nil
-        }
-      end
+    def set_cookie_for(user)
+      controller.cookies["user_credentials"] = {
+        value: "#{user.persistence_token}::#{user.id}",
+        expires: nil
+      }
+    end
 
-      def unset_cookie
-        controller.cookies["user_credentials"] = nil
-      end
+    def unset_cookie
+      controller.cookies["user_credentials"] = nil
+    end
 
-      def set_params_for(user)
-        controller.params["user_credentials"] = user.single_access_token
-      end
+    def set_params_for(user)
+      controller.params["user_credentials"] = user.single_access_token
+    end
 
-      def unset_params
-        controller.params["user_credentials"] = nil
-      end
+    def unset_params
+      controller.params["user_credentials"] = nil
+    end
 
-      def set_request_content_type(type)
-        controller.request_content_type = type
-      end
+    def set_request_content_type(type)
+      controller.request_content_type = type
+    end
 
-      def unset_request_content_type
-        controller.request_content_type = nil
-      end
+    def unset_request_content_type
+      controller.request_content_type = nil
+    end
 
-      def session_credentials_prefix(scope_record)
-        if scope_record.nil?
-          ""
-        else
-          format(
-            "%s_%d_",
-            scope_record.class.model_name.name.underscore,
-            scope_record.id
-          )
-        end
+    def session_credentials_prefix(scope_record)
+      if scope_record.nil?
+        ""
+      else
+        format(
+          "%s_%d_",
+          scope_record.class.model_name.name.underscore,
+          scope_record.id
+        )
       end
+    end
 
-      # Sets the session variables that `record` (eg. a `User`) would have after
-      # logging in.
-      #
-      # If `record` belongs to an `authenticates_many` association that uses the
-      # `scope_cookies` option, then a `scope_record` can be provided.
-      def set_session_for(record, scope_record = nil)
-        prefix = session_credentials_prefix(scope_record)
-        record_class_name = record.class.model_name.name.underscore
-        controller.session["#{prefix}#{record_class_name}_credentials"] = record.persistence_token
-        controller.session["#{prefix}#{record_class_name}_credentials_id"] = record.id
-      end
+    # Sets the session variables that `record` (eg. a `User`) would have after
+    # logging in.
+    #
+    # If `record` belongs to an `authenticates_many` association that uses the
+    # `scope_cookies` option, then a `scope_record` can be provided.
+    def set_session_for(record, scope_record = nil)
+      prefix = session_credentials_prefix(scope_record)
+      record_class_name = record.class.model_name.name.underscore
+      controller.session["#{prefix}#{record_class_name}_credentials"] = record.persistence_token
+      controller.session["#{prefix}#{record_class_name}_credentials_id"] = record.id
+    end
 
-      def unset_session
-        controller.session["user_credentials"] = controller.session["user_credentials_id"] = nil
-      end
+    def unset_session
+      controller.session["user_credentials"] = controller.session["user_credentials_id"] = nil
+    end
   end
 end

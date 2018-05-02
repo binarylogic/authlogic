@@ -64,9 +64,9 @@ module Authlogic
 
         private
 
-          def controller
-            self.class.controller
-          end
+        def controller
+          self.class.controller
+        end
       end
     end
   end

@@ -233,29 +233,29 @@ module ActsAsAuthenticTest
 
     private
 
-      def transition_password_to(
-        crypto_provider,
-        records,
-        from_crypto_providers = Authlogic::CryptoProviders::Sha512
-      )
-        records = [records] unless records.is_a?(Array)
-        User.acts_as_authentic do |c|
-          c.crypto_provider = crypto_provider
-          c.transition_from_crypto_providers = from_crypto_providers
-        end
-        records.each do |record|
-          old_hash = record.crypted_password
-          old_persistence_token = record.persistence_token
-          assert record.valid_password?(password_for(record))
-          assert_not_equal old_hash.to_s, record.crypted_password.to_s
-          assert_not_equal old_persistence_token.to_s, record.persistence_token.to_s
-
-          old_hash = record.crypted_password
-          old_persistence_token = record.persistence_token
-          assert record.valid_password?(password_for(record))
-          assert_equal old_hash.to_s, record.crypted_password.to_s
-          assert_equal old_persistence_token.to_s, record.persistence_token.to_s
-        end
+    def transition_password_to(
+      crypto_provider,
+      records,
+      from_crypto_providers = Authlogic::CryptoProviders::Sha512
+    )
+      records = [records] unless records.is_a?(Array)
+      User.acts_as_authentic do |c|
+        c.crypto_provider = crypto_provider
+        c.transition_from_crypto_providers = from_crypto_providers
       end
+      records.each do |record|
+        old_hash = record.crypted_password
+        old_persistence_token = record.persistence_token
+        assert record.valid_password?(password_for(record))
+        assert_not_equal old_hash.to_s, record.crypted_password.to_s
+        assert_not_equal old_persistence_token.to_s, record.persistence_token.to_s
+
+        old_hash = record.crypted_password
+        old_persistence_token = record.persistence_token
+        assert record.valid_password?(password_for(record))
+        assert_equal old_hash.to_s, record.crypted_password.to_s
+        assert_equal old_persistence_token.to_s, record.persistence_token.to_s
+      end
+    end
   end
 end

@@ -79,57 +79,71 @@ module Authlogic
         after_destroy
       ].freeze
 
-      def self.included(base) #:nodoc:
-        base.send :include, ActiveSupport::Callbacks
-
-        if Gem::Version.new(ActiveSupport::VERSION::STRING) >= Gem::Version.new("5")
-          base.define_callbacks(
-            *METHODS + [{ terminator: ->(_target, result_lambda) { result_lambda.call == false } }]
-          )
-          base.define_callbacks(
-            "persist",
-            terminator: ->(_target, result_lambda) { result_lambda.call == true }
-          )
-        else
-          base.define_callbacks(
-            *METHODS + [{ terminator: ->(_target, result) { result == false } }]
-          )
-          base.define_callbacks("persist", terminator: ->(_target, result) { result == true })
+      class << self
+        def included(base) #:nodoc:
+          base.send :include, ActiveSupport::Callbacks
+          define_session_callbacks(base)
+          define_session_callback_installation_methods(base)
         end
 
-        # Now we define the "callback installation methods". These class methods
-        # will be used by other modules to install their callbacks. Examples:
+        private
+
+        # Defines the "callback installation methods". Other modules will use
+        # these class methods to install their callbacks. Examples:
         #
         # ```
-        # # Timeout.included
+        # # session/timeout.rb, in `included`
         # before_persisting :reset_stale_state
         #
-        # # Session::Password.included
+        # # session/password.rb, in `included`
         # validate :validate_by_password, if: :authenticating_with_password?
         # ```
-        METHODS.each do |method|
-          base.class_eval <<-EOS, __FILE__, __LINE__ + 1
-            def self.#{method}(*methods, &block)
-              set_callback :#{method}, *methods, &block
-            end
-          EOS
+        def define_session_callback_installation_methods(base)
+          METHODS.each do |method|
+            base.class_eval <<-EOS, __FILE__, __LINE__ + 1
+              def self.#{method}(*filter_list, &block)
+                set_callback(:#{method}, *filter_list, &block)
+              end
+            EOS
+          end
+        end
+
+        # Defines session life cycle events that support callbacks.
+        def define_session_callbacks(base)
+          if Gem::Version.new(ActiveSupport::VERSION::STRING) >= Gem::Version.new("5")
+            base.define_callbacks(
+              *METHODS,
+              terminator: ->(_target, result_lambda) { result_lambda.call == false }
+            )
+            base.define_callbacks(
+              "persist",
+              terminator: ->(_target, result_lambda) { result_lambda.call == true }
+            )
+          else
+            base.define_callbacks(
+              *METHODS,
+              terminator: ->(_target, result) { result == false }
+            )
+            base.define_callbacks(
+              "persist",
+              terminator: ->(_target, result) { result == true }
+            )
+          end
         end
       end
 
-      private
-
-        METHODS.each do |method|
-          class_eval <<-EOS, __FILE__, __LINE__ + 1
+      METHODS.each do |method|
+        class_eval <<-EOS, __FILE__, __LINE__ + 1
             def #{method}
               run_callbacks(:#{method})
             end
           EOS
-        end
+      end
 
-        def save_record(alternate_record = nil)
-          r = alternate_record || record
-          r.save_without_session_maintenance(validate: false) if r && r.changed? && !r.readonly?
-        end
+      def save_record(alternate_record = nil)
+        r = alternate_record || record
+        r.save_without_session_maintenance(validate: false) if r && r.changed? && !r.readonly?
+      end
     end
   end
 end

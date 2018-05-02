@@ -89,9 +89,9 @@ module Authlogic
 
         private
 
-          def scope=(value)
-            RequestStore.store[:authlogic_scope] = value
-          end
+        def scope=(value)
+          RequestStore.store[:authlogic_scope] = value
+        end
       end
 
       module InstanceMethods
@@ -108,30 +108,30 @@ module Authlogic
 
         private
 
-          # Used for things like cookie_key, session_key, etc.
-          def build_key(last_part)
-            [scope[:id], super].compact.join("_")
-          end
+        # Used for things like cookie_key, session_key, etc.
+        def build_key(last_part)
+          [scope[:id], super].compact.join("_")
+        end
 
-          # `args[0]` is the name of an AR method, like
-          # `find_by_single_access_token`.
-          def search_for_record(*args)
-            search_scope.scoping do
-              klass.send(*args)
-            end
+        # `args[0]` is the name of an AR method, like
+        # `find_by_single_access_token`.
+        def search_for_record(*args)
+          search_scope.scoping do
+            klass.send(*args)
           end
+        end
 
-          # Returns an AR relation representing the scope of the search. The
-          # relation is either provided directly by, or defined by
-          # `find_options`.
-          def search_scope
-            if scope[:find_options].is_a?(ActiveRecord::Relation)
-              scope[:find_options]
-            else
-              conditions = scope[:find_options] && scope[:find_options][:conditions] || {}
-              klass.send(:where, conditions)
-            end
+        # Returns an AR relation representing the scope of the search. The
+        # relation is either provided directly by, or defined by
+        # `find_options`.
+        def search_scope
+          if scope[:find_options].is_a?(ActiveRecord::Relation)
+            scope[:find_options]
+          else
+            conditions = scope[:find_options] && scope[:find_options][:conditions] || {}
+            klass.send(:where, conditions)
           end
+        end
       end
     end
   end

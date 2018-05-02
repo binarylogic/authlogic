@@ -44,13 +44,13 @@ module Authlogic
 
       private
 
-        def authenticating_with_unauthorized_record?
-          !unauthorized_record.nil?
-        end
+      def authenticating_with_unauthorized_record?
+        !unauthorized_record.nil?
+      end
 
-        def validate_by_unauthorized_record
-          self.attempted_record = unauthorized_record
-        end
+      def validate_by_unauthorized_record
+        self.attempted_record = unauthorized_record
+      end
     end
   end
 end

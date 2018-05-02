@@ -96,9 +96,9 @@ module Authlogic
 
         private
 
-          def build_key(last_part)
-            last_part
-          end
+        def build_key(last_part)
+          last_part
+        end
       end
     end
   end
