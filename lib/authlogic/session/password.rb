@@ -4,7 +4,7 @@ module Authlogic
     module Password
 
       def initialize
-        instance_variable_set("@#{password_field}", nil)
+        @password_changed = nil
         super
       end
 
