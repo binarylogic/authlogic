@@ -2,13 +2,6 @@ module Authlogic
   module Session
     # Handles authenticating via a traditional username and password.
     module Password
-
-      def initialize
-
-        instance_variable_set('@password_changed', nil)
-        super
-      end
-
       def self.included(klass)
         klass.class_eval do
           extend Config
@@ -141,6 +134,7 @@ module Authlogic
             configure_password_methods
             self.class.configured_password_methods = true
           end
+          instance_variable_set("@#{password_field}", nil)
           super
         end
 
