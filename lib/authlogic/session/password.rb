@@ -2,6 +2,12 @@ module Authlogic
   module Session
     # Handles authenticating via a traditional username and password.
     module Password
+
+      def initialize
+        instance_variable_set("@#{password_field}", nil)
+        super
+      end
+
       def self.included(klass)
         klass.class_eval do
           extend Config
@@ -228,7 +234,7 @@ module Authlogic
           self.class.class_eval <<-EOS, __FILE__, __LINE__ + 1
               private
                 def protected_#{password_field}
-                  @#{password_field} ||= nil
+                  @#{password_field}
                 end
             EOS
         end
