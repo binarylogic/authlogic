@@ -228,7 +228,7 @@ module Authlogic
           self.class.class_eval <<-EOS, __FILE__, __LINE__ + 1
               private
                 def protected_#{password_field}
-                  @#{password_field}
+                  @#{password_field} ||= nil
                 end
             EOS
         end

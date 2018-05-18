@@ -34,7 +34,7 @@ module Authlogic
       # Lastly, to retrieve your session with the id check out the find class
       # method.
       def id
-        @id
+        @id ||= nil
       end
 
       private
