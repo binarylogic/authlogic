@@ -3,7 +3,7 @@ module Authlogic
     # Allows you to separate sessions with an id, ultimately letting you create
     # multiple sessions for the same user.
     module Id
-      def initialize(*args*)
+      def initialize(*args)
         @id = nil
         super
       end
