@@ -303,6 +303,7 @@ module Authlogic
         module InstanceMethods
           # The password
           def password
+            return nil unless defined?(@password)
             @password
           end
 
@@ -472,7 +473,7 @@ module Authlogic
           end
 
           def password_changed?
-            @password_changed == true
+            defined?(@password_changed) && @password_changed == true
           end
 
           def reset_password_changed

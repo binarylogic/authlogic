@@ -5,6 +5,9 @@ require "active_record"
 require "active_record/fixtures"
 require "timecop"
 require "i18n"
+require "minitest/reporters"
+
+Minitest::Reporters.use!(Minitest::Reporters::SpecReporter.new)
 
 I18n.load_path << File.dirname(__FILE__) + "/i18n/lol.yml"
 
