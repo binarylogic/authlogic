@@ -9,12 +9,13 @@ module Authlogic
   # than a `VERSION` string, because `::Gem::Version` is easier to use in a
   # comparison.
   #
-  # Perhaps surprisingly, we cannot return a frozen `Version`, because eg.
-  # rubygems (currently) needs to be able to modify it.
+  # We cannot return a frozen `Version`, because rubygems will try to modify it.
   # https://github.com/binarylogic/authlogic/pull/590
+  #
+  # Added in 4.0.0
   #
   # @api public
   def self.gem_version
-    ::Gem::Version.new("4.1.0")
+    ::Gem::Version.new("4.1.1")
   end
 end
