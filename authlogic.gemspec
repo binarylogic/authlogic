@@ -28,7 +28,7 @@ require "authlogic/version"
   s.add_development_dependency "bcrypt", "~> 3.1"
   s.add_development_dependency "byebug", "~> 10.0"
   s.add_development_dependency "minitest-reporters", "~> 1.2"
-  s.add_development_dependency "rubocop", "~> 0.54.0"
+  s.add_development_dependency "rubocop", "~> 0.56.0"
   s.add_development_dependency "timecop", "~> 0.7"
 
   s.files = `git ls-files`.split("\n")
