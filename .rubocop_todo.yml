@@ -10,10 +10,6 @@
 Metrics/AbcSize:
   Max: 19.7
 
-# Offense count: 3
-Metrics/PerceivedComplexity:
-  Max: 8
-
 Naming/MemoizedInstanceVariableName:
   Enabled: false
 
