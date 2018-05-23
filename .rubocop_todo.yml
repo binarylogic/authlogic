@@ -8,7 +8,7 @@
 
 # Goal: 15.0
 Metrics/AbcSize:
-  Max: 19.7
+  Max: 18.5
 
 Naming/MemoizedInstanceVariableName:
   Enabled: false
