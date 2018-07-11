@@ -48,71 +48,71 @@ module Authlogic
       module InstanceMethods
         private
 
-          def clear_failed_login_count
-            if record.respond_to?(:failed_login_count)
-              record.failed_login_count = 0
-            end
+        def clear_failed_login_count
+          if record.respond_to?(:failed_login_count)
+            record.failed_login_count = 0
           end
+        end
 
-          def increase_failed_login_count
-            if invalid_password? && attempted_record.respond_to?(:failed_login_count)
-              attempted_record.failed_login_count ||= 0
-              attempted_record.failed_login_count += 1
-            end
+        def increase_failed_login_count
+          if invalid_password? && attempted_record.respond_to?(:failed_login_count)
+            attempted_record.failed_login_count ||= 0
+            attempted_record.failed_login_count += 1
           end
+        end
 
-          def increment_login_cout
-            if record.respond_to?(:login_count)
-              record.login_count = (record.login_count.blank? ? 1 : record.login_count + 1)
-            end
+        def increment_login_cout
+          if record.respond_to?(:login_count)
+            record.login_count = (record.login_count.blank? ? 1 : record.login_count + 1)
           end
+        end
 
-          def update_info
-            increment_login_cout
-            clear_failed_login_count
-            update_login_timestamps
-            update_login_ip_addresses
-          end
+        def update_info
+          increment_login_cout
+          clear_failed_login_count
+          update_login_timestamps
+          update_login_ip_addresses
+        end
 
-          def update_login_ip_addresses
-            if record.respond_to?(:current_login_ip)
-              record.last_login_ip = record.current_login_ip if record.respond_to?(:last_login_ip)
-              record.current_login_ip = controller.request.ip
-            end
+        def update_login_ip_addresses
+          if record.respond_to?(:current_login_ip)
+            record.last_login_ip = record.current_login_ip if record.respond_to?(:last_login_ip)
+            record.current_login_ip = controller.request.ip
           end
+        end
 
-          def update_login_timestamps
-            if record.respond_to?(:current_login_at)
-              record.last_login_at = record.current_login_at if record.respond_to?(:last_login_at)
-              record.current_login_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
-            end
+        def update_login_timestamps
+          if record.respond_to?(:current_login_at)
+            record.last_login_at = record.current_login_at if record.respond_to?(:last_login_at)
+            record.current_login_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
           end
+        end
 
-          # This method lets authlogic know whether it should allow the
-          # last_request_at field to be updated with the current time.
-          #
-          # See also `last_request_update_allowed?` in
-          # `Authlogic::ControllerAdapters::AbstractAdapter`
-          #
-          # @api private
-          def set_last_request_at?
-            if !record || !klass.column_names.include?("last_request_at")
-              return false
-            end
-            unless controller.last_request_update_allowed?
-              return false
-            end
-            record.last_request_at.blank? ||
-              last_request_at_threshold.to_i.seconds.ago >= record.last_request_at
+        # This method lets authlogic know whether it should allow the
+        # last_request_at field to be updated with the current time.
+        #
+        # See also `last_request_update_allowed?` in
+        # `Authlogic::ControllerAdapters::AbstractAdapter`
+        #
+        # @api private
+        def set_last_request_at?
+          if !record || !klass.column_names.include?("last_request_at")
+            return false
           end
+          unless controller.last_request_update_allowed?
+            return false
+          end
+          record.last_request_at.blank? ||
+            last_request_at_threshold.to_i.seconds.ago >= record.last_request_at
+        end
 
-          def set_last_request_at
-            record.last_request_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
-          end
+        def set_last_request_at
+          record.last_request_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
+        end
 
-          def last_request_at_threshold
-            self.class.last_request_at_threshold
-          end
+        def last_request_at_threshold
+          self.class.last_request_at_threshold
+        end
       end
     end
   end

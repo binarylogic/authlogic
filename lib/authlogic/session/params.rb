@@ -80,50 +80,50 @@ module Authlogic
       module InstanceMethods
         private
 
-          def persist_by_params
-            return false unless params_enabled?
-            self.unauthorized_record = search_for_record(
-              "find_by_single_access_token",
-              params_credentials
-            )
-            self.single_access = valid?
-          end
+        def persist_by_params
+          return false unless params_enabled?
+          self.unauthorized_record = search_for_record(
+            "find_by_single_access_token",
+            params_credentials
+          )
+          self.single_access = valid?
+        end
 
-          def params_enabled?
-            if !params_credentials || !klass.column_names.include?("single_access_token")
-              return false
-            end
-            if controller.responds_to_single_access_allowed?
-              return controller.single_access_allowed?
-            end
-            params_enabled_by_allowed_request_types?
+        def params_enabled?
+          if !params_credentials || !klass.column_names.include?("single_access_token")
+            return false
           end
+          if controller.responds_to_single_access_allowed?
+            return controller.single_access_allowed?
+          end
+          params_enabled_by_allowed_request_types?
+        end
 
-          def params_enabled_by_allowed_request_types?
-            case single_access_allowed_request_types
-            when Array
-              single_access_allowed_request_types.include?(controller.request_content_type) ||
-                single_access_allowed_request_types.include?(:all)
-            else
-              %i[all any].include?(single_access_allowed_request_types)
-            end
+        def params_enabled_by_allowed_request_types?
+          case single_access_allowed_request_types
+          when Array
+            single_access_allowed_request_types.include?(controller.request_content_type) ||
+              single_access_allowed_request_types.include?(:all)
+          else
+            %i[all any].include?(single_access_allowed_request_types)
           end
+        end
 
-          def params_key
-            build_key(self.class.params_key)
-          end
+        def params_key
+          build_key(self.class.params_key)
+        end
 
-          def single_access?
-            single_access == true
-          end
+        def single_access?
+          single_access == true
+        end
 
-          def single_access_allowed_request_types
-            self.class.single_access_allowed_request_types
-          end
+        def single_access_allowed_request_types
+          self.class.single_access_allowed_request_types
+        end
 
-          def params_credentials
-            controller.params[params_key]
-          end
+        def params_credentials
+          controller.params[params_key]
+        end
       end
     end
   end
