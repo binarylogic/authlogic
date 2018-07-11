@@ -93,13 +93,13 @@ module Authlogic
       module InstanceMethods
         private
 
-          def act_like_restful_authentication?
-            self.class.act_like_restful_authentication == true
-          end
+        def act_like_restful_authentication?
+          self.class.act_like_restful_authentication == true
+        end
 
-          def transition_from_restful_authentication?
-            self.class.transition_from_restful_authentication == true
-          end
+        def transition_from_restful_authentication?
+          self.class.transition_from_restful_authentication == true
+        end
       end
     end
   end

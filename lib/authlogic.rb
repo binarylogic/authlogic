@@ -1,7 +1,9 @@
-# Authlogic uses ActiveSupport's core extensions like `strip_heredoc`, which
-# ActiveRecord does not `require`. It's possible that we could save a few
-# milliseconds by loading only the specific core extensions we need, but
-# `all.rb` is simpler. We can revisit this decision if it becomes a problem.
+# Authlogic uses ActiveSupport's core extensions like `strip_heredoc` and
+# `squish`. ActiveRecord does not `require` these exensions, so we must.
+#
+# It's possible that we could save a few milliseconds by loading only the
+# specific core extensions we need, but `all.rb` is simpler. We can revisit this
+# decision if it becomes a problem.
 require "active_support/all"
 
 require "active_record"

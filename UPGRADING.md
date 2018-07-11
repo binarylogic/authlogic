@@ -4,9 +4,11 @@ Supplemental instructions to complement CHANGELOG.md.
 
 ## 3.4.0
 
-In version 3.4.0, the default crypto_provider was changed from *Sha512* to *SCrypt*.
+In version 3.4.0, released 2014-03-03, the default crypto_provider was changed
+from *Sha512* to *SCrypt*.
 
-If you never set a crypto_provider and are upgrading, your passwords will break unless you set the original:
+If you never set a crypto_provider and are upgrading, your passwords will break
+unless you specify `Sha512`.
 
 ``` ruby
 c.crypto_provider = Authlogic::CryptoProviders::Sha512

@@ -50,32 +50,32 @@ module Authlogic
       module InstanceMethods
         private
 
-          def disable_magic_states?
-            self.class.disable_magic_states == true
-          end
+        def disable_magic_states?
+          self.class.disable_magic_states == true
+        end
 
-          # @api private
-          def required_magic_states_for(record)
-            %i[active approved confirmed].select { |state|
-              record.respond_to?("#{state}?")
-            }
-          end
+        # @api private
+        def required_magic_states_for(record)
+          %i[active approved confirmed].select { |state|
+            record.respond_to?("#{state}?")
+          }
+        end
 
-          def validate_magic_states
-            return true if attempted_record.nil?
-            required_magic_states_for(attempted_record).each do |required_status|
-              next if attempted_record.send("#{required_status}?")
-              errors.add(
-                :base,
-                I18n.t(
-                  "error_messages.not_#{required_status}",
-                  default: "Your account is not #{required_status}"
-                )
+        def validate_magic_states
+          return true if attempted_record.nil?
+          required_magic_states_for(attempted_record).each do |required_status|
+            next if attempted_record.send("#{required_status}?")
+            errors.add(
+              :base,
+              I18n.t(
+                "error_messages.not_#{required_status}",
+                default: "Your account is not #{required_status}"
               )
-              return false
-            end
-            true
+            )
+            return false
           end
+          true
+        end
       end
     end
   end

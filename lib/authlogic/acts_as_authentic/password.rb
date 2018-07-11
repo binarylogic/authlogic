@@ -195,9 +195,18 @@ module Authlogic
             validates_length_of_password_confirmation_field_options.merge(options)
         end
 
-        # The class you want to use to encrypt and verify your encrypted passwords. See
-        # the Authlogic::CryptoProviders module for more info on the available methods and
-        # how to create your own.
+        # The class you want to use to encrypt and verify your encrypted
+        # passwords. See the Authlogic::CryptoProviders module for more info on
+        # the available methods and how to create your own.
+        #
+        # The family of adaptive hash functions (BCrypt, SCrypt, PBKDF2) is the
+        # best choice for password storage today. We recommend SCrypt. Other
+        # one-way functions like SHA512 are inferior, but widely used.
+        # Reverisbile functions like AES256 are the worst choice.
+        #
+        # You can use the `transition_from_crypto_providers` option to gradually
+        # transition to a better crypto provider without causing your users any
+        # pain.
         #
         # * <tt>Default:</tt> CryptoProviders::SCrypt
         # * <tt>Accepts:</tt> Class
