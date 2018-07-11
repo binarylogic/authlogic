@@ -6,7 +6,8 @@ module Authlogic
     # I highly discourage using this crypto provider as it superbly inferior
     # to your other options.
     #
-    # Please use any other provider offered by Authlogic.
+    # Please use any other provider offered by Authlogic (except AES256, that
+    # would be even worse).
     class MD5
       class << self
         attr_accessor :join_token
