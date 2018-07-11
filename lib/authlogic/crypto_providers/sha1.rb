@@ -2,9 +2,10 @@ require "digest/sha1"
 
 module Authlogic
   module CryptoProviders
-    # This class was made for the users transitioning from restful_authentication. I
-    # highly discourage using this crypto provider as it is far inferior to your other
-    # options. Please use any other provider offered by Authlogic.
+    # This class was made for the users transitioning from
+    # restful_authentication. Use of this crypto provider is highly discouraged.
+    # It is far inferior to your other options. Please use any other provider
+    # offered by Authlogic.
     class Sha1
       class << self
         def join_token
@@ -12,8 +13,8 @@ module Authlogic
         end
         attr_writer :join_token
 
-        # The number of times to loop through the encryption. This is ten because that is
-        # what restful_authentication defaults to.
+        # The number of times to loop through the encryption. This is ten
+        # because that is what restful_authentication defaults to.
         def stretches
           @stretches ||= 10
         end
@@ -29,8 +30,8 @@ module Authlogic
           digest
         end
 
-        # Does the crypted password match the tokens? Uses the same tokens that were used
-        # to encrypt.
+        # Does the crypted password match the tokens? Uses the same tokens that
+        # were used to encrypt.
         def matches?(crypted, *tokens)
           encrypt(*tokens) == crypted
         end
