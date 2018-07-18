@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Fixed
   * None
 
+## 4.2.0 (2018-07-18)
+
+* Breaking Changes
+  * None
+* Added
+  * [#611](https://github.com/binarylogic/authlogic/pull/611) -  Deprecate
+    AES256, guide users to choose a better crypto provider
+* Fixed
+  * None
+
 ## 4.1.1 (2018-05-23)
 
 * Breaking Changes
