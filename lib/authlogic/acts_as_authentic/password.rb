@@ -211,6 +211,7 @@ module Authlogic
         # * <tt>Default:</tt> CryptoProviders::SCrypt
         # * <tt>Accepts:</tt> Class
         def crypto_provider(value = nil)
+          CryptoProviders::Guidance.new(value).impart_wisdom
           rw_config(:crypto_provider, value, CryptoProviders::SCrypt)
         end
         alias_method :crypto_provider=, :crypto_provider
