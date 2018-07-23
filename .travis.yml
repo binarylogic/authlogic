@@ -14,9 +14,10 @@ rvm:
   - 2.2.9
   - 2.5.0
 
+# We only test living versions of rails, per the [rails maintenance
+# policy](http://guides.rubyonrails.org/maintenance_policy.html)
 gemfile:
   - test/gemfiles/Gemfile.rails-4.2.x
-  - test/gemfiles/Gemfile.rails-5.0.x
   - test/gemfiles/Gemfile.rails-5.1.x
   - test/gemfiles/Gemfile.rails-5.2.x
 
