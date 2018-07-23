@@ -1,10 +1,11 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  # You can run the authlogic test suite with any supported version of MRI, but the
-  # linter will only care about this `TargetRubyVersion`. This should be set to the
-  # lowest version of MRI that authlogic supports.
-  TargetRubyVersion: 2.2
+  Exclude:
+    # TravisCI runs `bundle install --path=${BUNDLE_PATH:-vendor/bundle}`
+    # causing our bundle to be installed in `gemfiles/vendor/bundle`.
+    # Regardless, we have no interest in linting files in our bundle :D
+    - gemfiles/vendor/bundle/**/*
 
 # Please use normal indentation when aligning parameters.
 #

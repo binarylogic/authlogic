@@ -8,7 +8,7 @@ coverage/*
 doc/*
 benchmarks/*
 .rvmrc
-test/gemfiles/Gemfile*.lock
+gemfiles/Gemfile*.lock
 .bundle
 Gemfile.lock
 .ruby-gemset

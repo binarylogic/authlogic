@@ -1,24 +1,22 @@
 language: ruby
-
-# cache: bundler
-# We would like to enable travis' bundler cache (cache: bundler) but for some reason
-# travis installs our bundle under the test directory (test/vendor/bundle/*) and, as a
-# result, travis tries to run all of the tests of all of our dependencies!
-# TODO: There's probably a way to configure the bundle path
+cache: bundler
 
 before_install:
   - gem update --system
   - gem update bundler
 
+# We only test the oldest and the newest ruby versions that we support. We
+# do not test intermediate versions.
 rvm:
-  - 2.2.9
-  - 2.5.0
+  - 2.2.10
+  - 2.5.1
 
+# We only test living versions of rails, per the [rails maintenance
+# policy](http://guides.rubyonrails.org/maintenance_policy.html)
 gemfile:
-  - test/gemfiles/Gemfile.rails-4.2.x
-  - test/gemfiles/Gemfile.rails-5.0.x
-  - test/gemfiles/Gemfile.rails-5.1.x
-  - test/gemfiles/Gemfile.rails-5.2.x
+  - gemfiles/Gemfile.rails-4.2.x
+  - gemfiles/Gemfile.rails-5.1.x
+  - gemfiles/Gemfile.rails-5.2.x
 
 matrix:
   fast_finish: true
