@@ -16,7 +16,7 @@ We will review security issues promptly.
 
 ### Non-Security Issues
 
-Please use github issues only for bug reports and feature requests.
+Please use github issues only for bug reports and feature suggestions.
 
 ### Usage Questions
 
