@@ -72,6 +72,3 @@ Style/NumericPredicate:
 # SupportedStyles: compact, exploded
 Style/RaiseArgs:
   EnforcedStyle: compact
-
-Style/SafeNavigation:
-  Enabled: false
