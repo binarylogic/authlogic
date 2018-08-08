@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 # We forbid the use of AC::Parameters, and we have a test to that effect, but we

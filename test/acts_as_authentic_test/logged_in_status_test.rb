@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 module ActsAsAuthenticTest
   class LoggedInStatusTest < ActiveSupport::TestCase
-    ERROR_MSG = "Multiple calls to %s should result in different relations".freeze
+    ERROR_MSG = "Multiple calls to %s should result in different relations"
 
     def test_logged_in_timeout_config
       assert_equal 10.minutes.to_i, User.logged_in_timeout

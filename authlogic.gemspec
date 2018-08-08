@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "English"
 $LOAD_PATH.push File.expand_path("lib", __dir__)
 require "authlogic/version"
@@ -20,7 +22,7 @@ require "authlogic/version"
   s.summary = "A clean, simple, and unobtrusive ruby authentication solution."
   s.license = "MIT"
 
-  s.required_ruby_version = ">= 2.2.0"
+  s.required_ruby_version = ">= 2.3.0"
   s.add_dependency "activerecord", [">= 4.2", "< 5.3"]
   s.add_dependency "activesupport", [">= 4.2", "< 5.3"]
   s.add_dependency "request_store", "~> 1.0"

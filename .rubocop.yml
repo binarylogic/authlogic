@@ -6,6 +6,11 @@ AllCops:
     # causing our bundle to be installed in `gemfiles/vendor/bundle`.
     # Regardless, we have no interest in linting files in our bundle :D
     - gemfiles/vendor/bundle/**/*
+  # Specify lowest supported ruby version. If we committed our .ruby-version
+  # file, we wouldn't have to specify this (https://bit.ly/2vNTsue), but we
+  # don't commit that file because that would interfere with testing multiple
+  # rubies on CI.
+  TargetRubyVersion: 2.3
 
 # Please use normal indentation when aligning parameters.
 #

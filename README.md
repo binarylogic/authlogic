@@ -39,12 +39,15 @@ A clean, simple, and unobtrusive ruby authentication solution.
 
 ### 1.a. Compatibility
 
-| Version    | branches         | tag     | ruby     | activerecord  |
-| ---------- | ---------------- | ------- | -------- | ------------- |
-| Unreleased | master, 4-stable |         | >= 2.2.0 | >= 4.2, < 5.3 |
-| 3          | 3-stable         | v3.6.0  | >= 1.9.3 | >= 3.2, < 5.2 |
-| 2          | rails2           | v2.1.11 | >= 1.9.3 | ~> 2.3.0      |
-| 1          | ?                | v1.4.3  | ?        | ?             |
+| Version    | branches         | ruby     | activerecord  |
+| ---------- | ---------------- | -------- | ------------- |
+| 4.3        | master, 4-stable | >= 2.3.0 | >= 4.2, < 5.3 |
+| 4.2        | 4-2-stable       | >= 2.2.0 | >= 4.2, < 5.3 |
+| 3          | 3-stable         | >= 1.9.3 | >= 3.2, < 5.2 |
+| 2          | rails2           | >= 1.9.3 | ~> 2.3.0      |
+| 1          | ?                | ?        | ?             |
+
+Under SemVer, [changes to dependencies][10] do not require a major release.
 
 ### 1.b. Overview
 
@@ -384,3 +387,4 @@ Copyright (c) 2012 Ben Johnson of Binary Logic, released under the MIT license
 [7]: https://codeclimate.com/github/binarylogic/authlogic.png
 [8]: https://codeclimate.com/github/binarylogic/authlogic
 [9]: http://guides.rubyonrails.org/routing.html#resource-routing-the-rails-default
+[10]: https://semver.org/spec/v2.0.0.html#what-should-i-do-if-i-update-my-own-dependencies-without-changing-the-public-api
