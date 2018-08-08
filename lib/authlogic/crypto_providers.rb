@@ -33,7 +33,7 @@ module Authlogic
 
     # Guide users to choose a better crypto provider.
     class Guidance
-      AES256_DEPRECATED = <<-EOS.strip_heredoc.freeze
+      AES256_DEPRECATED = <<~EOS.freeze
         You have selected AES256 as your authlogic crypto provider. This
         choice is not suitable for password storage.
 
@@ -46,7 +46,7 @@ module Authlogic
         to make this painless for your users.
       EOS
       BUILTIN_PROVIDER_PREFIX = "Authlogic::CryptoProviders::".freeze
-      NONADAPTIVE_ALGORITHM = <<-EOS.strip_heredoc.freeze
+      NONADAPTIVE_ALGORITHM = <<~EOS.freeze
         You have selected %s as your authlogic crypto provider. This algorithm
         does not have any practical known attacks against it. However, there are
         better choices.
@@ -61,7 +61,7 @@ module Authlogic
         Use the transition_from_crypto_providers option to make the transition
         painless for your users.
       EOS
-      VULNERABLE_ALGORITHM = <<-EOS.strip_heredoc.freeze
+      VULNERABLE_ALGORITHM = <<~EOS.freeze
         You have selected %s as your authlogic crypto provider. It is a poor
         choice because there are known attacks against this algorithm.
 

@@ -12,7 +12,7 @@ module Authlogic
       end
 
       module InstanceMethods
-        E_AC_PARAMETERS = <<-EOS.strip_heredoc.freeze
+        E_AC_PARAMETERS = <<~EOS.freeze
           Passing an ActionController::Parameters to Authlogic is not allowed.
 
           In Authlogic 3, especially during the transition of rails to Strong

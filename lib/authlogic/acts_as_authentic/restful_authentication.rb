@@ -13,7 +13,7 @@ module Authlogic
       # Configures the restful_authentication aspect of acts_as_authentic.
       # These methods become class methods of ::ActiveRecord::Base.
       module Config
-        DPR_MSG = <<-STR.squish
+        DPR_MSG = <<~STR.squish
           Support for transitioning to authlogic from restful_authentication
           (%s) is deprecated without replacement. restful_authentication is no
           longer used in the ruby community, and the transition away from it is
