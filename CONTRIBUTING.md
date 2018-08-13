@@ -66,13 +66,30 @@ To run the tests without linting, use `rake test`.
 BUNDLE_GEMFILE=gemfiles/Gemfile.rails-4.2.x bundle exec rake test
 ```
 
-### Release
+### Version Control Branches
 
+We've been trying to follow the rails way, stable branches, but have been
+inconsistent. We should have one branche for each minor version, named like
+`4-3-stable`. Releases should be done on those branches, not in master. So,
+the "stable" branches should be the only branches with release tags.
+
+### A normal release (no backport)
+
+1. git checkout 4-3-stable # the latest "stable" branch (see above)
 1. Update version number in lib/authlogic/version.rb
-1. Add release date to changelog entry
-1. Add a new "Unreleased" section at top of changelog
-1. Commit with message like "Release 3.6.0"
-1. git tag -a -m "v3.6.0" "v3.6.0" # or whatever number
-1. git push --tags origin 3-stable # or whatever branch
+1. In the changelog,
+  - Add release date to entry
+  - Add a new "Unreleased" section at top
+1. In the readme,
+  - Update version number in the docs table at the top
+  - For non-patch versions, update the compatibility table
+1. Commit with message like "Release 4.3.0"
+1. git tag -a -m "v4.3.0" "v4.3.0"
+1. git push --tags origin 4-3-stable # or whatever branch (see above)
+1. CI should pass
 1. gem build authlogic.gemspec
-1. gem push authlogic-3.6.0
+1. gem push authlogic-4.3.0.gem
+1. update the docs in the master branch, because that's what people look at
+  - git checkout master
+  - git cherry-pick abcd1234 # the SHA from the stable branch
+  - commit and push with `[ci skip]`
