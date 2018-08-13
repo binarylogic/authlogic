@@ -1,7 +1,7 @@
 require "digest/md5"
 
 ::ActiveSupport::Deprecation.warn(
-  <<-EOS,
+  <<~EOS,
     authlogic/crypto_providers/wordpress.rb is deprecated without replacement.
     Yes, the entire file. Don't `require` it. Let us know ASAP if you are still
     using it.

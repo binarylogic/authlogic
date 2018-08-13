@@ -34,7 +34,7 @@ module Authlogic
         def self.included(klass) # :nodoc:
           if defined?(::ApplicationController)
             raise AuthlogicLoadedTooLateError.new(
-              <<-EOS.strip_heredoc
+              <<~EOS.squish
                 Authlogic is trying to add a callback to ActionController::Base
                 but ApplicationController has already been loaded, so the
                 callback won't be copied into your application. Generally this

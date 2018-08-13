@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "byebug"
 require "rubygems"
 require "minitest/autorun"

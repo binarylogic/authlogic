@@ -230,7 +230,7 @@ module Authlogic
         # `generate_cookie_for_saving`. If no cookie is found, returns nil.
         def cookie_credentials
           cookie = cookie_jar[cookie_key]
-          cookie && cookie.split("::")
+          cookie&.split("::")
         end
 
         # The third element of the cookie indicates whether the user wanted

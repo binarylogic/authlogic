@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Company < ActiveRecord::Base
   authenticates_many :employee_sessions
   authenticates_many :user_sessions, scope_cookies: true

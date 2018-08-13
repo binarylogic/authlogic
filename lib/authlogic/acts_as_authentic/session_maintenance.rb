@@ -128,7 +128,7 @@ module Authlogic
 
           session_ids.each do |session_id|
             session = session_class.find(session_id, self)
-            @_sessions << session if session && session.record
+            @_sessions << session if session&.record
           end
         end
 

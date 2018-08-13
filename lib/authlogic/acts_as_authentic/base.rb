@@ -91,7 +91,7 @@ module Authlogic
               end
             end
           end
-          columns_to_check.first && columns_to_check.first.to_sym
+          columns_to_check.first&.to_sym
         end
       end
     end

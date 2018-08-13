@@ -5,7 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 5.0.0 (Unreleased)
+
+* Breaking Changes
+  * Drop AES256 crypto provider, deprecated in 4.2.0
+  * Drop support for transitioning from restful_authentication, deprecated in 4.1.0
+  * Uses `frozen_string_literal`, so assume all strings returned are frozen
+* Added
+  * None
+* Fixed
+  * None
+
+## 4.3.0 (Unreleased)
 
 * Breaking Changes
   * None
@@ -13,13 +24,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   * None
 * Fixed
   * None
+* Dependencies
+  * Drop support for ruby 2.2, which reached EoL on 2018-06-20
 
 ## 4.2.0 (2018-07-18)
 
 * Breaking Changes
   * None
 * Added
-  * [#611](https://github.com/binarylogic/authlogic/pull/611) -  Deprecate
+  * [#611](https://github.com/binarylogic/authlogic/pull/611) - Deprecate
     AES256, guide users to choose a better crypto provider
 * Fixed
   * None
