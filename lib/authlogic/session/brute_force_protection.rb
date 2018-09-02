@@ -64,7 +64,7 @@ module Authlogic
         alias_method :failed_login_ban_for=, :failed_login_ban_for
       end
 
-      # The methods available for an Authlogic::Session::Base object that make
+      # The methods available in an Authlogic::Session::Base object that make
       # up the brute force protection feature.
       module InstanceMethods
         # Returns true when the consecutive_failed_logins_limit has been

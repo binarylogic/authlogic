@@ -4,6 +4,7 @@ require File.dirname(__FILE__) + "/test_case/mock_controller"
 require File.dirname(__FILE__) + "/test_case/mock_logger"
 require File.dirname(__FILE__) + "/test_case/mock_request"
 
+# :nodoc:
 module Authlogic
   # This module is a collection of methods and classes that help you easily test
   # Authlogic. In fact, I use these same tools to test the internals of
@@ -204,6 +205,7 @@ module Authlogic
     end
   end
 
+  # TODO: Why are these lines inside the `Authlogic` module? Should be outside?
   ::Test::Unit::TestCase.send(:include, TestCase) if defined?(::Test::Unit::TestCase)
   ::MiniTest::Unit::TestCase.send(:include, TestCase) if defined?(::MiniTest::Unit::TestCase)
   ::MiniTest::Test.send(:include, TestCase) if defined?(::MiniTest::Test)

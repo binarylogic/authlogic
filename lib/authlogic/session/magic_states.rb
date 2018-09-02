@@ -45,8 +45,8 @@ module Authlogic
         alias_method :disable_magic_states=, :disable_magic_states
       end
 
-      # The methods available for an Authlogic::Session::Base object that make up the
-      # magic states feature.
+      # The methods available in an Authlogic::Session::Base object that make up
+      # the magic states feature.
       module InstanceMethods
         private
 

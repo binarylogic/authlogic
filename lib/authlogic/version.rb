@@ -2,6 +2,7 @@
 
 require "rubygems"
 
+# :nodoc:
 module Authlogic
   # Returns a `::Gem::Version`, the version number of the authlogic gem.
   #

@@ -1,5 +1,6 @@
 module Authlogic
   module I18n
+    # The default translator used by authlogic/i18n.rb
     class Translator
       # If the I18n gem is present, calls +I18n.translate+ passing all
       # arguments, else returns +options[:default]+.

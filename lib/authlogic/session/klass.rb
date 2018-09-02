@@ -13,6 +13,7 @@ module Authlogic
         end
       end
 
+      # Class methods for configuration
       module Config
         # Lets you change which model to use for authentication.
         #
@@ -41,6 +42,7 @@ module Authlogic
         end
       end
 
+      # :nodoc:
       module InstanceMethods
         # Creating an alias method for the "record" method based on the klass
         # name, so that we can do:

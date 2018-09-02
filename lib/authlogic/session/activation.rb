@@ -24,6 +24,7 @@ module Authlogic
         end
       end
 
+      # :nodoc:
       module ClassMethods
         # Returns true if a controller has been set and can be used properly.
         # This MUST be set before anything can be done. Similar to how
@@ -55,6 +56,7 @@ module Authlogic
         end
       end
 
+      # :nodoc:
       module InstanceMethods
         # Making sure we are activated before we start creating objects
         def initialize(*args)

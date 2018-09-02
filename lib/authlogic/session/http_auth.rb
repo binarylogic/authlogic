@@ -69,7 +69,7 @@ module Authlogic
         alias_method :http_basic_auth_realm=, :http_basic_auth_realm
       end
 
-      # Instance methods for the HTTP basic auth feature of authlogic.
+      # :nodoc:
       module InstanceMethods
         private
 

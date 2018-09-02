@@ -26,7 +26,7 @@ module Authlogic
         alias_method :session_key=, :session_key
       end
 
-      # Instance methods for the session feature.
+      # :nodoc:
       module InstanceMethods
         private
 

@@ -9,6 +9,7 @@ module Authlogic
         end
       end
 
+      # :nodoc:
       module ClassMethods
         # This is how you persist a session. This finds the record for the
         # current session using a variety of methods. It basically tries to "log
@@ -44,6 +45,7 @@ module Authlogic
         end
       end
 
+      # :nodoc:
       module InstanceMethods
         # Returns boolean indicating if the session is being persisted or not,
         # meaning the user does not have to explicitly log in in order to be

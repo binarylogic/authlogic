@@ -11,6 +11,7 @@ module Authlogic
         end
       end
 
+      # :nodoc:
       module InstanceMethods
         E_AC_PARAMETERS = <<~EOS.freeze
           Passing an ActionController::Parameters to Authlogic is not allowed.

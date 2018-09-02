@@ -61,7 +61,7 @@ module Authlogic
           end
         end
 
-        # Class methods for the perishable token
+        # :nodoc:
         module ClassMethods
           # Use this method to find a record with a perishable token. This
           # method does 2 things for you:
@@ -94,7 +94,7 @@ module Authlogic
           end
         end
 
-        # Instance level methods for the perishable token.
+        # :nodoc:
         module InstanceMethods
           # Resets the perishable token to a random friendly token.
           def reset_perishable_token

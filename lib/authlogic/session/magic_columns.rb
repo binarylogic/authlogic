@@ -43,7 +43,7 @@ module Authlogic
         alias_method :last_request_at_threshold=, :last_request_at_threshold
       end
 
-      # The methods available for an Authlogic::Session::Base object that make
+      # The methods available in an Authlogic::Session::Base object that make
       # up the magic columns feature.
       module InstanceMethods
         private

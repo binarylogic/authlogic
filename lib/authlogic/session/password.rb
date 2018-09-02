@@ -127,7 +127,7 @@ module Authlogic
         alias_method :verify_password_method=, :verify_password_method
       end
 
-      # Password related instance methods
+      # :nodoc:
       module InstanceMethods
         def initialize(*args)
           unless self.class.configured_password_methods

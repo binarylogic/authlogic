@@ -113,6 +113,10 @@ Style/BlockDelimiters:
 Style/ClassAndModuleChildren:
   EnforcedStyle: nested
 
+Style/Documentation:
+  Exclude:
+    - 'test/**/*'
+
 # Both `module_function` and `extend_self` are legitimate. Most importantly,
 # they are different (http://bit.ly/2hSQAGm)
 Style/ModuleFunction:

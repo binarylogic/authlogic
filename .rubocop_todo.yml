@@ -22,28 +22,6 @@ Style/ClassVars:
   Exclude:
     - 'lib/authlogic/i18n.rb'
 
-# Offense count: 22
-Style/Documentation:
-  Exclude:
-    # Permanent
-    - 'test/**/*'
-
-    # TODO
-    - 'lib/authlogic/config.rb'
-    - 'lib/authlogic/controller_adapters/sinatra_adapter.rb'
-    - 'lib/authlogic/crypto_providers.rb'
-    - 'lib/authlogic/i18n/translator.rb'
-    - 'lib/authlogic/session/activation.rb'
-    - 'lib/authlogic/session/active_record_trickery.rb'
-    - 'lib/authlogic/session/existence.rb'
-    - 'lib/authlogic/session/foundation.rb'
-    - 'lib/authlogic/session/klass.rb'
-    - 'lib/authlogic/session/persistence.rb'
-    - 'lib/authlogic/session/scopes.rb'
-    - 'lib/authlogic/test_case.rb'
-    - 'lib/authlogic/test_case/mock_cookie_jar.rb'
-    - 'lib/authlogic/version.rb'
-
 Style/FrozenStringLiteralComment:
   Exclude:
     # Freezing strings in lib would be a breaking change. We'll have to wait

@@ -2,6 +2,7 @@
 module Authlogic
   module ControllerAdapters
     module SinatraAdapter
+      # Cookie management functions
       class Cookies
         attr_reader :request, :response
 
@@ -23,6 +24,7 @@ module Authlogic
         end
       end
 
+      # Thin wrapper around request and response.
       class Controller
         attr_reader :request, :response, :cookies
 
@@ -40,11 +42,13 @@ module Authlogic
         end
       end
 
+      # Sinatra controller adapter
       class Adapter < AbstractAdapter
         def cookie_domain
           env["SERVER_NAME"]
         end
 
+        # Mixed into `Sinatra::Base`
         module Implementation
           def self.included(klass)
             klass.send :before do

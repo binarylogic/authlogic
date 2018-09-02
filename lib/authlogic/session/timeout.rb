@@ -66,7 +66,7 @@ module Authlogic
         alias_method :logout_on_timeout=, :logout_on_timeout
       end
 
-      # Instance methods for the timeout feature.
+      # :nodoc:
       module InstanceMethods
         # Tells you if the record is stale or not. Meaning the record has timed
         # out. This will only return true if you set logout_on_timeout to true

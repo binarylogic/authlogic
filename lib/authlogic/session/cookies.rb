@@ -98,8 +98,8 @@ module Authlogic
         alias_method :sign_cookie=, :sign_cookie
       end
 
-      # The methods available for an Authlogic::Session::Base object that make up the
-      # cookie feature set.
+      # The methods available in an Authlogic::Session::Base object that make up
+      # the cookie feature set.
       module InstanceMethods
         # Allows you to set the remember_me option when passing credentials.
         def credentials=(value)
