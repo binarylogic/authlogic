@@ -32,8 +32,7 @@ module Authlogic
       end
 
       def cookie_domain
-        @cookie_domain_key ||= Rails::VERSION::STRING >= "2.3" ? :domain : :session_domain
-        controller.request.session_options[@cookie_domain_key]
+        controller.request.session_options[:domain]
       end
 
       def request_content_type
