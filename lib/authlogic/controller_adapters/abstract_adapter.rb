@@ -26,7 +26,7 @@ module Authlogic
       end
 
       def cookie_domain
-        raise NotImplementedError.new(E_COOKIE_DOMAIN_ADAPTER)
+        raise NotImplementedError, E_COOKIE_DOMAIN_ADAPTER
       end
 
       def params

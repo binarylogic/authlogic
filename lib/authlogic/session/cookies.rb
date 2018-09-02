@@ -81,7 +81,7 @@ module Authlogic
         def same_site(value = nil)
           unless VALID_SAME_SITE_VALUES.include?(value)
             msg = "Invalid same_site value: #{value}. Valid: #{VALID_SAME_SITE_VALUES.inspect}"
-            raise ArgumentError.new(msg)
+            raise ArgumentError, msg
           end
           rw_config(:same_site, value)
         end
@@ -198,7 +198,7 @@ module Authlogic
         def same_site=(value)
           unless VALID_SAME_SITE_VALUES.include?(value)
             msg = "Invalid same_site value: #{value}. Valid: #{VALID_SAME_SITE_VALUES.inspect}"
-            raise ArgumentError.new(msg)
+            raise ArgumentError, msg
           end
           @same_site = value
         end

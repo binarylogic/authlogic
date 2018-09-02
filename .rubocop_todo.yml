@@ -65,10 +65,3 @@ Style/MissingRespondToMissing:
 
 Style/NumericPredicate:
   Enabled: false
-
-# Offense count: 10
-# Cop supports --auto-correct.
-# Configuration parameters: .
-# SupportedStyles: compact, exploded
-Style/RaiseArgs:
-  EnforcedStyle: compact

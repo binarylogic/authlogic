@@ -94,7 +94,7 @@ module Authlogic
         # validation fails
         def save!
           result = save
-          raise SessionInvalidError.new(self) unless result
+          raise SessionInvalidError, self unless result
           result
         end
       end

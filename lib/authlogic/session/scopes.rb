@@ -80,7 +80,7 @@ module Authlogic
         #
         #   secure_account_2_user_credentials
         def with_scope(options = {})
-          raise ArgumentError.new("You must provide a block") unless block_given?
+          raise ArgumentError, "You must provide a block" unless block_given?
           self.scope = options
           result = yield
           self.scope = nil
