@@ -75,7 +75,7 @@ module Authlogic
         alias_method :single_access_allowed_request_types=, :single_access_allowed_request_types
       end
 
-      # The methods available for an Authlogic::Session::Base object that make
+      # The methods available in an Authlogic::Session::Base object that make
       # up the params / single access feature.
       module InstanceMethods
         private

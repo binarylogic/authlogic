@@ -435,7 +435,7 @@ module Authlogic
             check_against_database
           )
             # The arguments_type for the transitioning from restful_authentication
-            acting_restful = act_like_restful_authentication? && index.zero?
+            acting_restful = act_like_restful_authentication? && index == 0
             transitioning = transition_from_restful_authentication? &&
               index > 0 &&
               encryptor == Authlogic::CryptoProviders::Sha1

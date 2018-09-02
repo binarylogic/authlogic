@@ -22,6 +22,7 @@ module Authlogic
         klass.send(:include, InstanceMethods)
       end
 
+      # :nodoc:
       module ClassMethods
         # How to name the class, works JUST LIKE ActiveRecord, except it uses
         # the following namespace:
@@ -36,6 +37,7 @@ module Authlogic
         end
       end
 
+      # :nodoc:
       module InstanceMethods
         # Don't use this yourself, this is to just trick some of the helpers
         # since this is the method it calls.

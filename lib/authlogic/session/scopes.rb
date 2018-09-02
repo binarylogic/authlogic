@@ -9,7 +9,7 @@ module Authlogic
     #    Checkout Authlogic::AuthenticatesMany
     # 2. Want to scope the validations in your model? Ex: 2 users can have the same login
     #    under different accounts. See Authlogic::ActsAsAuthentic::Scope
-    module Scopes # :nodoc:
+    module Scopes
       def self.included(klass)
         klass.class_eval do
           extend ClassMethods
@@ -18,7 +18,7 @@ module Authlogic
         end
       end
 
-      # = Scopes
+      # :nodoc:
       module ClassMethods
         # The current scope set, should be used in the block passed to with_scope.
         def scope
@@ -80,7 +80,7 @@ module Authlogic
         #
         #   secure_account_2_user_credentials
         def with_scope(options = {})
-          raise ArgumentError.new("You must provide a block") unless block_given?
+          raise ArgumentError, "You must provide a block" unless block_given?
           self.scope = options
           result = yield
           self.scope = nil
@@ -94,6 +94,7 @@ module Authlogic
         end
       end
 
+      # :nodoc:
       module InstanceMethods
         # Setting the scope if it exists upon instantiation.
         def initialize(*args)

@@ -22,6 +22,7 @@ module Authlogic
         end
       end
 
+      # :nodoc:
       module ClassMethods
         # A convenience method. The same as:
         #
@@ -45,6 +46,7 @@ module Authlogic
         end
       end
 
+      # :nodoc:
       module InstanceMethods
         # Clears all errors and the associated record, you should call this
         # terminate a session, thus requiring the user to authenticate again if
@@ -94,7 +96,7 @@ module Authlogic
         # validation fails
         def save!
           result = save
-          raise SessionInvalidError.new(self) unless result
+          raise SessionInvalidError, self unless result
           result
         end
       end

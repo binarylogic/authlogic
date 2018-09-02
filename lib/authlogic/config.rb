@@ -1,7 +1,13 @@
 module Authlogic
+  # Mixed into `Authlogic::ActsAsAuthentic::Base` and
+  # `Authlogic::Session::Foundation`.
   module Config
     def self.extended(klass)
       klass.class_eval do
+        # TODO: Is this a confusing name, given this module is mixed into
+        # both `Authlogic::ActsAsAuthentic::Base` and
+        # `Authlogic::Session::Foundation`? Perhaps a more generic name, like
+        # `authlogic_config` would be better?
         class_attribute :acts_as_authentic_config
         self.acts_as_authentic_config ||= {}
       end

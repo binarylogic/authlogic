@@ -28,7 +28,7 @@ module Authlogic
           end
         end
 
-        # Class level methods for the persistence token.
+        # :nodoc:
         module ClassMethods
           # Resets ALL persistence tokens in the database, which will require
           # all users to re-authenticate.
@@ -38,7 +38,7 @@ module Authlogic
           end
         end
 
-        # Instance level methods for the persistence token.
+        # :nodoc:
         module InstanceMethods
           # Resets the persistence_token field to a random hex value.
           def reset_persistence_token

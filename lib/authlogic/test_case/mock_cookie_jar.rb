@@ -23,6 +23,11 @@ module Authlogic
       end
     end
 
+    # A mock of `ActionDispatch::Cookies::SignedKeyRotatingCookieJar`
+    #
+    # > .. a jar that'll automatically generate a signed representation of
+    # > cookie value and verify it when reading from the cookie again.
+    # > actionpack/lib/action_dispatch/middleware/cookies.rb
     class MockSignedCookieJar < MockCookieJar
       attr_reader :parent_jar # helper for testing
 

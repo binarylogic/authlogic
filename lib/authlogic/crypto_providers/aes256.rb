@@ -41,7 +41,8 @@ module Authlogic
 
         def aes
           if @key.blank?
-            raise ArgumentError.new(
+            raise(
+              ArgumentError,
               "You must provide a key like #{name}.key = my_key before using the #{name}"
             )
           end

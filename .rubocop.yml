@@ -113,10 +113,18 @@ Style/BlockDelimiters:
 Style/ClassAndModuleChildren:
   EnforcedStyle: nested
 
+Style/Documentation:
+  Exclude:
+    - 'test/**/*'
+
 # Both `module_function` and `extend_self` are legitimate. Most importantly,
 # they are different (http://bit.ly/2hSQAGm)
 Style/ModuleFunction:
   Enabled: false
+
+# `x > 0` is understood by more programmers than `x.positive?`
+Style/NumericPredicate:
+  EnforcedStyle: comparison
 
 # The decision of when to use slashes `/foo/` or percent-r `%r{foo}` is too
 # subtle to lint. Use whichever requires fewer backslash escapes.

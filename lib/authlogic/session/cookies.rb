@@ -81,7 +81,7 @@ module Authlogic
         def same_site(value = nil)
           unless VALID_SAME_SITE_VALUES.include?(value)
             msg = "Invalid same_site value: #{value}. Valid: #{VALID_SAME_SITE_VALUES.inspect}"
-            raise ArgumentError.new(msg)
+            raise ArgumentError, msg
           end
           rw_config(:same_site, value)
         end
@@ -98,8 +98,8 @@ module Authlogic
         alias_method :sign_cookie=, :sign_cookie
       end
 
-      # The methods available for an Authlogic::Session::Base object that make up the
-      # cookie feature set.
+      # The methods available in an Authlogic::Session::Base object that make up
+      # the cookie feature set.
       module InstanceMethods
         # Allows you to set the remember_me option when passing credentials.
         def credentials=(value)
@@ -198,7 +198,7 @@ module Authlogic
         def same_site=(value)
           unless VALID_SAME_SITE_VALUES.include?(value)
             msg = "Invalid same_site value: #{value}. Valid: #{VALID_SAME_SITE_VALUES.inspect}"
-            raise ArgumentError.new(msg)
+            raise ArgumentError, msg
           end
           @same_site = value
         end
