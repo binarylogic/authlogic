@@ -118,6 +118,10 @@ Style/ClassAndModuleChildren:
 Style/ModuleFunction:
   Enabled: false
 
+# `x > 0` is understood by more programmers than `x.positive?`
+Style/NumericPredicate:
+  EnforcedStyle: comparison
+
 # The decision of when to use slashes `/foo/` or percent-r `%r{foo}` is too
 # subtle to lint. Use whichever requires fewer backslash escapes.
 Style/RegexpLiteral:
