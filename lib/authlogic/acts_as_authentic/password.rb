@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module ActsAsAuthentic
     # This module has a lot of neat functionality. It is responsible for encrypting your

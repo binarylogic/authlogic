@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module ControllerAdapters
     # Adapter for authlogic to make it function as a Rack middleware.

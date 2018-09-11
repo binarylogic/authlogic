@@ -8,7 +8,7 @@
 
 # Offense count: 10
 Metrics/AbcSize:
-  Max: 18.5
+  Max: 18.3
 
 # Offense count: 59
 # Cop supports --auto-correct.
@@ -21,12 +21,6 @@ Style/Alias:
 Style/ClassVars:
   Exclude:
     - 'lib/authlogic/i18n.rb'
-
-Style/FrozenStringLiteralComment:
-  Exclude:
-    # Freezing strings in lib would be a breaking change. We'll have to wait
-    # for the next major version.
-    - lib/**/*
 
 # Offense count: 4
 Style/MethodMissingSuper:

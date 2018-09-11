@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   # This allows you to scope your authentication. For example, let's say all users belong
   # to an account, you want to make sure only users that belong to that account can

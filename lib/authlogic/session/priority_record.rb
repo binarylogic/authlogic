@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module Session
     # The point of this module is to avoid the StaleObjectError raised when

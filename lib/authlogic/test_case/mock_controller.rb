@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module TestCase
     # Basically acts like a controller but doesn't do anything. Authlogic can interact

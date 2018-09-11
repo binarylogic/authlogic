@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   # The acts_as_authentic method has a crypto_provider option. This allows you
   # to use any type of encryption you like. Just create a class with a class
@@ -32,8 +34,8 @@ module Authlogic
 
     # Guide users to choose a better crypto provider.
     class Guidance
-      BUILTIN_PROVIDER_PREFIX = "Authlogic::CryptoProviders::".freeze
-      NONADAPTIVE_ALGORITHM = <<~EOS.freeze
+      BUILTIN_PROVIDER_PREFIX = "Authlogic::CryptoProviders::"
+      NONADAPTIVE_ALGORITHM = <<~EOS
         You have selected %s as your authlogic crypto provider. This algorithm
         does not have any practical known attacks against it. However, there are
         better choices.
@@ -48,7 +50,7 @@ module Authlogic
         Use the transition_from_crypto_providers option to make the transition
         painless for your users.
       EOS
-      VULNERABLE_ALGORITHM = <<~EOS.freeze
+      VULNERABLE_ALGORITHM = <<~EOS
         You have selected %s as your authlogic crypto provider. It is a poor
         choice because there are known attacks against this algorithm.
 

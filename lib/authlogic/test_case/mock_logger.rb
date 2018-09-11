@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module TestCase
     # Simple class to replace real loggers, so that we can raise any errors being logged.

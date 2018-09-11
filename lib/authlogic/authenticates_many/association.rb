@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module AuthenticatesMany
     # An object of this class is used as a proxy for the authenticates_many

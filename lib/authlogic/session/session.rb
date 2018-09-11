@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module Session
     # Handles all parts of authentication that deal with sessions. Such as persisting a

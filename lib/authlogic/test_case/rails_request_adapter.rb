@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module TestCase
     # Adapts authlogic to work with the @request object when testing. This way Authlogic

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "authlogic/acts_as_authentic/queries/find_with_case"
 
 module Authlogic

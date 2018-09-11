@@ -23,7 +23,7 @@ module SessionTest
         old_last_request_at = ben.last_request_at
         assert UserSession.find
         ben.reload
-        assert ben.last_request_at != old_last_request_at
+        assert ben.last_request_at > old_last_request_at
       end
 
       def test_valid_increase_failed_login_count

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module ControllerAdapters # :nodoc:
     # Allows you to use Authlogic in any framework you want, not just rails. See
@@ -5,7 +7,7 @@ module Authlogic
     # your framework.
     class AbstractAdapter
       E_COOKIE_DOMAIN_ADAPTER = "The cookie_domain method has not been " \
-        "implemented by the controller adapter".freeze
+        "implemented by the controller adapter"
 
       attr_accessor :controller
 

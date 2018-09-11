@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Authlogic uses ActiveSupport's core extensions like `strip_heredoc` and
 # `squish`. ActiveRecord does not `require` these exensions, so we must.
 #
@@ -45,6 +47,7 @@ path = File.dirname(__FILE__) + "/authlogic/"
   "session/http_auth",
   "session/id",
   "session/klass",
+  "session/magic_column/assigns_last_request_at",
   "session/magic_columns",
   "session/magic_states",
   "session/params",

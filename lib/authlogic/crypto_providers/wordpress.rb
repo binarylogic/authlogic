@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "digest/md5"
 
 ::ActiveSupport::Deprecation.warn(
@@ -32,7 +34,7 @@ module Authlogic
     #
     class Wordpress
       class << self
-        ITOA64 = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".freeze
+        ITOA64 = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
         def matches?(crypted, *tokens)
           stretches = 1 << ITOA64.index(crypted[3, 1])

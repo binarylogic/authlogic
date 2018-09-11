@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module Session
     # Allows you to separate sessions with an id, ultimately letting you create

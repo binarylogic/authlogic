@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module Session
     # Authlogic tries to check the state of the record before creating the session. If
