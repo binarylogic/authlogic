@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 gemspec :path => ".."
 
-gem "activerecord", "~> 5.2.x"
-gem "activesupport", "~> 5.2.x"
+gem "activerecord", "~> 5.2.1"
+gem "activesupport", "~> 5.2.1"
 gem 'sqlite3', :platforms => :ruby
