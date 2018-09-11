@@ -12,8 +12,10 @@ cherry-pick it from the stable branch into master.
 ## 5.0.0 (Unreleased)
 
 * Breaking Changes
-  * Drop AES256 crypto provider, deprecated in 4.2.0
-  * Drop support for transitioning from restful_authentication, deprecated in 4.1.0
+  * [#617](https://github.com/binarylogic/authlogic/pull/617) -
+    Drop AES-256 crypto provider, deprecated in 4.2.0
+  * [#617](https://github.com/binarylogic/authlogic/pull/617) -
+    Drop restful_authentication, deprecated in 4.1.0
   * Uses `frozen_string_literal`, so assume all strings returned are frozen
 * Added
   * None
