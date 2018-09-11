@@ -26,7 +26,7 @@ module Authlogic
 
         private
 
-        # - comparison - Arel::Predications::Nodes::Equality
+        # - comparison - Arel::Nodes::Equality
         #
         # @api private
         def bind(comparison)
@@ -43,15 +43,24 @@ module Authlogic
         end
 
         # @api private
+        # @return Arel::Nodes::Equality
         def comparison
-          if !@sensitive
-            @model_class.connection.case_insensitive_comparison(
-              @model_class.arel_table,
-              @field,
-              @model_class.columns_hash[@field],
-              @value
-            )
-          elsif AR_GEM_VERSION >= Gem::Version.new("5.0")
+          @sensitive ? sensitive_comparison : insensitive_comparison
+        end
+
+        # @api private
+        def insensitive_comparison
+          @model_class.connection.case_insensitive_comparison(
+            @model_class.arel_table,
+            @field,
+            @model_class.columns_hash[@field],
+            @value
+          )
+        end
+
+        # @api private
+        def sensitive_comparison
+          if AR_GEM_VERSION >= Gem::Version.new("5.0")
             @model_class.connection.case_sensitive_comparison(
               @model_class.arel_table,
               @field,
