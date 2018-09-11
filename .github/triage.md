@@ -55,7 +55,7 @@ If this is a feature suggestion, it's still relevant, and you are committed to
 implementing it, please open a new issue and we can discuss your implementation
 plan.
 
-If this is a usage question, please ask it on [stackoverflow][1]. Unfortunatley,
+If this is a usage question, please ask it on [stackoverflow][1]. Unfortunately,
 we just don't have enough volunteers to handle usage questions on github. Also,
 please check the [reference documentation][2]. You might find something there
 that's not in the readme.
@@ -73,11 +73,10 @@ Hello, I'm going through old authlogic issues and seeing what to do with them.
 This one looks like a bug report.
 
 If you can still reproduce this issue with a clean install of the latest version
-of authlogic and rails, please create a git repo with a sample app that
-reproduces the problem, and open a new issue.
+of authlogic and rails, and you are committed to fixing it, please open a new issue.
 
 If this was more of a usage question than a bug report, please ask your question
-on [stackoverflow][1]. Unfortunatley, we just don't have enough volunteers to
+on [stackoverflow][1]. Unfortunately, we just don't have enough volunteers to
 handle usage questions on github.
 
 Thanks!

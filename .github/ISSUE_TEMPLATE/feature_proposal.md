@@ -14,9 +14,8 @@ about: >
   - Do not disclose security issues in public. See our [contributing
     guide](https://github.com/binarylogic/authlogic/blob/master/CONTRIBUTING.md)
     for instructions.
-- [ ] I am committed to implementing this feature in a reasonable amount of time.
-- [ ] If I cannot implement this feature in a reasonable amount of time, I
-  understand this issue will be closed.
+- [ ] I am committed to implementing this feature in a reasonable amount of
+  time, and responding promptly to feedback.
 
 # Current Behavior
 
@@ -29,4 +28,4 @@ Describe.
 # Proposed Solution
 
 It's OK if you don't have a solution, we can help with that. But, whatever
-solution we decide on, you must build yourself, in a reasonable amount of time.
+solution we decide on together, you must build yourself.

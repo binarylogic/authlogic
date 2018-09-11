@@ -14,10 +14,9 @@ about: >
   - Do not disclose security issues in public. See our [contributing
     guide](https://github.com/binarylogic/authlogic/blob/master/CONTRIBUTING.md)
     for instructions.
-- [ ] This is a reproducible bug, and I am committed to fixing it in
-  a reasonable amount of time.
-- [ ] If I cannot fix this bug in a reasonable amount of time, I understand
-  this issue will be closed.
+- [ ] This bug is reproducible with a clean install of authlogic
+- [ ] I am committed to fixing this in a reasonable amount of time, and
+  responding promptly to feedback.
 
 # Expected Behavior
 
