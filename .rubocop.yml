@@ -126,10 +126,9 @@ Style/ModuleFunction:
 Style/NumericPredicate:
   EnforcedStyle: comparison
 
-# The decision of when to use slashes `/foo/` or percent-r `%r{foo}` is too
-# subtle to lint. Use whichever requires fewer backslash escapes.
+# Use slashes for most patterns. Use %r when it reduces backslash escaping.
 Style/RegexpLiteral:
-  AllowInnerSlashes: true
+  AllowInnerSlashes: false
 
 # We use words, like `$LOAD_PATH`, because they are much less confusing that
 # arcane symbols like `$:`. Unfortunately, we must then `require "English"` in
