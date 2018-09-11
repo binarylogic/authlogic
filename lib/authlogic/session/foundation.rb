@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module Session
     # Sort of like an interface, it sets the foundation for the class, such as the
@@ -13,7 +15,7 @@ module Authlogic
 
       # :nodoc:
       module InstanceMethods
-        E_AC_PARAMETERS = <<~EOS.freeze
+        E_AC_PARAMETERS = <<~EOS
           Passing an ActionController::Parameters to Authlogic is not allowed.
 
           In Authlogic 3, especially during the transition of rails to Strong

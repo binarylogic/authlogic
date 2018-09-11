@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module Session
     # A brute force attacks is executed by hammering a login with as many password

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module Session
     # Between these callbacks and the configuration, this is the contract between me and

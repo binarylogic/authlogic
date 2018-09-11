@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module ActsAsAuthentic
     # This module is responsible for maintaining the single_access token. For more

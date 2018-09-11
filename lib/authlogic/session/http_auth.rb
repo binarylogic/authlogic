@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module Session
     # Handles all authentication that deals with basic HTTP auth. Which is

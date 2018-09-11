@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module Session
     # Allows you to create session with an object. Ex:

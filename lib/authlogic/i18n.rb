@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "authlogic/i18n/translator"
 
 module Authlogic

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module Session
     # Maintains the perishable token, which is helpful for confirming records or

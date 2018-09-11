@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module ActsAsAuthentic
     # Magic columns are like ActiveRecord's created_at and updated_at columns. They are

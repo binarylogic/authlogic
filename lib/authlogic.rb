@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Authlogic uses ActiveSupport's core extensions like `strip_heredoc` and
 # `squish`. ActiveRecord does not `require` these exensions, so we must.
 #

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module Session # :nodoc:
     # This is the most important class in Authlogic. You will inherit this class

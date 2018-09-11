@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module Session
     # This module is responsible for authenticating the user via params, which ultimately

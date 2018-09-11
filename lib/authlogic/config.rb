@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   # Mixed into `Authlogic::ActsAsAuthentic::Base` and
   # `Authlogic::Session::Foundation`.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module ActsAsAuthentic
     # Sometimes models won't have an explicit "login" or "username" field.

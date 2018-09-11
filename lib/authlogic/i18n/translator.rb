@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module I18n
     # The default translator used by authlogic/i18n.rb

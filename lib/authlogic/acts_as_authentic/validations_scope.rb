@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module ActsAsAuthentic
     # Allows you to scope everything to specific fields. See the Config

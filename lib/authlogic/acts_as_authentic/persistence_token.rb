@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module ActsAsAuthentic
     # Maintains the persistence token, the token responsible for persisting sessions. This token

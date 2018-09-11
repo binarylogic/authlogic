@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authlogic
   module Session
     # Authlogic looks like ActiveRecord, sounds like ActiveRecord, but its not

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Authlogic bridge for Sinatra
 module Authlogic
   module ControllerAdapters

@@ -22,12 +22,6 @@ Style/ClassVars:
   Exclude:
     - 'lib/authlogic/i18n.rb'
 
-Style/FrozenStringLiteralComment:
-  Exclude:
-    # Freezing strings in lib would be a breaking change. We'll have to wait
-    # for the next major version.
-    - lib/**/*
-
 # Offense count: 4
 Style/MethodMissingSuper:
   Exclude:
