@@ -2,9 +2,7 @@ require "digest/md5"
 
 module Authlogic
   module CryptoProviders
-    # This class was made for the users transitioning from md5 based systems.
-    # We strongly discourage using this crypto provider as it superbly inferior
-    # to your other options.
+    # A poor choice. There are known attacks against this algorithm.
     class MD5
       class << self
         attr_accessor :join_token
