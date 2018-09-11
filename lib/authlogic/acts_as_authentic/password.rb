@@ -202,7 +202,8 @@ module Authlogic
         # The family of adaptive hash functions (BCrypt, SCrypt, PBKDF2) is the
         # best choice for password storage today. We recommend SCrypt. Other
         # one-way functions like SHA512 are inferior, but widely used.
-        # Reverisbile functions like AES256 are the worst choice.
+        # Reverisbile functions like AES256 are the worst choice, and we no
+        # longer support them.
         #
         # You can use the `transition_from_crypto_providers` option to gradually
         # transition to a better crypto provider without causing your users any
