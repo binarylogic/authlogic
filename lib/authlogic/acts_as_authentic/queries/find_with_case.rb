@@ -21,27 +21,29 @@ module Authlogic
 
         # @api private
         def execute
-          bind(relation).first
+          bind(comparison).first
         end
 
         private
 
+        # - comparison - Arel::Predications::Nodes::Equality
+        #
         # @api private
-        def bind(relation)
+        def bind(comparison)
           if AR_GEM_VERSION >= Gem::Version.new("5")
             bind = ActiveRecord::Relation::QueryAttribute.new(
               @field,
               @value,
               ActiveRecord::Type::Value.new
             )
-            @model_class.where(relation, bind)
+            @model_class.where(comparison, bind)
           else
-            @model_class.where(relation)
+            @model_class.where(comparison)
           end
         end
 
         # @api private
-        def relation
+        def comparison
           if !@sensitive
             @model_class.connection.case_insensitive_comparison(
               @model_class.arel_table,
