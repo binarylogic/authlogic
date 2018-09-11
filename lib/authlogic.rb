@@ -47,6 +47,7 @@ path = File.dirname(__FILE__) + "/authlogic/"
   "session/http_auth",
   "session/id",
   "session/klass",
+  "session/magic_column/assigns_last_request_at",
   "session/magic_columns",
   "session/magic_states",
   "session/params",

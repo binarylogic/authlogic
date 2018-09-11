@@ -21,10 +21,10 @@ module Authlogic
         klass.class_eval do
           extend Config
           include InstanceMethods
-          after_persisting :set_last_request_at, if: :set_last_request_at?
+          after_persisting :set_last_request_at
           validate :increase_failed_login_count
           before_save :update_info
-          before_save :set_last_request_at, if: :set_last_request_at?
+          before_save :set_last_request_at
         end
       end
 
@@ -90,26 +90,12 @@ module Authlogic
           end
         end
 
-        # This method lets authlogic know whether it should allow the
-        # last_request_at field to be updated with the current time.
-        #
-        # See also `last_request_update_allowed?` in
-        # `Authlogic::ControllerAdapters::AbstractAdapter`
-        #
         # @api private
-        def set_last_request_at?
-          if !record || !klass.column_names.include?("last_request_at")
-            return false
-          end
-          unless controller.last_request_update_allowed?
-            return false
-          end
-          record.last_request_at.blank? ||
-            last_request_at_threshold.to_i.seconds.ago >= record.last_request_at
-        end
-
         def set_last_request_at
-          record.last_request_at = klass.default_timezone == :utc ? Time.now.utc : Time.now
+          current_time = klass.default_timezone == :utc ? Time.now.utc : Time.now
+          MagicColumn::AssignsLastRequestAt
+            .new(current_time, record, controller, last_request_at_threshold)
+            .assign
         end
 
         def last_request_at_threshold
