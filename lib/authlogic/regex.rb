@@ -34,14 +34,14 @@ module Authlogic
     # http://www.unicode.org/faq/idn.html
     # http://ruby-doc.org/core-2.1.5/Regexp.html#class-Regexp-label-Character+Classes
     # http://en.wikipedia.org/wiki/Unicode_character_property#General_Category
-    EMAIL_NONASCII = /
+    EMAIL_NONASCII = %r{
       \A
-      [^[:cntrl:][@\[\]\^ \!"\#$\(\)*,\/:;<=>?`{|}~\\]]+                        # mailbox
+      [^[:cntrl:][@\[\]\^ \!"\#$\(\)*,/:;<=>?`{|}~\\]]+                        # mailbox
       @
-      (?:[^[:cntrl:][@\[\]\^ \!\"\#$&\(\)*,\/:;<=>\?`{|}~\\_.%+']]+\.)+         # subdomains
-      (?:[^[:cntrl:][@\[\]\^ \!\"\#$&\(\)*,\/:;<=>\?`{|}~\\_.%+\-'0-9]]{2,25})  # TLD
+      (?:[^[:cntrl:][@\[\]\^ \!\"\#$&\(\)*,/:;<=>\?`{|}~\\_.%+']]+\.)+         # subdomains
+      (?:[^[:cntrl:][@\[\]\^ \!\"\#$&\(\)*,/:;<=>\?`{|}~\\_.%+\-'0-9]]{2,25})  # TLD
       \z
-    /x
+    }x
 
     # A simple regular expression that only allows for letters, numbers, spaces, and
     # .-_@+. Just a standard login / username regular expression.

@@ -26,25 +26,12 @@ module Authlogic
     autoload :Sha256, "authlogic/crypto_providers/sha256"
     autoload :Sha512, "authlogic/crypto_providers/sha512"
     autoload :BCrypt, "authlogic/crypto_providers/bcrypt"
-    autoload :AES256, "authlogic/crypto_providers/aes256"
     autoload :SCrypt, "authlogic/crypto_providers/scrypt"
     # crypto_providers/wordpress.rb has never been autoloaded, and now it is
     # deprecated.
 
     # Guide users to choose a better crypto provider.
     class Guidance
-      AES256_DEPRECATED = <<~EOS.freeze
-        You have selected AES256 as your authlogic crypto provider. This
-        choice is not suitable for password storage.
-
-        Authlogic will drop its AES256 crypto provider in the next major
-        version. If you're unable to transition away from AES256 please let us
-        know immediately.
-
-        We recommend using a one-way algorithm instead. There are many choices;
-        we recommend scrypt. Use the transition_from_crypto_providers option
-        to make this painless for your users.
-      EOS
       BUILTIN_PROVIDER_PREFIX = "Authlogic::CryptoProviders::".freeze
       NONADAPTIVE_ALGORITHM = <<~EOS.freeze
         You have selected %s as your authlogic crypto provider. This algorithm
@@ -89,8 +76,6 @@ module Authlogic
         # negate the benefits of the `autoload` above.
         name = absolute_name.demodulize
         case name
-        when "AES256"
-          ::ActiveSupport::Deprecation.warn(AES256_DEPRECATED)
         when "MD5", "Sha1"
           warn(format(VULNERABLE_ALGORITHM, name))
         when "Sha256", "Sha512"

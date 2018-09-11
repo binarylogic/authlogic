@@ -30,7 +30,7 @@ ruby. See `required_ruby_version` in the gemspec.
 
 ### Testing
 
-Tests can be run against different versions of Rails like so:
+Tests can be run against different versions of Rails:
 
 ```
 BUNDLE_GEMFILE=gemfiles/Gemfile.rails-4.2.x bundle install

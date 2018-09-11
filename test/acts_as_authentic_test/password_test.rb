@@ -90,8 +90,6 @@ module ActsAsAuthenticTest
 
     def test_crypto_provider_config
       assert_equal Authlogic::CryptoProviders::SCrypt, User.crypto_provider
-      assert_equal Authlogic::CryptoProviders::AES256, Employee.crypto_provider
-
       User.crypto_provider = Authlogic::CryptoProviders::BCrypt
       assert_equal Authlogic::CryptoProviders::BCrypt, User.crypto_provider
       User.crypto_provider Authlogic::CryptoProviders::Sha512

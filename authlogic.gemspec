@@ -33,8 +33,14 @@ require "authlogic/version"
   s.add_development_dependency "rubocop", "~> 0.58.1"
   s.add_development_dependency "timecop", "~> 0.7"
 
-  s.files = `git ls-files`.split("\n")
-  s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
+  # To reduce gem size, only the minimum files are included.
+  #
+  # Tests are intentionally excluded. We only support our own test suite, we do
+  # not have enough volunteers to support "in-situ" testing.
+  s.files = `git ls-files -z`.split("\x0").select { |f|
+    f.match(%r{^(LICENSE|lib|authlogic.gemspec)/})
+  }
+  s.test_files = [] # not packaged, see above
   s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
 end

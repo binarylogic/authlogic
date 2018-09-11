@@ -2,15 +2,14 @@ require "digest/sha2"
 
 module Authlogic
   module CryptoProviders
-    # = Sha512
-    #
-    # Uses the Sha512 hash algorithm to encrypt passwords.
+    # SHA-512 does not have any practical known attacks against it. However,
+    # there are better choices. We recommend transitioning to a more secure,
+    # adaptive hashing algorithm, like scrypt.
     class Sha512
       class << self
         attr_accessor :join_token
 
-        # The number of times to loop through the encryption. This is twenty
-        # because that is what restful_authentication defaults to.
+        # The number of times to loop through the encryption.
         def stretches
           @stretches ||= 20
         end

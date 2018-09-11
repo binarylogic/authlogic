@@ -202,7 +202,8 @@ module Authlogic
         # The family of adaptive hash functions (BCrypt, SCrypt, PBKDF2) is the
         # best choice for password storage today. We recommend SCrypt. Other
         # one-way functions like SHA512 are inferior, but widely used.
-        # Reverisbile functions like AES256 are the worst choice.
+        # Reverisbile functions like AES256 are the worst choice, and we no
+        # longer support them.
         #
         # You can use the `transition_from_crypto_providers` option to gradually
         # transition to a better crypto provider without causing your users any
@@ -326,12 +327,9 @@ module Authlogic
             if password_salt_field
               send("#{password_salt_field}=", Authlogic::Random.friendly_token)
             end
-            encryptor_args_type = act_like_restful_authentication? ? :restful_authentication : nil
             send(
               "#{crypted_password_field}=",
-              crypto_provider.encrypt(
-                *encrypt_arguments(@password, false, encryptor_args_type)
-              )
+              crypto_provider.encrypt(*encrypt_arguments(@password, false))
             )
             @password_changed = true
             after_password_set
@@ -356,7 +354,6 @@ module Authlogic
               next unless encryptor_matches?(
                 crypted,
                 encryptor,
-                index,
                 attempted_password,
                 check_against_database
               )
@@ -405,7 +402,7 @@ module Authlogic
 
           # Returns an array of arguments to be passed to a crypto provider, either its
           # `matches?` or its `encrypt` method.
-          def encrypt_arguments(raw_password, check_against_database, arguments_type = nil)
+          def encrypt_arguments(raw_password, check_against_database)
             salt = nil
             if password_salt_field
               salt =
@@ -415,43 +412,18 @@ module Authlogic
                   send(password_salt_field)
                 end
             end
-
-            case arguments_type
-            when :restful_authentication
-              [REST_AUTH_SITE_KEY, salt, raw_password, REST_AUTH_SITE_KEY].compact
-            when nil
-              [raw_password, salt].compact
-            else
-              raise "Invalid encryptor arguments_type: #{arguments_type}"
-            end
+            [raw_password, salt].compact
           end
 
           # Given `encryptor`, does `attempted_password` match the `crypted` password?
-          def encryptor_matches?(
-            crypted,
-            encryptor,
-            index,
-            attempted_password,
-            check_against_database
-          )
-            # The arguments_type for the transitioning from restful_authentication
-            acting_restful = act_like_restful_authentication? && index == 0
-            transitioning = transition_from_restful_authentication? &&
-              index > 0 &&
-              encryptor == Authlogic::CryptoProviders::Sha1
-            restful = acting_restful || transitioning
-            arguments_type = restful ? :restful_authentication : nil
-            encryptor_args = encrypt_arguments(
-              attempted_password,
-              check_against_database,
-              arguments_type
-            )
+          def encryptor_matches?(crypted, encryptor, attempted_password, check_against_database)
+            encryptor_args = encrypt_arguments(attempted_password, check_against_database)
             encryptor.matches?(crypted, *encryptor_args)
           end
 
           # Determines if we need to transition the password.
           #
-          # - If the index > 0 then we are using an "transition from" crypto
+          # - If the index > 0 then we are using a "transition from" crypto
           #   provider.
           # - If the encryptor has a cost and the cost it outdated.
           # - If we aren't using database values
