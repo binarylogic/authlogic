@@ -25,6 +25,7 @@ module Authlogic
         # * <tt>Default:</tt> nil
         # * <tt>Accepts:</tt> Symbol or Array of symbols
         def validations_scope(value = nil)
+          deprecate_authlogic_config("validations_scope")
           rw_config(:validations_scope, value)
         end
         alias_method :validations_scope=, :validations_scope
