@@ -113,6 +113,12 @@ require "English"
 $LOAD_PATH.unshift(File.expand_path("../lib", __dir__))
 require "authlogic"
 require "authlogic/test_case"
+
+# Configure SCrypt to be as fast as possible. This is desirable for a test
+# suite, and would be the opposite of desirable for production.
+Authlogic::CryptoProviders::SCrypt.max_time = 0.001 # 1ms
+Authlogic::CryptoProviders::SCrypt.max_mem = 1024 * 1024 # 1MB, the minimum SCrypt allows
+
 require "libs/project"
 require "libs/affiliate"
 require "libs/employee"
