@@ -6,7 +6,7 @@ module SessionTest
   class ValidationTest < ActiveSupport::TestCase
     def test_errors
       session = UserSession.new
-      assert session.errors.is_a?(Authlogic::Session::Validation::Errors)
+      assert_kind_of ::ActiveModel::Errors, session.errors
     end
 
     def test_valid
