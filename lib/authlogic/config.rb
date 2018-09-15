@@ -1,5 +1,15 @@
 module Authlogic
   module Config
+    E_USE_NORMAL_RAILS_VALIDATION = <<~EOS.freeze
+      This Authlogic configuration option (%s) is deprecated. Use normal
+      ActiveRecord validations instead. For example, instead of the Authlogic
+      method validates_length_of_email_field_options, you can use
+
+          validates :email, length: { ... }
+
+      These deprecated Authlogic methods will be removed in the next major version.
+    EOS
+
     def self.extended(klass)
       klass.class_eval do
         class_attribute :acts_as_authentic_config
@@ -8,6 +18,12 @@ module Authlogic
     end
 
     private
+
+    def deprecate_authlogic_config(method_name)
+      ::ActiveSupport::Deprecation.warn(
+        format(E_USE_NORMAL_RAILS_VALIDATION, method_name)
+      )
+    end
 
     # This is a one-liner method to write a config setting, read the config
     # setting, and also set a default value for the setting.
