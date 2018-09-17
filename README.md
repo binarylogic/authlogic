@@ -23,34 +23,25 @@ A clean, simple, and unobtrusive ruby authentication solution.
 ## Table of Contents
 
 - [1. Introduction](#1-introduction)
-  - [1.a. Compatibility](#1a-compatibility)
-  - [1.b. Overview](#1b-overview)
+  - [1.a. Overview](#1b-overview)
   - [1.c. Reference Documentation](#1c-reference-documentation)
-- [2. Rails](#2-rails)
-  - [2.a. The users table](#2a-the-users-table)
-  - [2.b. Controller](#2b-controller)
-  - [2.c. View](#2c-view)
+- [2. Rails Integration](#2-rails)
+  - [2.a. Model](#2a-model)
+  - [2.c. Controller](#2b-controller)
+  - [2.b. View](#2c-view)
   - [2.d. CSRF Protection](#2d-csrf-protection)
 - [3. Testing](#3-testing)
 - [4. Helpful links](#4-helpful-links)
 - [5. Add-ons](#5-add-ons)
-- [6. Internals](#6-internals)
+- [6. Internals](#3-quick-setup)
+- [7. Compatibility](#6-compatibility)
 
 ## 1. Introduction
 
-### 1.a. Compatibility
+Authlogic makes the authentication process simple. It seamlessly integrates into
+your rails applications, with a very straight forward setup process.
 
-| Version | branch       | ruby     | activerecord  |
-| ------- | ------------ | -------- | ------------- |
-| 4.3     | 4-3-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
-| 4.2     | 4-2-stable   | >= 2.2.0 | >= 4.2, < 5.3 |
-| 3       | 3-stable     | >= 1.9.3 | >= 3.2, < 5.2 |
-| 2       | rails2       | >= 1.9.3 | ~> 2.3.0      |
-| 1       | ?            | ?        | ?             |
-
-Under SemVer, [changes to dependencies][10] do not require a major release.
-
-### 1.b. Overview
+### 1.a. Overview
 
 Authlogic introduces a new type of model. You can have as many as you want, and
 name them whatever you want, just like your other models. In this example, we
@@ -175,14 +166,40 @@ Each of the above has various modules that are organized by topic: passwords,
 cookies, etc. For example, if you want to timeout users after a certain period
 of inactivity, you would look in `Authlogic::Session::Timeout`.
 
-## 2. Rails
+## 2. Rails Integration
 
-Let's walk through a typical rails setup.
+Let's walk through a typical rails setup using Authlogic. 
 
-### 2.a. The users table
+##### Add authlogic to your gemfile, and install it
+  ```ruby
+  # Authlogic is a clean, simple, and unobtrusive ruby authentication solution.
+  gem 'authlogic'
+  ``` 
 
-If you want to enable all the features of Authlogic, a migration to create a
-`User` model might look like this:
+### 2.a. Model
+
+##### Create a `User` model migration, and run migration
+```ruby
+class CreateUsers < ActiveRecord::Migration[5.2]
+  def change
+    create_table :users do |t|
+      t.string :first
+      t.string :last
+      
+      # Authlogic 
+      t.string :login  # t.string :email, also works as authenticate
+      t.string :crypted_password
+      t.string :password_salt
+      t.string :persistence_token
+      
+      t.timestamps
+    end
+  end
+end
+```
+
+Authlogic allows you to create a `User` model with some or all of
+fields below. The example above does not utilize all of the Authlogic features.
 
 ``` ruby
 class CreateUser < ActiveRecord::Migration
@@ -190,6 +207,9 @@ class CreateUser < ActiveRecord::Migration
     create_table :users do |t|
       # Authlogic::ActsAsAuthentic::Email
       t.string    :email
+      
+      # Authlogic::ActsAsAuthentic::Login
+      t.string    :login
 
       # Authlogic::ActsAsAuthentic::Password
       t.string    :crypted_password
@@ -227,9 +247,88 @@ class CreateUser < ActiveRecord::Migration
 end
 ```
 
+##### Add acts_as_authentic to the `User` model, and pass options to it by using a block.
+You can also add some constraints for your records by way of validates.
+
+```ruby
+class User < ApplicationRecord
+  # BCrypt hashes plain text passwords on the database level
+  acts_as_authentic do |user|
+   user.crypto_provider = Authlogic::CryptoProviders::BCrypt
+  end
+
+  validates :first, presence: true
+  validates :last, presence: true
+  
+  
+  # Authlogic
+  
+  # password and password_confirmation stand in place of the crypted password field
+  # that exists in your database model. Authlogic will automatically recognize this
+  # and because you passed the BCrypt option to acts_as_authentic, the 'User' model 
+  # will hash the crypted password field at the database level 
+  
+  validates :login, presence: true, uniqueness: true
+  validates :password, presence: true,  confirmation: true, length: { minimum: 8 }
+  validates :password_confirmation, presence: true, length: { minimum: 8 }
+end
+
+```
+##### You must also create a `UserSession` model.
+This is because we want the user to 
+login and for that to be known and to persist throughout the application. This 
+is why we used the `persistence_token` field when creating our `User` model. 
+
+You may have to delete the migration of the `UserSession` model.
+
+```ruby
+class UserSession < Authlogic::Session::Base
+  # specify configuration here, such as:
+  # logout_on_timeout true
+  # ...many more options in the documentation
+end
+````
+
+
 ### 2.b. Controller
 
-Your sessions controller will look just like your other controllers.
+##### Create the `Users` controller, and add the respective controller actions.
+
+```ruby
+class UsersController < ApplicationController
+  def new
+    @user = User.new
+  end
+
+  def create
+    @user = User.new(user_params)
+
+    if @user.save
+      flash[:notice] = 'Your user was created successfully'
+      redirect_to root_path
+    else
+      flash[:error] = 'Your user was not created'
+      render 'new'
+    end
+  end
+
+  private
+  
+  def user_params
+    params.require(:user).permit(
+      :first,
+      :last,
+      :login,
+      :password,
+      :password_confirmation
+    )
+  end
+end
+```
+
+#####Create a `UserSessions` controller. 
+Your `UserSessions` controller will 
+look just like your other controllers.
 
 ```ruby
 class UserSessionsController < ApplicationController
@@ -240,7 +339,7 @@ class UserSessionsController < ApplicationController
   def create
     @user_session = UserSession.new(user_session_params)
     if @user_session.save
-      redirect_to account_url
+      redirect_to root_path
     else
       render :action => :new
     end
@@ -248,13 +347,14 @@ class UserSessionsController < ApplicationController
 
   def destroy
     current_user_session.destroy
-    redirect_to new_user_session_url
+    redirect_to root_path
   end
 
   private
 
   def user_session_params
-    params.require(:user_session).permit(:email, :password, :remember_me)
+    params.require(:user_session).permit(:login, :password)
+    # with Authlogic you can optionally permit :remember_me as mentioned previously  
   end
 end
 ```
@@ -263,8 +363,11 @@ As you can see, this fits nicely into the [conventional controller methods][9].
 
 #### 2.b.1. Helper Methods
 
+##### Update application controller for session persistence
+
+
 ```ruby
-class ApplicationController
+class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user
 
   private
@@ -282,6 +385,21 @@ end
 
 ### 2.c. View
 
+##### The new `User` view might look like this:
+
+``` erbruby
+  <%= form_for @user do |user| %>
+    <%= user.text_field :first, placeholder: 'first name' %><br/>
+    <%= user.text_field :last, placeholder: 'last name' %><br/>
+    <%= user.text_field :login, placeholder: 'desired login' %><br/>
+    <%= user.password_field :password, placeholder: 'your password' %><br/>
+    <%= user.password_field :password_confirmation, placeholder: 'password confirmation' %><br/><br/>
+    <%= user.submit 'open account' %>
+  <% end %>
+```
+
+##### The Authlogic `UserSessions` view might look like this:
+
 ```erb
 <%= form_for @user_session do |f| %>
   <% if @user_session.errors.any? %>
@@ -294,14 +412,34 @@ end
     </ul>
   </div>
   <% end %>
-  <%= f.label :login %><br />
-  <%= f.text_field :login %><br />
-  <br />
-  <%= f.label :password %><br />
-  <%= f.password_field :password %><br />
-  <br />
+  <%= f.text_field :login, placeholder: 'login' %><br/>
+  <%= f.password_field :password, placeholder: 'password' %><br/><br/>
   <%= f.submit "Login" %>
 <% end %>
+```
+
+That should be enough to get you started. From there you should be able
+to create a user, and login with that user. Add additional functionality by
+referring to the API reference documentation, and picking up inspiration from other
+web applications that you engage with.
+
+Remember to check your routes!
+
+```ruby
+Rails.application.routes.draw do
+  get 'users/new'
+  get 'home/index'
+
+  resources :users
+  resources :user_sessions, only: [:create, :destroy]
+
+  delete '/logout', to: 'user_sessions#destroy', as: :logout
+  get '/login', to: 'user_sessions#new', as: :login
+
+  root 'home#index'
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+end
+
 ```
 
 ### 2.d. CSRF Protection
@@ -363,17 +501,30 @@ See [Authlogic::TestCase](https://github.com/binarylogic/authlogic/blob/master/l
 If you create one of your own, please let us know about it so we can add it to
 this list. Or just fork the project, add your link, and send us a pull request.
 
-## 6. Internals
+## 6. Internals 
 
-Interested in how all of this all works? Think about an ActiveRecord model. A
-database connection must be established before you can use it. In the case of
-Authlogic, a controller connection must be established before you can use it. It
-uses that controller connection to modify cookies, the current session, login
-with HTTP basic, etc. It connects to the controller through a before filter that
-is automatically set in your controller which lets Authlogic know about the
-current controller object. Then Authlogic leverages that to do everything, it's
-a pretty simple design. Nothing crazy going on, Authlogic is just leveraging the
-tools your framework provides in the controller object.
+Interested in how all of this all works? Think about an ActiveRecord model. 
+A database connection must be established before you can use it. In the case of 
+Authlogic, a controller connection must be established before you can use it. 
+It uses that controller connection to modify cookies, the current session, 
+login with HTTP basic, etc. It connects to the controller through a before 
+filter that is automatically set in your controller which lets Authlogic know 
+about the current controller object. Then Authlogic leverages that to do 
+everything, it's a pretty simple design. Nothing crazy going on, 
+Authlogic is just leveraging the tools your framework provides in the 
+controller object.
+
+## 7. Compatibility
+
+| Version | branch       | ruby     | activerecord  |
+| ------- | ------------ | -------- | ------------- |
+| 4.3     | 4-3-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
+| 4.2     | 4-2-stable   | >= 2.2.0 | >= 4.2, < 5.3 |
+| 3       | 3-stable     | >= 1.9.3 | >= 3.2, < 5.2 |
+| 2       | rails2       | >= 1.9.3 | ~> 2.3.0      |
+| 1       | ?            | ?        | ?             |
+
+Under SemVer, [changes to dependencies][10] do not require a major release.
 
 ## Intellectual Property
 
