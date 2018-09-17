@@ -23,9 +23,8 @@ A clean, simple, and unobtrusive ruby authentication solution.
 ## Table of Contents
 
 - [1. Introduction](#1-introduction)
-  - [1.a. Compatibility](#1a-compatibility)
-  - [1.b. Overview](#1b-overview)
-  - [1.c. Reference Documentation](#1c-reference-documentation)
+  - [1.a. Overview](#1b-overview)
+  - [1.b. Reference Documentation](#1c-reference-documentation)
 - [2. Rails](#2-rails)
   - [2.a. The users table](#2a-the-users-table)
   - [2.b. Controller](#2b-controller)
@@ -35,22 +34,11 @@ A clean, simple, and unobtrusive ruby authentication solution.
 - [4. Helpful links](#4-helpful-links)
 - [5. Add-ons](#5-add-ons)
 - [6. Internals](#6-internals)
+- [90. Compatibility](#90-compatibility)
 
 ## 1. Introduction
 
-### 1.a. Compatibility
-
-| Version | branch       | ruby     | activerecord  |
-| ------- | ------------ | -------- | ------------- |
-| 4.3     | 4-3-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
-| 4.2     | 4-2-stable   | >= 2.2.0 | >= 4.2, < 5.3 |
-| 3       | 3-stable     | >= 1.9.3 | >= 3.2, < 5.2 |
-| 2       | rails2       | >= 1.9.3 | ~> 2.3.0      |
-| 1       | ?            | ?        | ?             |
-
-Under SemVer, [changes to dependencies][10] do not require a major release.
-
-### 1.b. Overview
+### 1.a. Overview
 
 Authlogic introduces a new type of model. You can have as many as you want, and
 name them whatever you want, just like your other models. In this example, we
@@ -157,7 +145,7 @@ Authlogic is very flexible, it has a strong public API and a plethora of hooks
 to allow you to modify behavior and extend it. Check out the helpful links below
 to dig deeper.
 
-### 1.c. Reference Documentation
+### 1.b. Reference Documentation
 
 This README is just an introduction, but we also have [reference
 documentation](http://www.rubydoc.info/github/binarylogic/authlogic).
@@ -177,7 +165,7 @@ of inactivity, you would look in `Authlogic::Session::Timeout`.
 
 ## 2. Rails
 
-Let's walk through a typical rails setup.
+Let's walk through a typical rails setup. ([Compatibility](#90-compatibility))
 
 ### 2.a. The users table
 
@@ -374,6 +362,18 @@ is automatically set in your controller which lets Authlogic know about the
 current controller object. Then Authlogic leverages that to do everything, it's
 a pretty simple design. Nothing crazy going on, Authlogic is just leveraging the
 tools your framework provides in the controller object.
+
+## 90. Compatibility
+
+| Version | branch       | ruby     | activerecord  |
+| ------- | ------------ | -------- | ------------- |
+| 4.3     | 4-3-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
+| 4.2     | 4-2-stable   | >= 2.2.0 | >= 4.2, < 5.3 |
+| 3       | 3-stable     | >= 1.9.3 | >= 3.2, < 5.2 |
+| 2       | rails2       | >= 1.9.3 | ~> 2.3.0      |
+| 1       | ?            | ?        | ?             |
+
+Under SemVer, [changes to dependencies][10] do not require a major release.
 
 ## Intellectual Property
 
