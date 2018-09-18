@@ -19,7 +19,7 @@ require "authlogic/version"
     "jared@jaredbeck.com"
   ]
   s.homepage = "http://github.com/binarylogic/authlogic"
-  s.summary = "A clean, simple, and unobtrusive ruby authentication solution."
+  s.summary = "An unobtrusive ruby authentication library based on ActiveRecord."
   s.license = "MIT"
 
   s.required_ruby_version = ">= 2.3.0"
