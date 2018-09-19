@@ -22,6 +22,13 @@ module Authlogic
   module AuthenticatesMany
     # These methods become class methods of ::ActiveRecord::Base.
     module Base
+      DPR_AUTH_MANY = <<~EOS
+        authenticates_many is deprecated without replacement. Let us know
+        if you would like to take over maintenance of this feature as a separate
+        gem. If no one volunteers to extract and maintain a new gem, then this
+        feature will simply be deleted.
+      EOS
+
       # Allows you to set up a relationship with your sessions. See module
       # definition above for more details.
       #
@@ -56,6 +63,7 @@ module Authlogic
       #   `scope_cookies` is misleading. Perhaps simply `scope` or `scoped`
       #   would have been better.
       def authenticates_many(name, options = {})
+        ::ActiveSupport::Deprecation.warn(DPR_AUTH_MANY)
         options[:session_class] ||= name.to_s.classify.constantize
         options[:relationship_name] ||= options[:session_class].klass_name.underscore.pluralize
         class_eval <<-EOS, __FILE__, __LINE__ + 1
