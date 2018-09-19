@@ -40,7 +40,7 @@ module Authlogic
         # Here is how you use it:
         #
         # ```
-        # UserSession.with_scope(find_options: {conditions: "account_id = 2"}, id: "account_2") do
+        # UserSession.with_scope(find_options: User.where(account_id: 2), id: "account_2") do
         #   UserSession.find
         # end
         # ```
@@ -52,7 +52,7 @@ module Authlogic
         # User.where("login = 'ben'").first
         # ```
         #
-        # it would be:
+        # it would effectively be:
         #
         # ```
         # User.where("login = 'ben' and account_id = 2").first
@@ -116,8 +116,8 @@ module Authlogic
           [scope[:id], super].compact.join("_")
         end
 
-        # `args[0]` is the name of an AR method, like
-        # `find_by_single_access_token`.
+        # `args[0]` is the name of a model method, like
+        # `find_by_single_access_token` or `find_by_smart_case_login_field`.
         def search_for_record(*args)
           search_scope.scoping do
             klass.send(*args)

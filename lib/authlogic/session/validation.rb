@@ -65,7 +65,11 @@ module Authlogic
 
         before_validation
         new_session? ? before_validation_on_create : before_validation_on_update
+
+        # eg. `Authlogic::Session::Password.validate_by_password`
+        # This is when `attempted_record` is set.
         validate
+
         ensure_authentication_attempted
 
         if errors.empty?

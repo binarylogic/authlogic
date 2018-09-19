@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 module Authlogic
-  # This allows you to scope your authentication. For example, let's say all users belong
-  # to an account, you want to make sure only users that belong to that account can
-  # actually login into that account. Simple, just do:
+  # This allows you to scope your authentication.
+  #
+  # For example, let's say a user belongs to an account. You want to make sure
+  # only users that belong to that account can actually login into that account.
   #
   #   class Account < ActiveRecord::Base
   #     authenticates_many :user_sessions
