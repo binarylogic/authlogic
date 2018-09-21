@@ -16,6 +16,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Fixed
   * None
 
+## 4.4.0 (2018-09-21)
+
+* Breaking Changes
+  * None
+* Added
+  * None
+* Fixed
+  * None
+* Deprecation
+  * [#627](https://github.com/binarylogic/authlogic/pull/627) -
+    Deprecate `authenticates_many` without replacement
+  * [#623](https://github.com/binarylogic/authlogic/pull/623) -
+    Deprecate unnecessary validation features, use normal rails validation
+    instead
+
 ## 4.3.0 (2018-08-12)
 
 * Breaking Changes
