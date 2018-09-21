@@ -27,7 +27,7 @@ module Authlogic
         #
         # @deprecated
         def validations_scope(value = nil)
-          deprecate_authlogic_config("validations_scope")
+          deprecate_authlogic_config("validations_scope") if value
           rw_config(:validations_scope, value)
         end
         alias_method :validations_scope=, :validations_scope

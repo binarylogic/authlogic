@@ -48,7 +48,7 @@ module Authlogic
         #
         # @deprecated
         def validates_length_of_login_field_options(value = nil)
-          deprecate_authlogic_config("validates_length_of_login_field_options")
+          deprecate_authlogic_config("validates_length_of_login_field_options") if value
           rw_config(:validates_length_of_login_field_options, value, within: 3..100)
         end
         alias_method(
@@ -97,7 +97,7 @@ module Authlogic
         #
         # @deprecated
         def validates_format_of_login_field_options(value = nil)
-          deprecate_authlogic_config("validates_format_of_login_field_options")
+          deprecate_authlogic_config("validates_format_of_login_field_options") if value
           rw_config(
             :validates_format_of_login_field_options,
             value,
@@ -145,7 +145,7 @@ module Authlogic
         #
         # @deprecated
         def validates_uniqueness_of_login_field_options(value = nil)
-          deprecate_authlogic_config("validates_uniqueness_of_login_field_options")
+          deprecate_authlogic_config("validates_uniqueness_of_login_field_options") if value
           rw_config(
             :validates_uniqueness_of_login_field_options,
             value,

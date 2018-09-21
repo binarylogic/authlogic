@@ -32,6 +32,8 @@ cherry-pick it from the stable branch into master.
   * The methods for disabling Authlogic's "special" validations,
     eg. `validate_email_field = false` are actually deprecated, but should
     not produce a deprecation warning.
+  * Only produce deprecation warning when configuring a validation, not when
+    performing actual validation.
 
 ## 4.4.0 (2018-09-21)
 
