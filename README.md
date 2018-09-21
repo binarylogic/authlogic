@@ -1,6 +1,6 @@
 # Authlogic
 
-A clean, simple, and unobtrusive ruby authentication solution.
+An unobtrusive ruby authentication library based on ActiveRecord.
 
 [![Gem Version][5]][6] [![Build Status][1]][2] [![Code Climate][7]][8] [![Dependency Status][3]][4]
 
