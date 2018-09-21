@@ -99,8 +99,9 @@ module Authlogic
         #
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
+        #
+        # @deprecated
         def validate_password_field(value = nil)
-          deprecate_authlogic_config("validate_password_field")
           rw_config(:validate_password_field, value, true)
         end
         alias_method :validate_password_field=, :validate_password_field
@@ -115,6 +116,8 @@ module Authlogic
         #
         # * <tt>Default:</tt> {:minimum => 8, :if => :require_password?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
+        #
+        # @deprecated
         def validates_length_of_password_field_options(value = nil)
           deprecate_authlogic_config("validates_length_of_password_field_options")
           rw_config(
@@ -138,6 +141,8 @@ module Authlogic
         # You can do this:
         #
         #   merge_validates_length_of_password_field_options :my_option => my_value
+        #
+        # @deprecated
         def merge_validates_length_of_password_field_options(options = {})
           deprecate_authlogic_config(
             "merge_validates_length_of_password_field_options"
@@ -156,6 +161,8 @@ module Authlogic
         #
         # * <tt>Default:</tt> {:if => :require_password?}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_confirmation_of
+        #
+        # @deprecated
         def validates_confirmation_of_password_field_options(value = nil)
           deprecate_authlogic_config(
             "validates_confirmation_of_password_field_options"
@@ -171,6 +178,8 @@ module Authlogic
 
         # See merge_validates_length_of_password_field_options. The same thing, except for
         # validates_confirmation_of_password_field_options
+        #
+        # @deprecated
         def merge_validates_confirmation_of_password_field_options(options = {})
           deprecate_authlogic_config(
             "merge_validates_confirmation_of_password_field_options"
@@ -189,6 +198,8 @@ module Authlogic
         #
         # * <tt>Default:</tt> validates_length_of_password_field_options
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
+        #
+        # @deprecated
         def validates_length_of_password_confirmation_field_options(value = nil)
           deprecate_authlogic_config(
             "validates_length_of_password_confirmation_field_options"
@@ -206,6 +217,8 @@ module Authlogic
 
         # See merge_validates_length_of_password_field_options. The same thing, except for
         # validates_length_of_password_confirmation_field_options
+        #
+        # @deprecated
         def merge_validates_length_of_password_confirmation_field_options(options = {})
           deprecate_authlogic_config(
             "merge_validates_length_of_password_confirmation_field_options"

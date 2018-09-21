@@ -28,8 +28,9 @@ module Authlogic
         #
         # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
+        #
+        # @deprecated
         def validate_login_field(value = nil)
-          deprecate_authlogic_config("validate_login_field")
           rw_config(:validate_login_field, value, true)
         end
         alias_method :validate_login_field=, :validate_login_field
@@ -44,6 +45,8 @@ module Authlogic
         #
         # * <tt>Default:</tt> {:within => 3..100}
         # * <tt>Accepts:</tt> Hash of options accepted by validates_length_of
+        #
+        # @deprecated
         def validates_length_of_login_field_options(value = nil)
           deprecate_authlogic_config("validates_length_of_login_field_options")
           rw_config(:validates_length_of_login_field_options, value, within: 3..100)
@@ -62,6 +65,8 @@ module Authlogic
         # You can do this:
         #
         #   merge_validates_length_of_login_field_options :my_option => my_value
+        #
+        # @deprecated
         def merge_validates_length_of_login_field_options(options = {})
           deprecate_authlogic_config("merge_validates_length_of_login_field_options")
           self.validates_length_of_login_field_options =
@@ -89,6 +94,8 @@ module Authlogic
         #         }
         #
         # * <tt>Accepts:</tt> Hash of options accepted by validates_format_of
+        #
+        # @deprecated
         def validates_format_of_login_field_options(value = nil)
           deprecate_authlogic_config("validates_format_of_login_field_options")
           rw_config(
@@ -110,6 +117,8 @@ module Authlogic
 
         # See merge_validates_length_of_login_field_options. The same thing,
         # except for validates_format_of_login_field_options
+        #
+        # @deprecated
         def merge_validates_format_of_login_field_options(options = {})
           deprecate_authlogic_config("merge_validates_format_of_login_field_options")
           self.validates_format_of_login_field_options =
@@ -133,6 +142,8 @@ module Authlogic
         #         }
         #
         # * <tt>Accepts:</tt> Hash of options accepted by validates_uniqueness_of
+        #
+        # @deprecated
         def validates_uniqueness_of_login_field_options(value = nil)
           deprecate_authlogic_config("validates_uniqueness_of_login_field_options")
           rw_config(
@@ -150,6 +161,8 @@ module Authlogic
 
         # See merge_validates_length_of_login_field_options. The same thing,
         # except for validates_uniqueness_of_login_field_options
+        #
+        # @deprecated
         def merge_validates_uniqueness_of_login_field_options(options = {})
           deprecate_authlogic_config("merge_validates_uniqueness_of_login_field_options")
           self.validates_uniqueness_of_login_field_options =
