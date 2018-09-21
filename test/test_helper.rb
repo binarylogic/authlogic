@@ -249,14 +249,10 @@ module ActiveSupport
 
     # Sets the session variables that `record` (eg. a `User`) would have after
     # logging in.
-    #
-    # If `record` belongs to an `authenticates_many` association that uses the
-    # `scope_cookies` option, then a `scope_record` can be provided.
-    def set_session_for(record, scope_record = nil)
-      prefix = session_credentials_prefix(scope_record)
+    def set_session_for(record)
       record_class_name = record.class.model_name.name.underscore
-      controller.session["#{prefix}#{record_class_name}_credentials"] = record.persistence_token
-      controller.session["#{prefix}#{record_class_name}_credentials_id"] = record.id
+      controller.session["#{record_class_name}_credentials"] = record.persistence_token
+      controller.session["#{record_class_name}_credentials_id"] = record.id
     end
 
     def unset_session

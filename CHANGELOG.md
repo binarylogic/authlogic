@@ -12,6 +12,7 @@ cherry-pick it from the stable branch into master.
 ## 5.0.0 (Unreleased)
 
 * Breaking Changes
+  * Drop `authenticates_many`, deprecated in 4.4.0
   * [#617](https://github.com/binarylogic/authlogic/pull/617) -
     Drop AES-256 crypto provider, deprecated in 4.2.0
   * [#617](https://github.com/binarylogic/authlogic/pull/617) -
