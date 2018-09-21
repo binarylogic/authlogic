@@ -15,7 +15,7 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 | Version     | Documentation |
 | ----------- | ------------- |
 | Unreleased  | https://github.com/binarylogic/authlogic/blob/master/README.md |
-| 4.3.0       | https://github.com/binarylogic/authlogic/blob/v4.3.0/README.md |
+| 4.4.0       | https://github.com/binarylogic/authlogic/blob/v4.4.0/README.md |
 | 3.7.0       | https://github.com/binarylogic/authlogic/blob/v3.7.0/README.md |
 | 2.1.11      | https://github.com/binarylogic/authlogic/blob/v2.1.11/README.rdoc |
 | 1.4.3       | https://github.com/binarylogic/authlogic/blob/v1.4.3/README.rdoc |
@@ -367,6 +367,7 @@ tools your framework provides in the controller object.
 
 | Version | branch       | ruby     | activerecord  |
 | ------- | ------------ | -------- | ------------- |
+| 4.4     | 4-4-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
 | 4.3     | 4-3-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
 | 4.2     | 4-2-stable   | >= 2.2.0 | >= 4.2, < 5.3 |
 | 3       | 3-stable     | >= 1.9.3 | >= 3.2, < 5.2 |
