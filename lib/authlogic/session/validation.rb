@@ -3,28 +3,27 @@
 module Authlogic
   module Session
     # Responsible for session validation
+    #
+    # The errors in Authlogic work just like ActiveRecord. In fact, it uses
+    # the `ActiveModel::Errors` class. Use it the same way:
+    #
+    # ```
+    # class UserSession
+    #   validate :check_if_awesome
+    #
+    #   private
+    #
+    #   def check_if_awesome
+    #     if login && !login.include?("awesome")
+    #       errors.add(:login, "must contain awesome")
+    #     end
+    #     unless attempted_record.awesome?
+    #       errors.add(:base, "You must be awesome to log in")
+    #     end
+    #   end
+    # end
+    # ```
     module Validation
-      # The errors in Authlogic work JUST LIKE ActiveRecord. In fact, it uses
-      # the exact same ActiveRecord errors class. Use it the same way:
-      #
-      #   class UserSession
-      #     validate :check_if_awesome
-      #
-      #     private
-      #       def check_if_awesome
-      #         errors.add(:login, "must contain awesome") if login && !login.include?("awesome")
-      #         errors.add(:base, "You must be awesome to log in") unless attempted_record.awesome?
-      #       end
-      #   end
-      class Errors < (defined?(::ActiveModel) ? ::ActiveModel::Errors : ::ActiveRecord::Errors)
-        unless defined?(::ActiveModel)
-          def [](key)
-            value = super
-            value.is_a?(Array) ? value : [value].compact
-          end
-        end
-      end
-
       # You should use this as a place holder for any records that you find
       # during validation. The main reason for this is to allow other modules to
       # use it if needed. Take the failed_login_count feature, it needs this in
@@ -38,22 +37,9 @@ module Authlogic
         @attempted_record = value
       end
 
-      # The errors in Authlogic work JUST LIKE ActiveRecord. In fact, it uses
-      # the exact same ActiveRecord errors class. Use it the same way:
-      #
-      # === Example
-      #
-      #  class UserSession
-      #    before_validation :check_if_awesome
-      #
-      #    private
-      #      def check_if_awesome
-      #        errors.add(:login, "must contain awesome") if login && !login.include?("awesome")
-      #        errors.add(:base, "You must be awesome to log in") unless attempted_record.awesome?
-      #      end
-      #  end
+      # @api public
       def errors
-        @errors ||= Errors.new(self)
+        @errors ||= ::ActiveModel::Errors.new(self)
       end
 
       # Determines if the information you provided for authentication is valid
