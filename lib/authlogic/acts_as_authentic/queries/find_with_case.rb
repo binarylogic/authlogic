@@ -9,7 +9,7 @@ module Authlogic
         # Dup ActiveRecord.gem_version before freezing, in case someone
         # else wants to modify it. Freezing modifies an object in place.
         # https://github.com/binarylogic/authlogic/pull/590
-        AR_GEM_VERSION = ActiveRecord.gem_version.dup.freeze
+        AR_GEM_VERSION = ::ActiveRecord.gem_version.dup.freeze
 
         # @api private
         def initialize(model_class, field, value, sensitive)

@@ -48,34 +48,5 @@ module Authlogic
     # A simple regular expression that only allows for letters, numbers, spaces, and
     # .-_@+. Just a standard login / username regular expression.
     LOGIN = /\A[a-zA-Z0-9_][a-zA-Z0-9\.+\-_@ ]+\z/
-
-    # Accessing the above constants using the following methods is deprecated.
-
-    # @deprecated
-    def self.email
-      ::ActiveSupport::Deprecation.warn(
-        "Authlogic::Regex.email is deprecated, use Authlogic::Regex::EMAIL",
-        caller(1)
-      )
-      EMAIL
-    end
-
-    # @deprecated
-    def self.email_nonascii
-      ::ActiveSupport::Deprecation.warn(
-        "Authlogic::Regex.email_nonascii is deprecated, use Authlogic::Regex::EMAIL_NONASCII",
-        caller(1)
-      )
-      EMAIL_NONASCII
-    end
-
-    # @deprecated
-    def self.login
-      ::ActiveSupport::Deprecation.warn(
-        "Authlogic::Regex.login is deprecated, use Authlogic::Regex::LOGIN",
-        caller(1)
-      )
-      LOGIN
-    end
   end
 end

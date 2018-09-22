@@ -45,49 +45,6 @@ module ActsAsAuthenticTest
       assert User.check_passwords_against_database
     end
 
-    def test_validate_password_field_config
-      assert User.validate_password_field
-      assert Employee.validate_password_field
-
-      User.validate_password_field = false
-      refute User.validate_password_field
-      User.validate_password_field true
-      assert User.validate_password_field
-    end
-
-    def test_validates_length_of_password_field_options_config
-      default = { minimum: 8, if: :require_password? }
-      assert_equal default, User.validates_length_of_password_field_options
-      assert_equal default, Employee.validates_length_of_password_field_options
-
-      User.validates_length_of_password_field_options = { yes: "no" }
-      assert_equal({ yes: "no" }, User.validates_length_of_password_field_options)
-      User.validates_length_of_password_field_options default
-      assert_equal default, User.validates_length_of_password_field_options
-    end
-
-    def test_validates_confirmation_of_password_field_options_config
-      default = { if: :require_password? }
-      assert_equal default, User.validates_confirmation_of_password_field_options
-      assert_equal default, Employee.validates_confirmation_of_password_field_options
-
-      User.validates_confirmation_of_password_field_options = { yes: "no" }
-      assert_equal({ yes: "no" }, User.validates_confirmation_of_password_field_options)
-      User.validates_confirmation_of_password_field_options default
-      assert_equal default, User.validates_confirmation_of_password_field_options
-    end
-
-    def test_validates_length_of_password_confirmation_field_options_config
-      default = { minimum: 8, if: :require_password? }
-      assert_equal default, User.validates_length_of_password_confirmation_field_options
-      assert_equal default, Employee.validates_length_of_password_confirmation_field_options
-
-      User.validates_length_of_password_confirmation_field_options = { yes: "no" }
-      assert_equal({ yes: "no" }, User.validates_length_of_password_confirmation_field_options)
-      User.validates_length_of_password_confirmation_field_options default
-      assert_equal default, User.validates_length_of_password_confirmation_field_options
-    end
-
     def test_crypto_provider_config
       assert_equal Authlogic::CryptoProviders::SCrypt, User.crypto_provider
       User.crypto_provider = Authlogic::CryptoProviders::BCrypt
@@ -104,60 +61,6 @@ module ActsAsAuthenticTest
       assert_equal [Authlogic::CryptoProviders::BCrypt], User.transition_from_crypto_providers
       User.transition_from_crypto_providers []
       assert_equal [], User.transition_from_crypto_providers
-    end
-
-    def test_validates_length_of_password
-      u = User.new(
-        login: "abcde",
-        email: "abcde@test.com",
-        password: "abcdefgh",
-        password_confirmation: "abcdefgh"
-      )
-      assert u.valid?
-
-      u.password = u.password_confirmation = "abcdef"
-      refute u.valid?
-
-      assert u.errors[:password].include?("is too short (minimum is 8 characters)")
-      assert u.errors[:password_confirmation].include?("is too short (minimum is 8 characters)")
-    end
-
-    def test_validates_confirmation_of_password
-      u = User.new(
-        login: "abcde",
-        email: "abcde@test.com",
-        password: "abcdefgh",
-        password_confirmation: "abcdefgh"
-      )
-      assert u.valid?
-
-      u.password_confirmation = "abcdefghij"
-      refute u.valid?
-
-      assert u.errors[:password_confirmation].include?("doesn't match Password")
-    end
-
-    def test_validates_length_of_password_confirmation
-      u = User.new
-
-      u.password = "testpass"
-      u.password_confirmation = ""
-      refute u.valid?
-      refute u.errors[:password_confirmation].empty?
-
-      u.password_confirmation = "testpass"
-      refute u.valid?
-      assert u.errors[:password_confirmation].empty?
-
-      ben = users(:ben)
-      assert ben.valid?
-
-      ben.password = "newpasswd"
-      refute ben.valid?
-      refute ben.errors[:password_confirmation].empty?
-
-      ben.password_confirmation = "newpasswd"
-      assert ben.valid?
     end
 
     def test_password
