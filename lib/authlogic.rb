@@ -31,7 +31,6 @@ path = File.dirname(__FILE__) + "/authlogic/"
   "acts_as_authentic/persistence_token",
   "acts_as_authentic/session_maintenance",
   "acts_as_authentic/single_access_token",
-  "acts_as_authentic/validations_scope",
   "acts_as_authentic/base",
 
   "session/activation",
