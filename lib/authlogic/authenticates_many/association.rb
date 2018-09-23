@@ -13,7 +13,7 @@ module Authlogic
     # that specific account. To implement this via ActiveRecord do something
     # like:
     #
-    #   class User < ActiveRecord::Base
+    #   class User < ApplicationRecord
     #     authenticates_many :user_sessions
     #   end
     class Association

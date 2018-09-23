@@ -3,7 +3,7 @@ module Authlogic
   # to an account, you want to make sure only users that belong to that account can
   # actually login into that account. Simple, just do:
   #
-  #   class Account < ActiveRecord::Base
+  #   class Account < ApplicationRecord
   #     authenticates_many :user_sessions
   #   end
   #
