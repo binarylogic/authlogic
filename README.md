@@ -88,7 +88,7 @@ session = UserSession.find
 To get all of the nice authentication functionality in your model just do this:
 
 ```ruby
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   acts_as_authentic do |c|
     c.my_config_option = my_value
   end # the configuration block is optional
@@ -124,7 +124,7 @@ User.create(params[:user])
 You can switch this on and off with the following configuration:
 
 ```ruby
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   acts_as_authentic do |c|
     c.log_in_after_create = false
   end # the configuration block is optional
@@ -134,7 +134,7 @@ end
 Authlogic also updates the session when the user changes his/her password. You can also switch this on and off with the following configuration:
 
 ```ruby
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   acts_as_authentic do |c|
     c.log_in_after_password_change = false
   end # the configuration block is optional
@@ -212,6 +212,53 @@ class CreateUser < ActiveRecord::Migration
       t.timestamps
     end
   end
+end
+```
+
+In the `User` model,
+
+```ruby
+class User < ApplicationRecord
+  acts_as_authentic
+
+  # Validate email, login, and password as you see fit.
+  #
+  # Authlogic < 5 added these validation for you, making them a little awkward
+  # to change. In 4.4.0, those automatic validations were deprecated. See
+  # https://github.com/binarylogic/authlogic/blob/master/doc/use_normal_rails_validation.md
+  validates :email,
+    format: {
+      with: ::Authlogic::Regex::EMAIL,
+      message: "should look like an email address."
+    },
+    length: { maximum: 100 },
+    uniqueness: {
+      case_sensitive: false,
+      if: :email_changed?
+    }
+
+  validates :login,
+    format: {
+      with: ::Authlogic::Regex::LOGIN,
+      message: "should use only letters, numbers, spaces, and .-_@+ please."
+    },
+    length: { within: 3..100 },
+    uniqueness: {
+      case_sensitive: false,
+      if: :login_changed?
+    }
+
+  validates :password,
+    confirmation: { if: :require_password? },
+    length: {
+      minimum: 8,
+      if: :require_password?
+    }
+  validates :password_confirmation,
+    length: {
+      minimum: 8,
+      if: :require_password?
+  }
 end
 ```
 

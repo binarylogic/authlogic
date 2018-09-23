@@ -6,12 +6,8 @@ module Authlogic
   module Config
     E_USE_NORMAL_RAILS_VALIDATION = <<~EOS
       This Authlogic configuration option (%s) is deprecated. Use normal
-      ActiveRecord validations instead. For example, instead of the Authlogic
-      method validates_length_of_email_field_options, you can use
-
-          validates :email, length: { ... }
-
-      These deprecated Authlogic methods will be removed in the next major version.
+      ActiveRecord validation instead. Detailed instructions:
+      https://github.com/binarylogic/authlogic/blob/master/doc/use_normal_rails_validation.md
     EOS
 
     def self.extended(klass)

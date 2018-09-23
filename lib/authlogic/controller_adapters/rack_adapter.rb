@@ -34,7 +34,7 @@ module Authlogic
     #       # Authlogic options go here
     #     end
     #
-    #     class User < ActiveRecord::Base
+    #     class User < ApplicationRecord
     #       acts_as_authentic
     #     end
     #

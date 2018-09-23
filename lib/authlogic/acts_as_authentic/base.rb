@@ -19,7 +19,7 @@ module Authlogic
         # This includes a lot of helpful methods for authenticating records
         # which the Authlogic::Session module relies on. To use it just do:
         #
-        #   class User < ActiveRecord::Base
+        #   class User < ApplicationRecord
         #     acts_as_authentic
         #   end
         #
