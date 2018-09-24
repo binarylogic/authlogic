@@ -75,18 +75,28 @@ module Authlogic
       module InstanceMethods
         private
 
-        def persist_by_http_auth?
-          allow_http_basic_auth? && login_field && password_field
-        end
-
-        def persist_by_http_auth
-          login_proc = proc do |login, password|
+        # Returns a Proc to be executed by
+        # `ActionController::HttpAuthentication::Basic` when credentials are
+        # present in the HTTP request.
+        #
+        # @api private
+        # @return Proc
+        def http_auth_login_proc
+          proc do |login, password|
             if !login.blank? && !password.blank?
               send("#{login_field}=", login)
               send("#{password_field}=", password)
               valid?
             end
           end
+        end
+
+        def persist_by_http_auth?
+          allow_http_basic_auth? && login_field && password_field
+        end
+
+        def persist_by_http_auth
+          login_proc = http_auth_login_proc
 
           if self.class.request_http_basic_auth
             controller.authenticate_or_request_with_http_basic(
