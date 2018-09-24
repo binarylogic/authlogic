@@ -49,18 +49,18 @@ module Authlogic
         errors.clear
         self.attempted_record = nil
 
-        before_validation
-        new_session? ? before_validation_on_create : before_validation_on_update
+        run_callbacks(:before_validation)
+        run_callbacks(new_session? ? :before_validation_on_create : :before_validation_on_update)
 
         # eg. `Authlogic::Session::Password.validate_by_password`
         # This is when `attempted_record` is set.
-        validate
+        run_callbacks(:validate)
 
         ensure_authentication_attempted
 
         if errors.empty?
-          new_session? ? after_validation_on_create : after_validation_on_update
-          after_validation
+          run_callbacks(new_session? ? :after_validation_on_create : :after_validation_on_update)
+          run_callbacks(:after_validation)
         end
 
         save_record(attempted_record)

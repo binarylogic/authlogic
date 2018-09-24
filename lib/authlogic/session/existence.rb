@@ -54,11 +54,11 @@ module Authlogic
         # terminate a session, thus requiring the user to authenticate again if
         # it is needed.
         def destroy
-          before_destroy
+          run_callbacks :before_destroy
           save_record
           errors.clear
           @record = nil
-          after_destroy
+          run_callbacks :after_destroy
           true
         end
 
@@ -78,10 +78,10 @@ module Authlogic
           if valid?
             self.record = attempted_record
 
-            before_save
-            new_session? ? before_create : before_update
-            new_session? ? after_create : after_update
-            after_save
+            run_callbacks :before_save
+            run_callbacks(new_session? ? :before_create : :before_update)
+            run_callbacks(new_session? ? :after_create : :after_update)
+            run_callbacks :after_save
 
             save_record
             self.new_session = false

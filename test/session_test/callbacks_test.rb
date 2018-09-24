@@ -11,7 +11,7 @@ module SessionTest
     def test_no_callbacks
       assert_equal [], WackyUserSession._persist_callbacks.map(&:filter)
       session = WackyUserSession.new
-      session.send(:persist)
+      session.send(:run_callbacks, :persist)
       assert_equal 0, session.counter
     end
 
@@ -23,7 +23,7 @@ module SessionTest
       )
 
       session = WackyUserSession.new
-      session.send(:persist)
+      session.send(:run_callbacks, :persist)
       assert_equal 1, session.counter
     end
 
@@ -35,7 +35,7 @@ module SessionTest
       )
 
       session = WackyUserSession.new
-      session.send(:persist)
+      session.send(:run_callbacks, :persist)
       assert_equal 2, session.counter
     end
   end

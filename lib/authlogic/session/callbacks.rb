@@ -133,16 +133,6 @@ module Authlogic
         end
       end
 
-      METHODS.each do |method|
-        class_eval(
-          <<-EOS, __FILE__, __LINE__ + 1
-            def #{method}
-              run_callbacks(:#{method})
-            end
-          EOS
-        )
-      end
-
       def save_record(alternate_record = nil)
         r = alternate_record || record
         if r&.changed? && !r.readonly?
