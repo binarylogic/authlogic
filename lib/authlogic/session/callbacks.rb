@@ -40,7 +40,6 @@ module Authlogic
     #
     #   before_destroy
     #   [save record if record.changed?]
-    #   destroy
     #   after_destroy
     #
     # Notice the "save record if changed?" lines above. This helps with performance. If
