@@ -62,12 +62,12 @@ module Authlogic
           return true unless record.nil?
           self.attempted_record = nil
           self.remember_me = cookie_credentials_remember_me?
-          before_persisting
-          persist
+          run_callbacks :before_persisting
+          run_callbacks :persist
           ensure_authentication_attempted
           if errors.empty? && !attempted_record.nil?
             self.record = attempted_record
-            after_persisting
+            run_callbacks :after_persisting
             save_record
             self.new_session = false
             true
