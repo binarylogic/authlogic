@@ -8,15 +8,13 @@ before_install:
 # We only test the oldest and the newest ruby versions that we support. We
 # do not test intermediate versions.
 rvm:
-  - 2.3.7
   - 2.5.1
 
 # We only test living versions of rails, per the [rails maintenance
 # policy](http://guides.rubyonrails.org/maintenance_policy.html)
 gemfile:
-  - gemfiles/Gemfile.rails-4.2.x
-  - gemfiles/Gemfile.rails-5.1.x
   - gemfiles/Gemfile.rails-5.2.x
+  - gemfiles/Gemfile.rails-6.0.x
 
 matrix:
   fast_finish: true

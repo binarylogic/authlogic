@@ -23,9 +23,9 @@ require "authlogic/version"
   s.license = "MIT"
 
   s.required_ruby_version = ">= 2.3.0"
-  s.add_dependency "activemodel", [">= 4.2", "< 5.3"]
-  s.add_dependency "activerecord", [">= 4.2", "< 5.3"]
-  s.add_dependency "activesupport", [">= 4.2", "< 5.3"]
+  s.add_dependency "activemodel", [">= 5.2", "< 6.1"]
+  s.add_dependency "activerecord", [">= 5.2", "< 6.1"]
+  s.add_dependency "activesupport", [">= 5.2", "< 6.1"]
   s.add_dependency "request_store", "~> 1.0"
   s.add_dependency "scrypt", ">= 1.2", "< 4.0"
   s.add_development_dependency "bcrypt", "~> 3.1"
