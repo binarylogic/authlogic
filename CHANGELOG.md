@@ -19,12 +19,13 @@ cherry-pick it from the stable branch into master.
   * [#617](https://github.com/binarylogic/authlogic/pull/617) -
     Drop restful_authentication, deprecated in 4.1.0
   * Uses `frozen_string_literal`, so assume all strings returned are frozen
-  * Dependencies
-    * Drop support for rails 4.2, which will be reached EoL 2019-XX-XX (when Rails 6 will out)
 * Added
   * None
 * Fixed
   * None
+* Dependencies
+  * Drop support for rails < 5.2
+  * Add support for rails 6.0
 
 ## 4.4.2 (2018-09-23)
 
