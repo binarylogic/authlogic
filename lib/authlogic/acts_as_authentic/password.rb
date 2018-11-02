@@ -148,35 +148,16 @@ module Authlogic
       module Callbacks
         # Does the order of this array matter?
         METHODS = %w[
-          before_password_set
-          after_password_set
-          before_password_verification
-          after_password_verification
+          password_set
+          password_verification
         ].freeze
 
         def self.included(klass)
           return if klass.crypted_password_field.nil?
-          klass.define_callbacks(*METHODS)
-
+          klass.send :extend, ActiveModel::Callbacks
           METHODS.each do |method|
-            klass.class_eval <<-EOS, __FILE__, __LINE__ + 1
-              def self.#{method}(*methods, &block)
-                set_callback :#{method}, *methods, &block
-              end
-            EOS
+            klass.define_model_callbacks method, only: %i[before after]
           end
-        end
-
-        # TODO: Ideally, once this module is included, the included copies of
-        # the following methods would be private. This cannot be accomplished
-        # by using calling `private` here in the module. Maybe we can set the
-        # privacy inside `included`?
-        METHODS.each do |method|
-          class_eval <<-EOS, __FILE__, __LINE__ + 1
-            def #{method}
-              run_callbacks(:#{method}) { |result, object| result == false }
-            end
-          EOS
         end
       end
 
@@ -203,17 +184,17 @@ module Authlogic
           # create new password salt as well as encrypt the password.
           def password=(pass)
             return if ignore_blank_passwords? && pass.blank?
-            before_password_set
-            @password = pass
-            if password_salt_field
-              send("#{password_salt_field}=", Authlogic::Random.friendly_token)
+            run_callbacks :password_set do
+              @password = pass
+              if password_salt_field
+                send("#{password_salt_field}=", Authlogic::Random.friendly_token)
+              end
+              send(
+                "#{crypted_password_field}=",
+                crypto_provider.encrypt(*encrypt_arguments(@password, false))
+              )
+              @password_changed = true
             end
-            send(
-              "#{crypted_password_field}=",
-              crypto_provider.encrypt(*encrypt_arguments(@password, false))
-            )
-            @password_changed = true
-            after_password_set
           end
 
           # Accepts a raw password to determine if it is the correct password.
@@ -229,23 +210,23 @@ module Authlogic
           )
             crypted = crypted_password_to_validate_against(check_against_database)
             return false if attempted_password.blank? || crypted.blank?
-            before_password_verification
-
-            crypto_providers.each_with_index do |encryptor, index|
-              next unless encryptor_matches?(
-                crypted,
-                encryptor,
-                attempted_password,
-                check_against_database
-              )
-              if transition_password?(index, encryptor, check_against_database)
-                transition_password(attempted_password)
+            run_callbacks :password_verification do
+              crypto_providers.each_with_index.any? do |encryptor, index|
+                if encryptor_matches?(
+                  crypted,
+                  encryptor,
+                  attempted_password,
+                  check_against_database
+                )
+                  if transition_password?(index, encryptor, check_against_database)
+                    transition_password(attempted_password)
+                  end
+                  true
+                else
+                  false
+                end
               end
-              after_password_verification
-              return true
             end
-
-            false
           end
 
           # Resets the password to a random friendly token.
