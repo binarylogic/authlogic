@@ -30,17 +30,8 @@ module Authlogic
         #   end
         #
         # See the various sub modules for the configuration they provide.
-        def acts_as_authentic(unsupported_options = nil)
-          # Stop all configuration if the DB is not set up
+        def acts_as_authentic
           return unless db_setup?
-
-          unless unsupported_options.nil?
-            raise ArgumentError, "You are using the old v1.X.X configuration method for " \
-                "Authlogic. Instead of passing a hash of configuration " \
-                "options to acts_as_authentic, pass a block: " \
-                "acts_as_authentic { |c| c.my_option = my_value }"
-          end
-
           yield self if block_given?
           acts_as_authentic_modules.each { |mod| include mod }
         end
