@@ -18,6 +18,9 @@ module Authlogic
             extend ClassMethods
             include InstanceMethods
 
+            # If the table does not have a password column, then
+            # `after_password_set` etc. will not be defined. See
+            # `Authlogic::ActsAsAuthentic::Password::Callbacks.included`
             if respond_to?(:after_password_set) && respond_to?(:after_password_verification)
               after_password_set :reset_persistence_token
               after_password_verification :reset_persistence_token!, if: :reset_persistence_token?
