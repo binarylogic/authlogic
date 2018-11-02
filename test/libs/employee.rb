@@ -2,7 +2,9 @@
 
 class Employee < ActiveRecord::Base
   acts_as_authentic do |config|
-    config.crypto_provider = Authlogic::CryptoProviders::Sha512
+    silence_warnings do
+      config.crypto_provider = Authlogic::CryptoProviders::Sha512
+    end
   end
   belongs_to :company
 end

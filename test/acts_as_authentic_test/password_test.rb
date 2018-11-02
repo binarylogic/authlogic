@@ -47,9 +47,13 @@ module ActsAsAuthenticTest
 
     def test_crypto_provider_config
       assert_equal Authlogic::CryptoProviders::SCrypt, User.crypto_provider
-      User.crypto_provider = Authlogic::CryptoProviders::BCrypt
+      silence_warnings do
+        User.crypto_provider = Authlogic::CryptoProviders::BCrypt
+      end
       assert_equal Authlogic::CryptoProviders::BCrypt, User.crypto_provider
-      User.crypto_provider Authlogic::CryptoProviders::Sha512
+      silence_warnings do
+        User.crypto_provider Authlogic::CryptoProviders::Sha512
+      end
       assert_equal Authlogic::CryptoProviders::Sha512, User.crypto_provider
     end
 
@@ -143,7 +147,9 @@ module ActsAsAuthenticTest
     )
       records = [records] unless records.is_a?(Array)
       User.acts_as_authentic do |c|
-        c.crypto_provider = crypto_provider
+        silence_warnings do
+          c.crypto_provider = crypto_provider
+        end
         c.transition_from_crypto_providers = from_crypto_providers
       end
       records.each do |record|
