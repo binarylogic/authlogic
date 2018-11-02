@@ -158,15 +158,12 @@ module Authlogic
           return if klass.crypted_password_field.nil?
           klass.define_callbacks(*METHODS)
 
-          # If Rails 3, support the new callback syntax
-          if klass.singleton_class.method_defined?(:set_callback)
-            METHODS.each do |method|
-              klass.class_eval <<-EOS, __FILE__, __LINE__ + 1
-                def self.#{method}(*methods, &block)
-                  set_callback :#{method}, *methods, &block
-                end
-              EOS
-            end
+          METHODS.each do |method|
+            klass.class_eval <<-EOS, __FILE__, __LINE__ + 1
+              def self.#{method}(*methods, &block)
+                set_callback :#{method}, *methods, &block
+              end
+            EOS
           end
         end
 
