@@ -15,17 +15,17 @@ rvm:
 # We only test living versions of rails, per the [rails maintenance
 # policy](http://guides.rubyonrails.org/maintenance_policy.html)
 gemfile:
-  - gemfiles/Gemfile.rails-5.2.x
-  - gemfiles/Gemfile.rails-6.0.x
+  - gemfiles/rails-5.2.rb
+  - gemfiles/rails-6.0.rb
 
 matrix:
   exclude:
     # rails 6 will not support ruby < 2.4.1
     - rvm: 2.3.8
-      gemfile: gemfiles/Gemfile.rails-6.0.x
+      gemfile: gemfiles/rails-6.0.rb
     # optimization: don't test intermediate rubies (see above)
     - rvm: 2.4.4
-      gemfile: gemfiles/Gemfile.rails-5.2.x
+      gemfile: gemfiles/rails-5.2.rb
   fast_finish: true
 
 # We want to use `sudo: false` because the container infrastructure is supposed
