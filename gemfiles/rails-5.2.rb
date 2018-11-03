@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
-gemspec :path => ".."
+gemspec path: ".."
 
 gem "activerecord", "~> 5.2.1"
 gem "activesupport", "~> 5.2.1"
-gem 'sqlite3', :platforms => :ruby
+gem "sqlite3", platforms: :ruby
