@@ -19,7 +19,7 @@ module Authlogic
     #   before_persisting
     #   persist
     #   after_persisting
-    #   [save record if record.changed?]
+    #   [save record if record.has_changes_to_save?]
     #
     #   before_validation
     #   before_validation_on_create
@@ -28,7 +28,7 @@ module Authlogic
     #   after_validation_on_update
     #   after_validation_on_create
     #   after_validation
-    #   [save record if record.changed?]
+    #   [save record if record.has_changes_to_save?]
     #
     #   before_save
     #   before_create
@@ -36,13 +36,13 @@ module Authlogic
     #   after_update
     #   after_create
     #   after_save
-    #   [save record if record.changed?]
+    #   [save record if record.has_changes_to_save?]
     #
     #   before_destroy
-    #   [save record if record.changed?]
+    #   [save record if record.has_changes_to_save?]
     #   after_destroy
     #
-    # Notice the "save record if changed?" lines above. This helps with performance. If
+    # Notice the "save record if has_changes_to_save" lines above. This helps with performance. If
     # you need to make changes to the associated record, there is no need to save the
     # record, Authlogic will do it for you. This allows multiple modules to modify the
     # record and execute as few queries as possible.
@@ -135,7 +135,7 @@ module Authlogic
 
       def save_record(alternate_record = nil)
         r = alternate_record || record
-        if r&.changed? && !r.readonly?
+        if r&.has_changes_to_save? && !r.readonly?
           r.save_without_session_maintenance(validate: false)
         end
       end

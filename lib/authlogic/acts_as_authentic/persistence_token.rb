@@ -27,7 +27,7 @@ module Authlogic
             end
 
             validates_presence_of :persistence_token
-            validates_uniqueness_of :persistence_token, if: :persistence_token_changed?
+            validates_uniqueness_of :persistence_token, if: :will_save_change_to_persistence_token?
 
             before_validation :reset_persistence_token, if: :reset_persistence_token?
           end

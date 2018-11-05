@@ -43,7 +43,9 @@ module Authlogic
 
           klass.class_eval do
             include InstanceMethods
-            validates_uniqueness_of :single_access_token, if: :single_access_token_changed?
+            validates_uniqueness_of :single_access_token,
+              if: :will_save_change_to_single_access_token?
+
             before_validation :reset_single_access_token, if: :reset_single_access_token?
             if respond_to?(:after_password_set)
               after_password_set(
