@@ -138,6 +138,19 @@ module ActsAsAuthenticTest
       assert_not_equal old_password_salt, ben.password_salt
     end
 
+    def test_reset_password_in_after_save
+      lumbergh = admins(:lumbergh)
+
+      old_perishable_token = lumbergh.perishable_token
+      old_crypted_password = lumbergh.crypted_password
+
+      lumbergh.role = "Stapler Supervisor"
+      lumbergh.save!
+
+      assert_not_equal old_perishable_token, lumbergh.perishable_token
+      assert_not_equal old_crypted_password, lumbergh.crypted_password
+    end
+
     private
 
     def transition_password_to(
