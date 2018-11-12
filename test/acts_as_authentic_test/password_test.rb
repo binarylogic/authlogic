@@ -138,6 +138,19 @@ module ActsAsAuthenticTest
       assert_not_equal old_password_salt, ben.password_salt
     end
 
+    def test_reset_password_in_after_save
+      lumbergh = admins(:lumbergh)
+      old_crypted_password = lumbergh.crypted_password
+      lumbergh.role = "Stapler Supervisor"
+      lumbergh.save!
+      # Because his `role` changed, the `after_save` callback in admin.rb will
+      # reset Lumbergh's password.
+      assert_not_equal old_crypted_password, lumbergh.crypted_password
+      # Lumbergh's perishable_token has also changed, but that's not relevant
+      # to this test because perishable_token always changes whenever you save
+      # anything (unless you `disable_perishable_token_maintenance`).
+    end
+
     private
 
     def transition_password_to(

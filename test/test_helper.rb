@@ -107,6 +107,18 @@ ActiveRecord::Schema.define(version: 1) do
     t.string    :ldap_login
     t.string    :persistence_token
   end
+
+  create_table :admins do |t|
+    t.datetime  :created_at
+    t.datetime  :updated_at
+    t.string    :login
+    t.string    :crypted_password
+    t.string    :password_salt
+    t.string    :persistence_token
+    t.string    :perishable_token
+    t.string    :email
+    t.string    :role
+  end
 end
 
 require "English"
@@ -127,6 +139,7 @@ require "libs/ldaper"
 require "libs/user"
 require "libs/user_session"
 require "libs/company"
+require "libs/admin"
 
 module ActiveSupport
   class TestCase
@@ -164,7 +177,8 @@ module ActiveSupport
         Ldaper,
         User,
         UserSession,
-        Company
+        Company,
+        Admin
       ].each do |model|
         unless model.respond_to?(:original_acts_as_authentic_config)
           model.class_attribute :original_acts_as_authentic_config
@@ -182,7 +196,8 @@ module ActiveSupport
         Ldaper,
         User,
         UserSession,
-        Company
+        Company,
+        Admin
       ].each do |model|
         model.acts_as_authentic_config = model.original_acts_as_authentic_config
       end

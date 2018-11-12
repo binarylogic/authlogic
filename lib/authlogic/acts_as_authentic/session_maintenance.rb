@@ -116,7 +116,7 @@ module Authlogic
             session_class.activated? &&
             maintain_session? &&
             !session_ids.blank? &&
-            persistence_token_changed?
+            will_save_change_to_persistence_token?
         end
 
         def maintain_session?
@@ -176,7 +176,7 @@ module Authlogic
         end
 
         def log_in_after_password_change?
-          persistence_token_changed? && self.class.log_in_after_password_change
+          will_save_change_to_persistence_token? && self.class.log_in_after_password_change
         end
       end
     end

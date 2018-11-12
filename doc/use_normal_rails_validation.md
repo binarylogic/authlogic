@@ -41,7 +41,7 @@ validates :email,
   length: { maximum: 100 },
   uniqueness: {
     case_sensitive: false,
-    if: :email_changed?
+    if: :will_save_change_to_email?
   }
 
 validates :login,
@@ -57,7 +57,7 @@ validates :login,
   length: { within: 3..100 },
   uniqueness: {
     case_sensitive: false,
-    if: :login_changed?
+    if: :will_save_change_to_login?
   }
 
 validates :password,

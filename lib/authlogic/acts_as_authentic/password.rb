@@ -247,8 +247,8 @@ module Authlogic
           private
 
           def crypted_password_to_validate_against(check_against_database)
-            if check_against_database && send("#{crypted_password_field}_changed?")
-              send("#{crypted_password_field}_was")
+            if check_against_database && send("will_save_change_to_#{crypted_password_field}?")
+              send("#{crypted_password_field}_in_database")
             else
               send(crypted_password_field)
             end
@@ -268,8 +268,8 @@ module Authlogic
             salt = nil
             if password_salt_field
               salt =
-                if check_against_database && send("#{password_salt_field}_changed?")
-                  send("#{password_salt_field}_was")
+                if check_against_database && send("will_save_change_to_#{password_salt_field}?")
+                  send("#{password_salt_field}_in_database")
                 else
                   send(password_salt_field)
                 end
@@ -299,7 +299,7 @@ module Authlogic
             ) &&
               (
                 !check_against_database ||
-                !send("#{crypted_password_field}_changed?")
+                !send("will_save_change_to_#{crypted_password_field}?")
               )
           end
 
@@ -309,6 +309,7 @@ module Authlogic
           end
 
           def require_password?
+            # this is _not_ the activemodel changed? method, see below
             new_record? || password_changed? || send(crypted_password_field).blank?
           end
 

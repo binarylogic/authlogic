@@ -58,7 +58,7 @@ module Authlogic
             extend ClassMethods
             include InstanceMethods
 
-            validates_uniqueness_of :perishable_token, if: :perishable_token_changed?
+            validates_uniqueness_of :perishable_token, if: :will_save_change_to_perishable_token?
             before_save :reset_perishable_token, unless: :disable_perishable_token_maintenance?
           end
         end
