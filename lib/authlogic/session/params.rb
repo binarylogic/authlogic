@@ -56,7 +56,7 @@ module Authlogic
         def params_key(value = nil)
           rw_config(:params_key, value, cookie_key)
         end
-        alias_method :params_key=, :params_key
+        alias params_key= params_key
 
         # Authentication is allowed via a single access token, but maybe this is
         # something you don't want for your application as a whole. Maybe this
@@ -74,7 +74,7 @@ module Authlogic
             ["application/rss+xml", "application/atom+xml"]
           )
         end
-        alias_method :single_access_allowed_request_types=, :single_access_allowed_request_types
+        alias single_access_allowed_request_types= single_access_allowed_request_types
       end
 
       # The methods available in an Authlogic::Session::Base object that make

@@ -48,7 +48,7 @@ module Authlogic
         def find_by_login_method(value = nil)
           rw_config(:find_by_login_method, value, "find_by_smart_case_login_field")
         end
-        alias_method :find_by_login_method=, :find_by_login_method
+        alias find_by_login_method= find_by_login_method
 
         # The text used to identify credentials (username/password) combination
         # when a bad login attempt occurs. When you show error messages for a
@@ -90,7 +90,7 @@ module Authlogic
         def generalize_credentials_error_messages(value = nil)
           rw_config(:generalize_credentials_error_messages, value, false)
         end
-        alias_method :generalize_credentials_error_messages=, :generalize_credentials_error_messages
+        alias generalize_credentials_error_messages= generalize_credentials_error_messages
 
         # The name of the method you want Authlogic to create for storing the
         # login / username. Keep in mind this is just for your
@@ -105,7 +105,7 @@ module Authlogic
         def login_field(value = nil)
           rw_config(:login_field, value, klass.login_field || klass.email_field)
         end
-        alias_method :login_field=, :login_field
+        alias login_field= login_field
 
         # Works exactly like login_field, but for the password instead. Returns
         # :password if a login_field exists.
@@ -115,7 +115,7 @@ module Authlogic
         def password_field(value = nil)
           rw_config(:password_field, value, login_field && :password)
         end
-        alias_method :password_field=, :password_field
+        alias password_field= password_field
 
         # The name of the method in your model used to verify the password. This
         # should be an instance method. It should also be prepared to accept a
@@ -126,7 +126,7 @@ module Authlogic
         def verify_password_method(value = nil)
           rw_config(:verify_password_method, value, "valid_password?")
         end
-        alias_method :verify_password_method=, :verify_password_method
+        alias verify_password_method= verify_password_method
       end
 
       # :nodoc:

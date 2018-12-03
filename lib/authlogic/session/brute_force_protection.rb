@@ -53,7 +53,7 @@ module Authlogic
         def consecutive_failed_logins_limit(value = nil)
           rw_config(:consecutive_failed_logins_limit, value, 50)
         end
-        alias_method :consecutive_failed_logins_limit=, :consecutive_failed_logins_limit
+        alias consecutive_failed_logins_limit= consecutive_failed_logins_limit
 
         # Once the failed logins limit has been exceed, how long do you want to
         # ban the user? This can be a temporary or permanent ban.
@@ -63,7 +63,7 @@ module Authlogic
         def failed_login_ban_for(value = nil)
           rw_config(:failed_login_ban_for, (!value.nil? && value) || value, 2.hours.to_i)
         end
-        alias_method :failed_login_ban_for=, :failed_login_ban_for
+        alias failed_login_ban_for= failed_login_ban_for
       end
 
       # The methods available in an Authlogic::Session::Base object that make

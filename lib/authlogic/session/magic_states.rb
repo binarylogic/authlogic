@@ -44,7 +44,7 @@ module Authlogic
         def disable_magic_states(value = nil)
           rw_config(:disable_magic_states, value, false)
         end
-        alias_method :disable_magic_states=, :disable_magic_states
+        alias disable_magic_states= disable_magic_states
       end
 
       # The methods available in an Authlogic::Session::Base object that make up

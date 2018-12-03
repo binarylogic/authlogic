@@ -27,10 +27,7 @@ module Authlogic
         def change_single_access_token_with_password(value = nil)
           rw_config(:change_single_access_token_with_password, value, false)
         end
-        alias_method(
-          :change_single_access_token_with_password=,
-          :change_single_access_token_with_password
-        )
+        alias change_single_access_token_with_password= change_single_access_token_with_password
       end
 
       # All method, for the single_access token aspect of acts_as_authentic.

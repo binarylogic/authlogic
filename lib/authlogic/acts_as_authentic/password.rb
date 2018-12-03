@@ -33,7 +33,7 @@ module Authlogic
             )
           )
         end
-        alias_method :crypted_password_field=, :crypted_password_field
+        alias crypted_password_field= crypted_password_field
 
         # The name of the password_salt field in the database.
         #
@@ -46,7 +46,7 @@ module Authlogic
             first_column_to_exist(nil, :password_salt, :pw_salt, :salt)
           )
         end
-        alias_method :password_salt_field=, :password_salt_field
+        alias password_salt_field= password_salt_field
 
         # Whether or not to require a password confirmation. If you don't want your users
         # to confirm their password just set this to false.
@@ -56,7 +56,7 @@ module Authlogic
         def require_password_confirmation(value = nil)
           rw_config(:require_password_confirmation, value, true)
         end
-        alias_method :require_password_confirmation=, :require_password_confirmation
+        alias require_password_confirmation= require_password_confirmation
 
         # By default passwords are required when a record is new or the crypted_password
         # is blank, but if both of these things are met a password is not required. In
@@ -75,7 +75,7 @@ module Authlogic
         def ignore_blank_passwords(value = nil)
           rw_config(:ignore_blank_passwords, value, true)
         end
-        alias_method :ignore_blank_passwords=, :ignore_blank_passwords
+        alias ignore_blank_passwords= ignore_blank_passwords
 
         # When calling valid_password?("some pass") do you want to check that password
         # against what's in that object or whats in the database. Take this example:
@@ -93,7 +93,7 @@ module Authlogic
         def check_passwords_against_database(value = nil)
           rw_config(:check_passwords_against_database, value, true)
         end
-        alias_method :check_passwords_against_database=, :check_passwords_against_database
+        alias check_passwords_against_database= check_passwords_against_database
 
         # The class you want to use to encrypt and verify your encrypted
         # passwords. See the Authlogic::CryptoProviders module for more info on
@@ -115,7 +115,7 @@ module Authlogic
           CryptoProviders::Guidance.new(value).impart_wisdom
           rw_config(:crypto_provider, value, CryptoProviders::SCrypt)
         end
-        alias_method :crypto_provider=, :crypto_provider
+        alias crypto_provider= crypto_provider
 
         # Let's say you originally encrypted your passwords with Sha1. Sha1 is
         # starting to join the party with MD5 and you want to switch to
@@ -141,7 +141,7 @@ module Authlogic
             []
           )
         end
-        alias_method :transition_from_crypto_providers=, :transition_from_crypto_providers
+        alias transition_from_crypto_providers= transition_from_crypto_providers
       end
 
       # Callbacks / hooks to allow other modules to modify the behavior of this module.
@@ -235,14 +235,14 @@ module Authlogic
             self.password = friendly_token
             self.password_confirmation = friendly_token if self.class.require_password_confirmation
           end
-          alias_method :randomize_password, :reset_password
+          alias randomize_password reset_password
 
           # Resets the password to a random friendly token and then saves the record.
           def reset_password!
             reset_password
             save_without_session_maintenance(validate: false)
           end
-          alias_method :randomize_password!, :reset_password!
+          alias randomize_password! reset_password!
 
           private
 

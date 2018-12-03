@@ -42,7 +42,7 @@ module Authlogic
         def last_request_at_threshold(value = nil)
           rw_config(:last_request_at_threshold, value, 0)
         end
-        alias_method :last_request_at_threshold=, :last_request_at_threshold
+        alias last_request_at_threshold= last_request_at_threshold
       end
 
       # The methods available in an Authlogic::Session::Base object that make

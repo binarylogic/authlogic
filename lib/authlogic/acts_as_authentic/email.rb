@@ -23,7 +23,7 @@ module Authlogic
         def email_field(value = nil)
           rw_config(:email_field, value, first_column_to_exist(nil, :email, :email_address))
         end
-        alias_method :email_field=, :email_field
+        alias email_field= email_field
       end
     end
   end

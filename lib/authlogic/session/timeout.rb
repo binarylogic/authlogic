@@ -65,7 +65,7 @@ module Authlogic
         def logout_on_timeout(value = nil)
           rw_config(:logout_on_timeout, value, false)
         end
-        alias_method :logout_on_timeout=, :logout_on_timeout
+        alias logout_on_timeout= logout_on_timeout
       end
 
       # :nodoc:

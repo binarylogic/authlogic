@@ -22,7 +22,7 @@ module Authlogic
         def login_field(value = nil)
           rw_config(:login_field, value, first_column_to_exist(nil, :login, :username))
         end
-        alias_method :login_field=, :login_field
+        alias login_field= login_field
 
         # This method allows you to find a record with the given login. If you
         # notice, with Active Record you have the UniquenessValidator class.

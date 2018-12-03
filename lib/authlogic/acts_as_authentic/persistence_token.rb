@@ -55,7 +55,7 @@ module Authlogic
             reset_persistence_token
             save_without_session_maintenance(validate: false)
           end
-          alias_method :forget!, :reset_persistence_token!
+          alias forget! reset_persistence_token!
 
           private
 

@@ -26,7 +26,7 @@ module Authlogic
           @klass_name = klass.name
           @klass = klass
         end
-        alias_method :authenticate_with=, :authenticate_with
+        alias authenticate_with= authenticate_with
 
         # The name of the class that this session is authenticating with. For
         # example, the UserSession class will authenticate with the User class
