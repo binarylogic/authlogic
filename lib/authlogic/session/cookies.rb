@@ -35,7 +35,7 @@ module Authlogic
         def cookie_key(value = nil)
           rw_config(:cookie_key, value, "#{klass_name.underscore}_credentials")
         end
-        alias_method :cookie_key=, :cookie_key
+        alias cookie_key= cookie_key
 
         # If sessions should be remembered by default or not.
         #
@@ -44,7 +44,7 @@ module Authlogic
         def remember_me(value = nil)
           rw_config(:remember_me, value, false)
         end
-        alias_method :remember_me=, :remember_me
+        alias remember_me= remember_me
 
         # The length of time until the cookie expires.
         #
@@ -53,7 +53,7 @@ module Authlogic
         def remember_me_for(value = nil)
           rw_config(:remember_me_for, value, 3.months)
         end
-        alias_method :remember_me_for=, :remember_me_for
+        alias remember_me_for= remember_me_for
 
         # Should the cookie be set as secure?  If true, the cookie will only be sent over
         # SSL connections
@@ -63,7 +63,7 @@ module Authlogic
         def secure(value = nil)
           rw_config(:secure, value, true)
         end
-        alias_method :secure=, :secure
+        alias secure= secure
 
         # Should the cookie be set as httponly?  If true, the cookie will not be
         # accessible from javascript
@@ -73,7 +73,7 @@ module Authlogic
         def httponly(value = nil)
           rw_config(:httponly, value, true)
         end
-        alias_method :httponly=, :httponly
+        alias httponly= httponly
 
         # Should the cookie be prevented from being send along with cross-site
         # requests?
@@ -87,7 +87,7 @@ module Authlogic
           end
           rw_config(:same_site, value)
         end
-        alias_method :same_site=, :same_site
+        alias same_site= same_site
 
         # Should the cookie be signed? If the controller adapter supports it, this is a
         # measure against cookie tampering.
@@ -97,7 +97,7 @@ module Authlogic
           end
           rw_config(:sign_cookie, value, false)
         end
-        alias_method :sign_cookie=, :sign_cookie
+        alias sign_cookie= sign_cookie
       end
 
       # The methods available in an Authlogic::Session::Base object that make up

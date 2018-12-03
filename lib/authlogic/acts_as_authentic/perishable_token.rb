@@ -35,7 +35,7 @@ module Authlogic
             10.minutes.to_i
           )
         end
-        alias_method :perishable_token_valid_for=, :perishable_token_valid_for
+        alias perishable_token_valid_for= perishable_token_valid_for
 
         # Authlogic tries to expire and change the perishable token as much as
         # possible, without compromising its purpose. If you want to manage it
@@ -46,7 +46,7 @@ module Authlogic
         def disable_perishable_token_maintenance(value = nil)
           rw_config(:disable_perishable_token_maintenance, value, false)
         end
-        alias_method :disable_perishable_token_maintenance=, :disable_perishable_token_maintenance
+        alias disable_perishable_token_maintenance= disable_perishable_token_maintenance
       end
 
       # All methods relating to the perishable token.

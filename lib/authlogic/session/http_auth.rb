@@ -33,7 +33,7 @@ module Authlogic
         def allow_http_basic_auth(value = nil)
           rw_config(:allow_http_basic_auth, value, false)
         end
-        alias_method :allow_http_basic_auth=, :allow_http_basic_auth
+        alias allow_http_basic_auth= allow_http_basic_auth
 
         # Whether or not to request HTTP authentication
         #
@@ -55,7 +55,7 @@ module Authlogic
         def request_http_basic_auth(value = nil)
           rw_config(:request_http_basic_auth, value, false)
         end
-        alias_method :request_http_basic_auth=, :request_http_basic_auth
+        alias request_http_basic_auth= request_http_basic_auth
 
         # HTTP authentication realm
         #
@@ -68,7 +68,7 @@ module Authlogic
         def http_basic_auth_realm(value = nil)
           rw_config(:http_basic_auth_realm, value, "Application")
         end
-        alias_method :http_basic_auth_realm=, :http_basic_auth_realm
+        alias http_basic_auth_realm= http_basic_auth_realm
       end
 
       # :nodoc:

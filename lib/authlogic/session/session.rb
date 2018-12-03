@@ -25,7 +25,7 @@ module Authlogic
         def session_key(value = nil)
           rw_config(:session_key, value, cookie_key)
         end
-        alias_method :session_key=, :session_key
+        alias session_key= session_key
       end
 
       # :nodoc:

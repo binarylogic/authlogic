@@ -24,7 +24,7 @@ module Authlogic
         def logged_in_timeout(value = nil)
           rw_config(:logged_in_timeout, (!value.nil? && value.to_i) || value, 10.minutes.to_i)
         end
-        alias_method :logged_in_timeout=, :logged_in_timeout
+        alias logged_in_timeout= logged_in_timeout
       end
 
       # All methods for the logged in status feature seat.

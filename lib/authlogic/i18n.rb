@@ -94,7 +94,7 @@ module Authlogic
       def translate(key, options = {})
         translator.translate key, { scope: I18n.scope }.merge(options)
       end
-      alias :t :translate
+      alias t translate
     end
   end
 end

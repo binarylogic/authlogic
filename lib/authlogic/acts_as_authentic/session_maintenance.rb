@@ -42,7 +42,7 @@ module Authlogic
         def log_in_after_create(value = nil)
           rw_config(:log_in_after_create, value, true)
         end
-        alias_method :log_in_after_create=, :log_in_after_create
+        alias log_in_after_create= log_in_after_create
 
         # In order to turn off automatic maintenance of sessions when updating
         # the password, just set this to false.
@@ -52,7 +52,7 @@ module Authlogic
         def log_in_after_password_change(value = nil)
           rw_config(:log_in_after_password_change, value, true)
         end
-        alias_method :log_in_after_password_change=, :log_in_after_password_change
+        alias log_in_after_password_change= log_in_after_password_change
 
         # As you may know, authlogic sessions can be separate by id (See
         # Authlogic::Session::Base#id). You can specify here what session ids
@@ -64,7 +64,7 @@ module Authlogic
         def session_ids(value = nil)
           rw_config(:session_ids, value, [nil])
         end
-        alias_method :session_ids=, :session_ids
+        alias session_ids= session_ids
 
         # The name of the associated session class. This is inferred by the name
         # of the model.
@@ -79,7 +79,7 @@ module Authlogic
                   end
           rw_config(:session_class, value, const)
         end
-        alias_method :session_class=, :session_class
+        alias session_class= session_class
       end
 
       # This module, as one of the `acts_as_authentic_modules`, is only included
