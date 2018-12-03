@@ -10,6 +10,12 @@
 Metrics/AbcSize:
   Max: 17.07
 
+# After consolidating the 23 session modules into one file (see discussion in
+# https://github.com/binarylogic/authlogic/pull/642) some methods are too big.
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'lib/authlogic/session/base.rb'
+
 # Offense count: 5
 Style/ClassVars:
   Exclude:
@@ -27,3 +33,7 @@ Style/MissingRespondToMissing:
   Exclude:
     - 'lib/authlogic/controller_adapters/sinatra_adapter.rb'
     - 'lib/authlogic/test_case/mock_request.rb'
+
+Style/TrivialAccessors:
+  Exclude:
+    - 'lib/authlogic/session/base.rb'

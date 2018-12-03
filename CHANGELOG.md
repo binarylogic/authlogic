@@ -12,19 +12,27 @@ cherry-pick it from the stable branch into master.
 ## 5.0.0 (Unreleased)
 
 * Breaking Changes
-  * [#629](https://github.com/binarylogic/authlogic/pull/629) -
-    Drop validations deprecated in 4.4.0.
-    * See [doc/use_normal_rails_validation.md][1]
-    * [#640](https://github.com/binarylogic/authlogic/pull/640) -
-      Drop `Authlogic::Regex`
-  * [#628](https://github.com/binarylogic/authlogic/pull/628) -
-    Drop `authenticates_many`, deprecated in 4.4.0
-  * [#617](https://github.com/binarylogic/authlogic/pull/617) -
-    Drop AES-256 crypto provider, deprecated in 4.2.0
-  * [#617](https://github.com/binarylogic/authlogic/pull/617) -
-    Drop restful_authentication, deprecated in 4.1.0
-  * [#618](https://github.com/binarylogic/authlogic/pull/618) -
-    Uses `frozen_string_literal`, so assume all strings returned are frozen
+  * Likely to affect many people
+    * [#629](https://github.com/binarylogic/authlogic/pull/629) -
+      Drop validations deprecated in 4.4.0.
+      * See [doc/use_normal_rails_validation.md][1]
+      * [#640](https://github.com/binarylogic/authlogic/pull/640) -
+        Drop `Authlogic::Regex`
+    * [#628](https://github.com/binarylogic/authlogic/pull/628) -
+      Drop `authenticates_many`, deprecated in 4.4.0
+  * Likely to affect few people
+    * [#617](https://github.com/binarylogic/authlogic/pull/617) -
+      Drop AES-256 crypto provider, deprecated in 4.2.0
+    * [#617](https://github.com/binarylogic/authlogic/pull/617) -
+      Drop restful_authentication, deprecated in 4.1.0
+  * Unlikely to affect anyone
+    * [#618](https://github.com/binarylogic/authlogic/pull/618) -
+      Uses `frozen_string_literal`, so assume all strings returned are frozen
+    * [#642](https://github.com/binarylogic/authlogic/pull/642) -
+      The modules that were mixed into `Authlogic::Session::Base` have been
+      inlined and deleted. This only affects you if you were re-opening
+      ("monkey-patching") one of the deleted modules, in which case you can
+      re-open `Base` instead.
 * Added
   * None
 * Fixed
