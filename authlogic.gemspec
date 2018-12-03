@@ -23,6 +23,8 @@ require "authlogic/version"
   s.license = "MIT"
 
   s.required_ruby_version = ">= 2.3.0"
+
+  # See doc/rails_support_in_authlogic_5.0.md
   s.add_dependency "activemodel", [">= 5.2", "< 6.1"]
   s.add_dependency "activerecord", [">= 5.2", "< 6.1"]
   s.add_dependency "activesupport", [">= 5.2", "< 6.1"]

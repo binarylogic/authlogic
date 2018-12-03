@@ -22,12 +22,11 @@ cherry-pick it from the stable branch into master.
 * Added
   * None
 * Fixed
-  * replace use of 1) <attribute>_changed? with will_save_change_to_<attribute>?,
-    2) <model>.changed? with <model>.has_changes_to_save?, and 3) <attribute>_was?
-    with <attribute>_in_database
+  * [#638](https://github.com/binarylogic/authlogic/pull/638) -
+    Address Rails 5.1 changes to ActiveModel::Dirty
 * Dependencies
-  * Drop support for rails < 5.2
-  * Add support for rails 6.0
+  * Add support for rails 6.0, drop support for rails < 5.2. See
+    [doc/rails_support_in_authlogic_5.0.md](https://git.io/fpK7j) for details.
 
 ## 4.4.2 (2018-09-23)
 
