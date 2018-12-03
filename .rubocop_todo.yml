@@ -8,7 +8,7 @@
 
 # Offense count: 10
 Metrics/AbcSize:
-  Max: 17.4
+  Max: 17.07
 
 # Offense count: 5
 Style/ClassVars:

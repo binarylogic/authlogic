@@ -57,21 +57,51 @@ module Authlogic
           end
         end
 
+        # @api private
+        # @return [String] - Examples:
+        # - user_credentials_id
+        # - ziggity_zack_user_credentials_id
+        #   - ziggity_zack is an "id", see `Authlogic::Session::Id`
+        #   - see persistence_token_test.rb
+        def session_compound_key
+          "#{session_key}_#{klass.primary_key}"
+        end
+
         def session_credentials
           [
             controller.session[session_key],
-            controller.session["#{session_key}_#{klass.primary_key}"]
+            controller.session[session_compound_key]
           ].collect { |i| i.nil? ? i : i.to_s }.compact
         end
 
+        # @return [String] - Examples:
+        # - user_credentials
+        # - ziggity_zack_user_credentials
+        #   - ziggity_zack is an "id", see `Authlogic::Session::Id`
+        #   - see persistence_token_test.rb
         def session_key
           build_key(self.class.session_key)
         end
 
         def update_session
-          controller.session[session_key] = record && record.persistence_token
-          compound_key = "#{session_key}_#{klass.primary_key}"
+          update_session_set_persistence_token
+          update_session_set_primary_key
+        end
+
+        # Updates the session, setting the primary key (usually `id`) of the
+        # record.
+        #
+        # @api private
+        def update_session_set_primary_key
+          compound_key = session_compound_key
           controller.session[compound_key] = record && record.send(record.class.primary_key)
+        end
+
+        # Updates the session, setting the `persistence_token` of the record.
+        #
+        # @api private
+        def update_session_set_persistence_token
+          controller.session[session_key] = record && record.persistence_token
         end
       end
     end
