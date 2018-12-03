@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 class User < ActiveRecord::Base
+  EMAIL = /
+    \A
+    [A-Z0-9_.&%+\-']+   # mailbox
+    @
+    (?:[A-Z0-9\-]+\.)+  # subdomains
+    (?:[A-Z]{2,25})     # TLD
+    \z
+  /ix
+  LOGIN = /\A[a-zA-Z0-9_][a-zA-Z0-9\.+\-_@ ]+\z/
+
   acts_as_authentic do |c|
     c.transition_from_crypto_providers Authlogic::CryptoProviders::Sha512
   end
@@ -17,7 +27,7 @@ class User < ActiveRecord::Base
   # The following validations represent what Authlogic < 5 used as defaults.
   validates :email,
     format: {
-      with: Authlogic::Regex::EMAIL,
+      with: EMAIL,
       message: proc {
         ::Authlogic::I18n.t(
           "error_messages.email_invalid",
@@ -33,7 +43,7 @@ class User < ActiveRecord::Base
 
   validates :login,
     format: {
-      with: Authlogic::Regex::LOGIN,
+      with: LOGIN,
       message: proc {
         ::Authlogic::I18n.t(
           "error_messages.login_invalid",

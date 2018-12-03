@@ -12,7 +12,9 @@ cherry-pick it from the stable branch into master.
 ## 5.0.0 (Unreleased)
 
 * Breaking Changes
-  * Drop validations deprecated in 4.4.0
+  * Drop validations deprecated in 4.4.0.
+    * Drops `Authlogic::Regex`
+    * See [doc/use_normal_rails_validation.md][1]
   * Drop `authenticates_many`, deprecated in 4.4.0
   * [#617](https://github.com/binarylogic/authlogic/pull/617) -
     Drop AES-256 crypto provider, deprecated in 4.2.0
@@ -63,7 +65,7 @@ cherry-pick it from the stable branch into master.
     Deprecate `authenticates_many` without replacement
   * [#623](https://github.com/binarylogic/authlogic/pull/623) -
     Deprecate unnecessary validation features, use normal rails validation
-    instead
+    instead. See [doc/use_normal_rails_validation.md][1]
 
 ## 4.3.0 (2018-08-12)
 
@@ -336,3 +338,5 @@ cherry-pick it from the stable branch into master.
 * changes
   * rails 3 support
   * ruby 1.9.2 support
+
+[1]: https://github.com/binarylogic/authlogic/blob/master/doc/use_normal_rails_validation.md
