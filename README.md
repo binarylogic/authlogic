@@ -107,12 +107,6 @@ setting the Authlogic::CryptoProvider option:
 c.crypto_provider = Authlogic::CryptoProviders::BCrypt
 ```
 
-You may validate international email addresses by enabling the provided alternate regex:
-
-``` ruby
-c.validates_format_of_email_field_options = {:with => Authlogic::Regex.email_nonascii}
-```
-
 Also, sessions are automatically maintained. You can switch this on and off with
 configuration, but the following will automatically log a user in after a
 successful registration:
@@ -228,7 +222,7 @@ class User < ApplicationRecord
   # https://github.com/binarylogic/authlogic/blob/master/doc/use_normal_rails_validation.md
   validates :email,
     format: {
-      with: ::Authlogic::Regex::EMAIL,
+      with: /@/,
       message: "should look like an email address."
     },
     length: { maximum: 100 },
@@ -239,8 +233,8 @@ class User < ApplicationRecord
 
   validates :login,
     format: {
-      with: ::Authlogic::Regex::LOGIN,
-      message: "should use only letters, numbers, spaces, and .-_@+ please."
+      with: /\A[a-z0-9]+\z/,
+      message: "should use only letters and numbers."
     },
     length: { within: 3..100 },
     uniqueness: {

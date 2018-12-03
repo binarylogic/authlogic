@@ -22,15 +22,27 @@ the Authlogic method validates_length_of_email_field_options, use
 It might be a good idea to replace these one field at a time, ie. email,
 then login, then password; one field per commit.
 
+Finish this process before upgrading to Authlogic 5.
+
 ## Default Values
 
-The following validations represent the Authlogic < 5 defaults. Merge these
+The following validations represent the defaults in Authlogic 4. Merge these
 defaults with any settings you may have overwritten.
 
-```
+```ruby
+EMAIL = /
+  \A
+  [A-Z0-9_.&%+\-']+   # mailbox
+  @
+  (?:[A-Z0-9\-]+\.)+  # subdomains
+  (?:[A-Z]{2,25})     # TLD
+  \z
+/ix
+LOGIN = /\A[a-zA-Z0-9_][a-zA-Z0-9\.+\-_@ ]+\z/
+
 validates :email,
   format: {
-    with: ::Authlogic::Regex::EMAIL,
+    with: EMAIL,
     message: proc {
       ::Authlogic::I18n.t(
         "error_messages.email_invalid",
@@ -46,7 +58,7 @@ validates :email,
 
 validates :login,
   format: {
-    with: ::Authlogic::Regex::LOGIN,
+    with: LOGIN,
     message: proc {
       ::Authlogic::I18n.t(
         "error_messages.login_invalid",
