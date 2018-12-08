@@ -12,22 +12,27 @@ cherry-pick it from the stable branch into master.
 ## 5.0.0 (Unreleased)
 
 * Breaking Changes
-  * Drop validations deprecated in 4.4.0.
-    * Drops `Authlogic::Regex`
+  * [#629](https://github.com/binarylogic/authlogic/pull/629) -
+    Drop validations deprecated in 4.4.0.
     * See [doc/use_normal_rails_validation.md][1]
-  * Drop `authenticates_many`, deprecated in 4.4.0
+    * [#640](https://github.com/binarylogic/authlogic/pull/640) -
+      Drop `Authlogic::Regex`
+  * [#628](https://github.com/binarylogic/authlogic/pull/628) -
+    Drop `authenticates_many`, deprecated in 4.4.0
   * [#617](https://github.com/binarylogic/authlogic/pull/617) -
     Drop AES-256 crypto provider, deprecated in 4.2.0
   * [#617](https://github.com/binarylogic/authlogic/pull/617) -
     Drop restful_authentication, deprecated in 4.1.0
-  * Uses `frozen_string_literal`, so assume all strings returned are frozen
+  * [#618](https://github.com/binarylogic/authlogic/pull/618) -
+    Uses `frozen_string_literal`, so assume all strings returned are frozen
 * Added
   * None
 * Fixed
   * [#638](https://github.com/binarylogic/authlogic/pull/638) -
     Address Rails 5.1 changes to ActiveModel::Dirty
 * Dependencies
-  * Add support for rails 6.0, drop support for rails < 5.2. See
+  * [#632](https://github.com/binarylogic/authlogic/pull/632) -
+    Add support for rails 6.0, drop support for rails < 5.2. See
     [doc/rails_support_in_authlogic_5.0.md](https://git.io/fpK7j) for details.
 
 ## 4.4.2 (2018-09-23)
