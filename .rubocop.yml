@@ -34,6 +34,10 @@ AllCops:
 Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 
+# Avoid empty lines in methods, they are a sign the method is too big.
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 

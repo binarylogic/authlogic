@@ -8,8 +8,8 @@ class User < ActiveRecord::Base
     (?:[A-Z0-9\-]+\.)+  # subdomains
     (?:[A-Z]{2,25})     # TLD
     \z
-  /ix
-  LOGIN = /\A[a-zA-Z0-9_][a-zA-Z0-9\.+\-_@ ]+\z/
+  /ix.freeze
+  LOGIN = /\A[a-zA-Z0-9_][a-zA-Z0-9\.+\-_@ ]+\z/.freeze
 
   acts_as_authentic do |c|
     c.transition_from_crypto_providers Authlogic::CryptoProviders::Sha512

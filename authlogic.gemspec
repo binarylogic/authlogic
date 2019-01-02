@@ -33,7 +33,7 @@ require "authlogic/version"
   s.add_development_dependency "bcrypt", "~> 3.1"
   s.add_development_dependency "byebug", "~> 10.0"
   s.add_development_dependency "minitest-reporters", "~> 1.3"
-  s.add_development_dependency "rubocop", "~> 0.58.1"
+  s.add_development_dependency "rubocop", "~> 0.62.0"
   s.add_development_dependency "timecop", "~> 0.7"
 
   # To reduce gem size, only the minimum files are included.
