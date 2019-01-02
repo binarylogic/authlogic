@@ -34,6 +34,8 @@ cherry-pick it from the stable branch into master.
   * [#632](https://github.com/binarylogic/authlogic/pull/632) -
     Add support for rails 6.0, drop support for rails < 5.2. See
     [doc/rails_support_in_authlogic_5.0.md](https://git.io/fpK7j) for details.
+  * [#645](https://github.com/binarylogic/authlogic/pull/645) -
+    Add support for ruby 2.6
 
 ## 4.4.2 (2018-09-23)
 
