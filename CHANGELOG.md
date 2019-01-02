@@ -34,6 +34,7 @@ cherry-pick it from the stable branch into master.
       inlined and deleted. This only affects you if you were re-opening
       ("monkey-patching") one of the deleted modules, in which case you can
       re-open `Base` instead.
+    * `Session::Base#credentials` now always returns a hash.
 * Added
   * None
 * Fixed

@@ -1126,23 +1126,21 @@ module Authlogic
           )
       end
 
-      # The credentials you passed to create your session. See credentials= for
-      # more info.
+      # The credentials you passed to create your session, in a redacted format
+      # intended for output (debugging, logging). See credentials= for more
+      # info.
+      #
+      # @api private
       def credentials
         if authenticating_with_unauthorized_record?
-          # Returning meaningful credentials
-          details = {}
-          details[:unauthorized_record] = "<protected>"
-          details
+          { unauthorized_record: "<protected>" }
         elsif authenticating_with_password?
-          # Returns the login_field / password_field credentials combination in
-          # hash form.
-          details = {}
-          details[login_field.to_sym] = send(login_field)
-          details[password_field.to_sym] = "<protected>"
-          details
+          {
+            login_field.to_sym => send(login_field),
+            password_field.to_sym => "<protected>"
+          }
         else
-          []
+          {}
         end
       end
 
