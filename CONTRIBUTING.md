@@ -33,14 +33,14 @@ ruby. See `required_ruby_version` in the gemspec.
 Tests can be run against different versions of Rails:
 
 ```
-BUNDLE_GEMFILE=gemfiles/rails-6.0.rb bundle install
-BUNDLE_GEMFILE=gemfiles/rails-6.0.rb bundle exec rake
+BUNDLE_GEMFILE=gemfiles/rails_6.0.rb bundle install
+BUNDLE_GEMFILE=gemfiles/rails_6.0.rb bundle exec rake
 ```
 
 To run a single test:
 
 ```
-BUNDLE_GEMFILE=gemfiles/rails-6.0.rb \
+BUNDLE_GEMFILE=gemfiles/rails_6.0.rb \
   bundle exec ruby -I test path/to/test.rb
 ```
 
@@ -57,13 +57,13 @@ Running `rake` also runs a linter, rubocop. Contributions must pass both
 the linter and the tests. The linter can be run on its own.
 
 ```
-BUNDLE_GEMFILE=gemfiles/rails-6.0.rb bundle exec rubocop
+BUNDLE_GEMFILE=gemfiles/rails_6.0.rb bundle exec rubocop
 ```
 
 To run the tests without linting, use `rake test`.
 
 ```
-BUNDLE_GEMFILE=gemfiles/rails-6.0.rb bundle exec rake test
+BUNDLE_GEMFILE=gemfiles/rails_6.0.rb bundle exec rake test
 ```
 
 ### Version Control Branches

@@ -1067,6 +1067,7 @@ module Authlogic
       # Constructor
       # ===========
 
+      # rubocop:disable Metrics/AbcSize
       def initialize(*args)
         @id = nil
         self.scope = self.class.scope
@@ -1092,6 +1093,7 @@ module Authlogic
         instance_variable_set("@#{password_field}", nil)
         self.credentials = args
       end
+      # rubocop:enable Metrics/AbcSize
 
       # Public instance methods
       # =======================
@@ -1170,6 +1172,8 @@ module Authlogic
       # # Finally, there's priority_record
       # [{ priority_record: my_object }, :my_id]
       # ```
+      #
+      # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       def credentials=(value)
         normalized = Array.wrap(value)
         if normalized.first.class.name == "ActionController::Parameters"
@@ -1225,6 +1229,7 @@ module Authlogic
         values = value.is_a?(Array) ? value : [value]
         self.priority_record = values[1] if values[1].class < ::ActiveRecord::Base
       end
+      # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
       # Clears all errors and the associated record, you should call this
       # terminate a session, thus requiring the user to authenticate again if
