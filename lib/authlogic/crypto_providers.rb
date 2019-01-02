@@ -29,8 +29,6 @@ module Authlogic
     autoload :Sha512, "authlogic/crypto_providers/sha512"
     autoload :BCrypt, "authlogic/crypto_providers/bcrypt"
     autoload :SCrypt, "authlogic/crypto_providers/scrypt"
-    # crypto_providers/wordpress.rb has never been autoloaded, and now it is
-    # deprecated.
 
     # Guide users to choose a better crypto provider.
     class Guidance

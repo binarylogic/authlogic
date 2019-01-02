@@ -46,9 +46,6 @@ Layout/MultilineOperationIndentation:
 
 Metrics/AbcSize:
   Exclude:
-    # crypto_providers/wordpress is deprecated so we will not attempt to
-    # improve its quality.
-    - lib/authlogic/crypto_providers/wordpress.rb
     # In an ideal world tests would be held to the same ABC metric as production
     # code. In practice, time spent doing so is not nearly as valuable as
     # spending the same time improving production code.
@@ -61,12 +58,6 @@ Metrics/BlockLength:
 # Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
 Metrics/ClassLength:
   Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Exclude:
-    # crypto_providers/wordpress is deprecated so we will not attempt to
-    # improve its quality.
-    - lib/authlogic/crypto_providers/wordpress.rb
 
 # Aim for 80, but 100 is OK.
 Metrics/LineLength:
