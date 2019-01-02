@@ -2,7 +2,7 @@
 
 module Authlogic
   # Mixed into `Authlogic::ActsAsAuthentic::Base` and
-  # `Authlogic::Session::Foundation`.
+  # `Authlogic::Session::Base`.
   module Config
     E_USE_NORMAL_RAILS_VALIDATION = <<~EOS
       This Authlogic configuration option (%s) is deprecated. Use normal
@@ -14,7 +14,7 @@ module Authlogic
       klass.class_eval do
         # TODO: Is this a confusing name, given this module is mixed into
         # both `Authlogic::ActsAsAuthentic::Base` and
-        # `Authlogic::Session::Foundation`? Perhaps a more generic name, like
+        # `Authlogic::Session::Base`? Perhaps a more generic name, like
         # `authlogic_config` would be better?
         class_attribute :acts_as_authentic_config
         self.acts_as_authentic_config ||= {}

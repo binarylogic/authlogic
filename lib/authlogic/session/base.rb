@@ -148,6 +148,17 @@ module Authlogic
     # allow Authlogic to extend properly with multiple extensions. Please ONLY use the
     # method above.
     #
+    # HTTP Basic Authentication
+    # =========================
+    #
+    # Handles all authentication that deals with basic HTTP auth. Which is
+    # authentication built into the HTTP protocol:
+    #
+    #   http://username:password@whatever.com
+    #
+    # Also, if you are not comfortable letting users pass their raw username and
+    # password you can use a single access token, as described below.
+    #
     # Magic Columns
     # =============
     #
@@ -157,8 +168,7 @@ module Authlogic
     # * login_count - Increased every time an explicit login is made. This will *NOT*
     #   increase if logging in by a session, cookie, or basic http auth
     # * failed_login_count - This increases for each consecutive failed login. See
-    #   Authlogic::Session::BruteForceProtection and the consecutive_failed_logins_limit
-    #   config option for more details.
+    #   the consecutive_failed_logins_limit option for details.
     # * last_request_at - Updates every time the user logs in, either by explicitly
     #   logging in, or logging in by cookie, session, or http auth
     # * current_login_at - Updates with the current time when an explicit login is made.
@@ -235,18 +245,6 @@ module Authlogic
     # it changes, the tighter the security.
     #
     # See Authlogic::ActsAsAuthentic::PerishableToken for more information.
-    #
-    # HTTP Basic Authentication
-    # =========================
-    #
-    # Handles all authentication that deals with basic HTTP auth. Which is
-    # authentication built into the HTTP protocol:
-    #
-    #   http://username:password@whatever.com
-    #
-    # Also, if you are not comfortable letting users pass their raw username and
-    # password you can always use the single access token. See
-    # Authlogic::Session::Params for more info.
     #
     # Scopes
     # ======
@@ -1157,15 +1155,15 @@ module Authlogic
       # # You can pass an array of objects:
       # session.credentials = [my_user_object, true]
       #
-      # # If you need to set an id (see `Authlogic::Session::Id`) pass it
-      # # last. It needs be the last item in the array you pass, since the id
-      # # is something that you control yourself, it should never be set from
-      # # a hash or a form. Examples:
+      # # If you need to set an id (see `#id`) pass it last.
       # session.credentials = [
       #   {:login => "foo", :password => "bar", :remember_me => true},
       #   :my_id
       # ]
       # session.credentials = [my_user_object, true, :my_id]
+      #
+      # The `id` is something that you control yourself, it should never be
+      # set from a hash or a form.
       #
       # # Finally, there's priority_record
       # [{ priority_record: my_object }, :my_id]
@@ -1195,9 +1193,6 @@ module Authlogic
         #
         # You must pass an actual Hash, `ActionController::Parameters` is
         # specifically not allowed.
-        #
-        # See `Authlogic::Session::Foundation#credentials=` for an overview of
-        # all method signatures.
         values = Array.wrap(value)
         if values.first.is_a?(Hash)
           sliced = values
@@ -1268,22 +1263,21 @@ module Authlogic
       end
 
       # Allows you to set a unique identifier for your session, so that you can
-      # have more than 1 session at a time. A good example when this might be
-      # needed is when you want to have a normal user session and a "secure"
-      # user session. The secure user session would be created only when they
-      # want to modify their billing information, or other sensitive
-      # information. Similar to me.com. This requires 2 user sessions. Just use
-      # an id for the "secure" session and you should be good.
+      # have more than 1 session at a time.
+      #
+      # For example, you may want to have simultaneous private and public
+      # sessions. Or, a normal user session and a "secure" user session. The
+      # secure user session would be created only when they want to modify their
+      # billing information, or other sensitive information.
       #
       # You can set the id during initialization (see initialize for more
       # information), or as an attribute:
       #
       #   session.id = :my_id
       #
-      # Just be sure and set your id before you save your session.
+      # Set your id before you save your session.
       #
-      # Lastly, to retrieve your session with the id check out the find class
-      # method.
+      # Lastly, to retrieve your session with the id, use the `.find` method.
       def id
         @id
       end
@@ -1510,7 +1504,7 @@ module Authlogic
         run_callbacks(:before_validation)
         run_callbacks(new_session? ? :before_validation_on_create : :before_validation_on_update)
 
-        # eg. `Authlogic::Session::Password.validate_by_password`
+        # Run the `validate` callbacks, eg. `validate_by_password`.
         # This is when `attempted_record` is set.
         run_callbacks(:validate)
 
@@ -1954,7 +1948,7 @@ module Authlogic
       # @return [String] - Examples:
       # - user_credentials_id
       # - ziggity_zack_user_credentials_id
-      #   - ziggity_zack is an "id", see `Authlogic::Session::Id`
+      #   - ziggity_zack is an "id", see `#id`
       #   - see persistence_token_test.rb
       def session_compound_key
         "#{session_key}_#{klass.primary_key}"
@@ -1970,7 +1964,7 @@ module Authlogic
       # @return [String] - Examples:
       # - user_credentials
       # - ziggity_zack_user_credentials
-      #   - ziggity_zack is an "id", see `Authlogic::Session::Id`
+      #   - ziggity_zack is an "id", see `#id`
       #   - see persistence_token_test.rb
       def session_key
         build_key(self.class.session_key)

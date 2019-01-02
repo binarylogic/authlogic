@@ -2,9 +2,9 @@
 
 module Authlogic
   module ActsAsAuthentic
-    # This module is responsible for maintaining the single_access token. For more
-    # information the single access token and how to use it, see the
-    # Authlogic::Session::Params module.
+    # This module is responsible for maintaining the single_access token. For
+    # more information the single access token and how to use it, see "Params"
+    # in `Session::Base`.
     module SingleAccessToken
       def self.included(klass)
         klass.class_eval do

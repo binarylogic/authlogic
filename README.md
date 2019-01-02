@@ -153,10 +153,6 @@ ActiveRecord model:
 2. **Authlogic::ActsAsAuthentic**, which adds in functionality to your
   ActiveRecord model when you call `acts_as_authentic`.
 
-Each of the above has various modules that are organized by topic: passwords,
-cookies, etc. For example, if you want to timeout users after a certain period
-of inactivity, you would look in `Authlogic::Session::Timeout`.
-
 ## 2. Rails
 
 Let's walk through a typical rails setup. ([Compatibility](#90-compatibility))
@@ -189,7 +185,7 @@ class CreateUser < ActiveRecord::Migration
       t.string    :perishable_token
       t.index     :perishable_token, unique: true
 
-      # Authlogic::Session::MagicColumns
+      # See "Magic Columns" in Authlogic::Session::Base
       t.integer   :login_count, default: 0, null: false
       t.integer   :failed_login_count, default: 0, null: false
       t.datetime  :last_request_at
@@ -198,7 +194,7 @@ class CreateUser < ActiveRecord::Migration
       t.string    :current_login_ip
       t.string    :last_login_ip
 
-      # Authlogic::Session::MagicStates
+      # See "Magic States" in Authlogic::Session::Base
       t.boolean   :active, default: false
       t.boolean   :approved, default: false
       t.boolean   :confirmed, default: false
