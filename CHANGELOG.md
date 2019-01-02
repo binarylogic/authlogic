@@ -26,6 +26,7 @@ cherry-pick it from the stable branch into master.
     * [#617](https://github.com/binarylogic/authlogic/pull/617) -
       Drop restful_authentication, deprecated in 4.1.0
   * Unlikely to affect anyone
+    * Drop the wordpress crypto provider, deprecated in 4.1.0
     * [#618](https://github.com/binarylogic/authlogic/pull/618) -
       Uses `frozen_string_literal`, so assume all strings returned are frozen
     * [#642](https://github.com/binarylogic/authlogic/pull/642) -
