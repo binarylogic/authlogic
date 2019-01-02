@@ -16,7 +16,7 @@ module SessionTest
         session.credentials = ActionController::Parameters.new
       }
       assert_equal(
-        ::Authlogic::Session::Foundation::InstanceMethods::E_AC_PARAMETERS,
+        ::Authlogic::Session::Base::E_AC_PARAMETERS,
         e.message
       )
     end
