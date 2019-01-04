@@ -9,7 +9,16 @@ Releases are done in our "stable" branches, eg. `4-3-stable` so if you're
 looking at `master` and don't see a release here, it's because we forgot to
 cherry-pick it from the stable branch into master.
 
-## 5.0.0 (Unreleased)
+## Unreleased
+
+* Breaking Changes
+  * None
+* Added
+  * None
+* Fixed
+  * None
+
+## 5.0.0 (2019-01-04)
 
 * Breaking Changes
   * Likely to affect many people
