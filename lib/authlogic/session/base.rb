@@ -1322,7 +1322,7 @@ module Authlogic
       def persisting?
         return true unless record.nil?
         self.attempted_record = nil
-        self.remember_me = cookie_credentials_remember_me?
+        self.remember_me = cookie_credentials&.remember_me?
         run_callbacks :before_persisting
         run_callbacks :persist
         ensure_authentication_attempted
@@ -1380,7 +1380,7 @@ module Authlogic
       # Has the cookie expired due to current time being greater than remember_me_until.
       def remember_me_expired?
         return unless remember_me?
-        (Time.parse(cookie_credentials[2]) < Time.now)
+        cookie_credentials.remember_me_until < ::Time.now
       end
 
       # How long to remember the user if remember_me is true. This is based on the class
@@ -1610,18 +1610,16 @@ module Authlogic
         build_key(self.class.cookie_key)
       end
 
-      # Returns an array of cookie elements. See cookie format in
-      # `generate_cookie_for_saving`. If no cookie is found, returns nil.
+      # Look in the `cookie_jar`, find the cookie that contains authlogic
+      # credentials (`cookie_key`).
+      #
+      # @api private
+      # @return ::Authlogic::CookieCredentials or if no cookie is found, nil
       def cookie_credentials
-        cookie = cookie_jar[cookie_key]
-        cookie&.split("::")
-      end
-
-      # The third element of the cookie indicates whether the user wanted
-      # to be remembered (Actually, it's a timestamp, `remember_me_until`)
-      # See cookie format in `generate_cookie_for_saving`.
-      def cookie_credentials_remember_me?
-        !cookie_credentials.nil? && !cookie_credentials[2].nil?
+        cookie_value = cookie_jar[cookie_key]
+        unless cookie_value.nil?
+          ::Authlogic::CookieCredentials.parse(cookie_value)
+        end
       end
 
       def cookie_jar
@@ -1705,15 +1703,15 @@ module Authlogic
         self.class.generalize_credentials_error_messages
       end
 
+      # @api private
       def generate_cookie_for_saving
-        value = format(
-          "%s::%s%s",
+        creds = ::Authlogic::CookieCredentials.new(
           record.persistence_token,
           record.send(record.class.primary_key),
-          remember_me? ? "::#{remember_me_until.iso8601}" : ""
+          remember_me? ? remember_me_until : nil
         )
         {
-          value: value,
+          value: creds.to_s,
           expires: remember_me_until,
           secure: secure,
           httponly: httponly,
@@ -1809,10 +1807,10 @@ module Authlogic
 
       # Tries to validate the session from information in the cookie
       def persist_by_cookie
-        persistence_token, record_id = cookie_credentials
-        if persistence_token.present?
-          record = search_for_record("find_by_#{klass.primary_key}", record_id)
-          if record && record.persistence_token == persistence_token
+        creds = cookie_credentials
+        if creds&.persistence_token.present?
+          record = search_for_record("find_by_#{klass.primary_key}", creds.record_id)
+          if record && record.persistence_token == creds.persistence_token
             self.unauthorized_record = record
           end
           valid?
