@@ -18,6 +18,7 @@ path = File.dirname(__FILE__) + "/authlogic/"
   "config",
 
   "controller_adapters/abstract_adapter",
+  "cookie_credentials",
 
   "crypto_providers",
 
