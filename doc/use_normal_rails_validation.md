@@ -87,7 +87,7 @@ validates :password_confirmation,
 
 ## Motivation
 
-The deprecated features save people some time in the begginning, when setting up
+The deprecated features save people some time in the beginning, when setting up
 Authlogic. But, later in the life of a project, when these settings need to
 change, it is obscure compared to normal ActiveRecord validations.
 
