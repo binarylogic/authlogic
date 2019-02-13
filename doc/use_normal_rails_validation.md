@@ -4,7 +4,7 @@ In Authlogic 4.4.0, [we deprecated][1] the features of Authlogic related to
 validating email, login, and password. In 5.0.0 these features will be dropped.
 Use normal ActiveRecord validations instead.
 
-## Instructions
+## Instructions for 4.4.0
 
 First, disable the deprecated Authlogic validations:
 
@@ -87,7 +87,7 @@ validates :password_confirmation,
 
 ## Motivation
 
-The deprecated features save people some time in the begginning, when setting up
+The deprecated features save people some time in the beginning, when setting up
 Authlogic. But, later in the life of a project, when these settings need to
 change, it is obscure compared to normal ActiveRecord validations.
 
