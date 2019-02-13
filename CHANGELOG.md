@@ -5,10 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-Releases are done in our "stable" branches, eg. `4-3-stable` so if you're
-looking at `master` and don't see a release here, it's because we forgot to
-cherry-pick it from the stable branch into master.
-
 ## Unreleased
 
 * Breaking Changes
@@ -17,6 +13,16 @@ cherry-pick it from the stable branch into master.
   * None
 * Fixed
   * None
+
+## 5.0.1 (2019-02-13)
+
+* Breaking Changes
+  * None
+* Added
+  * None
+* Fixed
+  * [#650](https://github.com/binarylogic/authlogic/pull/650) -
+    rails 6.0.0.beta1 made a breaking change to case_insensitive_comparison
 
 ## 5.0.0 (2019-01-04)
 
