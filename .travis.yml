@@ -18,6 +18,10 @@ gemfile:
   - gemfiles/rails_6.0.rb
 
 matrix:
+  allow_failures:
+    # Rails 6 is in beta and they're still making breaking changes.
+    # When rails 6 final is released, we'll remove this `allow_failures`.
+    - gemfile: gemfiles/rails_6.0.rb
   exclude:
     # rails 6 requires ruby >= 2.5.0
     - rvm: 2.3.8

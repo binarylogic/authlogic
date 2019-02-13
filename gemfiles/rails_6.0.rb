@@ -8,4 +8,3 @@ gemspec path: ".."
 # while, maybe until RC 1 is released.
 gem "activerecord", github: "rails/rails", ref: "ebdaa04"
 gem "activesupport", github: "rails/rails", ref: "ebdaa04"
-gem "sqlite3", platforms: :ruby
