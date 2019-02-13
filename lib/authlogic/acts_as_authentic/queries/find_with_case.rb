@@ -34,17 +34,28 @@ module Authlogic
 
         # @api private
         def insensitive_comparison
-          @model_class.connection.case_insensitive_comparison(
-            @model_class.arel_table,
-            @field,
-            @model_class.columns_hash[@field],
-            @value
-          )
+          if AR_GEM_VERSION > Gem::Version.new("5.3")
+            @model_class.connection.case_insensitive_comparison(
+              @model_class.arel_table[@field], @value
+            )
+          else
+            @model_class.connection.case_insensitive_comparison(
+              @model_class.arel_table,
+              @field,
+              @model_class.columns_hash[@field],
+              @value
+            )
+          end
         end
 
         # @api private
+        # rubocop:disable Metrics/AbcSize
         def sensitive_comparison
-          if AR_GEM_VERSION >= Gem::Version.new("5.0")
+          if AR_GEM_VERSION > Gem::Version.new("5.3")
+            @model_class.connection.case_sensitive_comparison(
+              @model_class.arel_table[@field], @value
+            )
+          elsif AR_GEM_VERSION >= Gem::Version.new("5.0")
             @model_class.connection.case_sensitive_comparison(
               @model_class.arel_table,
               @field,
@@ -56,6 +67,7 @@ module Authlogic
             @model_class.arel_table[@field].eq(value)
           end
         end
+        # rubocop:enable Metrics/AbcSize
       end
     end
   end
