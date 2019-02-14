@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "authlogic/acts_as_authentic/queries/case_sensitivity"
-require "authlogic/acts_as_authentic/queries/find_with_case"
 
 module Authlogic
   module ActsAsAuthentic
@@ -55,7 +54,11 @@ module Authlogic
 
         # @api private
         def find_with_case(field, value, sensitive)
-          Queries::FindWithCase.new(self, field, value, sensitive).execute
+          if sensitive
+            find_by(field => value)
+          else
+            find_by(arel_table[field].matches(value))
+          end
         end
       end
     end
