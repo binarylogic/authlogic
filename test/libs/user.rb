@@ -53,8 +53,7 @@ class User < ActiveRecord::Base
     },
     length: { within: 3..100 },
     uniqueness: {
-      case_sensitive: false,
-      if: :will_save_change_to_login?
+      case_sensitive: true
     }
 
   validates :password,
