@@ -54,8 +54,8 @@ ruby –I test path/to/test.rb
 ### Test MySQL
 
 ```
-mysql -e 'create database authlogic;'
-DB=mysql BUNDLE_GEMFILE=gemfiles/rails_6.0.rb bundle exec rake
+mysql -e 'drop database authlogic; create database authlogic;' && \
+  DB=mysql BUNDLE_GEMFILE=gemfiles/rails_5.2.rb bundle exec rake
 ```
 
 ### Test PostgreSQL
