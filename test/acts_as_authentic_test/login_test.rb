@@ -16,10 +16,12 @@ module ActsAsAuthenticTest
     end
 
     def test_find_by_smart_case_login_field
+      # Note that in the testing library, User#login is configured to be
+      # case-sensitive, but Employee#email is case-insensitive
       ben = users(:ben)
       assert_equal ben, User.find_by_smart_case_login_field("bjohnson")
-      assert_equal ben, User.find_by_smart_case_login_field("BJOHNSON")
-      assert_equal ben, User.find_by_smart_case_login_field("Bjohnson")
+      assert_equal nil, User.find_by_smart_case_login_field("BJOHNSON")
+      assert_equal nil, User.find_by_smart_case_login_field("Bjohnson")
 
       drew = employees(:drew)
       assert_equal drew, Employee.find_by_smart_case_login_field("dgainor@binarylogic.com")
