@@ -1,9 +1,23 @@
+addons:
+  # rails 6 only supports PostgreSQL >= 9.3
+  postgresql: "9.4"
+
 language: ruby
 cache: bundler
 
 before_install:
   - gem update --system
   - gem update bundler
+
+before_script:
+  - mysql -e 'create database authlogic;'
+  - psql -c 'create database authlogic;' -U postgres
+
+env:
+  matrix:
+    - DB=mysql
+    - DB=postgres
+    - DB=sqlite
 
 # We only test the oldest and the newest ruby versions that we support. We
 # do not test intermediate versions.
@@ -23,6 +37,10 @@ matrix:
     - rvm: 2.3.8
       gemfile: gemfiles/rails_6.0.rb
   fast_finish: true
+
+services:
+  - mysql
+  - postgresql
 
 # We want to use `sudo: false` because the container infrastructure is supposed
 # to be faster, but Travis is having issues with containers lately ..
