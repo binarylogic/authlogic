@@ -3,6 +3,8 @@ module Authlogic
     # Handles all authentication that deals with cookies, such as persisting,
     # saving, and destroying.
     module Cookies
+      VALID_SAME_SITE_VALUES = [nil, "Lax", "Strict"].freeze
+
       def self.included(klass)
         klass.class_eval do
           extend Config
@@ -54,22 +56,36 @@ module Authlogic
         # Should the cookie be set as secure?  If true, the cookie will only be sent over
         # SSL connections
         #
-        # * <tt>Default:</tt> false
+        # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
         def secure(value = nil)
-          rw_config(:secure, value, false)
+          rw_config(:secure, value, true)
         end
         alias_method :secure=, :secure
 
         # Should the cookie be set as httponly?  If true, the cookie will not be
         # accessible from javascript
         #
-        # * <tt>Default:</tt> false
+        # * <tt>Default:</tt> true
         # * <tt>Accepts:</tt> Boolean
         def httponly(value = nil)
-          rw_config(:httponly, value, false)
+          rw_config(:httponly, value, true)
         end
         alias_method :httponly=, :httponly
+
+        # Should the cookie be prevented from being send along with cross-site
+        # requests?
+        #
+        # * <tt>Default:</tt> nil
+        # * <tt>Accepts:</tt> String, one of nil, 'Lax' or 'Strict'
+        def same_site(value = nil)
+          unless VALID_SAME_SITE_VALUES.include?(value)
+            msg = "Invalid same_site value: #{value}. Valid: #{VALID_SAME_SITE_VALUES.inspect}"
+            raise ArgumentError.new(msg)
+          end
+          rw_config(:same_site, value)
+        end
+        alias_method :same_site=, :same_site
 
         # Should the cookie be signed? If the controller adapter supports it, this is a
         # measure against cookie tampering.
@@ -109,7 +125,7 @@ module Authlogic
             end
           else
             r = values.find { |val| val.is_a?(TrueClass) || val.is_a?(FalseClass) }
-            self.remember_me = r if !r.nil?
+            self.remember_me = r unless r.nil?
           end
         end
 
@@ -185,6 +201,21 @@ module Authlogic
           httponly == true || httponly == "true" || httponly == "1"
         end
 
+        # If the cookie should be marked as SameSite with 'Lax' or 'Strict' flag.
+        def same_site
+          return @same_site if defined?(@same_site)
+          @same_site = self.class.same_site(nil)
+        end
+
+        # Accepts nil, 'Lax' or 'Strict' as possible flags.
+        def same_site=(value)
+          unless VALID_SAME_SITE_VALUES.include?(value)
+            msg = "Invalid same_site value: #{value}. Valid: #{VALID_SAME_SITE_VALUES.inspect}"
+            raise ArgumentError.new(msg)
+          end
+          @same_site = value
+        end
+
         # If the cookie should be signed
         def sign_cookie
           return @sign_cookie if defined?(@sign_cookie)
@@ -221,57 +252,72 @@ module Authlogic
 
         private
 
-          def cookie_key
-            build_key(self.class.cookie_key)
-          end
+        def cookie_key
+          build_key(self.class.cookie_key)
+        end
 
-          def cookie_credentials
-            if self.class.encrypt_cookie
-              cookie = controller.cookies.encrypted[cookie_key]
-            elsif self.class.sign_cookie
-              cookie = controller.cookies.signed[cookie_key]
-            else
-              cookie = controller.cookies[cookie_key]
+        # Returns an array of cookie elements. See cookie format in
+        # `generate_cookie_for_saving`. If no cookie is found, returns nil.
+        def cookie_credentials
+          cookie = cookie_jar[cookie_key]
+          cookie&.split("::")
+        end
+
+        # The third element of the cookie indicates whether the user wanted
+        # to be remembered (Actually, it's a timestamp, `remember_me_until`)
+        # See cookie format in `generate_cookie_for_saving`.
+        def cookie_credentials_remember_me?
+          !cookie_credentials.nil? && !cookie_credentials[2].nil?
+        end
+
+        def cookie_jar
+          if self.class.encrypt_cookie
+            controller.cookies.encrypted
+          elsif self.class.sign_cookie
+            controller.cookies.signed
+          else
+            controller.cookies
+          end
+        end
+
+        # Tries to validate the session from information in the cookie
+        def persist_by_cookie
+          persistence_token, record_id = cookie_credentials
+          if persistence_token.present?
+            record = search_for_record("find_by_#{klass.primary_key}", record_id)
+            if record && record.persistence_token == persistence_token
+              self.unauthorized_record = record
             end
-            cookie && cookie.split("::")
+            valid?
+          else
+            false
           end
+        end
 
-          # Tries to validate the session from information in the cookie
-          def persist_by_cookie
-            persistence_token, record_id = cookie_credentials
-            if persistence_token.present?
-              record = search_for_record("find_by_#{klass.primary_key}", record_id)
-              self.unauthorized_record = record if record && record.persistence_token == persistence_token
-              valid?
-            else
-              false
-            end
-          end
+        def save_cookie
+          cookie_jar[cookie_key] = generate_cookie_for_saving
+        end
 
-          def save_cookie
-            if encrypt_cookie?
-              controller.cookies.encrypted[cookie_key] = generate_cookie_for_saving
-            elsif sign_cookie?
-              controller.cookies.signed[cookie_key] = generate_cookie_for_saving
-            else
-              controller.cookies[cookie_key] = generate_cookie_for_saving
-            end
-          end
+        def generate_cookie_for_saving
+          value = format(
+            "%s::%s%s",
+            record.persistence_token,
+            record.send(record.class.primary_key),
+            remember_me? ? "::#{remember_me_until.iso8601}" : ""
+          )
+          {
+            value: value,
+            expires: remember_me_until,
+            secure: secure,
+            httponly: httponly,
+            same_site: same_site,
+            domain: controller.cookie_domain
+          }
+        end
 
-          def generate_cookie_for_saving
-            remember_me_until_value = "::#{remember_me_until.iso8601}" if remember_me?
-            {
-              :value => "#{record.persistence_token}::#{record.send(record.class.primary_key)}#{remember_me_until_value}",
-              :expires => remember_me_until,
-              :secure => secure,
-              :httponly => httponly,
-              :domain => controller.cookie_domain
-            }
-          end
-
-          def destroy_cookie
-            controller.cookies.delete cookie_key, :domain => controller.cookie_domain
-          end
+        def destroy_cookie
+          controller.cookies.delete cookie_key, domain: controller.cookie_domain
+        end
       end
     end
   end

@@ -1,4 +1,6 @@
-require 'test_helper'
+# frozen_string_literal: true
+
+require "test_helper"
 
 module ActsAsAuthenticTest
   class EmailTest < ActiveSupport::TestCase
@@ -7,22 +9,24 @@ module ActsAsAuthenticTest
       "damien+test1...etc..@mydomain.com",
       "dakota.dux+1@gmail.com",
       "dakota.d'ux@gmail.com",
-      "a&b@c.com"
-    ]
+      "a&b@c.com",
+      "someuser@somedomain.travelersinsurance"
+    ].freeze
 
     BAD_ASCII_EMAILS = [
       "",
       "aaaaaaaaaaaaa",
       "question?mark@gmail.com",
       "backslash@g\\mail.com",
-      "<script>alert(123);</script>\nnobody@example.com"
-    ]
+      "<script>alert(123);</script>\nnobody@example.com",
+      "someuser@somedomain.isreallytoolongandimeanreallytoolong"
+    ].freeze
 
     # http://en.wikipedia.org/wiki/ISO/IEC_8859-1#Codepage_layout
     GOOD_ISO88591_EMAILS = [
       "töm.öm@dömain.fi",  # https://github.com/binarylogic/authlogic/issues/176
       "Pelé@examplé.com",  # http://en.wikipedia.org/wiki/Email_address#Internationalization_examples
-    ]
+    ].freeze
 
     BAD_ISO88591_EMAILS = [
       "",
@@ -31,34 +35,34 @@ module ActsAsAuthenticTest
       "é[@example.com",  # L bracket
       "question?mark@gmail.com",  # question mark
       "back\\slash@gmail.com",    # backslash
-    ]
+    ].freeze
 
     GOOD_UTF8_EMAILS = [
-      "δκιμή@παράδεγμα.δοκμή",            # http://en.wikipedia.org/wiki/Email_address#Internationalization_examples
+      "δκιμή@παράδεγμα.δοκμή", # http://en.wikipedia.org/wiki/Email_address#Internationalization_examples
       "我本@屋企.香港",                     # http://en.wikipedia.org/wiki/Email_address#Internationalization_examples
       "甲斐@黒川.日買",                     # http://en.wikipedia.org/wiki/Email_address#Internationalization_examples
-      "чебурша@ящик-с-пельнами.рф",       # Contains dashes in domain head
-      "企斐@黒川.みんな",                                              #  https://github.com/binarylogic/authlogic/issues/176#issuecomment-55829320
-    ]
+      "чебурша@ящик-с-пельнами.рф", # Contains dashes in domain head
+      "企斐@黒川.みんな", #  https://github.com/binarylogic/authlogic/issues/176#issuecomment-55829320
+    ].freeze
 
     BAD_UTF8_EMAILS = [
       "",
-              ".みんな",                                                    #  https://github.com/binarylogic/authlogic/issues/176#issuecomment-55829320
-      'δκιμή@παράδεγμα.δ',          # short TLD
+      ".みんな", #  https://github.com/binarylogic/authlogic/issues/176#issuecomment-55829320
+      "δκιμή@παράδεγμα.δ",          # short TLD
       "öm(@ava.fi",                 # L paren
       "é)@domain.com",              # R paren
       "é[@example.com",             # L bracket
       "δ]@πράιγμα.δοκμή",           # R bracket
       "我\.香港",                    # slash
       "甲;.日本",                    # semicolon
-      "ч:@ящик-с-пельнами.рф",      # colon
-      "斐,.みんな",                                           #  comma
+      "ч:@ящик-с-пельнами.рф", # colon
+      "斐,.みんな", #  comma
       "香<.香港",                    # less than
       "我>.香港",                    # greater than
-      "我?本@屋企.香港",              # question mark
-      "чебурша@ьн\\ами.рф",         # backslash
+      "我?本@屋企.香港", # question mark
+      "чебурша@ьн\\ами.рф", # backslash
       "user@domain.com%0A<script>alert('hello')</script>"
-    ]
+    ].freeze
 
     def test_email_field_config
       assert_equal :email, User.email_field
@@ -81,22 +85,22 @@ module ActsAsAuthenticTest
     end
 
     def test_validates_length_of_email_field_options_config
-      assert_equal({ :maximum => 100 }, User.validates_length_of_email_field_options)
-      assert_equal({ :maximum => 100 }, Employee.validates_length_of_email_field_options)
+      assert_equal({ maximum: 100 }, User.validates_length_of_email_field_options)
+      assert_equal({ maximum: 100 }, Employee.validates_length_of_email_field_options)
 
-      User.validates_length_of_email_field_options = { :yes => "no" }
-      assert_equal({ :yes => "no" }, User.validates_length_of_email_field_options)
-      User.validates_length_of_email_field_options({ :within => 6..100 })
-      assert_equal({ :within => 6..100 }, User.validates_length_of_email_field_options)
+      User.validates_length_of_email_field_options = { yes: "no" }
+      assert_equal({ yes: "no" }, User.validates_length_of_email_field_options)
+      User.validates_length_of_email_field_options(within: 6..100)
+      assert_equal({ within: 6..100 }, User.validates_length_of_email_field_options)
     end
 
     def test_validates_format_of_email_field_options_config
       default = {
-        :with => Authlogic::Regex.email,
-        :message => proc do
+        with: Authlogic::Regex::EMAIL,
+        message: proc do
           I18n.t(
-            'error_messages.email_invalid',
-            :default => "should look like an email address."
+            "error_messages.email_invalid",
+            default: "should look like an email address."
           )
         end
       }
@@ -114,17 +118,17 @@ module ActsAsAuthenticTest
       assert_equal default_message, message.call
       assert_equal default, options
 
-      User.validates_format_of_email_field_options = { :yes => "no" }
-      assert_equal({ :yes => "no" }, User.validates_format_of_email_field_options)
+      User.validates_format_of_email_field_options = { yes: "no" }
+      assert_equal({ yes: "no" }, User.validates_format_of_email_field_options)
       User.validates_format_of_email_field_options default
       assert_equal default, User.validates_format_of_email_field_options
 
       with_email_nonascii = {
-        :with => Authlogic::Regex.email_nonascii,
-        :message => Proc.new do
+        with: Authlogic::Regex::EMAIL_NONASCII,
+        message: proc do
           I18n.t(
-            'error_messages.email_invalid_international',
-            :default => "should look like an international email address."
+            "error_messages.email_invalid_international",
+            default: "should look like an international email address."
           )
         end
       }
@@ -138,11 +142,11 @@ module ActsAsAuthenticTest
       # ensure we successfully loaded the test locale
       assert I18n.available_locales.include?(:lol), "Test locale failed to load"
 
-      I18n.with_locale('lol') do
+      I18n.with_locale("lol") do
         message = I18n.t("authlogic.error_messages.email_invalid")
 
         cat = User.new
-        cat.email = 'meow'
+        cat.email = "meow"
         cat.valid?
 
         # filter duplicate error messages
@@ -155,14 +159,14 @@ module ActsAsAuthenticTest
 
     def test_validates_uniqueness_of_email_field_options_config
       default = {
-        :case_sensitive => false,
-        :scope => Employee.validations_scope,
-        :if => "#{Employee.email_field}_changed?".to_sym
+        case_sensitive: false,
+        scope: Employee.validations_scope,
+        if: "#{Employee.email_field}_changed?".to_sym
       }
       assert_equal default, Employee.validates_uniqueness_of_email_field_options
 
-      Employee.validates_uniqueness_of_email_field_options = { :yes => "no" }
-      assert_equal({ :yes => "no" }, Employee.validates_uniqueness_of_email_field_options)
+      Employee.validates_uniqueness_of_email_field_options = { yes: "no" }
+      assert_equal({ yes: "no" }, Employee.validates_uniqueness_of_email_field_options)
       Employee.validates_uniqueness_of_email_field_options default
       assert_equal default, Employee.validates_uniqueness_of_email_field_options
     end
@@ -211,11 +215,11 @@ module ActsAsAuthenticTest
 
     def test_validates_format_of_nonascii_email_field
       (GOOD_ASCII_EMAILS + GOOD_ISO88591_EMAILS + GOOD_UTF8_EMAILS).each do |e|
-        assert e =~  Authlogic::Regex.email_nonascii, "Good email should validate: #{e}"
+        assert e =~ Authlogic::Regex::EMAIL_NONASCII, "Good email should validate: #{e}"
       end
 
       (BAD_ASCII_EMAILS + BAD_ISO88591_EMAILS + BAD_UTF8_EMAILS).each do |e|
-        assert e !~  Authlogic::Regex.email_nonascii, "Bad email should not validate: #{e}"
+        assert e !~ Authlogic::Regex::EMAIL_NONASCII, "Bad email should not validate: #{e}"
       end
     end
 

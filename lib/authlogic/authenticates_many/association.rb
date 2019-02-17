@@ -13,34 +13,38 @@ module Authlogic
     # that specific account. To implement this via ActiveRecord do something
     # like:
     #
-    #   class User < ActiveRecord::Base
+    #   class User < ApplicationRecord
     #     authenticates_many :user_sessions
     #   end
     class Association
       attr_accessor :klass, :find_options, :id
 
+      # - id: Usually `nil`, but if the `scope_cookies` option is used, then
+      #   `id` is a string like "company_123". It may seem strange to refer
+      #   to such a string as an "id", but the naming is intentional, and
+      #   is derived from `Authlogic::Session::Id`.
       def initialize(klass, find_options, id)
         self.klass = klass
         self.find_options = find_options
         self.id = id
       end
 
-      [:create, :create!, :find, :new].each do |method|
-        class_eval <<-"end_eval", __FILE__, __LINE__
+      %i[create create! find new].each do |method|
+        class_eval <<-EOS, __FILE__, __LINE__ + 1
           def #{method}(*args)
             klass.with_scope(scope_options) do
               klass.#{method}(*args)
             end
           end
-        end_eval
+        EOS
       end
       alias_method :build, :new
 
       private
 
-        def scope_options
-          { :find_options => find_options, :id => id }
-        end
+      def scope_options
+        { find_options: find_options, id: id }
+      end
     end
   end
 end

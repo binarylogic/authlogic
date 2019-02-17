@@ -1,9 +1,17 @@
 module Authlogic
   module TestCase
+    # A mock of `ActionDispatch::Cookies::CookieJar`.
     class MockCookieJar < Hash # :nodoc:
+      attr_accessor :set_cookies
+
       def [](key)
         hash = super
         hash && hash[:value]
+      end
+
+      def []=(key, options)
+        (@set_cookies ||= {})[key.to_s] = options
+        super
       end
 
       def delete(key, _options = {})
@@ -29,7 +37,7 @@ module Authlogic
       def [](val)
         signed_message = @parent_jar[val]
         if signed_message
-          payload, signature = signed_message.split('--')
+          payload, signature = signed_message.split("--")
           raise "Invalid signature" unless Digest::SHA1.hexdigest(payload) == signature
           payload
         end

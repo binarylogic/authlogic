@@ -6,7 +6,8 @@ module Authlogic
     # I highly discourage using this crypto provider as it superbly inferior
     # to your other options.
     #
-    # Please use any other provider offered by Authlogic.
+    # Please use any other provider offered by Authlogic (except AES256, that
+    # would be even worse).
     class MD5
       class << self
         attr_accessor :join_token
@@ -24,7 +25,8 @@ module Authlogic
           digest
         end
 
-        # Does the crypted password match the tokens? Uses the same tokens that were used to encrypt.
+        # Does the crypted password match the tokens? Uses the same tokens that
+        # were used to encrypt.
         def matches?(crypted, *tokens)
           encrypt(*tokens) == crypted
         end

@@ -6,7 +6,7 @@ module Authlogic
         klass.class_eval do
           extend Config
           include InstanceMethods
-          validate :validate_by_password, :if => :authenticating_with_password?
+          validate :validate_by_password, if: :authenticating_with_password?
 
           class << self
             attr_accessor :configured_password_methods
@@ -119,7 +119,7 @@ module Authlogic
         # should be an instance method. It should also be prepared to accept a
         # raw password and a crytped password.
         #
-        # * <tt>Default:</tt> "valid_password?"
+        # * <tt>Default:</tt> "valid_password?" defined in acts_as_authentic/password.rb
         # * <tt>Accepts:</tt> Symbol or String
         def verify_password_method(value = nil)
           rw_config(:verify_password_method, value, "valid_password?")
@@ -130,10 +130,11 @@ module Authlogic
       # Password related instance methods
       module InstanceMethods
         def initialize(*args)
-          if !self.class.configured_password_methods
+          unless self.class.configured_password_methods
             configure_password_methods
             self.class.configured_password_methods = true
           end
+          instance_variable_set("@#{password_field}", nil)
           super
         end
 
@@ -152,12 +153,21 @@ module Authlogic
 
         # Accepts the login_field / password_field credentials combination in
         # hash form.
+        #
+        # You must pass an actual Hash, `ActionController::Parameters` is
+        # specifically not allowed.
+        #
+        # See `Authlogic::Session::Foundation#credentials=` for an overview of
+        # all method signatures.
         def credentials=(value)
           super
-          values = parse_param_val(value) # add strong parameters check
-
+          values = Array.wrap(value)
           if values.first.is_a?(Hash)
-            values.first.with_indifferent_access.slice(login_field, password_field).each do |field, val|
+            sliced = values
+              .first
+              .with_indifferent_access
+              .slice(login_field, password_field)
+            sliced.each do |field, val|
               next if val.blank?
               send("#{field}=", val)
             end
@@ -170,105 +180,138 @@ module Authlogic
 
         private
 
-          def configure_password_methods
-            if login_field
-              self.class.send(:attr_writer, login_field) if !respond_to?("#{login_field}=")
-              self.class.send(:attr_reader, login_field) if !respond_to?(login_field)
-            end
-
-            if password_field
-              self.class.send(:attr_writer, password_field) if !respond_to?("#{password_field}=")
-              self.class.send(:define_method, password_field) {} if !respond_to?(password_field)
-
-              # The password should not be accessible publicly. This way forms
-              # using form_for don't fill the password with the attempted
-              # password. To prevent this we just create this method that is
-              # private.
-              self.class.class_eval <<-"end_eval", __FILE__, __LINE__
-                private
-                  def protected_#{password_field}
-                    @#{password_field}
-                  end
-              end_eval
-            end
+        def add_invalid_password_error
+          if generalize_credentials_error_messages?
+            add_general_credentials_error
+          else
+            errors.add(
+              password_field,
+              I18n.t("error_messages.password_invalid", default: "is not valid")
+            )
           end
+        end
 
-          def authenticating_with_password?
-            login_field && (!send(login_field).nil? || !send("protected_#{password_field}").nil?)
+        def add_login_not_found_error
+          if generalize_credentials_error_messages?
+            add_general_credentials_error
+          else
+            errors.add(
+              login_field,
+              I18n.t("error_messages.login_not_found", default: "is not valid")
+            )
           end
+        end
 
-          def validate_by_password
-            self.invalid_password = false
+        def authenticating_with_password?
+          login_field && (!send(login_field).nil? || !send("protected_#{password_field}").nil?)
+        end
 
-            # check for blank fields
-            if send(login_field).blank?
-              errors.add(login_field, I18n.t('error_messages.login_blank', :default => "cannot be blank"))
-            end
-            if send("protected_#{password_field}").blank?
-              errors.add(password_field, I18n.t('error_messages.password_blank', :default => "cannot be blank"))
-            end
-            return if errors.count > 0
+        def configure_password_methods
+          define_login_field_methods
+          define_password_field_methods
+        end
 
-            self.attempted_record = search_for_record(find_by_login_method, send(login_field))
-            if attempted_record.blank?
-              generalize_credentials_error_messages? ?
-                add_general_credentials_error :
-                errors.add(login_field, I18n.t('error_messages.login_not_found', :default => "is not valid"))
-              return
-            end
+        def define_login_field_methods
+          return unless login_field
+          self.class.send(:attr_writer, login_field) unless respond_to?("#{login_field}=")
+          self.class.send(:attr_reader, login_field) unless respond_to?(login_field)
+        end
 
-            # check for invalid password
-            if !attempted_record.send(verify_password_method, send("protected_#{password_field}"))
-              self.invalid_password = true
-              generalize_credentials_error_messages? ?
-                add_general_credentials_error :
-                errors.add(password_field, I18n.t('error_messages.password_invalid', :default => "is not valid"))
-              return
-            end
+        def define_password_field_methods
+          return unless password_field
+          self.class.send(:attr_writer, password_field) unless respond_to?("#{password_field}=")
+          self.class.send(:define_method, password_field) {} unless respond_to?(password_field)
+
+          # The password should not be accessible publicly. This way forms
+          # using form_for don't fill the password with the attempted
+          # password. To prevent this we just create this method that is
+          # private.
+          self.class.class_eval(
+            <<-EOS, __FILE__, __LINE__ + 1
+              private
+                def protected_#{password_field}
+                  @#{password_field}
+                end
+            EOS
+          )
+        end
+
+        # In keeping with the metaphor of ActiveRecord, verification of the
+        # password is referred to as a "validation".
+        def validate_by_password
+          self.invalid_password = false
+          validate_by_password__blank_fields
+          return if errors.count > 0
+          self.attempted_record = search_for_record(find_by_login_method, send(login_field))
+          if attempted_record.blank?
+            add_login_not_found_error
+            return
           end
+          validate_by_password__invalid_password
+        end
 
-          attr_accessor :invalid_password
-
-          def find_by_login_method
-            self.class.find_by_login_method
+        def validate_by_password__blank_fields
+          if send(login_field).blank?
+            errors.add(
+              login_field,
+              I18n.t("error_messages.login_blank", default: "cannot be blank")
+            )
           end
-
-          def login_field
-            self.class.login_field
+          if send("protected_#{password_field}").blank?
+            errors.add(
+              password_field,
+              I18n.t("error_messages.password_blank", default: "cannot be blank")
+            )
           end
+        end
 
-          def add_general_credentials_error
-            error_message =
+        # Verify the password, usually using `valid_password?` in
+        # `acts_as_authentic/password.rb`. If it cannot be verified, we
+        # refer to it as "invalid".
+        def validate_by_password__invalid_password
+          unless attempted_record.send(
+            verify_password_method,
+            send("protected_#{password_field}")
+          )
+            self.invalid_password = true
+            add_invalid_password_error
+          end
+        end
+
+        attr_accessor :invalid_password
+
+        def find_by_login_method
+          self.class.find_by_login_method
+        end
+
+        def login_field
+          self.class.login_field
+        end
+
+        def add_general_credentials_error
+          error_message =
             if self.class.generalize_credentials_error_messages.is_a? String
               self.class.generalize_credentials_error_messages
             else
               "#{login_field.to_s.humanize}/Password combination is not valid"
             end
-            errors.add(:base, I18n.t('error_messages.general_credentials_error', :default => error_message))
-          end
+          errors.add(
+            :base,
+            I18n.t("error_messages.general_credentials_error", default: error_message)
+          )
+        end
 
-          def generalize_credentials_error_messages?
-            self.class.generalize_credentials_error_messages
-          end
+        def generalize_credentials_error_messages?
+          self.class.generalize_credentials_error_messages
+        end
 
-          def password_field
-            self.class.password_field
-          end
+        def password_field
+          self.class.password_field
+        end
 
-          def verify_password_method
-            self.class.verify_password_method
-          end
-
-          # In Rails 5 the ActionController::Parameters no longer inherits from
-          # HashWithIndifferentAccess. (http://bit.ly/2gnK08F) This method
-          # converts the ActionController::Parameters to a Hash.
-          def parse_param_val(value)
-            if value.first.class.name == "ActionController::Parameters"
-              [value.first.to_h]
-            else
-              value.is_a?(Array) ? value : [value]
-            end
-          end
+        def verify_password_method
+          self.class.verify_password_method
+        end
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserSession < Authlogic::Session::Base
 end
 
@@ -15,11 +17,11 @@ class WackyUserSession < Authlogic::Session::Base
 
   def persist_by_false
     self.counter += 1
-    return false
+    false
   end
 
   def persist_by_true
     self.counter += 1
-    return true
+    true
   end
 end

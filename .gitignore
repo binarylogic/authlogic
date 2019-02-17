@@ -1,14 +1,15 @@
 .DS_Store
 .swp
+*.gem
 *.log
 *.sqlite3
 pkg/*
 coverage/*
-doc/*
 benchmarks/*
 .rvmrc
-test/gemfiles/Gemfile*.lock
+gemfiles/Gemfile*.lock
 .bundle
 Gemfile.lock
 .ruby-gemset
 .ruby-version
+.byebug_history

@@ -1,9 +1,10 @@
 module Authlogic
   module ActsAsAuthentic
-    # Since web applications are stateless there is not sure fire way to tell if a user is logged in or not,
-    # from the database perspective. The best way to do this is to provide a "timeout" based on inactivity.
-    # So if that user is inactive for a certain amount of time we assume they are logged out. That's what this
-    # module is all about.
+    # Since web applications are stateless there is not sure fire way to tell if
+    # a user is logged in or not, from the database perspective. The best way to
+    # do this is to provide a "timeout" based on inactivity. So if that user is
+    # inactive for a certain amount of time we assume they are logged out.
+    # That's what this module is all about.
     module LoggedInStatus
       def self.included(klass)
         klass.class_eval do
@@ -27,7 +28,7 @@ module Authlogic
       # All methods for the logged in status feature seat.
       module Methods
         def self.included(klass)
-          return if !klass.column_names.include?("last_request_at")
+          return unless klass.column_names.include?("last_request_at")
 
           klass.class_eval do
             include InstanceMethods
@@ -52,11 +53,15 @@ module Authlogic
           end
         end
 
+        # :nodoc:
         module InstanceMethods
           # Returns true if the last_request_at > logged_in_timeout.
           def logged_in?
             unless respond_to?(:last_request_at)
-              raise "Can not determine the records login state because there is no last_request_at column"
+              raise(
+                "Can not determine the records login state because " \
+                  "there is no last_request_at column"
+              )
             end
             !last_request_at.nil? && last_request_at > logged_in_timeout.seconds.ago
           end
@@ -68,9 +73,9 @@ module Authlogic
 
           private
 
-            def logged_in_timeout
-              self.class.logged_in_timeout
-            end
+          def logged_in_timeout
+            self.class.logged_in_timeout
+          end
         end
       end
     end

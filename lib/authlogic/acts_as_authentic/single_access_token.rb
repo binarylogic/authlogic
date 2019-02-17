@@ -12,6 +12,8 @@ module Authlogic
       end
 
       # All configuration for the single_access token aspect of acts_as_authentic.
+      #
+      # These methods become class methods of ::ActiveRecord::Base.
       module Config
         # The single access token is used for authentication via URLs, such as a private
         # feed. That being said, if the user changes their password, that token probably
@@ -23,24 +25,34 @@ module Authlogic
         def change_single_access_token_with_password(value = nil)
           rw_config(:change_single_access_token_with_password, value, false)
         end
-        alias_method :change_single_access_token_with_password=, :change_single_access_token_with_password
+        alias_method(
+          :change_single_access_token_with_password=,
+          :change_single_access_token_with_password
+        )
       end
 
       # All method, for the single_access token aspect of acts_as_authentic.
+      #
+      # This module, as one of the `acts_as_authentic_modules`, is only included
+      # into an ActiveRecord model if that model calls `acts_as_authentic`.
       module Methods
         def self.included(klass)
-          return if !klass.column_names.include?("single_access_token")
+          return unless klass.column_names.include?("single_access_token")
 
           klass.class_eval do
             include InstanceMethods
-            validates_uniqueness_of :single_access_token, :if => :single_access_token_changed?
-            before_validation :reset_single_access_token, :if => :reset_single_access_token?
+            validates_uniqueness_of :single_access_token, if: :single_access_token_changed?
+            before_validation :reset_single_access_token, if: :reset_single_access_token?
             if respond_to?(:after_password_set)
-              after_password_set(:reset_single_access_token, :if => :change_single_access_token_with_password?)
+              after_password_set(
+                :reset_single_access_token,
+                if: :change_single_access_token_with_password?
+              )
             end
           end
         end
 
+        # :nodoc:
         module InstanceMethods
           # Resets the single_access_token to a random friendly token.
           def reset_single_access_token
@@ -55,13 +67,13 @@ module Authlogic
 
           protected
 
-            def reset_single_access_token?
-              single_access_token.blank?
-            end
+          def reset_single_access_token?
+            single_access_token.blank?
+          end
 
-            def change_single_access_token_with_password?
-              self.class.change_single_access_token_with_password == true
-            end
+          def change_single_access_token_with_password?
+            self.class.change_single_access_token_with_password == true
+          end
         end
       end
     end

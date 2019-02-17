@@ -175,6 +175,11 @@ module Authlogic
   #     assert_logged_in
   #   end
   module TestCase
+    def initialize(*args)
+      @request = nil
+      super
+    end
+
     # Activates authlogic so that you can use it in your tests. You should call
     # this method in your test's setup. Ex:
     #
@@ -186,7 +191,9 @@ module Authlogic
         end
       end
 
-      Authlogic::Session::Base.controller = (@request && Authlogic::TestCase::RailsRequestAdapter.new(@request)) || controller
+      Authlogic::Session::Base.controller = @request &&
+        Authlogic::TestCase::RailsRequestAdapter.new(@request) ||
+        controller
     end
 
     # The Authlogic::TestCase::MockController object passed to Authlogic to

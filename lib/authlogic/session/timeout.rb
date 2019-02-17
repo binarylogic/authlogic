@@ -41,7 +41,7 @@ module Authlogic
         # they login and then leave the website, when do mark them as logged
         # out? I recommend just using this as a fun feature on your website or
         # reports, giving you a ballpark number of users logged in and active.
-        # This is not meant to be a dead accurate representation of a users
+        # This is not meant to be a dead accurate representation of a user's
         # logged in state, since there is really no real way to do this with web
         # based apps. Think about a user that logs in and doesn't log out. There
         # is no action that tells you that the user isn't technically still
@@ -52,7 +52,7 @@ module Authlogic
         # this option to true and if your record returns true for stale? then
         # they will be required to log back in.
         #
-        # Lastly, UserSession.find will still return a object is the session is
+        # Lastly, UserSession.find will still return an object if the session is
         # stale, but you will not get a record. This allows you to determine if
         # the user needs to log back in because their session went stale, or
         # because they just aren't logged in. Just call
@@ -83,20 +83,20 @@ module Authlogic
 
         private
 
-          def reset_stale_state
-            self.stale_record = nil
-          end
+        def reset_stale_state
+          self.stale_record = nil
+        end
 
-          def enforce_timeout
-            if stale?
-              self.stale_record = record
-              self.record = nil
-            end
+        def enforce_timeout
+          if stale?
+            self.stale_record = record
+            self.record = nil
           end
+        end
 
-          def logout_on_timeout?
-            self.class.logout_on_timeout == true
-          end
+        def logout_on_timeout?
+          self.class.logout_on_timeout == true
+        end
       end
     end
   end

@@ -11,11 +11,13 @@ module Authlogic
         end
       end
 
+      # The primary configuration of a model (often, `User`) for use with
+      # authlogic. These methods become class methods of ::ActiveRecord::Base.
       module Config
-        # This includes a lot of helpful methods for authenticating records which The Authlogic::Session module relies on.
-        # To use it just do:
+        # This includes a lot of helpful methods for authenticating records
+        # which the Authlogic::Session module relies on. To use it just do:
         #
-        #   class User < ActiveRecord::Base
+        #   class User < ApplicationRecord
         #     acts_as_authentic
         #   end
         #
@@ -28,9 +30,9 @@ module Authlogic
         # See the various sub modules for the configuration they provide.
         def acts_as_authentic(unsupported_options = nil)
           # Stop all configuration if the DB is not set up
-          return if !db_setup?
+          return unless db_setup?
 
-          if !unsupported_options.nil?
+          unless unsupported_options.nil?
             raise ArgumentError.new(
               "You are using the old v1.X.X configuration method for " \
                 "Authlogic. Instead of passing a hash of configuration " \
@@ -43,12 +45,15 @@ module Authlogic
           acts_as_authentic_modules.each { |mod| include mod }
         end
 
-        # Since this part of Authlogic deals with another class, ActiveRecord, we can't just start including things
-        # in ActiveRecord itself. A lot of these module includes need to be triggered by the acts_as_authentic method
-        # call. For example, you don't want to start adding in email validations and what not into a model that has
-        # nothing to do with Authlogic.
+        # Since this part of Authlogic deals with another class, ActiveRecord,
+        # we can't just start including things in ActiveRecord itself. A lot of
+        # these module includes need to be triggered by the acts_as_authentic
+        # method call. For example, you don't want to start adding in email
+        # validations and what not into a model that has nothing to do with
+        # Authlogic.
         #
-        # That being said, this is your tool for extending Authlogic and "hooking" into the acts_as_authentic call.
+        # That being said, this is your tool for extending Authlogic and
+        # "hooking" into the acts_as_authentic call.
         def add_acts_as_authentic_module(mod, action = :append)
           modules = acts_as_authentic_modules.clone
           case action
@@ -61,7 +66,8 @@ module Authlogic
           self.acts_as_authentic_modules = modules
         end
 
-        # This is the same as add_acts_as_authentic_module, except that it removes the module from the list.
+        # This is the same as add_acts_as_authentic_module, except that it
+        # removes the module from the list.
         def remove_acts_as_authentic_module(mod)
           modules = acts_as_authentic_modules.clone
           modules.delete(mod)
@@ -70,21 +76,23 @@ module Authlogic
 
         private
 
-          def db_setup?
-            begin
-              column_names
-              true
-            rescue StandardError
-              false
-            end
-          end
+        def db_setup?
+          column_names
+          true
+        rescue StandardError
+          false
+        end
 
-          def first_column_to_exist(*columns_to_check)
-            if db_setup?
-              columns_to_check.each { |column_name| return column_name.to_sym if column_names.include?(column_name.to_s) }
+        def first_column_to_exist(*columns_to_check)
+          if db_setup?
+            columns_to_check.each do |column_name|
+              if column_names.include?(column_name.to_s)
+                return column_name.to_sym
+              end
             end
-            columns_to_check.first && columns_to_check.first.to_sym
           end
+          columns_to_check.first&.to_sym
+        end
       end
     end
   end
@@ -98,7 +106,11 @@ end
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::Password
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::PerishableToken
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::PersistenceToken
+
+# RestfulAuthentication is deprecated. See comments in
+# acts_as_authentic/restful_authentication.rb
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::RestfulAuthentication
+
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::SessionMaintenance
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::SingleAccessToken
 ::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::ValidationsScope

@@ -19,7 +19,13 @@ module Authlogic
     #   end
     class SCrypt
       class << self
-        DEFAULTS = { :key_len => 32, :salt_size => 8, :max_time => 0.2, :max_mem => 1024 * 1024, :max_memfrac => 0.5 }
+        DEFAULTS = {
+          key_len: 32,
+          salt_size: 8,
+          max_time: 0.2,
+          max_mem: 1024 * 1024,
+          max_memfrac: 0.5
+        }.freeze
 
         attr_writer :key_len, :salt_size, :max_time, :max_mem, :max_memfrac
         # Key length - length in bytes of generated key, from 16 to 512.
@@ -42,7 +48,8 @@ module Authlogic
           @max_mem ||= DEFAULTS[:max_mem]
         end
 
-        # Max memory fraction - maximum memory out of all available. Always greater than zero and <= 0.5.
+        # Max memory fraction - maximum memory out of all available. Always
+        # greater than zero and <= 0.5.
         def max_memfrac
           @max_memfrac ||= DEFAULTS[:max_memfrac]
         end
@@ -51,11 +58,11 @@ module Authlogic
         def encrypt(*tokens)
           ::SCrypt::Password.create(
             join_tokens(tokens),
-            :key_len => key_len,
-            :salt_size => salt_size,
-            :max_mem => max_mem,
-            :max_memfrac => max_memfrac,
-            :max_time => max_time
+            key_len: key_len,
+            salt_size: salt_size,
+            max_mem: max_mem,
+            max_memfrac: max_memfrac,
+            max_time: max_time
           )
         end
 
@@ -68,17 +75,15 @@ module Authlogic
 
         private
 
-          def join_tokens(tokens)
-            tokens.flatten.join
-          end
+        def join_tokens(tokens)
+          tokens.flatten.join
+        end
 
-          def new_from_hash(hash)
-            begin
-              ::SCrypt::Password.new(hash)
-            rescue ::SCrypt::Errors::InvalidHash
-              return nil
-            end
-          end
+        def new_from_hash(hash)
+          ::SCrypt::Password.new(hash)
+        rescue ::SCrypt::Errors::InvalidHash
+          nil
+        end
       end
     end
   end

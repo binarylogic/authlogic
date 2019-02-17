@@ -1,4 +1,6 @@
-require 'test_helper'
+# frozen_string_literal: true
+
+require "test_helper"
 
 module SessionTest
   module ParamsTest
@@ -14,9 +16,13 @@ module SessionTest
       def test_single_access_allowed_request_types
         UserSession.single_access_allowed_request_types = ["my request type"]
         assert_equal ["my request type"], UserSession.single_access_allowed_request_types
-
-        UserSession.single_access_allowed_request_types ["application/rss+xml", "application/atom+xml"]
-        assert_equal ["application/rss+xml", "application/atom+xml"], UserSession.single_access_allowed_request_types
+        UserSession.single_access_allowed_request_types(
+          ["application/rss+xml", "application/atom+xml"]
+        )
+        assert_equal(
+          ["application/rss+xml", "application/atom+xml"],
+          UserSession.single_access_allowed_request_types
+        )
       end
     end
 
@@ -41,7 +47,9 @@ module SessionTest
         set_request_content_type("application/atom+xml")
         assert session.persisting?
         assert_equal ben, session.record
-        assert_nil controller.session["user_credentials"] # should not persist since this is single access
+
+        # should not persist since this is single access
+        assert_nil controller.session["user_credentials"]
 
         set_request_content_type("application/rss+xml")
         assert session.persisting?

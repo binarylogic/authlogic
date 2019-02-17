@@ -1,4 +1,4 @@
-require 'request_store'
+require "request_store"
 
 module Authlogic
   module Session
@@ -25,10 +25,10 @@ module Authlogic
           RequestStore.store[:authlogic_scope]
         end
 
-        # What with_scopes focuses on is scoping the query when finding the object and the
-        # name of the cookie / session. It works very similar to
-        # ActiveRecord::Base#with_scopes. It accepts a hash with any of the following
-        # options:
+        # What with_scopes focuses on is scoping the query when finding the
+        # object and the name of the cookie / session. It works very similar to
+        # ActiveRecord::Base#with_scopes. It accepts a hash with any of the
+        # following options:
         #
         # * <tt>find_options:</tt> any options you can pass into ActiveRecord::Base.find.
         #   This is used when trying to find the record.
@@ -37,21 +37,27 @@ module Authlogic
         #
         # Here is how you use it:
         #
-        #   UserSession.with_scope(:find_options => {:conditions => "account_id = 2"}, :id => "account_2") do
-        #     UserSession.find
-        #   end
+        # ```
+        # UserSession.with_scope(find_options: {conditions: "account_id = 2"}, id: "account_2") do
+        #   UserSession.find
+        # end
+        # ```
         #
-        # Essentially what the above does is scope the searching of the object with the
-        # sql you provided. So instead of:
+        # Essentially what the above does is scope the searching of the object
+        # with the sql you provided. So instead of:
         #
-        #   User.where("login = 'ben'").first
+        # ```
+        # User.where("login = 'ben'").first
+        # ```
         #
         # it would be:
         #
-        #   User.where("login = 'ben' and account_id = 2").first
+        # ```
+        # User.where("login = 'ben' and account_id = 2").first
+        # ```
         #
-        # You will also notice the :id option. This works just like the id method. It
-        # scopes your cookies. So the name of your cookie will be:
+        # You will also notice the :id option. This works just like the id
+        # method. It scopes your cookies. So the name of your cookie will be:
         #
         #   account_2_user_credentials
         #
@@ -59,9 +65,13 @@ module Authlogic
         #
         #   user_credentials
         #
-        # What is also nifty about scoping with an :id is that it merges your id's. So if you do:
+        # What is also nifty about scoping with an :id is that it merges your
+        # id's. So if you do:
         #
-        #   UserSession.with_scope(:find_options => {:conditions => "account_id = 2"}, :id => "account_2") do
+        #   UserSession.with_scope(
+        #     find_options: { conditions: "account_id = 2"},
+        #     id: "account_2"
+        #   ) do
         #     session = UserSession.new
         #     session.id = :secure
         #   end
@@ -79,9 +89,9 @@ module Authlogic
 
         private
 
-          def scope=(value)
-            RequestStore.store[:authlogic_scope] = value
-          end
+        def scope=(value)
+          RequestStore.store[:authlogic_scope] = value
+        end
       end
 
       module InstanceMethods
@@ -98,30 +108,30 @@ module Authlogic
 
         private
 
-          # Used for things like cookie_key, session_key, etc.
-          def build_key(last_part)
-            [scope[:id], super].compact.join("_")
-          end
+        # Used for things like cookie_key, session_key, etc.
+        def build_key(last_part)
+          [scope[:id], super].compact.join("_")
+        end
 
-          # `args[0]` is the name of an AR method, like
-          # `find_by_single_access_token`.
-          def search_for_record(*args)
-            search_scope.scoping do
-              klass.send(*args)
-            end
+        # `args[0]` is the name of an AR method, like
+        # `find_by_single_access_token`.
+        def search_for_record(*args)
+          search_scope.scoping do
+            klass.send(*args)
           end
+        end
 
-          # Returns an AR relation representing the scope of the search. The
-          # relation is either provided directly by, or defined by
-          # `find_options`.
-          def search_scope
-            if scope[:find_options].is_a?(ActiveRecord::Relation)
-              scope[:find_options]
-            else
-              conditions = scope[:find_options] && scope[:find_options][:conditions] || {}
-              klass.send(:where, conditions)
-            end
+        # Returns an AR relation representing the scope of the search. The
+        # relation is either provided directly by, or defined by
+        # `find_options`.
+        def search_scope
+          if scope[:find_options].is_a?(ActiveRecord::Relation)
+            scope[:find_options]
+          else
+            conditions = scope[:find_options] && scope[:find_options][:conditions] || {}
+            klass.send(:where, conditions)
           end
+        end
       end
     end
   end

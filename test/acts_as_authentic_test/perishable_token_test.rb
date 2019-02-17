@@ -1,4 +1,6 @@
-require 'test_helper'
+# frozen_string_literal: true
+
+require "test_helper"
 
 module ActsAsAuthenticTest
   class PerishableTokenTest < ActiveSupport::TestCase
@@ -60,14 +62,18 @@ module ActsAsAuthenticTest
 
     def test_find_using_perishable_token_when_perished
       ben = users(:ben)
-      ActiveRecord::Base.connection.execute("UPDATE users set updated_at = '#{1.week.ago.to_s(:db)}' where id = #{ben.id}")
+      ActiveRecord::Base.connection.execute(
+        "UPDATE users set updated_at = '#{1.week.ago.to_s(:db)}' where id = #{ben.id}"
+      )
       assert_nil User.find_using_perishable_token(ben.perishable_token)
     end
 
     def test_find_using_perishable_token_when_perished_2
       User.perishable_token_valid_for = 1.minute
       ben = users(:ben)
-      ActiveRecord::Base.connection.execute("UPDATE users set updated_at = '#{2.minutes.ago.to_s(:db)}' where id = #{ben.id}")
+      ActiveRecord::Base.connection.execute(
+        "UPDATE users set updated_at = '#{2.minutes.ago.to_s(:db)}' where id = #{ben.id}"
+      )
       assert_nil User.find_using_perishable_token(ben.perishable_token)
       User.perishable_token_valid_for = 10.minutes
     end
@@ -75,7 +81,9 @@ module ActsAsAuthenticTest
     def test_find_using_perishable_token_when_passing_threshold
       User.perishable_token_valid_for = 1.minute
       ben = users(:ben)
-      ActiveRecord::Base.connection.execute("UPDATE users set updated_at = '#{10.minutes.ago.to_s(:db)}' where id = #{ben.id}")
+      ActiveRecord::Base.connection.execute(
+        "UPDATE users set updated_at = '#{10.minutes.ago.to_s(:db)}' where id = #{ben.id}"
+      )
       assert_nil User.find_using_perishable_token(ben.perishable_token, 5.minutes)
       assert_equal ben, User.find_using_perishable_token(ben.perishable_token, 20.minutes)
       User.perishable_token_valid_for = 10.minutes
@@ -83,7 +91,7 @@ module ActsAsAuthenticTest
 
     def test_find_perishable_token_with_bang
       assert_raises ActiveRecord::RecordNotFound do
-        User.find_using_perishable_token!('some_bad_value')
+        User.find_using_perishable_token!("some_bad_value")
       end
     end
   end

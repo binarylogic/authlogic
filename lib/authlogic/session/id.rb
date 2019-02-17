@@ -3,6 +3,11 @@ module Authlogic
     # Allows you to separate sessions with an id, ultimately letting you create
     # multiple sessions for the same user.
     module Id
+      def initialize(*args)
+        @id = nil
+        super
+      end
+
       def self.included(klass)
         klass.class_eval do
           attr_writer :id
@@ -39,10 +44,10 @@ module Authlogic
 
       private
 
-        # Used for things like cookie_key, session_key, etc.
-        def build_key(last_part)
-          [id, super].compact.join("_")
-        end
+      # Used for things like cookie_key, session_key, etc.
+      def build_key(last_part)
+        [id, super].compact.join("_")
+      end
     end
   end
 end

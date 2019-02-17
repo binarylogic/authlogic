@@ -1,4 +1,4 @@
-require 'action_controller'
+require "action_controller"
 
 module Authlogic
   module ControllerAdapters
@@ -13,12 +13,14 @@ module Authlogic
         controller.authenticate_with_http_basic(&block)
       end
 
+      # Returns a `ActionDispatch::Cookies::CookieJar`. See the AC guide
+      # http://guides.rubyonrails.org/action_controller_overview.html#cookies
       def cookies
         controller.send(:cookies)
       end
 
       def cookie_domain
-        @cookie_domain_key ||= Rails::VERSION::STRING >= '2.3' ? :domain : :session_domain
+        @cookie_domain_key ||= Rails::VERSION::STRING >= "2.3" ? :domain : :session_domain
         controller.request.session_options[@cookie_domain_key]
       end
 
@@ -32,7 +34,7 @@ module Authlogic
         def self.included(klass) # :nodoc:
           if defined?(::ApplicationController)
             raise AuthlogicLoadedTooLateError.new(
-              <<-EOS.strip_heredoc
+              <<~EOS.squish
                 Authlogic is trying to add a callback to ActionController::Base
                 but ApplicationController has already been loaded, so the
                 callback won't be copied into your application. Generally this
@@ -54,12 +56,15 @@ module Authlogic
 
         private
 
-          def activate_authlogic
-            Authlogic::Session::Base.controller = RailsAdapter.new(self)
-          end
+        def activate_authlogic
+          Authlogic::Session::Base.controller = RailsAdapter.new(self)
+        end
       end
     end
   end
 end
 
-ActionController::Base.send(:include, Authlogic::ControllerAdapters::RailsAdapter::RailsImplementation)
+ActionController::Base.send(
+  :include,
+  Authlogic::ControllerAdapters::RailsAdapter::RailsImplementation
+)

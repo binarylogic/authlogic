@@ -66,7 +66,11 @@ module Authlogic
         # * <tt>Accepts:</tt> String of a request type, or :all or :any to
         #   allow single access authentication for any and all request types
         def single_access_allowed_request_types(value = nil)
-          rw_config(:single_access_allowed_request_types, value, ["application/rss+xml", "application/atom+xml"])
+          rw_config(
+            :single_access_allowed_request_types,
+            value,
+            ["application/rss+xml", "application/atom+xml"]
+          )
         end
         alias_method :single_access_allowed_request_types=, :single_access_allowed_request_types
       end
@@ -76,40 +80,50 @@ module Authlogic
       module InstanceMethods
         private
 
-          def persist_by_params
-            return false if !params_enabled?
-            self.unauthorized_record = search_for_record("find_by_single_access_token", params_credentials)
-            self.single_access = valid?
-          end
+        def persist_by_params
+          return false unless params_enabled?
+          self.unauthorized_record = search_for_record(
+            "find_by_single_access_token",
+            params_credentials
+          )
+          self.single_access = valid?
+        end
 
-          def params_enabled?
-            return false if !params_credentials || !klass.column_names.include?("single_access_token")
-            return controller.single_access_allowed? if controller.responds_to_single_access_allowed?
-
-            case single_access_allowed_request_types
-            when Array
-              single_access_allowed_request_types.include?(controller.request_content_type) ||
-                single_access_allowed_request_types.include?(:all)
-            else
-              [:all, :any].include?(single_access_allowed_request_types)
-            end
+        def params_enabled?
+          if !params_credentials || !klass.column_names.include?("single_access_token")
+            return false
           end
-
-          def params_key
-            build_key(self.class.params_key)
+          if controller.responds_to_single_access_allowed?
+            return controller.single_access_allowed?
           end
+          params_enabled_by_allowed_request_types?
+        end
 
-          def single_access?
-            single_access == true
+        def params_enabled_by_allowed_request_types?
+          case single_access_allowed_request_types
+          when Array
+            single_access_allowed_request_types.include?(controller.request_content_type) ||
+              single_access_allowed_request_types.include?(:all)
+          else
+            %i[all any].include?(single_access_allowed_request_types)
           end
+        end
 
-          def single_access_allowed_request_types
-            self.class.single_access_allowed_request_types
-          end
+        def params_key
+          build_key(self.class.params_key)
+        end
 
-          def params_credentials
-            controller.params[params_key]
-          end
+        def single_access?
+          single_access == true
+        end
+
+        def single_access_allowed_request_types
+          self.class.single_access_allowed_request_types
+        end
+
+        def params_credentials
+          controller.params[params_key]
+        end
       end
     end
   end

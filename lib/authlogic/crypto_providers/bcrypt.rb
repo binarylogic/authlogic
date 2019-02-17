@@ -16,10 +16,18 @@ module Authlogic
     #   require "benchmark"
     #
     #   Benchmark.bm(18) do |x|
-    #     x.report("BCrypt (cost = 10:") { 100.times { BCrypt::Password.create("mypass", :cost => 10) } }
-    #     x.report("BCrypt (cost = 4:") { 100.times { BCrypt::Password.create("mypass", :cost => 4) } }
-    #     x.report("Sha512:") { 100.times { Digest::SHA512.hexdigest("mypass") } }
-    #     x.report("Sha1:") { 100.times { Digest::SHA1.hexdigest("mypass") } }
+    #     x.report("BCrypt (cost = 10:") {
+    #       100.times { BCrypt::Password.create("mypass", :cost => 10) }
+    #     }
+    #     x.report("BCrypt (cost = 4:") {
+    #       100.times { BCrypt::Password.create("mypass", :cost => 4) }
+    #     }
+    #     x.report("Sha512:") {
+    #       100.times { Digest::SHA512.hexdigest("mypass") }
+    #     }
+    #     x.report("Sha1:") {
+    #       100.times { Digest::SHA1.hexdigest("mypass") }
+    #     }
     #   end
     #
     #                            user     system      total        real
@@ -66,7 +74,7 @@ module Authlogic
 
         # Creates a BCrypt hash for the password passed.
         def encrypt(*tokens)
-          ::BCrypt::Password.create(join_tokens(tokens), :cost => cost)
+          ::BCrypt::Password.create(join_tokens(tokens), cost: cost)
         end
 
         # Does the hash match the tokens? Uses the same tokens that were used to
@@ -90,17 +98,15 @@ module Authlogic
 
         private
 
-          def join_tokens(tokens)
-            tokens.flatten.join
-          end
+        def join_tokens(tokens)
+          tokens.flatten.join
+        end
 
-          def new_from_hash(hash)
-            begin
-              ::BCrypt::Password.new(hash)
-            rescue ::BCrypt::Errors::InvalidHash
-              return nil
-            end
-          end
+        def new_from_hash(hash)
+          ::BCrypt::Password.new(hash)
+        rescue ::BCrypt::Errors::InvalidHash
+          nil
+        end
       end
     end
   end

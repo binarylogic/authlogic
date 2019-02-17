@@ -1,10 +1,16 @@
 module Authlogic
   module Session
-    # Provides methods to create and destroy objects. Basically controls their "existence".
+    # Provides methods to create and destroy objects. Basically controls their
+    # "existence".
     module Existence
       class SessionInvalidError < ::StandardError # :nodoc:
         def initialize(session)
-          super("Your session is invalid and has the following errors: #{session.errors.full_messages.to_sentence}")
+          message = I18n.t(
+            "error_messages.session_invalid",
+            default: "Your session is invalid and has the following errors:"
+          )
+          message += " #{session.errors.full_messages.to_sentence}"
+          super message
         end
       end
 
@@ -40,8 +46,9 @@ module Authlogic
       end
 
       module InstanceMethods
-        # Clears all errors and the associated record, you should call this terminate a session, thus requiring
-        # the user to authenticate again if it is needed.
+        # Clears all errors and the associated record, you should call this
+        # terminate a session, thus requiring the user to authenticate again if
+        # it is needed.
         def destroy
           before_destroy
           save_record
@@ -51,15 +58,17 @@ module Authlogic
           true
         end
 
-        # Returns true if the session is new, meaning no action has been taken on it and a successful save
-        # has not taken place.
+        # Returns true if the session is new, meaning no action has been taken
+        # on it and a successful save has not taken place.
         def new_session?
           new_session != false
         end
 
-        # After you have specified all of the details for your session you can try to save it. This will
-        # run validation checks and find the associated record, if all validation passes. If validation
-        # does not pass, the save will fail and the errors will be stored in the errors object.
+        # After you have specified all of the details for your session you can
+        # try to save it. This will run validation checks and find the
+        # associated record, if all validation passes. If validation does not
+        # pass, the save will fail and the errors will be stored in the errors
+        # object.
         def save
           result = nil
           if valid?
@@ -81,7 +90,8 @@ module Authlogic
           result
         end
 
-        # Same as save but raises an exception of validation errors when validation fails
+        # Same as save but raises an exception of validation errors when
+        # validation fails
         def save!
           result = save
           raise SessionInvalidError.new(self) unless result

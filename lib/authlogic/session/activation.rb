@@ -1,4 +1,4 @@
-require 'request_store'
+require "request_store"
 
 module Authlogic
   module Session
@@ -10,7 +10,10 @@ module Authlogic
     module Activation
       class NotActivatedError < ::StandardError # :nodoc:
         def initialize
-          super("You must activate the Authlogic::Session::Base.controller with a controller object before creating objects")
+          super(
+            "You must activate the Authlogic::Session::Base.controller with " \
+              "a controller object before creating objects"
+          )
         end
       end
 
@@ -61,9 +64,9 @@ module Authlogic
 
         private
 
-          def controller
-            self.class.controller
-          end
+        def controller
+          self.class.controller
+        end
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Employee < ActiveRecord::Base
   acts_as_authentic do |c|
     c.crypto_provider Authlogic::CryptoProviders::AES256

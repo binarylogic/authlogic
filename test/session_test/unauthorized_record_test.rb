@@ -1,4 +1,6 @@
-require 'test_helper'
+# frozen_string_literal: true
+
+require "test_helper"
 
 module SessionTest
   class UnauthorizedRecordTest < ActiveSupport::TestCase
@@ -7,7 +9,7 @@ module SessionTest
       session = UserSession.new
       session.credentials = [ben]
       assert_equal ben, session.unauthorized_record
-      assert_equal({ :unauthorized_record => "<protected>" }, session.credentials)
+      assert_equal({ unauthorized_record: "<protected>" }, session.credentials)
     end
   end
 end
