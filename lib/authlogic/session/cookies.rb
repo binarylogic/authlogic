@@ -104,7 +104,8 @@ module Authlogic
             raise "Encrypted cookies not supported with #{controller.class}!"
           end
           if value && sign_cookie
-            raise "It is recommended to use encrypt_cookie instead of sign_cookie. You may not enable both options."
+            raise "It is recommended to use encrypt_cookie instead of sign_cookie. " \
+                  "You may not enable both options."
           end
           rw_config(:encrypt_cookie, value, false)
         end
@@ -296,23 +297,27 @@ module Authlogic
 
         def save_cookie
           cookie_jar[cookie_key] = generate_cookie_for_saving
+          true
         end
 
         def generate_cookie_for_saving
-          value = format(
-            "%s::%s%s",
-            record.persistence_token,
-            record.send(record.class.primary_key),
-            remember_me? ? "::#{remember_me_until.iso8601}" : ""
-          )
           {
-            value: value,
+            value: generate_cookie_value,
             expires: remember_me_until,
             secure: secure,
             httponly: httponly,
             same_site: same_site,
             domain: controller.cookie_domain
           }
+        end
+
+        def generate_cookie_value
+          format(
+            "%s::%s%s",
+            record.persistence_token.to_s,
+            record.send(record.class.primary_key).to_s,
+            remember_me? ? "::#{remember_me_until.iso8601}" : ""
+          )
         end
 
         def destroy_cookie

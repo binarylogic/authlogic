@@ -32,6 +32,7 @@ module Authlogic
 
       def initialize(parent_jar)
         @parent_jar = parent_jar
+        parent_jar.each { |k, v| self[k] = v }
       end
 
       def [](val)
@@ -54,10 +55,12 @@ module Authlogic
 
       def initialize(parent_jar)
         @parent_jar = parent_jar
+        parent_jar.each { |k, v| self[k] = v }
       end
 
       def [](val)
-        if encrypted_message = @parent_jar[val]
+        encrypted_message = @parent_jar[val]
+        if encrypted_message
           self.class.decrypt(encrypted_message)
         end
       end
@@ -68,8 +71,13 @@ module Authlogic
       end
 
       # simple caesar cipher for testing
-      def self.encrypt(str); str.unpack('U*').map(&:succ).pack('U*'); end
-      def self.decrypt(str); str.unpack('U*').map(&:pred).pack('U*');end
+      def self.encrypt(str)
+        str.unpack("U*").map(&:succ).pack("U*")
+      end
+
+      def self.decrypt(str)
+        str.unpack("U*").map(&:pred).pack("U*")
+      end
     end
   end
 end
