@@ -3,4 +3,4 @@
 source "https://rubygems.org"
 gemspec
 
-gem "sqlite3", platforms: :ruby
+gem "sqlite3", "~> 1.3.6", platforms: :ruby
