@@ -57,7 +57,7 @@ module Authlogic
           if sensitive
             find_by(field => value)
           else
-            find_by(arel_table[field].matches(value))
+            find_by(arel_table[field].lower.eq(value.downcase))
           end
         end
       end
