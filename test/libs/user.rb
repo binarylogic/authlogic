@@ -55,6 +55,9 @@ class User < ActiveRecord::Base
     uniqueness: {
       case_sensitive: true
     }
+  # Note that we specify case_sensitive: true here for testing purposes.
+  # Currently, the Employee and Admin models do not validate uniqueness,
+  # and will default to being treated as case-insensitive
 
   validates :password,
     confirmation: { if: :require_password? },
