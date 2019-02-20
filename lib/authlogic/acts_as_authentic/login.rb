@@ -57,7 +57,8 @@ module Authlogic
           if sensitive
             find_by(field => value)
           else
-            find_by(arel_table[field].lower.eq(value.downcase))
+            table = arel_table[field]
+            find_by(table.lower.eq(table.relation.lower(value)))
           end
         end
       end
