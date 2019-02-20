@@ -53,7 +53,12 @@ class User < ActiveRecord::Base
     },
     length: { within: 3..100 },
     uniqueness: {
-      case_sensitive: false,
+      # Our User model will test `case_sensitive: true`. Other models, like
+      # Employee and Admin do not validate uniqueness, and thus, for them,
+      # `find_by_smart_case_login_field` will be case-insensitive. See eg.
+      # `test_find_by_smart_case_login_field` in
+      # `test/acts_as_authentic_test/login_test.rb`
+      case_sensitive: true,
       if: :will_save_change_to_login?
     }
 
