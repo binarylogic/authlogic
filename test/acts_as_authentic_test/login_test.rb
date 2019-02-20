@@ -16,13 +16,18 @@ module ActsAsAuthenticTest
     end
 
     def test_find_by_smart_case_login_field
-      # Note that in the testing library, User#login is configured to be
-      # case-sensitive, but Employee#email is case-insensitive
+      # Note that in the testing library, User#login is case-sensitive.
       ben = users(:ben)
       assert_equal ben, User.find_by_smart_case_login_field("bjohnson")
-      assert_equal nil, User.find_by_smart_case_login_field("BJOHNSON")
-      assert_equal nil, User.find_by_smart_case_login_field("Bjohnson")
 
+      # For MySQL, case-sensitivity or case-insensitivity will be determined
+      # by the db collation, not by the Rails model validations.
+      unless ActiveRecord::Base.connection_config[:adapter] == "mysql2"
+        assert_equal nil, User.find_by_smart_case_login_field("BJOHNSON")
+        assert_equal nil, User.find_by_smart_case_login_field("Bjohnson")
+      end
+
+      # Note that in the testing library, Employee#email is case-insensitive.
       drew = employees(:drew)
       assert_equal drew, Employee.find_by_smart_case_login_field("dgainor@binarylogic.com")
       assert_equal drew, Employee.find_by_smart_case_login_field("Dgainor@binarylogic.com")
