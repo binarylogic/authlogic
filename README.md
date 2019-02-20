@@ -253,6 +253,14 @@ class User < ApplicationRecord
 end
 ```
 
+Authlogic will use your model attribute's `uniqueness` case-sensitivity to
+perform the appropriate search when a user logs in. (Note that when validating
+`uniqueness` without specifying the value of `case_sensitive`, Authlogic
+will use the Rails default of `true`. When not validating the `uniqueness`
+of a model attribute, Authlogic will default to being case-insensitive.
+(Note that for some databases, e.g., MySQL, the case-sensitivity of the
+search will depend on your database collation.)
+
 ### 2.b. Controller
 
 Your sessions controller will look just like your other controllers.
