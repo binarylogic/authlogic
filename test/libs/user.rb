@@ -53,7 +53,8 @@ class User < ActiveRecord::Base
     },
     length: { within: 3..100 },
     uniqueness: {
-      case_sensitive: true
+      case_sensitive: true,
+      if: :will_save_change_to_login?
     }
   # Note that we specify case_sensitive: true here for testing purposes.
   # Currently, the Employee and Admin models do not validate uniqueness,
