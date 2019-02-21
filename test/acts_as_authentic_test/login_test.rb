@@ -16,11 +16,15 @@ module ActsAsAuthenticTest
     end
 
     def test_find_by_smart_case_login_field
+      # `User` is configured to be case-sensitive. (It has a case-sensitive
+      # uniqueness validation)
       ben = users(:ben)
       assert_equal ben, User.find_by_smart_case_login_field("bjohnson")
-      assert_equal ben, User.find_by_smart_case_login_field("BJOHNSON")
-      assert_equal ben, User.find_by_smart_case_login_field("Bjohnson")
+      assert_equal nil, User.find_by_smart_case_login_field("BJOHNSON")
+      assert_equal nil, User.find_by_smart_case_login_field("Bjohnson")
 
+      # Unlike `User`, `Employee` does not have a uniqueness validation. In
+      # the absence of such, authlogic performs a case-insensitive query.
       drew = employees(:drew)
       assert_equal drew, Employee.find_by_smart_case_login_field("dgainor@binarylogic.com")
       assert_equal drew, Employee.find_by_smart_case_login_field("Dgainor@binarylogic.com")
