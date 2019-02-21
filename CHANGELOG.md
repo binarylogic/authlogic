@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Added
   * None
 * Fixed
-  * None
+  * [#659](https://github.com/binarylogic/authlogic/pull/659) -
+    Fixed an issue affecting case-sensitive searches in MySQL
 
 ## 5.0.1 (2019-02-13)
 
