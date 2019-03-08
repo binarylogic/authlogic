@@ -98,7 +98,7 @@ module Authlogic
         alias_method :sign_cookie=, :sign_cookie
 
         # Should the cookie be encrypted? If the controller adapter supports it, this is a
-        # measure against cookie tampering and privacy.
+        # measure to hide the contents of the cookie (e.g. persistence_token)"
         def encrypt_cookie(value = nil)
           if value && !controller.cookies.respond_to?(:encrypted)
             raise "Encrypted cookies not supported with #{controller.class}!"
