@@ -39,6 +39,10 @@ require "authlogic/version"
   s.add_development_dependency "sqlite3", "~> 1.3.13"
   s.add_development_dependency "timecop", "~> 0.7"
 
+  s.add_development_dependency "coveralls"
+  s.add_development_dependency "simplecov", "> 0.16"
+  s.add_development_dependency "simplecov-console", "> 0.4"
+
   # To reduce gem size, only the minimum files are included.
   #
   # Tests are intentionally excluded. We only support our own test suite, we do
