@@ -13,6 +13,9 @@ before_script:
   - mysql -e 'create database authlogic;'
   - psql -c 'create database authlogic;' -U postgres
 
+after_script:
+  - bundle exec rake coveralls:push
+
 env:
   matrix:
     - DB=mysql
@@ -23,7 +26,7 @@ env:
 # do not test intermediate versions.
 rvm:
   - 2.3.8
-  - 2.6.0
+  - 2.6.1
 
 # We only test living versions of rails, per the [rails maintenance
 # policy](http://guides.rubyonrails.org/maintenance_policy.html)

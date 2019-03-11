@@ -4,6 +4,9 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 
 [![Gem Version][5]][6] [![Build Status][1]][2] [![Code Climate][7]][8] [![Dependency Status][3]][4]
 
+[![Coverage Status](https://coveralls.io/repos/github/binarylogic/authlogic/badge.svg?branch=master)](https://coveralls.io/github/binarylogic/authlogic?branch=master)
+
+
 ## Sponsors
 
 [![Timber Logging](http://res.cloudinary.com/timber/image/upload/v1490556810/pricing/sponsorship.png)](https://timber.io?utm_source=github&utm_medium=authlogic)
