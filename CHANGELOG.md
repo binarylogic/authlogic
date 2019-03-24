@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## 5.0.0 (Unreleased)
+## [5.0.0](https://github.com/binarylogic/authlogic/blob/5-0-stable/CHANGELOG.md)
 
 * Breaking Changes
   * Drop AES256 crypto provider, deprecated in 4.2.0
@@ -15,6 +15,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   * None
 * Fixed
   * None
+
+## 4.4.3 (Unreleased)
+
+* Breaking Changes
+  * None
+* Added
+  * [#660](https://github.com/binarylogic/authlogic/pull/660) -
+    Authlogic::Session::Cookies.encrypt_cookie option
+* Fixed
+  * Restrict sqlite3 version so tests can run normally
 
 ## 4.4.2 (2018-09-23)
 
