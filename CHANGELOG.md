@@ -64,6 +64,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   * [#645](https://github.com/binarylogic/authlogic/pull/645) -
     Add support for ruby 2.6
 
+## 4.4.3 (Unreleased)
+
+* Breaking Changes
+* None
+* Added
+* [#660](https://github.com/binarylogic/authlogic/pull/660) -
+Authlogic::Session::Cookies.encrypt_cookie option
+* Fixed
+* Restrict sqlite3 version so tests can run normally
+
 ## 4.4.2 (2018-09-23)
 
 * Breaking Changes
