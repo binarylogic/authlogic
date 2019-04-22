@@ -12,7 +12,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Added
   * None
 * Fixed
+  * [#665](https://github.com/binarylogic/authlogic/pull/665) -
+    Explicitly set case_sensitive: true for validates_uniqueness_of validation
+    due to deprecation in Rails 6.0
+  * [#659](https://github.com/binarylogic/authlogic/pull/659) -
+    Fixed an issue affecting case-sensitive searches in MySQL
+
+## 5.0.1 (2019-02-13)
+
+* Breaking Changes
   * None
+* Added
+  * None
+* Fixed
+  * [#650](https://github.com/binarylogic/authlogic/pull/650) -
+    rails 6.0.0.beta1 made a breaking change to case_insensitive_comparison
 
 ## 5.0.1 (2019-02-13)
 

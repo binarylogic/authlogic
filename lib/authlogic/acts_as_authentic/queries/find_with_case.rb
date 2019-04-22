@@ -4,6 +4,19 @@ module Authlogic
   module ActsAsAuthentic
     module Queries
       # The query used by public-API method `find_by_smart_case_login_field`.
+      #
+      # We use the rails methods `case_insensitive_comparison` and
+      # `case_sensitive_comparison`. These methods nicely take into account
+      # MySQL collations. (Consider the case where a user *says* they want a
+      # case-sensitive uniqueness validation, but then they configure their
+      # database to have an insensitive collation. Rails will handle this for
+      # us, by downcasing, see
+      # `active_record/connection_adapters/abstract_mysql_adapter.rb`) So that's
+      # great! But, these methods are not part of rails' public API, so there
+      # are no docs. So, everything we know about how to use the methods
+      # correctly comes from mimicing what we find in
+      # `active_record/validations/uniqueness.rb`.
+      #
       # @api private
       class FindWithCase
         # Dup ActiveRecord.gem_version before freezing, in case someone
@@ -49,25 +62,21 @@ module Authlogic
         end
 
         # @api private
-        # rubocop:disable Metrics/AbcSize
         def sensitive_comparison
+          bound_value = @model_class.predicate_builder.build_bind_attribute(@field, @value)
           if AR_GEM_VERSION > Gem::Version.new("5.3")
             @model_class.connection.case_sensitive_comparison(
-              @model_class.arel_table[@field], @value
+              @model_class.arel_table[@field], bound_value
             )
-          elsif AR_GEM_VERSION >= Gem::Version.new("5.0")
+          else
             @model_class.connection.case_sensitive_comparison(
               @model_class.arel_table,
               @field,
               @model_class.columns_hash[@field],
-              @value
+              bound_value
             )
-          else
-            value = @model_class.connection.case_sensitive_modifier(@value, @field)
-            @model_class.arel_table[@field].eq(value)
           end
         end
-        # rubocop:enable Metrics/AbcSize
       end
     end
   end

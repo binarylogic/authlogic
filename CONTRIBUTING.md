@@ -51,6 +51,20 @@ will be used. This is only suitable for certain unit tests.
 ruby –I test path/to/test.rb
 ```
 
+### Test MySQL
+
+```
+mysql -e 'drop database authlogic; create database authlogic;' && \
+  DB=mysql BUNDLE_GEMFILE=gemfiles/rails_5.2.rb bundle exec rake
+```
+
+### Test PostgreSQL
+
+```
+psql -c 'create database authlogic;' -U postgres
+DB=postgres BUNDLE_GEMFILE=gemfiles/rails_6.0.rb bundle exec rake
+```
+
 ### Linting
 
 Running `rake` also runs a linter, rubocop. Contributions must pass both
