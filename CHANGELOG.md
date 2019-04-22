@@ -12,6 +12,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Added
   * None
 * Fixed
+  * None
+
+## 5.0.2 (2019-04-21)
+
+* Breaking Changes
+  * None
+* Added
+  * None
+* Fixed
   * [#665](https://github.com/binarylogic/authlogic/pull/665) -
     Explicitly set case_sensitive: true for validates_uniqueness_of validation
     due to deprecation in Rails 6.0
