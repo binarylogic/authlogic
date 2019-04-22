@@ -32,16 +32,15 @@ require "authlogic/version"
   s.add_dependency "scrypt", ">= 1.2", "< 4.0"
   s.add_development_dependency "bcrypt", "~> 3.1"
   s.add_development_dependency "byebug", "~> 10.0"
+  s.add_development_dependency "coveralls", "~> 0.8.22"
   s.add_development_dependency "minitest-reporters", "~> 1.3"
   s.add_development_dependency "mysql2", "~> 0.5.2"
   s.add_development_dependency "pg", "~> 1.1.4"
   s.add_development_dependency "rubocop", "~> 0.62.0"
+  s.add_development_dependency "simplecov", "~> 0.16.1"
+  s.add_development_dependency "simplecov-console", "~> 0.4.2"
   s.add_development_dependency "sqlite3", "~> 1.3.13"
   s.add_development_dependency "timecop", "~> 0.7"
-
-  s.add_development_dependency "coveralls"
-  s.add_development_dependency "simplecov", "> 0.16"
-  s.add_development_dependency "simplecov-console", "> 0.4"
 
   # To reduce gem size, only the minimum files are included.
   #
