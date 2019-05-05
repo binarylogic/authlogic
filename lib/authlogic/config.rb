@@ -32,12 +32,23 @@ module Authlogic
     # This is a one-liner method to write a config setting, read the config
     # setting, and also set a default value for the setting.
     def rw_config(key, value, default_value = nil)
-      if value.nil?
-        acts_as_authentic_config.include?(key) ? acts_as_authentic_config[key] : default_value
-      else
-        self.acts_as_authentic_config = acts_as_authentic_config.merge(key => value)
-        value
-      end
+      value.nil? ? read_config(key, default_value) : write_config(key, value)
+    end
+
+    # Reads a setting for a key.
+    def read_config(key, default)
+      return acts_as_authentic_config[key] if acts_as_authentic_config.include?(key)
+
+      return default.call if default.respond_to? :call
+
+      default
+    end
+
+    # Writes a setting for a key and returns the value.
+    def write_config(key, value)
+      self.acts_as_authentic_config = acts_as_authentic_config.merge(key => value)
+
+      value
     end
   end
 end
