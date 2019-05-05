@@ -113,7 +113,9 @@ module Authlogic
         # * <tt>Accepts:</tt> Class
         def crypto_provider(value = nil)
           CryptoProviders::Guidance.new(value).impart_wisdom
-          rw_config(:crypto_provider, value, CryptoProviders::SCrypt)
+          CryptoProviders.crypto_providers_from(
+            rw_config(:crypto_provider, value, "Authlogic::CryptoProviders::SCrypt")
+          )
         end
         alias crypto_provider= crypto_provider
 
@@ -135,10 +137,12 @@ module Authlogic
         # * <tt>Default:</tt> nil
         # * <tt>Accepts:</tt> Class or Array
         def transition_from_crypto_providers(value = nil)
-          rw_config(
-            :transition_from_crypto_providers,
-            (!value.nil? && [value].flatten.compact) || value,
-            []
+          CryptoProviders.crypto_providers_from(
+            rw_config(
+              :transition_from_crypto_providers,
+              (!value.nil? && [value].flatten.compact) || value,
+              []
+            )
           )
         end
         alias transition_from_crypto_providers= transition_from_crypto_providers
@@ -334,11 +338,11 @@ module Authlogic
           end
 
           def crypto_provider
-            self.class.crypto_provider
+            CryptoProviders.crypto_providers_from(self.class.crypto_provider)
           end
 
           def transition_from_crypto_providers
-            self.class.transition_from_crypto_providers
+            CryptoProviders.crypto_providers_from(self.class.transition_from_crypto_providers)
           end
         end
       end
