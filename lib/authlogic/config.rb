@@ -35,7 +35,7 @@ module Authlogic
       value.nil? ? read_config(key, default_value) : write_config(key, value)
     end
 
-    # Reads a setting for a key.
+    # Read a value for a key.
     def read_config(key, default)
       return acts_as_authentic_config[key] if acts_as_authentic_config.include?(key)
 
@@ -44,7 +44,7 @@ module Authlogic
       default
     end
 
-    # Writes a setting for a key and returns the value.
+    # Write a value for a key and return that value.
     def write_config(key, value)
       self.acts_as_authentic_config = acts_as_authentic_config.merge(key => value)
 
