@@ -38,6 +38,7 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 - [4. Helpful links](#4-helpful-links)
 - [5. Add-ons](#5-add-ons)
 - [6. Internals](#6-internals)
+- [7. Extending](#7-extending)
 - [90. Compatibility](#90-compatibility)
 
 ## 1. Introduction
@@ -417,6 +418,35 @@ tools your framework provides in the controller object.
 | 1       | ?            | ?        | ?             |
 
 Under SemVer, [changes to dependencies][10] do not require a major release.
+
+## 7. Extending
+
+## 7.a. Extending UserSession
+
+Your `UserSession` is designed to be extended with callbacks.
+
+Example: Custom logging.
+
+```
+# user_session.rb
+class UserSession < Authlogic::Session::Base
+  after_persisting :my_custom_logging
+
+  private
+
+  def my_custom_logging
+    Rails.logger.info(
+      format(
+        'After authentication attempt, user id is %d',
+        record.send(record.class.primary_key)
+      )
+    )
+  end
+end
+```
+
+To learn more about available callbacks, see the "Callbacks" documentation
+in `authlogic/session/base.rb`.
 
 ## Intellectual Property
 
