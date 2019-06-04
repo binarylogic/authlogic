@@ -27,8 +27,8 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 ## Table of Contents
 
 - [1. Introduction](#1-introduction)
-  - [1.a. Overview](#1b-overview)
-  - [1.b. Reference Documentation](#1c-reference-documentation)
+  - [1.a. Overview](#1a-overview)
+  - [1.b. Reference Documentation](#1b-reference-documentation)
 - [2. Rails](#2-rails)
   - [2.a. The users table](#2a-the-users-table)
   - [2.b. Controller](#2b-controller)
