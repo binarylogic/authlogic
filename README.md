@@ -99,9 +99,9 @@ class User < ApplicationRecord
 end
 ```
 
-This handles validations, etc. It is also "smart" in the sense that it if a
-login field is present it will use that to authenticate, if not it will look for
-an email field, etc. This is all configurable, but for 99% of cases that above
+It is also "smart" in the sense that if a login or username field
+is present it will use that to authenticate, if not it will look for
+an email field. This is all configurable, but for 99% of cases the above
 is all you will need to do.
 
 You may specify how passwords are cryptographically hashed (or encrypted) by
@@ -293,7 +293,7 @@ As you can see, this fits nicely into the [conventional controller methods][9].
 #### 2.b.1. Helper Methods
 
 ```ruby
-class ApplicationController
+class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user
 
   private
