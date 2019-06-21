@@ -412,7 +412,7 @@ tools your framework provides in the controller object.
 | 4.4     | 4-4-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
 | 4.3     | 4-3-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
 | 4.2     | 4-2-stable   | >= 2.2.0 | >= 4.2, < 5.3 |
-| 3       | 3-stable     | >= 1.9.3 | >= 3.2, < 5.2 |
+| 3       | 3-stable     | >= 1.9.3 | >= 3.2, < 5.3 |
 | 2       | rails2       | >= 1.9.3 | ~> 2.3.0      |
 | 1       | ?            | ?        | ?             |
 
