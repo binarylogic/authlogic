@@ -109,13 +109,23 @@ module Authlogic
         # transition to a better crypto provider without causing your users any
         # pain.
         #
-        # * <tt>Default:</tt> CryptoProviders::SCrypt
+        # * <tt>Default:</tt> There is no longer a default value. Prior to
+        #   Authlogic 6, the default was `CryptoProviders::SCrypt`. If you try
+        #   to read this config option before setting it, it will raise a
+        #   `NilCryptoProvider` error. See that error's message for further
+        #   details, and rationale for this change.
         # * <tt>Accepts:</tt> Class
-        def crypto_provider(value = nil)
-          CryptoProviders::Guidance.new(value).impart_wisdom
-          rw_config(:crypto_provider, value, CryptoProviders::SCrypt)
+        def crypto_provider
+          acts_as_authentic_config[:crypto_provider].tap { |provider|
+            raise NilCryptoProvider if provider.nil?
+          }
         end
-        alias crypto_provider= crypto_provider
+
+        def crypto_provider=(value)
+          raise NilCryptoProvider if value.nil?
+          CryptoProviders::Guidance.new(value).impart_wisdom
+          rw_config(:crypto_provider, value)
+        end
 
         # Let's say you originally encrypted your passwords with Sha1. Sha1 is
         # starting to join the party with MD5 and you want to switch to

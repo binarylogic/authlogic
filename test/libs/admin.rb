@@ -2,7 +2,9 @@
 
 # This model demonstrates an `after_save` callback.
 class Admin < ActiveRecord::Base
-  acts_as_authentic
+  acts_as_authentic do |c|
+    c.crypto_provider = Authlogic::CryptoProviders::SCrypt
+  end
 
   validates :password, confirmation: true
 

@@ -52,7 +52,7 @@ module ActsAsAuthenticTest
       end
       assert_equal Authlogic::CryptoProviders::BCrypt, User.crypto_provider
       silence_warnings do
-        User.crypto_provider Authlogic::CryptoProviders::Sha512
+        User.crypto_provider = Authlogic::CryptoProviders::Sha512
       end
       assert_equal Authlogic::CryptoProviders::Sha512, User.crypto_provider
     end
