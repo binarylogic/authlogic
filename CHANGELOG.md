@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Fixed
   * None
 
+## 5.0.3 (2019-09-07)
+
+* Breaking Changes
+  * None
+* Added
+  * None
+* Fixed
+  * [#678](https://github.com/binarylogic/authlogic/pull/678) -
+    Fix `ActionText` deprecation warning by lazily loading controller adapter
+
 ## 5.0.2 (2019-04-21)
 
 * Breaking Changes
