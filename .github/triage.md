@@ -2,6 +2,16 @@
 
 Common responses to issues.
 
+## Ignored issue template
+
+Due to limited volunteers, we can't accept usage questions. Please ask such
+questions on [Stack
+Overflow](https://stackoverflow.com/questions/tagged/authlogic). We don't even
+have enough volunteers to accept non-security bug reports, unless you can commit
+to fixing them yourself, and just need some help. If you can commit to fixing a
+non-security bug yourself, you can open an issue, but please follow our issue
+template.
+
 ## Usage question we were able to answer
 
 ```

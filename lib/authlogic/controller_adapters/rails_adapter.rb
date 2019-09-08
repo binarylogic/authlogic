@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "action_controller"
-
 module Authlogic
   module ControllerAdapters
     # Adapts authlogic to work with rails. The point is to close the gap between
@@ -67,7 +65,6 @@ module Authlogic
   end
 end
 
-ActionController::Base.send(
-  :include,
-  Authlogic::ControllerAdapters::RailsAdapter::RailsImplementation
-)
+ActiveSupport.on_load(:action_controller) do
+  include Authlogic::ControllerAdapters::RailsAdapter::RailsImplementation
+end

@@ -27,8 +27,8 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 ## Table of Contents
 
 - [1. Introduction](#1-introduction)
-  - [1.a. Overview](#1b-overview)
-  - [1.b. Reference Documentation](#1c-reference-documentation)
+  - [1.a. Overview](#1a-overview)
+  - [1.b. Reference Documentation](#1b-reference-documentation)
 - [2. Rails](#2-rails)
   - [2.a. The users table](#2a-the-users-table)
   - [2.b. Controller](#2b-controller)
@@ -38,6 +38,7 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 - [4. Helpful links](#4-helpful-links)
 - [5. Add-ons](#5-add-ons)
 - [6. Internals](#6-internals)
+- [7. Extending](#7-extending)
 - [90. Compatibility](#90-compatibility)
 
 ## 1. Introduction
@@ -99,9 +100,9 @@ class User < ApplicationRecord
 end
 ```
 
-This handles validations, etc. It is also "smart" in the sense that it if a
-login field is present it will use that to authenticate, if not it will look for
-an email field, etc. This is all configurable, but for 99% of cases that above
+It is also "smart" in the sense that if a login or username field
+is present it will use that to authenticate, if not it will look for
+an email field. This is all configurable, but for 99% of cases the above
 is all you will need to do.
 
 You may specify how passwords are cryptographically hashed (or encrypted) by
@@ -293,7 +294,7 @@ As you can see, this fits nicely into the [conventional controller methods][9].
 #### 2.b.1. Helper Methods
 
 ```ruby
-class ApplicationController
+class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user
 
   private
@@ -412,11 +413,40 @@ tools your framework provides in the controller object.
 | 4.4     | 4-4-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
 | 4.3     | 4-3-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
 | 4.2     | 4-2-stable   | >= 2.2.0 | >= 4.2, < 5.3 |
-| 3       | 3-stable     | >= 1.9.3 | >= 3.2, < 5.2 |
+| 3       | 3-stable     | >= 1.9.3 | >= 3.2, < 5.3 |
 | 2       | rails2       | >= 1.9.3 | ~> 2.3.0      |
 | 1       | ?            | ?        | ?             |
 
 Under SemVer, [changes to dependencies][10] do not require a major release.
+
+## 7. Extending
+
+## 7.a. Extending UserSession
+
+Your `UserSession` is designed to be extended with callbacks.
+
+Example: Custom logging.
+
+```
+# user_session.rb
+class UserSession < Authlogic::Session::Base
+  after_persisting :my_custom_logging
+
+  private
+
+  def my_custom_logging
+    Rails.logger.info(
+      format(
+        'After authentication attempt, user id is %d',
+        record.send(record.class.primary_key)
+      )
+    )
+  end
+end
+```
+
+To learn more about available callbacks, see the "Callbacks" documentation
+in `authlogic/session/base.rb`.
 
 ## Intellectual Property
 
