@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Fixed
   * None
 
+## 5.0.4 (2019-09-11)
+
+* Breaking Changes
+  * None
+* Added
+  * None
+* Fixed
+  * [#681](https://github.com/binarylogic/authlogic/pull/681) -
+    Delete unnecessary `AuthlogicLoadedTooLateError`
+
 ## 5.0.3 (2019-09-07)
 
 * Breaking Changes
