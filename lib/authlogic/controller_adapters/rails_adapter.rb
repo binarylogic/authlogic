@@ -7,20 +7,6 @@ module Authlogic
     # Similar to how ActiveRecord has an adapter for MySQL, PostgreSQL, SQLite,
     # etc.
     class RailsAdapter < AbstractAdapter
-      # :nodoc:
-      class AuthlogicLoadedTooLateError < StandardError
-        def message
-          <<~EOS.squish
-            Authlogic is trying to add a callback to ActionController::Base but
-            ApplicationController has already been loaded, so the callback won't
-            be copied into your application. Generally this is due to another
-            gem or plugin requiring your ApplicationController prematurely, such
-            as the resource_controller plugin. Please require Authlogic first,
-            before these other gems / plugins.
-          EOS
-        end
-      end
-
       def authenticate_with_http_basic(&block)
         controller.authenticate_with_http_basic(&block)
       end
@@ -43,16 +29,7 @@ module Authlogic
       # "activates" authlogic.
       module RailsImplementation
         def self.included(klass) # :nodoc:
-          if defined?(::ApplicationController)
-            raise AuthlogicLoadedTooLateError
-          end
-
-          # In Rails 4.0.2, the *_filter methods were renamed to *_action.
-          if klass.respond_to? :prepend_before_action
-            klass.prepend_before_action :activate_authlogic
-          else
-            klass.prepend_before_filter :activate_authlogic
-          end
+          klass.prepend_before_action :activate_authlogic
         end
 
         private
