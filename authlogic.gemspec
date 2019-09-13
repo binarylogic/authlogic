@@ -40,7 +40,7 @@ require "authlogic/version"
   s.add_development_dependency "rubocop-performance", "~> 1.1"
   s.add_development_dependency "simplecov", "~> 0.16.1"
   s.add_development_dependency "simplecov-console", "~> 0.4.2"
-  s.add_development_dependency "sqlite3", "~> 1.3.13"
+  s.add_development_dependency "sqlite3", "~> 1.4.0"
   s.add_development_dependency "timecop", "~> 0.7"
 
   # To reduce gem size, only the minimum files are included.
