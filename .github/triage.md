@@ -4,7 +4,7 @@ Common responses to issues.
 
 ## Ignored issue template, bug report
 
-All issues are required to use our [issue template](https://github.com/binarylogic/authlogic/blob/master/.github/ISSUE_TEMPLATE/bug_report.md). Please open a new issue and follow the instructions. Due to limited volunteers, we can help, but you must commit to taking an active leadership role in fixing your own issue.
+Due to limited volunteers, all issues are required to use our [issue template](https://github.com/binarylogic/authlogic/blob/master/.github/ISSUE_TEMPLATE/bug_report.md). Please open a new issue and follow the instructions. We can help, but we require you to take an active leadership role in fixing any issues you identify. If code changes are needed, you can open an issue for discussion, but you must commit to authoring a PR.
 
 ## Usage Question
 
