@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require File.dirname(__FILE__) + "/test_case/rails_request_adapter"
+require File.dirname(__FILE__) + "/test_case/mock_api_controller"
 require File.dirname(__FILE__) + "/test_case/mock_cookie_jar"
 require File.dirname(__FILE__) + "/test_case/mock_controller"
 require File.dirname(__FILE__) + "/test_case/mock_logger"
