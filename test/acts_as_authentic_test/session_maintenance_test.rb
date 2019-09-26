@@ -59,6 +59,18 @@ module ActsAsAuthenticTest
       assert_equal logged_in_user, old_user
     end
 
+    def test_no_login_after_logged_out_create
+      User.log_in_after_create = false
+      user = User.create(
+        login: "awesome2",
+        password: "saweeeet2",
+        password_confirmation: "saweeeet2",
+        email: "awesome2@awesome.com"
+      )
+      assert user.persisted?
+      assert_nil UserSession.find
+    end
+
     def test_updating_session_with_failed_magic_state
       ben = users(:ben)
       ben.confirmed = false

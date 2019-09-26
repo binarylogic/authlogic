@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Added
   * None
 * Fixed
+  * [#686](https://github.com/binarylogic/authlogic/pull/686) - Respect
+    the `log_in_after_create` setting when creating a new logged-out user
   * [#668](https://github.com/binarylogic/authlogic/pull/668) -
     BCrypt user forced to load SCrypt
 
