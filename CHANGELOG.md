@@ -7,12 +7,27 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
-* Breaking Changes
-  * None
+* Breaking Changes, Major
+  * There is no longer a default `crypto_provider`. We still recommend SCrypt,
+    but don't want users of other providers to be forced to install it. You
+    must now explicitly specify your `crypto_provider`, eg. in your `user.rb`.
+
+        acts_as_authentic do |config|
+          c.crypto_provider = ::Authlogic::CryptoProviders::SCrypt
+        end
+
+    To continue to use the `scrypt` gem, add it to your `Gemfile`.
+
+        gem "scrypt", "~> 3.0"
+
+* Breaking Changes, Minor
+  * The arity of `crypto_provider` has changed from -1 (one optional arg) to 0
+    (no arguments). To set the provider, use `crypto_provider=`.
 * Added
   * None
 * Fixed
-  * None
+  * [#668](https://github.com/binarylogic/authlogic/pull/668) -
+    BCrypt user forced to load SCrypt
 
 ## 5.0.4 (2019-09-11)
 

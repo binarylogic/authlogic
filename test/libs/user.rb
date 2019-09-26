@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   LOGIN = /\A[a-zA-Z0-9_][a-zA-Z0-9\.+\-_@ ]+\z/.freeze
 
   acts_as_authentic do |c|
+    c.crypto_provider = Authlogic::CryptoProviders::SCrypt
     c.transition_from_crypto_providers Authlogic::CryptoProviders::Sha512
   end
   belongs_to :company

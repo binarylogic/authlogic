@@ -13,6 +13,7 @@ require "active_record"
 path = File.dirname(__FILE__) + "/authlogic/"
 
 [
+  "errors",
   "i18n",
   "random",
   "config",
