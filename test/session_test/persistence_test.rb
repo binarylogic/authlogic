@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "authlogic/controller_adapters/rails_adapter"
 
 module SessionTest
   class PersistenceTest < ActiveSupport::TestCase
@@ -15,6 +16,20 @@ module SessionTest
       set_session_for(aaron)
       session = UserSession.find
       assert session
+    end
+
+    def test_find_in_api
+      @controller = Authlogic::TestCase::MockAPIController.new
+      UserSession.controller =
+        Authlogic::ControllerAdapters::RailsAdapter.new(@controller)
+
+      aaron = users(:aaron)
+      refute UserSession.find
+
+      UserSession.single_access_allowed_request_types = ["application/json"]
+      set_params_for(aaron)
+      set_request_content_type("application/json")
+      assert UserSession.find
     end
 
     def test_persisting

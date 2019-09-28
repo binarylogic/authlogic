@@ -27,7 +27,7 @@ module Authlogic
       end
 
       def request
-        @request ||= MockRequest.new(controller)
+        @request ||= MockRequest.new(self)
       end
 
       def request_content_type
@@ -37,6 +37,16 @@ module Authlogic
       def session
         @session ||= {}
       end
+
+      # If method is defined, it causes below behavior...
+      #   controller = Authlogic::ControllerAdapters::RailsAdapter.new(
+      #     Authlogic::TestCase::MockAPIController.new
+      #   )
+      #   controller.responds_to_single_access_allowed? #=> true
+      #   controller.single_access_allowed?
+      #     #=> NoMethodError: undefined method `single_access_allowed?' for nil:NilClass
+      #
+      undef :single_access_allowed?
     end
   end
 end
