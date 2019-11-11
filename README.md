@@ -456,9 +456,9 @@ Copyright (c) 2012 Ben Johnson of Binary Logic, released under the MIT license
 [2]: https://travis-ci.org/binarylogic/authlogic
 [3]: https://gemnasium.com/badges/github.com/binarylogic/authlogic.svg
 [4]: https://gemnasium.com/binarylogic/authlogic
-[5]: https://badge.fury.io/rb/authlogic.png
+[5]: https://badge.fury.io/rb/authlogic.svg
 [6]: http://badge.fury.io/rb/authlogic
-[7]: https://codeclimate.com/github/binarylogic/authlogic.png
+[7]: https://codeclimate.com/github/binarylogic/authlogic.svg
 [8]: https://codeclimate.com/github/binarylogic/authlogic
 [9]: http://guides.rubyonrails.org/routing.html#resource-routing-the-rails-default
 [10]: https://semver.org/spec/v2.0.0.html#what-should-i-do-if-i-update-my-own-dependencies-without-changing-the-public-api
