@@ -1,8 +1,7 @@
 ---
 name: I want to fix a bug, but need some help
 about: >
-  If the bug is easy to reproduce, we will help. However, you must fix the bug,
-  in a reasonable amount of time, or your issue will be closed. See
+  If the bug is easy to reproduce, we will help. See
   CONTRIBUTING.md
 
 ---
@@ -17,8 +16,7 @@ ISSUES THAT DO NOT FOLLOW THIS TEMPLATE WILL BE CLOSED IMMEDIATELY.
     guide](https://github.com/binarylogic/authlogic/blob/master/CONTRIBUTING.md)
     for instructions.
 - [ ] This bug is reproducible with a clean install of authlogic
-- [ ] I am committed to fixing this in a reasonable amount of time, and
-  responding promptly to feedback.
+- [ ] Include the steps to reproduce the bugs
 
 # Expected Behavior
 

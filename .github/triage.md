@@ -4,11 +4,11 @@ Common responses to issues.
 
 ## Ignored issue template, bug report
 
-Due to limited volunteers, all issues are required to use our [issue template](https://github.com/binarylogic/authlogic/blob/master/.github/ISSUE_TEMPLATE/bug_report.md). Please open a new issue and follow the instructions. We can help, but we require you to take an active leadership role in fixing any issues you identify. If code changes are needed, you can open an issue for discussion, but you must commit to authoring a PR.
+Due to limited volunteers, all issues are required to use our [issue template](https://github.com/binarylogic/authlogic/blob/master/.github/ISSUE_TEMPLATE/bug_report.md). Please open a new issue and follow the instructions. We can help, but we require you to take an active leadership role in fixing any issues you identify. If code changes are needed, you can open an issue for discussion.
 
 ## Usage Question
 
-Due to limited volunteers, we can't accept usage questions. Please ask such questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/authlogic). We don't even have enough volunteers to accept non-security bug reports, unless you can commit to fixing them yourself, and just need some help. If you can commit to fixing a non-security bug yourself, you can open an issue, but please follow our issue template.
+Due to limited volunteers, we can't accept usage questions. Please ask such questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/authlogic). We don't even have enough volunteers to accept non-security bug reports. If you can commit to fixing a non-security bug yourself, you can open an issue, but please follow our issue template.
 
 ## Usage question we were able to answer
 

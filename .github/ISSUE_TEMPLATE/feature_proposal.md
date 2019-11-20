@@ -1,8 +1,7 @@
 ---
 name: Feature Proposal
 about: >
-  Propose something that you would like to build. We'll help, but you must build
-  it yourself, in a reasonable amount of time, or your issue will be closed. See
+  Propose something that you would like to build. See
   CONTRIBUTING.md
 
 ---
@@ -16,14 +15,18 @@ ISSUES THAT DO NOT FOLLOW THIS TEMPLATE WILL BE CLOSED IMMEDIATELY.
   - Do not disclose security issues in public. See our [contributing
     guide](https://github.com/binarylogic/authlogic/blob/master/CONTRIBUTING.md)
     for instructions.
-- [ ] I am committed to implementing this feature in a reasonable amount of
-  time, and responding promptly to feedback.
+
+- [ ] Include the reason why this feature is helpfull for the community
 
 # Current Behavior
 
 Describe.
 
 # Proposed Behavior
+
+Describe.
+
+# Explain why this feature is helpfull
 
 Describe.
 
