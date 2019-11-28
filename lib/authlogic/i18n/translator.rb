@@ -8,7 +8,7 @@ module Authlogic
       # arguments, else returns +options[:default]+.
       def translate(key, options = {})
         if defined?(::I18n)
-          ::I18n.translate key, options
+          ::I18n.translate key, **options
         else
           options[:default]
         end
