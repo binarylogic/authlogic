@@ -198,7 +198,7 @@ module Authlogic
     # 2. Enable logging out on timeouts
     #
     #   class UserSession < Authlogic::Session::Base
-    #     logout_on_timeout true # default if false
+    #     logout_on_timeout true # default is false
     #   end
     #
     # This will require a user to log back in if they are inactive for more than
