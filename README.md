@@ -173,6 +173,7 @@ class CreateUser < ActiveRecord::Migration
     create_table :users do |t|
       # Authlogic::ActsAsAuthentic::Email
       t.string    :email
+      t.index     :email, unique: true
 
       # Authlogic::ActsAsAuthentic::Password
       t.string    :crypted_password
