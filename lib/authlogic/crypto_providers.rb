@@ -30,6 +30,15 @@ module Authlogic
     autoload :BCrypt, "authlogic/crypto_providers/bcrypt"
     autoload :SCrypt, "authlogic/crypto_providers/scrypt"
 
+    # V2 crypto providers fix their predecessors' encryption schemes by
+    # hashing byte strings instead of the ehx strings output by `hexdigest`
+    module V2
+      autoload :MD5, "authlogic/crypto_providers/v2/md5"
+      autoload :SHA1, "authlogic/crypto_providers/v2/sha1"
+      autoload :SHA256, "authlogic/crypto_providers/v2/sha256"
+      autoload :SHA512, "authlogic/crypto_providers/v2/sha512"
+    end
+
     # Guide users to choose a better crypto provider.
     class Guidance
       BUILTIN_PROVIDER_PREFIX = "Authlogic::CryptoProviders::"

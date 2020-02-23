@@ -92,6 +92,25 @@ module ActsAsAuthenticTest
       )
     end
 
+    def test_v2_crypto_provider_transition
+      ben = users(:ben)
+
+      providers = [
+        Authlogic::CryptoProviders::V2::SHA512,
+        Authlogic::CryptoProviders::V2::MD5,
+        Authlogic::CryptoProviders::V2::SHA1,
+        Authlogic::CryptoProviders::V2::SHA256
+      ]
+      transition_password_to(providers[0], ben)
+      providers.each_cons(2) do |old_provider, new_provider|
+        transition_password_to(
+          new_provider,
+          ben,
+          old_provider
+        )
+      end
+    end
+
     def test_checks_password_against_database
       ben = users(:aaron)
       ben.password = "new pass"
