@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     the `log_in_after_create` setting when creating a new logged-out user
   * [#668](https://github.com/binarylogic/authlogic/pull/668) -
     BCrypt user forced to load SCrypt
+  * [#697](https://github.com/binarylogic/authlogic/issues/697) - Add Authlogic::CryptoProviders::V2 module containing fixed SHA and MD5 encryption schemes
 
 ## 5.0.4 (2019-09-11)
 
