@@ -7,6 +7,8 @@ about: >
 
 ---
 
+ISSUES THAT DO NOT FOLLOW THIS TEMPLATE WILL BE CLOSED IMMEDIATELY.
+
 - [ ] This is not a usage question.
   - Our volunteers' time is limited, so please ask usage questions on
     [StackOverflow](http://stackoverflow.com/questions/tagged/authlogic).

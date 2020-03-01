@@ -19,3 +19,6 @@ require "rubocop/rake_task"
 RuboCop::RakeTask.new
 
 task default: %i[rubocop test]
+
+require "coveralls/rake/task"
+Coveralls::RakeTask.new

@@ -4,6 +4,9 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 
 [![Gem Version][5]][6] [![Build Status][1]][2] [![Code Climate][7]][8] [![Dependency Status][3]][4]
 
+[![Coverage Status](https://coveralls.io/repos/github/binarylogic/authlogic/badge.svg?branch=master)](https://coveralls.io/github/binarylogic/authlogic?branch=master)
+
+
 ## Sponsors
 
 [![Timber Logging](http://res.cloudinary.com/timber/image/upload/v1490556810/pricing/sponsorship.png)](https://timber.io?utm_source=github&utm_medium=authlogic)
@@ -15,7 +18,7 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 | Version     | Documentation |
 | ----------- | ------------- |
 | Unreleased  | https://github.com/binarylogic/authlogic/blob/master/README.md |
-| 5.0.1       | https://github.com/binarylogic/authlogic/blob/v5.0.1/README.md |
+| 5.0.4       | https://github.com/binarylogic/authlogic/blob/v5.0.4/README.md |
 | 4.4.2       | https://github.com/binarylogic/authlogic/blob/v4.4.2/README.md |
 | 3.7.0       | https://github.com/binarylogic/authlogic/blob/v3.7.0/README.md |
 | 2.1.11      | https://github.com/binarylogic/authlogic/blob/v2.1.11/README.rdoc |
@@ -24,8 +27,8 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 ## Table of Contents
 
 - [1. Introduction](#1-introduction)
-  - [1.a. Overview](#1b-overview)
-  - [1.b. Reference Documentation](#1c-reference-documentation)
+  - [1.a. Overview](#1a-overview)
+  - [1.b. Reference Documentation](#1b-reference-documentation)
 - [2. Rails](#2-rails)
   - [2.a. The users table](#2a-the-users-table)
   - [2.b. Controller](#2b-controller)
@@ -35,6 +38,7 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 - [4. Helpful links](#4-helpful-links)
 - [5. Add-ons](#5-add-ons)
 - [6. Internals](#6-internals)
+- [7. Extending](#7-extending)
 - [90. Compatibility](#90-compatibility)
 
 ## 1. Introduction
@@ -96,9 +100,9 @@ class User < ApplicationRecord
 end
 ```
 
-This handles validations, etc. It is also "smart" in the sense that it if a
-login field is present it will use that to authenticate, if not it will look for
-an email field, etc. This is all configurable, but for 99% of cases that above
+It is also "smart" in the sense that if a login or username field
+is present it will use that to authenticate, if not it will look for
+an email field. This is all configurable, but for 99% of cases the above
 is all you will need to do.
 
 You may specify how passwords are cryptographically hashed (or encrypted) by
@@ -169,6 +173,7 @@ class CreateUser < ActiveRecord::Migration
     create_table :users do |t|
       # Authlogic::ActsAsAuthentic::Email
       t.string    :email
+      t.index     :email, unique: true
 
       # Authlogic::ActsAsAuthentic::Password
       t.string    :crypted_password
@@ -290,7 +295,7 @@ As you can see, this fits nicely into the [conventional controller methods][9].
 #### 2.b.1. Helper Methods
 
 ```ruby
-class ApplicationController
+class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user
 
   private
@@ -409,11 +414,40 @@ tools your framework provides in the controller object.
 | 4.4     | 4-4-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
 | 4.3     | 4-3-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
 | 4.2     | 4-2-stable   | >= 2.2.0 | >= 4.2, < 5.3 |
-| 3       | 3-stable     | >= 1.9.3 | >= 3.2, < 5.2 |
+| 3       | 3-stable     | >= 1.9.3 | >= 3.2, < 5.3 |
 | 2       | rails2       | >= 1.9.3 | ~> 2.3.0      |
 | 1       | ?            | ?        | ?             |
 
 Under SemVer, [changes to dependencies][10] do not require a major release.
+
+## 7. Extending
+
+## 7.a. Extending UserSession
+
+Your `UserSession` is designed to be extended with callbacks.
+
+Example: Custom logging.
+
+```
+# user_session.rb
+class UserSession < Authlogic::Session::Base
+  after_persisting :my_custom_logging
+
+  private
+
+  def my_custom_logging
+    Rails.logger.info(
+      format(
+        'After authentication attempt, user id is %d',
+        record.send(record.class.primary_key)
+      )
+    )
+  end
+end
+```
+
+To learn more about available callbacks, see the "Callbacks" documentation
+in `authlogic/session/base.rb`.
 
 ## Intellectual Property
 
@@ -423,9 +457,9 @@ Copyright (c) 2012 Ben Johnson of Binary Logic, released under the MIT license
 [2]: https://travis-ci.org/binarylogic/authlogic
 [3]: https://gemnasium.com/badges/github.com/binarylogic/authlogic.svg
 [4]: https://gemnasium.com/binarylogic/authlogic
-[5]: https://badge.fury.io/rb/authlogic.png
+[5]: https://badge.fury.io/rb/authlogic.svg
 [6]: http://badge.fury.io/rb/authlogic
-[7]: https://codeclimate.com/github/binarylogic/authlogic.png
+[7]: https://codeclimate.com/github/binarylogic/authlogic.svg
 [8]: https://codeclimate.com/github/binarylogic/authlogic
 [9]: http://guides.rubyonrails.org/routing.html#resource-routing-the-rails-default
 [10]: https://semver.org/spec/v2.0.0.html#what-should-i-do-if-i-update-my-own-dependencies-without-changing-the-public-api

@@ -7,13 +7,73 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+* Breaking Changes, Major
+  * There is no longer a default `crypto_provider`. We still recommend SCrypt,
+    but don't want users of other providers to be forced to install it. You
+    must now explicitly specify your `crypto_provider`, eg. in your `user.rb`.
+
+        acts_as_authentic do |config|
+          c.crypto_provider = ::Authlogic::CryptoProviders::SCrypt
+        end
+
+    To continue to use the `scrypt` gem, add it to your `Gemfile`.
+
+        gem "scrypt", "~> 3.0"
+
+* Breaking Changes, Minor
+  * The arity of `crypto_provider` has changed from -1 (one optional arg) to 0
+    (no arguments). To set the provider, use `crypto_provider=`.
+* Added
+  * None
+* Fixed
+  * [#686](https://github.com/binarylogic/authlogic/pull/686) - Respect
+    the `log_in_after_create` setting when creating a new logged-out user
+  * [#668](https://github.com/binarylogic/authlogic/pull/668) -
+    BCrypt user forced to load SCrypt
+
+## 5.0.4 (2019-09-11)
+
+* Breaking Changes
+  * None
+* Added
+  * None
+* Fixed
+  * [#681](https://github.com/binarylogic/authlogic/pull/681) -
+    Delete unnecessary `AuthlogicLoadedTooLateError`
+
+## 5.0.3 (2019-09-07)
+
+* Breaking Changes
+  * None
+* Added
+  * None
+* Fixed
+  * [#678](https://github.com/binarylogic/authlogic/pull/678) -
+    Fix `ActionText` deprecation warning by lazily loading controller adapter
+
+## 5.0.2 (2019-04-21)
+
 * Breaking Changes
   * None
 * Added
   * [#666](https://github.com/binarylogic/authlogic/pull/666) -
 Authlogic::Session::Cookies.encrypt_cookie option
 * Fixed
+  * [#665](https://github.com/binarylogic/authlogic/pull/665) -
+    Explicitly set case_sensitive: true for validates_uniqueness_of validation
+    due to deprecation in Rails 6.0
+  * [#659](https://github.com/binarylogic/authlogic/pull/659) -
+    Fixed an issue affecting case-sensitive searches in MySQL
+
+## 5.0.1 (2019-02-13)
+
+* Breaking Changes
   * None
+* Added
+  * None
+* Fixed
+  * [#650](https://github.com/binarylogic/authlogic/pull/650) -
+    rails 6.0.0.beta1 made a breaking change to case_insensitive_comparison
 
 ## 5.0.1 (2019-02-13)
 

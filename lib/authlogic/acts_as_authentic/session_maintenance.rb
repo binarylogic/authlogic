@@ -176,7 +176,9 @@ module Authlogic
         end
 
         def log_in_after_password_change?
-          will_save_change_to_persistence_token? && self.class.log_in_after_password_change
+          persisted? &&
+            will_save_change_to_persistence_token? &&
+            self.class.log_in_after_password_change
         end
       end
     end

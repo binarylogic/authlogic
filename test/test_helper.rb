@@ -1,5 +1,20 @@
 # frozen_string_literal: true
 
+require "coveralls"
+require "simplecov"
+require "simplecov-console"
+
+Coveralls.wear!
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(
+  [
+    SimpleCov::Formatter::Console,
+    # Want a nice code coverage website? Uncomment this next line!
+    SimpleCov::Formatter::HTMLFormatter
+  ]
+)
+SimpleCov.start { add_filter "/test/" }
+
 require "byebug"
 require "rubygems"
 require "minitest/autorun"
@@ -13,8 +28,20 @@ Minitest::Reporters.use!(Minitest::Reporters::SpecReporter.new)
 
 I18n.load_path << File.dirname(__FILE__) + "/i18n/lol.yml"
 
-# ActiveRecord::Schema.verbose = false
-ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
+# https://docs.travis-ci.com/user/database-setup
+case ENV["DB"]
+when "mysql"
+  ActiveRecord::Base.establish_connection(
+    adapter: "mysql2",
+    database: "authlogic",
+    username: "root"
+  )
+when "postgres"
+  ActiveRecord::Base.establish_connection(adapter: "postgresql", database: "authlogic")
+else
+  ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
+end
+
 logger = Logger.new(STDOUT)
 logger.level = Logger::FATAL
 ActiveRecord::Base.logger = logger
@@ -30,15 +57,15 @@ end
 ActiveRecord::Base.default_timezone = :local
 ActiveRecord::Schema.define(version: 1) do
   create_table :companies do |t|
-    t.datetime  :created_at
-    t.datetime  :updated_at
+    t.datetime  :created_at, limit: 6
+    t.datetime  :updated_at, limit: 6
     t.string    :name
     t.boolean   :active
   end
 
   create_table :projects do |t|
-    t.datetime  :created_at
-    t.datetime  :updated_at
+    t.datetime  :created_at, limit: 6
+    t.datetime  :updated_at, limit: 6
     t.string    :name
   end
 
@@ -48,8 +75,8 @@ ActiveRecord::Schema.define(version: 1) do
   end
 
   create_table :users do |t|
-    t.datetime  :created_at
-    t.datetime  :updated_at
+    t.datetime  :created_at, limit: 6
+    t.datetime  :updated_at, limit: 6
     t.integer   :lock_version, default: 0
     t.integer   :company_id
     t.string    :login
@@ -63,9 +90,9 @@ ActiveRecord::Schema.define(version: 1) do
     t.string    :last_name
     t.integer   :login_count, default: 0, null: false
     t.integer   :failed_login_count, default: 0, null: false
-    t.datetime  :last_request_at
-    t.datetime  :current_login_at
-    t.datetime  :last_login_at
+    t.datetime  :last_request_at, limit: 6
+    t.datetime  :current_login_at, limit: 6
+    t.datetime  :last_login_at, limit: 6
     t.string    :current_login_ip
     t.string    :last_login_ip
     t.boolean   :active, default: true
@@ -74,8 +101,8 @@ ActiveRecord::Schema.define(version: 1) do
   end
 
   create_table :employees do |t|
-    t.datetime  :created_at
-    t.datetime  :updated_at
+    t.datetime  :created_at, limit: 6
+    t.datetime  :updated_at, limit: 6
     t.integer   :company_id
     t.string    :email
     t.string    :crypted_password
@@ -84,16 +111,16 @@ ActiveRecord::Schema.define(version: 1) do
     t.string    :first_name
     t.string    :last_name
     t.integer   :login_count, default: 0, null: false
-    t.datetime  :last_request_at
-    t.datetime  :current_login_at
-    t.datetime  :last_login_at
+    t.datetime  :last_request_at, limit: 6
+    t.datetime  :current_login_at, limit: 6
+    t.datetime  :last_login_at, limit: 6
     t.string    :current_login_ip
     t.string    :last_login_ip
   end
 
   create_table :affiliates do |t|
-    t.datetime  :created_at
-    t.datetime  :updated_at
+    t.datetime  :created_at, limit: 6
+    t.datetime  :updated_at, limit: 6
     t.integer   :company_id
     t.string    :username
     t.string    :pw_hash
@@ -102,15 +129,15 @@ ActiveRecord::Schema.define(version: 1) do
   end
 
   create_table :ldapers do |t|
-    t.datetime  :created_at
-    t.datetime  :updated_at
+    t.datetime  :created_at, limit: 6
+    t.datetime  :updated_at, limit: 6
     t.string    :ldap_login
     t.string    :persistence_token
   end
 
   create_table :admins do |t|
-    t.datetime  :created_at
-    t.datetime  :updated_at
+    t.datetime  :created_at, limit: 6
+    t.datetime  :updated_at, limit: 6
     t.string    :login
     t.string    :crypted_password
     t.string    :password_salt

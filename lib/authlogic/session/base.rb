@@ -198,7 +198,7 @@ module Authlogic
     # 2. Enable logging out on timeouts
     #
     #   class UserSession < Authlogic::Session::Base
-    #     logout_on_timeout true # default if false
+    #     logout_on_timeout true # default is false
     #   end
     #
     # This will require a user to log back in if they are inactive for more than
@@ -472,14 +472,9 @@ module Authlogic
           !controller.nil?
         end
 
-        # Do you want to allow your users to log in via HTTP basic auth?
+        # Allow users to log in via HTTP basic authentication.
         #
-        # I recommend keeping this enabled. The only time I feel this should be
-        # disabled is if you are not comfortable having your users provide their
-        # raw username and password. Whatever the reason, you can disable it
-        # here.
-        #
-        # * <tt>Default:</tt> true
+        # * <tt>Default:</tt> false
         # * <tt>Accepts:</tt> Boolean
         def allow_http_basic_auth(value = nil)
           rw_config(:allow_http_basic_auth, value, false)
