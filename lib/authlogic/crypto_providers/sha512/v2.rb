@@ -4,11 +4,11 @@ require "digest/sha2"
 
 module Authlogic
   module CryptoProviders
-    module V2
+    class Sha512
       # SHA-512 does not have any practical known attacks against it. However,
       # there are better choices. We recommend transitioning to a more secure,
       # adaptive hashing algorithm, like scrypt.
-      class SHA512
+      class V2
         class << self
           attr_accessor :join_token
 

@@ -6,6 +6,9 @@ module Authlogic
   module CryptoProviders
     # A poor choice. There are known attacks against this algorithm.
     class Sha1
+      # V2 hashes the digest bytes in repeated stretches instead of hex characters.
+      autoload :V2, File.join(__dir__, "sha1", "v2")
+
       class << self
         def join_token
           @join_token ||= "--"

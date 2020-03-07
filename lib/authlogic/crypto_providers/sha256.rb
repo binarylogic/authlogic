@@ -29,6 +29,9 @@ module Authlogic
     #
     # Uses the Sha256 hash algorithm to encrypt passwords.
     class Sha256
+      # V2 hashes the digest bytes in repeated stretches instead of hex characters.
+      autoload :V2, File.join(__dir__, "sha256", "v2")
+
       class << self
         attr_accessor :join_token
 

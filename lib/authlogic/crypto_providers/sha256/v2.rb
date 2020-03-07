@@ -25,11 +25,11 @@ module Authlogic
   #     end
   #   end
   module CryptoProviders
-    module V2
+    class Sha256
       # = Sha256
       #
       # Uses the Sha256 hash algorithm to encrypt passwords.
-      class SHA256
+      class V2
         class << self
           attr_accessor :join_token
 

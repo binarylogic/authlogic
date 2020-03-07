@@ -4,9 +4,9 @@ require "digest/md5"
 
 module Authlogic
   module CryptoProviders
-    module V2
+    class MD5
       # A poor choice. There are known attacks against this algorithm.
-      class MD5
+      class V2
         class << self
           attr_accessor :join_token
 

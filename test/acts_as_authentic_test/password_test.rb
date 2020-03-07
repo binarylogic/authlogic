@@ -96,10 +96,10 @@ module ActsAsAuthenticTest
       ben = users(:ben)
 
       providers = [
-        Authlogic::CryptoProviders::V2::SHA512,
-        Authlogic::CryptoProviders::V2::MD5,
-        Authlogic::CryptoProviders::V2::SHA1,
-        Authlogic::CryptoProviders::V2::SHA256
+        Authlogic::CryptoProviders::Sha512::V2,
+        Authlogic::CryptoProviders::MD5::V2,
+        Authlogic::CryptoProviders::Sha1::V2,
+        Authlogic::CryptoProviders::Sha256::V2
       ]
       transition_password_to(providers[0], ben)
       providers.each_cons(2) do |old_provider, new_provider|

@@ -4,9 +4,9 @@ require "digest/sha1"
 
 module Authlogic
   module CryptoProviders
-    module V2
+    class Sha1
       # A poor choice. There are known attacks against this algorithm.
-      class SHA1
+      class V2
         class << self
           def join_token
             @join_token ||= "--"
