@@ -8,6 +8,9 @@ module Authlogic
     # there are better choices. We recommend transitioning to a more secure,
     # adaptive hashing algorithm, like scrypt.
     class Sha512
+      # V2 hashes the digest bytes in repeated stretches instead of hex characters.
+      autoload :V2, File.join(__dir__, "sha512", "v2")
+
       class << self
         attr_accessor :join_token
 

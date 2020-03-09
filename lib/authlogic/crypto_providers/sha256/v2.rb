@@ -25,33 +25,32 @@ module Authlogic
   #     end
   #   end
   module CryptoProviders
-    # = Sha256
-    #
-    # Uses the Sha256 hash algorithm to encrypt passwords.
     class Sha256
-      # V2 hashes the digest bytes in repeated stretches instead of hex characters.
-      autoload :V2, File.join(__dir__, "sha256", "v2")
+      # = Sha256
+      #
+      # Uses the Sha256 hash algorithm to encrypt passwords.
+      class V2
+        class << self
+          attr_accessor :join_token
 
-      class << self
-        attr_accessor :join_token
+          # The number of times to loop through the encryption.
+          def stretches
+            @stretches ||= 20
+          end
+          attr_writer :stretches
 
-        # The number of times to loop through the encryption.
-        def stretches
-          @stretches ||= 20
-        end
-        attr_writer :stretches
+          # Turns your raw password into a Sha256 hash.
+          def encrypt(*tokens)
+            digest = tokens.flatten.join(join_token)
+            stretches.times { digest = Digest::SHA256.digest(digest) }
+            digest.unpack("H*")[0]
+          end
 
-        # Turns your raw password into a Sha256 hash.
-        def encrypt(*tokens)
-          digest = tokens.flatten.join(join_token)
-          stretches.times { digest = Digest::SHA256.hexdigest(digest) }
-          digest
-        end
-
-        # Does the crypted password match the tokens? Uses the same tokens that
-        # were used to encrypt.
-        def matches?(crypted, *tokens)
-          encrypt(*tokens) == crypted
+          # Does the crypted password match the tokens? Uses the same tokens that
+          # were used to encrypt.
+          def matches?(crypted, *tokens)
+            encrypt(*tokens) == crypted
+          end
         end
       end
     end
