@@ -16,6 +16,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Fixed
   * None
 
+## 4.4.4
+* Breaking Changes
+  * None
+* Added
+  * Ability to specify None as a valid value to SameSite cookie attribute
+* Fixed
+  * None
+  
 ## 4.4.3 (2019-03-23)
 
 * Breaking Changes
