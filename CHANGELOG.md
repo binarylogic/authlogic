@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 6.0.0 (Unreleased)
 
 * Breaking Changes, Major
   * There is no longer a default `crypto_provider`. We still recommend SCrypt,
@@ -24,13 +24,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   * The arity of `crypto_provider` has changed from -1 (one optional arg) to 0
     (no arguments). To set the provider, use `crypto_provider=`.
 * Added
-  * The ability to specify "None" as a valid SameSite attribute to address change in default SameSite behavior from Chromium project and probably other browsers soon.
+  * [#702](https://github.com/binarylogic/authlogic/pull/702) - The ability to
+    specify "None" as a valid SameSite attribute
 * Fixed
   * [#686](https://github.com/binarylogic/authlogic/pull/686) - Respect
     the `log_in_after_create` setting when creating a new logged-out user
   * [#668](https://github.com/binarylogic/authlogic/pull/668) -
     BCrypt user forced to load SCrypt
-  * [#697](https://github.com/binarylogic/authlogic/issues/697) - Add V2 CryptoProviders  for MD5 and SHA schemes that fix key stretching by hashing the byte digests instead of the hex strings representing those digests
+  * [#697](https://github.com/binarylogic/authlogic/issues/697) - Add V2
+    CryptoProviders for MD5 and SHA schemes that fix key stretching by hashing
+    the byte digests instead of the hex strings representing those digests
 
 ## 5.0.4 (2019-09-11)
 
