@@ -351,7 +351,7 @@ module Authlogic
         - https://github.com/binarylogic/authlogic/pull/558
         - https://github.com/binarylogic/authlogic/pull/577
       EOS
-      VALID_SAME_SITE_VALUES = [nil, "Lax", "Strict"].freeze
+      VALID_SAME_SITE_VALUES = [nil, "Lax", "Strict", "None"].freeze
 
       # Callbacks
       # =========

@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Breaking Changes
   * None
 * Added
-  * None
+  * The ability to specify "None" as a valid SameSite attribute to address change in default SameSite behavior from Chromium project and probably other browsers soon.
+
 * Fixed
   * None
 
