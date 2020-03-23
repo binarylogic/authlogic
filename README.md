@@ -365,6 +365,15 @@ class ApplicationController < ActionController::Base
 end
 ```
 
+### 2.e SameSite Cookie Attribute
+The SameSite attribute tells browsers when and how to fire cookies in first- or third-party situations. SameSite is used by a variety of browsers to identify whether or not to allow a cookie to be accessed.
+
+Up until recently, the standard default value when SameSite was not explicitly defined was to allow cookies in both first- and third-party contexts. However, starting with Chrome 80+, the SameSite attribute will not default to Lax behavior meaning cookies will only be permitted in first-party contexts. 
+
+Authlogic can allow you to explicitly set the value of SameSite to one of: Lax, Strict, or None. Note that when setting SameSite to None, the `secure` flag must also be set (secure is the default in Authlogic). 
+
+Reference: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#SameSite
+
 ## 3. Testing
 
 See [Authlogic::TestCase](https://github.com/binarylogic/authlogic/blob/master/lib/authlogic/test_case.rb)
