@@ -78,7 +78,7 @@ module SessionTest
         assert_equal "Lax", session.same_site
         session.same_site = "None"
         assert_equal "None", session.same_site
-        
+
         assert_raise(ArgumentError) { UserSession.same_site "foo" }
         assert_raise(ArgumentError) { UserSession.new.same_site "foo" }
       end
