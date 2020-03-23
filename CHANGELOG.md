@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   * The arity of `crypto_provider` has changed from -1 (one optional arg) to 0
     (no arguments). To set the provider, use `crypto_provider=`.
 * Added
-  * None
+  * The ability to specify "None" as a valid SameSite attribute to address change in default SameSite behavior from Chromium project and probably other browsers soon.
 * Fixed
   * [#686](https://github.com/binarylogic/authlogic/pull/686) - Respect
     the `log_in_after_create` setting when creating a new logged-out user
