@@ -20,8 +20,8 @@ module ActsAsAuthenticTest
       # uniqueness validation)
       ben = users(:ben)
       assert_equal ben, User.find_by_smart_case_login_field("bjohnson")
-      assert_equal nil, User.find_by_smart_case_login_field("BJOHNSON")
-      assert_equal nil, User.find_by_smart_case_login_field("Bjohnson")
+      assert_nil User.find_by_smart_case_login_field("BJOHNSON")
+      assert_nil User.find_by_smart_case_login_field("Bjohnson")
 
       # Unlike `User`, `Employee` does not have a uniqueness validation. In
       # the absence of such, authlogic performs a case-insensitive query.
