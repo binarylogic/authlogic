@@ -438,8 +438,7 @@ module Authlogic
 
       class << self
         attr_accessor(
-          :configured_password_methods,
-          :configured_klass_methods
+          :configured_password_methods
         )
       end
       attr_accessor(
@@ -1060,24 +1059,10 @@ module Authlogic
       # Constructor
       # ===========
 
-      # rubocop:disable Metrics/AbcSize
       def initialize(*args)
         @id = nil
         self.scope = self.class.scope
-
-        # Creating an alias method for the "record" method based on the klass
-        # name, so that we can do:
-        #
-        #   session.user
-        #
-        # instead of:
-        #
-        #   session.record
-        unless self.class.configured_klass_methods
-          self.class.send(:alias_method, klass_name.demodulize.underscore.to_sym, :record)
-          self.class.configured_klass_methods = true
-        end
-
+        define_record_alias_method
         raise Activation::NotActivatedError unless self.class.activated?
         unless self.class.configured_password_methods
           configure_password_methods
@@ -1086,7 +1071,6 @@ module Authlogic
         instance_variable_set("@#{password_field}", nil)
         self.credentials = args
       end
-      # rubocop:enable Metrics/AbcSize
 
       # Public instance methods
       # =======================
@@ -1492,24 +1476,21 @@ module Authlogic
       # Determines if the information you provided for authentication is valid
       # or not. If there is a problem with the information provided errors will
       # be added to the errors object and this method will return false.
+      #
+      # @api public
       def valid?
         errors.clear
         self.attempted_record = nil
-
-        run_callbacks(:before_validation)
-        run_callbacks(new_session? ? :before_validation_on_create : :before_validation_on_update)
+        run_the_before_validation_callbacks
 
         # Run the `validate` callbacks, eg. `validate_by_password`.
         # This is when `attempted_record` is set.
         run_callbacks(:validate)
 
         ensure_authentication_attempted
-
         if errors.empty?
-          run_callbacks(new_session? ? :after_validation_on_create : :after_validation_on_update)
-          run_callbacks(:after_validation)
+          run_the_after_validation_callbacks
         end
-
         save_record(attempted_record)
         errors.empty?
       end
@@ -1636,15 +1617,23 @@ module Authlogic
         self.class.send(:attr_reader, login_field) unless respond_to?(login_field)
       end
 
+      # @api private
       def define_password_field_methods
         return unless password_field
-        self.class.send(:attr_writer, password_field) unless respond_to?("#{password_field}=")
-        self.class.send(:define_method, password_field) {} unless respond_to?(password_field)
+        define_password_field_writer_method
+        define_password_field_reader_methods
+      end
 
-        # The password should not be accessible publicly. This way forms
-        # using form_for don't fill the password with the attempted
-        # password. To prevent this we just create this method that is
-        # private.
+      # The password should not be accessible publicly. This way forms using
+      # form_for don't fill the password with the attempted password. To prevent
+      # this we just create this method that is private.
+      #
+      # @api private
+      def define_password_field_reader_methods
+        unless respond_to?(password_field)
+          # Deliberate no-op method, see rationale above.
+          self.class.send(:define_method, password_field) {}
+        end
         self.class.class_eval(
           <<-EOS, __FILE__, __LINE__ + 1
             private
@@ -1653,6 +1642,28 @@ module Authlogic
             end
         EOS
         )
+      end
+
+      def define_password_field_writer_method
+        unless respond_to?("#{password_field}=")
+          self.class.send(:attr_writer, password_field)
+        end
+      end
+
+      # Creating an alias method for the "record" method based on the klass
+      # name, so that we can do:
+      #
+      #   session.user
+      #
+      # instead of:
+      #
+      #   session.record
+      #
+      # @api private
+      def define_record_alias_method
+        noun = klass_name.demodulize.underscore.to_sym
+        return if respond_to?(noun)
+        self.class.send(:alias_method, noun, :record)
       end
 
       def destroy_cookie
@@ -1699,14 +1710,18 @@ module Authlogic
       end
 
       # @api private
-      def generate_cookie_for_saving
-        creds = ::Authlogic::CookieCredentials.new(
+      def generate_cookie_credentials
+        ::Authlogic::CookieCredentials.new(
           record.persistence_token,
           record.send(record.class.primary_key),
           remember_me? ? remember_me_until : nil
         )
+      end
+
+      # @api private
+      def generate_cookie_for_saving
         {
-          value: creds.to_s,
+          value: generate_cookie_credentials.to_s,
           expires: remember_me_until,
           secure: secure,
           httponly: httponly,
@@ -1891,6 +1906,18 @@ module Authlogic
 
       def reset_failed_login_count
         attempted_record.failed_login_count = 0
+      end
+
+      # @api private
+      def run_the_after_validation_callbacks
+        run_callbacks(new_session? ? :after_validation_on_create : :after_validation_on_update)
+        run_callbacks(:after_validation)
+      end
+
+      # @api private
+      def run_the_before_validation_callbacks
+        run_callbacks(:before_validation)
+        run_callbacks(new_session? ? :before_validation_on_create : :before_validation_on_update)
       end
 
       # `args[0]` is the name of a model method, like
