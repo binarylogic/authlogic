@@ -35,6 +35,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   * [#697](https://github.com/binarylogic/authlogic/issues/697) - Add V2
     CryptoProviders for MD5 and SHA schemes that fix key stretching by hashing
     the byte digests instead of the hex strings representing those digests
+* Dependencies
+  * Drop support for ruby 2.3 (reached EOL on 2019-04-01)
 
 ## Previous major version
 

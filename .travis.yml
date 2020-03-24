@@ -25,8 +25,8 @@ env:
 # We only test the oldest and the newest ruby versions that we support. We
 # do not test intermediate versions.
 rvm:
-  - 2.3.8
-  - 2.6.1
+  - 2.4.9
+  - 2.7.0
 
 # We only test living versions of rails, per the [rails maintenance
 # policy](http://guides.rubyonrails.org/maintenance_policy.html)
@@ -37,7 +37,7 @@ gemfile:
 matrix:
   exclude:
     # rails 6 requires ruby >= 2.5.0
-    - rvm: 2.3.8
+    - rvm: 2.4.9
       gemfile: gemfiles/rails_6.0.rb
   fast_finish: true
 
