@@ -5,25 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [5.0.0](https://github.com/binarylogic/authlogic/blob/5-0-stable/CHANGELOG.md)
+## 5.0.0
+
+See https://github.com/binarylogic/authlogic/blob/5-0-stable/CHANGELOG.md
+
+## Unreleased
 
 * Breaking Changes
-  * Drop AES256 crypto provider, deprecated in 4.2.0
-  * Drop support for transitioning from restful_authentication, deprecated in 4.1.0
-  * Uses `frozen_string_literal`, so assume all strings returned are frozen
+  * None
 * Added
   * None
 * Fixed
   * None
 
-## 4.4.4
+## 4.5.0 (2020-03-23)
+
 * Breaking Changes
   * None
 * Added
-  * Ability to specify None as a valid value to SameSite cookie attribute
+  * [#701](https://github.com/binarylogic/authlogic/pull/701) - Ability to
+    specify None as a valid value to SameSite cookie attribute
 * Fixed
   * None
-  
+
 ## 4.4.3 (2019-03-23)
 
 * Breaking Changes
