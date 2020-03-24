@@ -1492,24 +1492,21 @@ module Authlogic
       # Determines if the information you provided for authentication is valid
       # or not. If there is a problem with the information provided errors will
       # be added to the errors object and this method will return false.
+      #
+      # @api public
       def valid?
         errors.clear
         self.attempted_record = nil
-
-        run_callbacks(:before_validation)
-        run_callbacks(new_session? ? :before_validation_on_create : :before_validation_on_update)
+        run_the_before_validation_callbacks
 
         # Run the `validate` callbacks, eg. `validate_by_password`.
         # This is when `attempted_record` is set.
         run_callbacks(:validate)
 
         ensure_authentication_attempted
-
         if errors.empty?
-          run_callbacks(new_session? ? :after_validation_on_create : :after_validation_on_update)
-          run_callbacks(:after_validation)
+          run_the_after_validation_callbacks
         end
-
         save_record(attempted_record)
         errors.empty?
       end
@@ -1895,6 +1892,18 @@ module Authlogic
 
       def reset_failed_login_count
         attempted_record.failed_login_count = 0
+      end
+
+      # @api private
+      def run_the_after_validation_callbacks
+        run_callbacks(new_session? ? :after_validation_on_create : :after_validation_on_update)
+        run_callbacks(:after_validation)
+      end
+
+      # @api private
+      def run_the_before_validation_callbacks
+        run_callbacks(:before_validation)
+        run_callbacks(new_session? ? :before_validation_on_create : :before_validation_on_update)
       end
 
       # `args[0]` is the name of a model method, like
