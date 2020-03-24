@@ -12,6 +12,20 @@ AllCops:
   # rubies on CI.
   TargetRubyVersion: 2.4
 
+# Avoid empty lines in methods, they are a sign the method is too big.
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
+# Aim for 80, but 100 is OK.
+Layout/LineLength:
+  Max: 100
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
 # Please use normal indentation when aligning parameters.
 #
 # Good:
@@ -31,18 +45,8 @@ AllCops:
 #                 b)
 #
 # The latter is harder to maintain and uses too much horizontal space.
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   EnforcedStyle: with_fixed_indentation
-
-# Avoid empty lines in methods, they are a sign the method is too big.
-Layout/EmptyLineAfterGuardClause:
-  Enabled: false
-
-Layout/MultilineMethodCallIndentation:
-  EnforcedStyle: indented
-
-Layout/MultilineOperationIndentation:
-  EnforcedStyle: indented
 
 Metrics/AbcSize:
   Exclude:
@@ -58,10 +62,6 @@ Metrics/BlockLength:
 # Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
 Metrics/ClassLength:
   Enabled: false
-
-# Aim for 80, but 100 is OK.
-Metrics/LineLength:
-  Max: 100
 
 # Questionable value compared to metrics like AbcSize or CyclomaticComplexity.
 Metrics/MethodLength:
