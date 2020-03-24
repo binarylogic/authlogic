@@ -438,8 +438,7 @@ module Authlogic
 
       class << self
         attr_accessor(
-          :configured_password_methods,
-          :configured_klass_methods
+          :configured_password_methods
         )
       end
       attr_accessor(
@@ -1060,24 +1059,10 @@ module Authlogic
       # Constructor
       # ===========
 
-      # rubocop:disable Metrics/AbcSize
       def initialize(*args)
         @id = nil
         self.scope = self.class.scope
-
-        # Creating an alias method for the "record" method based on the klass
-        # name, so that we can do:
-        #
-        #   session.user
-        #
-        # instead of:
-        #
-        #   session.record
-        unless self.class.configured_klass_methods
-          self.class.send(:alias_method, klass_name.demodulize.underscore.to_sym, :record)
-          self.class.configured_klass_methods = true
-        end
-
+        define_record_alias_method
         raise Activation::NotActivatedError unless self.class.activated?
         unless self.class.configured_password_methods
           configure_password_methods
@@ -1086,7 +1071,6 @@ module Authlogic
         instance_variable_set("@#{password_field}", nil)
         self.credentials = args
       end
-      # rubocop:enable Metrics/AbcSize
 
       # Public instance methods
       # =======================
@@ -1650,6 +1634,22 @@ module Authlogic
             end
         EOS
         )
+      end
+
+      # Creating an alias method for the "record" method based on the klass
+      # name, so that we can do:
+      #
+      #   session.user
+      #
+      # instead of:
+      #
+      #   session.record
+      #
+      # @api private
+      def define_record_alias_method
+        noun = klass_name.demodulize.underscore.to_sym
+        return if respond_to?(noun)
+        self.class.send(:alias_method, noun, :record)
       end
 
       def destroy_cookie
