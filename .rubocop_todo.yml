@@ -31,10 +31,3 @@ Style/MissingRespondToMissing:
 Style/TrivialAccessors:
   Exclude:
     - 'lib/authlogic/session/base.rb'
-
-Style/UnpackFirst:
-  Exclude:
-    - lib/authlogic/crypto_providers/md5/v2.rb
-    - lib/authlogic/crypto_providers/sha1/v2.rb
-    - lib/authlogic/crypto_providers/sha256/v2.rb
-    - lib/authlogic/crypto_providers/sha512/v2.rb
