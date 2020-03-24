@@ -1699,14 +1699,18 @@ module Authlogic
       end
 
       # @api private
-      def generate_cookie_for_saving
-        creds = ::Authlogic::CookieCredentials.new(
+      def generate_cookie_credentials
+        ::Authlogic::CookieCredentials.new(
           record.persistence_token,
           record.send(record.class.primary_key),
           remember_me? ? remember_me_until : nil
         )
+      end
+
+      # @api private
+      def generate_cookie_for_saving
         {
-          value: creds.to_s,
+          value: generate_cookie_credentials.to_s,
           expires: remember_me_until,
           secure: secure,
           httponly: httponly,
