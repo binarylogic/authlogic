@@ -1617,15 +1617,23 @@ module Authlogic
         self.class.send(:attr_reader, login_field) unless respond_to?(login_field)
       end
 
+      # @api private
       def define_password_field_methods
         return unless password_field
-        self.class.send(:attr_writer, password_field) unless respond_to?("#{password_field}=")
-        self.class.send(:define_method, password_field) {} unless respond_to?(password_field)
+        define_password_field_writer_method
+        define_password_field_reader_methods
+      end
 
-        # The password should not be accessible publicly. This way forms
-        # using form_for don't fill the password with the attempted
-        # password. To prevent this we just create this method that is
-        # private.
+      # The password should not be accessible publicly. This way forms using
+      # form_for don't fill the password with the attempted password. To prevent
+      # this we just create this method that is private.
+      #
+      # @api private
+      def define_password_field_reader_methods
+        unless respond_to?(password_field)
+          # Deliberate no-op method, see rationale above.
+          self.class.send(:define_method, password_field) {}
+        end
         self.class.class_eval(
           <<-EOS, __FILE__, __LINE__ + 1
             private
@@ -1634,6 +1642,12 @@ module Authlogic
             end
         EOS
         )
+      end
+
+      def define_password_field_writer_method
+        unless respond_to?("#{password_field}=")
+          self.class.send(:attr_writer, password_field)
+        end
       end
 
       # Creating an alias method for the "record" method based on the klass

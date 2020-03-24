@@ -26,7 +26,7 @@ Lint/SendWithMixinArgument:
 
 # Offense count: 3
 Metrics/AbcSize:
-  Max: 16.28
+  Max: 16.03
 
 # Offense count: 5
 Style/ClassVars:
