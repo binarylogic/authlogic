@@ -18,8 +18,9 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 | Version     | Documentation |
 | ----------- | ------------- |
 | Unreleased  | https://github.com/binarylogic/authlogic/blob/master/README.md |
-| 5.0.4       | https://github.com/binarylogic/authlogic/blob/v5.0.4/README.md |
-| 4.4.2       | https://github.com/binarylogic/authlogic/blob/v4.4.2/README.md |
+| 6.0.0       | https://github.com/binarylogic/authlogic/blob/v6.0.0/README.md |
+| 5.1.0       | https://github.com/binarylogic/authlogic/blob/v5.1.0/README.md |
+| 4.5.0       | https://github.com/binarylogic/authlogic/blob/v4.5.0/README.md |
 | 3.7.0       | https://github.com/binarylogic/authlogic/blob/v3.7.0/README.md |
 | 2.1.11      | https://github.com/binarylogic/authlogic/blob/v2.1.11/README.rdoc |
 | 1.4.3       | https://github.com/binarylogic/authlogic/blob/v1.4.3/README.rdoc |
@@ -415,20 +416,6 @@ current controller object. Then Authlogic leverages that to do everything, it's
 a pretty simple design. Nothing crazy going on, Authlogic is just leveraging the
 tools your framework provides in the controller object.
 
-## 90. Compatibility
-
-| Version | branch       | ruby     | activerecord  |
-| ------- | ------------ | -------- | ------------- |
-| 5.0     | master       | >= 2.3.0 | >= 5.2, < 6.1 |
-| 4.4     | 4-4-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
-| 4.3     | 4-3-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
-| 4.2     | 4-2-stable   | >= 2.2.0 | >= 4.2, < 5.3 |
-| 3       | 3-stable     | >= 1.9.3 | >= 3.2, < 5.3 |
-| 2       | rails2       | >= 1.9.3 | ~> 2.3.0      |
-| 1       | ?            | ?        | ?             |
-
-Under SemVer, [changes to dependencies][10] do not require a major release.
-
 ## 7. Extending
 
 ## 7.a. Extending UserSession
@@ -457,6 +444,21 @@ end
 
 To learn more about available callbacks, see the "Callbacks" documentation
 in `authlogic/session/base.rb`.
+
+## 90. Compatibility
+
+| Version | branch       | ruby     | activerecord  |
+| ------- | ------------ | -------- | ------------- |
+| 6.0     | 6-0-stable   | >= 2.4.0 | >= 5.2, < 6.1 |
+| 5.1     | 5-1-stable   | >= 2.3.0 | >= 5.2, < 6.1 |
+| 4.5     | 4-5-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
+| 4.3     | 4-3-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
+| 4.2     | 4-2-stable   | >= 2.2.0 | >= 4.2, < 5.3 |
+| 3       | 3-stable     | >= 1.9.3 | >= 3.2, < 5.3 |
+| 2       | rails2       | >= 1.9.3 | ~> 2.3.0      |
+| 1       | ?            | ?        | ?             |
+
+Under SemVer, [changes to dependencies][10] do not require a major release.
 
 ## Intellectual Property
 
