@@ -18,7 +18,7 @@ module Authlogic
         this default, then, in your User model (or equivalent), please set the
         following:
 
-            acts_as_authentic do |config|
+            acts_as_authentic do |c|
               c.crypto_provider = ::Authlogic::CryptoProviders::SCrypt
             end
 
