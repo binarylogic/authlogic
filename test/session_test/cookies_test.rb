@@ -182,6 +182,22 @@ module SessionTest
         )
       end
 
+      def test_after_save_save_cookie_encrypted
+        ben = users(:ben)
+
+        assert_nil controller.cookies["user_credentials"]
+        payload = "#{ben.persistence_token}::#{ben.id}"
+
+        session = UserSession.new(ben)
+        session.encrypt_cookie = true
+        assert session.save
+        assert_equal payload, controller.cookies.encrypted["user_credentials"]
+        assert_equal(
+          Authlogic::TestCase::MockEncryptedCookieJar.encrypt(payload),
+          controller.cookies.encrypted.parent_jar["user_credentials"]
+        )
+      end
+
       def test_after_save_save_cookie_signed
         ben = users(:ben)
 

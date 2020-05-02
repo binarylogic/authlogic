@@ -23,6 +23,10 @@ module Authlogic
       def signed
         @signed ||= MockSignedCookieJar.new(self)
       end
+
+      def encrypted
+        @encrypted ||= MockEncryptedCookieJar.new(self)
+      end
     end
 
     # A mock of `ActionDispatch::Cookies::SignedKeyRotatingCookieJar`
@@ -35,6 +39,7 @@ module Authlogic
 
       def initialize(parent_jar)
         @parent_jar = parent_jar
+        parent_jar.each { |k, v| self[k] = v }
       end
 
       def [](val)
@@ -49,6 +54,36 @@ module Authlogic
       def []=(key, options)
         options[:value] = "#{options[:value]}--#{Digest::SHA1.hexdigest options[:value]}"
         @parent_jar[key] = options
+      end
+    end
+
+    class MockEncryptedCookieJar < MockCookieJar
+      attr_reader :parent_jar # helper for testing
+
+      def initialize(parent_jar)
+        @parent_jar = parent_jar
+        parent_jar.each { |k, v| self[k] = v }
+      end
+
+      def [](val)
+        encrypted_message = @parent_jar[val]
+        if encrypted_message
+          self.class.decrypt(encrypted_message)
+        end
+      end
+
+      def []=(key, options)
+        options[:value] = self.class.encrypt(options[:value])
+        @parent_jar[key] = options
+      end
+
+      # simple caesar cipher for testing
+      def self.encrypt(str)
+        str.unpack("U*").map(&:succ).pack("U*")
+      end
+
+      def self.decrypt(str)
+        str.unpack("U*").map(&:pred).pack("U*")
       end
     end
   end
