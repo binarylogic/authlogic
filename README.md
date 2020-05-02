@@ -171,7 +171,7 @@ To install Authlogic, add this to your Gemfile:
 
 Let's walk through a typical rails setup. ([Compatibility](#90-compatibility))
 
-### 2.a. The users table
+### 2.a.1 The users table
 
 If you want to enable all the features of Authlogic, a migration to create a
 `User` model might look like this:
@@ -183,6 +183,9 @@ class CreateUser < ActiveRecord::Migration
       # Authlogic::ActsAsAuthentic::Email
       t.string    :email
       t.index     :email, unique: true
+
+      # Authlogic::ActsAsAuthentic::Login
+      t.string    :login
 
       # Authlogic::ActsAsAuthentic::Password
       t.string    :crypted_password
@@ -267,6 +270,15 @@ class User < ApplicationRecord
 end
 ```
 
+### 2.a.2. UserSession model
+
+And define a corresponding model in `app/models/user_session.rb`:
+
+```ruby
+class UserSession < Authlogic::Session::Base
+end
+```
+
 ### 2.b. Controller
 
 Your sessions controller will look just like your other controllers.
@@ -280,7 +292,7 @@ class UserSessionsController < ApplicationController
   def create
     @user_session = UserSession.new(user_session_params.to_h)
     if @user_session.save
-      redirect_to account_url
+      redirect_to root_url
     else
       render :action => :new
     end
@@ -294,7 +306,7 @@ class UserSessionsController < ApplicationController
   private
 
   def user_session_params
-    params.require(:user_session).permit(:email, :password, :remember_me)
+    params.require(:user_session).permit(:login, :password, :remember_me)
   end
 end
 ```
@@ -320,10 +332,22 @@ class ApplicationController < ActionController::Base
 end
 ```
 
+#### 2.b.2. Routes
+
+```ruby
+Rails.application.routes.draw do
+  # ...
+  resources :users
+  resource :user_session
+end
+```
+
 ### 2.c. View
 
+For example, in `app/views/user_sessions/new.html.erb`:
+
 ```erb
-<%= form_for @user_session do |f| %>
+<%= form_for @user_session, url: user_session_url do |f| %>
   <% if @user_session.errors.any? %>
   <div id="error_explanation">
     <h2><%= pluralize(@user_session.errors.count, "error") %> prohibited:</h2>
@@ -339,6 +363,9 @@ end
   <br />
   <%= f.label :password %><br />
   <%= f.password_field :password %><br />
+  <br />
+  <%= f.label :remember_me %><br />
+  <%= f.check_box :remember_me %><br />
   <br />
   <%= f.submit "Login" %>
 <% end %>
@@ -374,7 +401,7 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-### 2.e SameSite Cookie Attribute
+### 2.e. SameSite Cookie Attribute
 The SameSite attribute tells browsers when and how to fire cookies in first- or third-party situations. SameSite is used by a variety of browsers to identify whether or not to allow a cookie to be accessed.
 
 Up until recently, the standard default value when SameSite was not explicitly defined was to allow cookies in both first- and third-party contexts. However, starting with Chrome 80+, the SameSite attribute will not default to Lax behavior meaning cookies will only be permitted in first-party contexts. 
