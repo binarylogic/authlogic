@@ -270,7 +270,7 @@ class UserSessionsController < ApplicationController
   end
 
   def create
-    @user_session = UserSession.new(user_session_params)
+    @user_session = UserSession.new(user_session_params.to_h)
     if @user_session.save
       redirect_to account_url
     else
