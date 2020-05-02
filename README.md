@@ -159,6 +159,14 @@ ActiveRecord model:
 2. **Authlogic::ActsAsAuthentic**, which adds in functionality to your
   ActiveRecord model when you call `acts_as_authentic`.
 
+### 1.c. Installation
+
+To install Authlogic, add this to your Gemfile:
+
+ `gem 'authlogic'`
+
+ And run `bundle install`.
+
 ## 2. Rails
 
 Let's walk through a typical rails setup. ([Compatibility](#90-compatibility))
