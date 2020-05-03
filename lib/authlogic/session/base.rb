@@ -955,6 +955,20 @@ module Authlogic
         end
         alias sign_cookie= sign_cookie
 
+        # Should the cookie be encrypted? If the controller adapter supports it, this is a
+        # measure to hide the contents of the cookie (e.g. persistence_token)
+        def encrypt_cookie(value = nil)
+          if value && !controller.cookies.respond_to?(:encrypted)
+            raise "Encrypted cookies not supported with #{controller.class}!"
+          end
+          if value && sign_cookie
+            raise "It is recommended to use encrypt_cookie instead of sign_cookie. " \
+                  "You may not enable both options."
+          end
+          rw_config(:encrypt_cookie, value, false)
+        end
+        alias_method :encrypt_cookie=, :encrypt_cookie
+
         # Works exactly like cookie_key, but for sessions. See cookie_key for more info.
         #
         # * <tt>Default:</tt> cookie_key
@@ -1459,6 +1473,23 @@ module Authlogic
         sign_cookie == true || sign_cookie == "true" || sign_cookie == "1"
       end
 
+      # If the cookie should be encrypted
+      def encrypt_cookie
+        return @encrypt_cookie if defined?(@encrypt_cookie)
+        @encrypt_cookie = self.class.encrypt_cookie
+      end
+
+      # Accepts a boolean as to whether the cookie should be encrypted.  If true
+      # the cookie will be saved in an encrypted state.
+      def encrypt_cookie=(value)
+        @encrypt_cookie = value
+      end
+
+      # See encrypt_cookie
+      def encrypt_cookie?
+        encrypt_cookie == true || encrypt_cookie == "true" || encrypt_cookie == "1"
+      end
+
       # The scope of the current object
       def scope
         @scope ||= {}
@@ -1599,7 +1630,9 @@ module Authlogic
       end
 
       def cookie_jar
-        if self.class.sign_cookie
+        if self.class.encrypt_cookie
+          controller.cookies.encrypted
+        elsif self.class.sign_cookie
           controller.cookies.signed
         else
           controller.cookies
@@ -1710,24 +1743,23 @@ module Authlogic
       end
 
       # @api private
-      def generate_cookie_credentials
-        ::Authlogic::CookieCredentials.new(
-          record.persistence_token,
-          record.send(record.class.primary_key),
-          remember_me? ? remember_me_until : nil
-        )
-      end
-
-      # @api private
       def generate_cookie_for_saving
         {
-          value: generate_cookie_credentials.to_s,
+          value: generate_cookie_value.to_s,
           expires: remember_me_until,
           secure: secure,
           httponly: httponly,
           same_site: same_site,
           domain: controller.cookie_domain
         }
+      end
+
+      def generate_cookie_value
+        ::Authlogic::CookieCredentials.new(
+          record.persistence_token,
+          record.send(record.class.primary_key),
+          remember_me? ? remember_me_until : nil
+        )
       end
 
       # Returns a Proc to be executed by
@@ -1957,11 +1989,7 @@ module Authlogic
       end
 
       def save_cookie
-        if sign_cookie?
-          controller.cookies.signed[cookie_key] = generate_cookie_for_saving
-        else
-          controller.cookies[cookie_key] = generate_cookie_for_saving
-        end
+        cookie_jar[cookie_key] = generate_cookie_for_saving
       end
 
       # @api private

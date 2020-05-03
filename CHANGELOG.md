@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Breaking Changes
   * None
 * Added
-  * None
+  * [#666](https://github.com/binarylogic/authlogic/pull/666) -
+    Forwardported Authlogic::Session::Cookies.encrypt_cookie option
 * Fixed
   * None
 
