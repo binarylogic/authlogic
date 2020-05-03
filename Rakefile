@@ -13,13 +13,13 @@ Rake::TestTask.new(:test) do |test|
 
   # Set interpreter warning level to 2 (verbose)
   #
-  # TODO: I had to temporarily disable warnings because TravisCI has a maximum
-  # log length of 4MB and the following warning was printed thousands of times:
+  # Warnings are set to 0 on TravisCI because it has a maximum
+  # log length of 4MB and the following warning is printed thousands of times:
   #
   # > ../postgresql/database_statements.rb:24:
   # > warning: rb_tainted_str_new is deprecated and will be removed in Ruby 3.2.
-  #
-  test.ruby_opts += ["-W0"]
+  warning_level = ENV.fetch("TRAVIS", "false") == "true" ? 0 : 2
+  test.ruby_opts += [format("-W%d", warning_level)]
 end
 
 require "rubocop/rake_task"

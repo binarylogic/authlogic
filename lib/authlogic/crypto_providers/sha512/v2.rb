@@ -24,7 +24,7 @@ module Authlogic
             stretches.times do
               digest = Digest::SHA512.digest(digest)
             end
-            digest.unpack("H*")[0]
+            digest.unpack1("H*")
           end
 
           # Does the crypted password match the tokens? Uses the same tokens that

@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     but don't want users of other providers to be forced to install it. You
     must now explicitly specify your `crypto_provider`, eg. in your `user.rb`.
 
-        acts_as_authentic do |config|
+        acts_as_authentic do |c|
           c.crypto_provider = ::Authlogic::CryptoProviders::SCrypt
         end
 
