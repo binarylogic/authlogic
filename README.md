@@ -18,8 +18,8 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 | Version     | Documentation |
 | ----------- | ------------- |
 | Unreleased  | https://github.com/binarylogic/authlogic/blob/master/README.md |
-| 6.0.0       | https://github.com/binarylogic/authlogic/blob/v6.0.0/README.md |
-| 5.1.0       | https://github.com/binarylogic/authlogic/blob/v5.1.0/README.md |
+| 6.1.0       | https://github.com/binarylogic/authlogic/blob/v6.1.0/README.md |
+| 5.2.0       | https://github.com/binarylogic/authlogic/blob/v5.2.0/README.md |
 | 4.5.0       | https://github.com/binarylogic/authlogic/blob/v4.5.0/README.md |
 | 3.7.0       | https://github.com/binarylogic/authlogic/blob/v3.7.0/README.md |
 | 2.1.11      | https://github.com/binarylogic/authlogic/blob/v2.1.11/README.rdoc |
@@ -407,9 +407,9 @@ end
 ### 2.e. SameSite Cookie Attribute
 The SameSite attribute tells browsers when and how to fire cookies in first- or third-party situations. SameSite is used by a variety of browsers to identify whether or not to allow a cookie to be accessed.
 
-Up until recently, the standard default value when SameSite was not explicitly defined was to allow cookies in both first- and third-party contexts. However, starting with Chrome 80+, the SameSite attribute will not default to Lax behavior meaning cookies will only be permitted in first-party contexts. 
+Up until recently, the standard default value when SameSite was not explicitly defined was to allow cookies in both first- and third-party contexts. However, starting with Chrome 80+, the SameSite attribute will not default to Lax behavior meaning cookies will only be permitted in first-party contexts.
 
-Authlogic can allow you to explicitly set the value of SameSite to one of: Lax, Strict, or None. Note that when setting SameSite to None, the `secure` flag must also be set (secure is the default in Authlogic). 
+Authlogic can allow you to explicitly set the value of SameSite to one of: Lax, Strict, or None. Note that when setting SameSite to None, the `secure` flag must also be set (secure is the default in Authlogic).
 
 Reference: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#SameSite
 
@@ -487,8 +487,8 @@ in `authlogic/session/base.rb`.
 
 | Version | branch       | ruby     | activerecord  |
 | ------- | ------------ | -------- | ------------- |
-| 6.0     | 6-0-stable   | >= 2.4.0 | >= 5.2, < 6.1 |
-| 5.1     | 5-1-stable   | >= 2.3.0 | >= 5.2, < 6.1 |
+| 6.1     | 6-1-stable   | >= 2.4.0 | >= 5.2, < 6.1 |
+| 5.2     | 5-2-stable   | >= 2.3.0 | >= 5.2, < 6.1 |
 | 4.5     | 4-5-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
 | 4.3     | 4-3-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
 | 4.2     | 4-2-stable   | >= 2.2.0 | >= 4.2, < 5.3 |

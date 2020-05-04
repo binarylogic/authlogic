@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Breaking Changes
   * None
 * Added
+  * None
+* Fixed
+  * None
+
+## 6.1.0 (2020-05-03)
+
+* Breaking Changes
+  * None
+* Added
   * [#666](https://github.com/binarylogic/authlogic/pull/666) -
     Forwardported Authlogic::Session::Cookies.encrypt_cookie option
 * Fixed
@@ -31,7 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
         gem "scrypt", "~> 3.0"
 
 * Breaking Changes, Minor
-  * To set your crypto provider, you must use `crypto_provider=`, not 
+  * To set your crypto provider, you must use `crypto_provider=`, not
     `crypto_provider`. The arity of the later has changed from -1 (one optional
     arg) to 0 (no arguments).
 * Added
