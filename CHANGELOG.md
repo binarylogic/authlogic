@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Breaking Changes
   * None
 * Added
+  * None
+* Fixed
+  * None
+
+## 5.2.0 (2020-05-03)
+
+* Breaking Changes
+  * None
+* Added
   * [#666](https://github.com/binarylogic/authlogic/pull/666) -
     Forwardported Authlogic::Session::Cookies.encrypt_cookie option
 * Fixed
