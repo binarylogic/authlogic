@@ -57,6 +57,8 @@ module Authlogic
       end
     end
 
+    # Which ActionDispatch class is this a mock of?
+    # TODO: Document as with other mocks above.
     class MockEncryptedCookieJar < MockCookieJar
       attr_reader :parent_jar # helper for testing
 
