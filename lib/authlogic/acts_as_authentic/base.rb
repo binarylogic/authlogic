@@ -31,7 +31,6 @@ module Authlogic
         #
         # See the various sub modules for the configuration they provide.
         def acts_as_authentic
-          return unless db_setup?
           yield self if block_given?
           acts_as_authentic_modules.each { |mod| include mod }
         end
@@ -67,19 +66,10 @@ module Authlogic
 
         private
 
-        def db_setup?
-          column_names
-          true
-        rescue StandardError
-          false
-        end
-
         def first_column_to_exist(*columns_to_check)
-          if db_setup?
-            columns_to_check.each do |column_name|
-              if column_names.include?(column_name.to_s)
-                return column_name.to_sym
-              end
+          columns_to_check.each do |column_name|
+            if column_names.include?(column_name.to_s)
+              return column_name.to_sym
             end
           end
           columns_to_check.first&.to_sym
