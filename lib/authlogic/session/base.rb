@@ -967,7 +967,7 @@ module Authlogic
           end
           rw_config(:encrypt_cookie, value, false)
         end
-        alias_method :encrypt_cookie=, :encrypt_cookie
+        alias encrypt_cookie= encrypt_cookie
 
         # Works exactly like cookie_key, but for sessions. See cookie_key for more info.
         #
