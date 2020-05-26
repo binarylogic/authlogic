@@ -36,6 +36,7 @@ An unobtrusive ruby authentication library based on ActiveRecord.
   - [2.b. Controller](#2b-controller)
     - [2.b.1. Helper Methods](#2b1-helper-methods)
     - [2.b.2. Routes](#2b2-routes)
+    - [2.b.3. ActionController::API](#2b3-actioncontroller-api)
   - [2.c. View](#2c-view)
   - [2.d. CSRF Protection](#2d-csrf-protection)
 - [3. Testing](#3-testing)
@@ -344,6 +345,13 @@ Rails.application.routes.draw do
   resource :user_session
 end
 ```
+
+#### 2.b.3. ActionController::API
+
+> Because ActionController::API does not include ActionController::Cookies
+> metal and ActionDispatch::Cookies rack module, Therefore, our controller can
+> not use the cookies method.
+> - [#684](https://github.com/binarylogic/authlogic/pull/684).
 
 ### 2.c. View
 

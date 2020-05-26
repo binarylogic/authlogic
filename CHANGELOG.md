@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Breaking Changes
   * None
 * Added
-  * None
+  * [#684](https://github.com/binarylogic/authlogic/pull/684) - Use cookies
+    only when available. Support for `ActionController::API`
 * Fixed
   * None
 
