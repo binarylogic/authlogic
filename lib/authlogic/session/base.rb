@@ -415,10 +415,10 @@ module Authlogic
       before_save :set_last_request_at
 
       after_save :reset_perishable_token!
-      after_save :save_cookie
+      after_save :save_cookie, if: :cookie_enabled?
       after_save :update_session
 
-      after_destroy :destroy_cookie
+      after_destroy :destroy_cookie, if: :cookie_enabled?
       after_destroy :update_session
 
       # `validate` callbacks, in deliberate order. For example,
@@ -1623,10 +1623,16 @@ module Authlogic
       # @api private
       # @return ::Authlogic::CookieCredentials or if no cookie is found, nil
       def cookie_credentials
+        return unless cookie_enabled?
+
         cookie_value = cookie_jar[cookie_key]
         unless cookie_value.nil?
           ::Authlogic::CookieCredentials.parse(cookie_value)
         end
+      end
+
+      def cookie_enabled?
+        !controller.cookies.nil?
       end
 
       def cookie_jar

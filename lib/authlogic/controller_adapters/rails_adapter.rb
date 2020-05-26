@@ -14,7 +14,7 @@ module Authlogic
       # Returns a `ActionDispatch::Cookies::CookieJar`. See the AC guide
       # http://guides.rubyonrails.org/action_controller_overview.html#cookies
       def cookies
-        controller.send(:cookies)
+        controller.respond_to?(:cookies, true) ? controller.send(:cookies) : nil
       end
 
       def cookie_domain
