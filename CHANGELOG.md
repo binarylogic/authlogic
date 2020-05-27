@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Added
   * [#666](https://github.com/binarylogic/authlogic/pull/666) -
     Forwardported Authlogic::Session::Cookies.encrypt_cookie option
+  * [#723](https://github.com/binarylogic/authlogic/pull/723) -
+    Option to raise a `Authlogic::ModelSetupError` when your database is not
+    configured correctly.
 * Fixed
   * None
 
