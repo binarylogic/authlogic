@@ -92,6 +92,23 @@ module ActsAsAuthenticTest
       )
     end
 
+    def test_password_changed_false_if_transitioning
+      User.class_eval do
+        after_update :verify_not_changed, unless: :password_changed?
+        def verify_not_changed; end
+      end
+      ben = users(:ben)
+      mock_method = MiniTest::Mock.new
+      mock_method.expect :call, nil
+      ben.stub :verify_not_changed, mock_method do
+        transition_password_to(Authlogic::CryptoProviders::BCrypt, ben)
+      end
+      mock_method.verify
+      User.class_eval do
+        User.skip_callback :update, :after, :verify_not_changed
+      end
+    end
+
     def test_v2_crypto_provider_transition
       ben = users(:ben)
 
