@@ -31,8 +31,8 @@ module Authlogic
         #
         # See the various sub modules for the configuration they provide.
         def acts_as_authentic
-          return unless db_setup?
           yield self if block_given?
+          return unless db_setup?
           acts_as_authentic_modules.each { |mod| include mod }
         end
 
@@ -65,12 +65,27 @@ module Authlogic
           self.acts_as_authentic_modules = modules
         end
 
+        # Some Authlogic modules requires a database connection with a existing
+        # users table by the moment when you call the `acts_as_authentic`
+        # method. If you try to call `acts_as_authentic` without a database
+        # connection, it will raise a `Authlogic::ModelSetupError`.
+        #
+        # If you rely on the User model before the database is setup correctly,
+        # set this field to false.
+        # * <tt>Default:</tt> false
+        # * <tt>Accepts:</tt> Boolean
+        def raise_on_model_setup_error(value = nil)
+          rw_config(:raise_on_model_setup_error, value, false)
+        end
+        alias raise_on_model_setup_error= raise_on_model_setup_error
+
         private
 
         def db_setup?
           column_names
           true
         rescue StandardError
+          raise ModelSetupError if raise_on_model_setup_error
           false
         end
 

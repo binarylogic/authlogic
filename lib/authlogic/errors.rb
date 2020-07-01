@@ -32,4 +32,19 @@ module Authlogic
       EOS
     end
   end
+
+  # :nodoc:
+  class ModelSetupError < Error
+    def message
+      <<-EOS
+        You must establish a database connection and run the migrations before
+        using acts_as_authentic. If you need to load the User model before the
+        database is set up correctly, please set the following:
+
+            acts_as_authentic do |c|
+              c.raise_on_model_setup_error = false
+            end
+      EOS
+    end
+  end
 end
