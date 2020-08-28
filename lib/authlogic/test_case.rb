@@ -195,12 +195,6 @@ module Authlogic
         end
       end
 
-      if @request && !@request.respond_to?(:headers)
-        class <<@request
-          alias_method :headers, :parameters
-        end
-      end
-
       Authlogic::Session::Base.controller = @request &&
         Authlogic::TestCase::RailsRequestAdapter.new(@request) ||
         controller
