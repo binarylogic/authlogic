@@ -38,6 +38,10 @@ module Authlogic
         @params ||= {}
       end
 
+      def headers
+        @headers ||= {}
+      end
+
       def request
         @request ||= MockRequest.new(self)
       end

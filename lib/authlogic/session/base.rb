@@ -236,6 +236,19 @@ module Authlogic
     #
     # You can modify all of this behavior with the Config sub module.
     #
+    # Headers
+    # =======
+    #
+    # This module is responsible for authenticating the user via headers, which requires
+    # setting HTTP header, for example, the following curl command:
+    #
+    #   curl -H "user_credentials: 4LiXF7FiGUppIPubBPey" https://www.domain.com
+    #
+    # Notice the token in the header parameter, this is a single access token. This headers
+    # method operates exactly as the params method.
+    #
+    # You can modify all of this behavior with the Config sub module.
+    #
     # Perishable Token
     # ================
     #
@@ -403,6 +416,7 @@ module Authlogic
 
       # `persist` callbacks, in order of priority
       persist :persist_by_params
+      persist :persist_by_headers
       persist :persist_by_cookie
       persist :persist_by_session
       persist :persist_by_http_auth, if: :persist_by_http_auth?
@@ -865,6 +879,24 @@ module Authlogic
           rw_config(:params_key, value, cookie_key)
         end
         alias params_key= params_key
+
+        # Works exactly like cookie_key, but for headers. So a user can login via
+        # headers just like a cookie or a session. Your URL would look like:
+        #
+        #   curl -H "user_credentials: 4LiXF7FiGUppIPubBPey" https://www.domain.com
+        #
+        # You can change the "user_credentials" key above with this
+        # configuration option. Keep in mind, just like cookie_key, if you
+        # supply an id the id will be appended to the front. Check out
+        # cookie_key for more details. Also checkout the "Single Access /
+        # Private Feeds Access" section in the README.
+        #
+        # * <tt>Default:</tt> cookie_key
+        # * <tt>Accepts:</tt> String
+        def headers_key(value = nil)
+          rw_config(:headers_key, value, cookie_key)
+        end
+        alias headers_key= headers_key
 
         # Works exactly like login_field, but for the password instead. Returns
         # :password if a login_field exists.
@@ -1849,6 +1881,34 @@ module Authlogic
         build_key(self.class.params_key)
       end
 
+      def headers_credentials
+        controller.headers[headers_key]
+      end
+
+      def headers_enabled?
+        if !headers_credentials || !klass.column_names.include?("single_access_token")
+          return false
+        end
+        if controller.responds_to_single_access_allowed?
+          return controller.single_access_allowed?
+        end
+        headers_enabled_by_allowed_request_types?
+      end
+
+      def headers_enabled_by_allowed_request_types?
+        case single_access_allowed_request_types
+        when Array
+          single_access_allowed_request_types.include?(controller.request_content_type) ||
+            single_access_allowed_request_types.include?(:all)
+        else
+          %i[all any].include?(single_access_allowed_request_types)
+        end
+      end
+
+      def headers_key
+        build_key(self.class.headers_key)
+      end
+
       def password_field
         self.class.password_field
       end
@@ -1872,6 +1932,15 @@ module Authlogic
         self.unauthorized_record = search_for_record(
           "find_by_single_access_token",
           params_credentials
+        )
+        self.single_access = valid?
+      end
+
+      def persist_by_headers
+        return false unless headers_enabled?
+        self.unauthorized_record = search_for_record(
+          "find_by_single_access_token",
+          headers_credentials
         )
         self.single_access = valid?
       end

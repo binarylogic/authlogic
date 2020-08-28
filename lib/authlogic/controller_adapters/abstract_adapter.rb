@@ -36,6 +36,10 @@ module Authlogic
         controller.params
       end
 
+      def headers
+        controller.headers
+      end
+
       def request
         controller.request
       end
