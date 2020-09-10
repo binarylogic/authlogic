@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Added
   * None
 * Fixed
-  * None
+  * [#726](https://github.com/binarylogic/authlogic/issues/726) - Thread
+    safety in `Authlogic::Session::Base.klass_name`
 
 ## 6.2.0 (2020-09-03)
 
