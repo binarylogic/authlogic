@@ -776,15 +776,23 @@ module Authlogic
         # example, the UserSession class will authenticate with the User class
         # unless you specify otherwise in your configuration. See
         # authenticate_with for information on how to change this value.
+        #
+        # @api public
         def klass
           @klass ||= klass_name ? klass_name.constantize : nil
         end
 
-        # The string of the model name class guessed from the actual session class name.
+        # The model name, guessed from the session class name, e.g. "User",
+        # from "UserSession".
+        #
+        # TODO: This method can return nil. We should explore this. It seems
+        # likely to cause a NoMethodError later, so perhaps we should raise an
+        # error instead.
+        #
+        # @api private
         def klass_name
-          return @klass_name if defined?(@klass_name)
-          @klass_name = name.scan(/(.*)Session/)[0]
-          @klass_name = klass_name ? klass_name[0] : nil
+          return @klass_name if instance_variable_defined?(:@klass_name)
+          @klass_name = name.scan(/(.*)Session/)[0]&.first
         end
 
         # The name of the method you want Authlogic to create for storing the
