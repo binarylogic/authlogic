@@ -107,5 +107,6 @@ the "stable" branches should be the only branches with release tags.
 1. git push --tags origin 4-3-stable
 1. update the docs in the master branch, because that's what people look at
   - git checkout master
-  - git cherry-pick abcd1234 # the SHA from the stable branch
-  - commit and push with `[ci skip]`
+  - git merge --ff-only 4-3-stable
+  - optional: amend commit, adding `[ci skip]`
+  - git push
