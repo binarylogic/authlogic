@@ -948,7 +948,7 @@ module Authlogic
         # Should the cookie be signed? If the controller adapter supports it, this is a
         # measure against cookie tampering.
         def sign_cookie(value = nil)
-          if value && !controller.cookies.respond_to?(:signed)
+          if value && controller && !controller.cookies.respond_to?(:signed)
             raise "Signed cookies not supported with #{controller.class}!"
           end
           rw_config(:sign_cookie, value, false)
@@ -958,7 +958,7 @@ module Authlogic
         # Should the cookie be encrypted? If the controller adapter supports it, this is a
         # measure to hide the contents of the cookie (e.g. persistence_token)
         def encrypt_cookie(value = nil)
-          if value && !controller.cookies.respond_to?(:encrypted)
+          if value && controller && !controller.cookies.respond_to?(:encrypted)
             raise "Encrypted cookies not supported with #{controller.class}!"
           end
           if value && sign_cookie
