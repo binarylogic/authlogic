@@ -6,7 +6,6 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 
 [![Coverage Status](https://coveralls.io/repos/github/binarylogic/authlogic/badge.svg?branch=master)](https://coveralls.io/github/binarylogic/authlogic?branch=master)
 
-
 ## Sponsors
 
 [![Timber Logging](http://res.cloudinary.com/timber/image/upload/v1490556810/pricing/sponsorship.png)](https://timber.io?utm_source=github&utm_medium=authlogic)
@@ -18,7 +17,7 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 | Version     | Documentation |
 | ----------- | ------------- |
 | Unreleased  | https://github.com/binarylogic/authlogic/blob/master/README.md |
-| 6.1.0       | https://github.com/binarylogic/authlogic/blob/v6.1.0/README.md |
+| 6.2.0       | https://github.com/binarylogic/authlogic/blob/v6.2.0/README.md |
 | 5.2.0       | https://github.com/binarylogic/authlogic/blob/v5.2.0/README.md |
 | 4.5.0       | https://github.com/binarylogic/authlogic/blob/v4.5.0/README.md |
 | 3.7.0       | https://github.com/binarylogic/authlogic/blob/v3.7.0/README.md |
@@ -495,7 +494,7 @@ in `authlogic/session/base.rb`.
 
 | Version | branch       | ruby     | activerecord  |
 | ------- | ------------ | -------- | ------------- |
-| 6.1     | 6-1-stable   | >= 2.4.0 | >= 5.2, < 6.1 |
+| 6.2     | 6-2-stable   | >= 2.4.0 | >= 5.2, < 6.1 |
 | 5.2     | 5-2-stable   | >= 2.3.0 | >= 5.2, < 6.1 |
 | 4.5     | 4-5-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
 | 4.3     | 4-3-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
