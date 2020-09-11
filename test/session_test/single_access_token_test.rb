@@ -3,7 +3,7 @@
 require "test_helper"
 
 module SessionTest
-  module ParamsTest
+  module SingleAccessTokenTest
     class ConfigTest < ActiveSupport::TestCase
       def test_params_key
         UserSession.params_key = "my_params_key"
