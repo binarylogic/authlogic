@@ -1857,21 +1857,28 @@ module Authlogic
         controller.params[params_key]
       end
 
-      def params_enabled?
-        if !params_credentials || !klass.column_names.include?("single_access_token")
-          return false
-        end
-        if controller.responds_to_single_access_allowed?
-          return controller.single_access_allowed?
-        end
-        params_enabled_by_allowed_request_types?
+      def headers_credentials
+        controller.headers[headers_key]
       end
 
-      def params_enabled_by_allowed_request_types?
-        case single_access_allowed_request_types
-        when Array
-          single_access_allowed_request_types.include?(controller.request_content_type) ||
-            single_access_allowed_request_types.include?(:all)
+      def params_enabled?
+        params_credentials && single_access_token_enabled?
+      end
+
+      def headers_enabled?
+        headers_credentials && single_access_token_enabled?
+      end
+
+      def single_access_token_enabled?
+        return false unless klass.column_names.include?("single_access_token")
+        return controller.single_access_allowed? if controller.responds_to_single_access_allowed?
+
+        single_access_token_allowed_by_request_type?
+      end
+
+      def single_access_token_allowed_by_request_type?
+        if single_access_allowed_request_types.is_a?(Array)
+          (single_access_allowed_request_types & [controller.request_content_type, :all]).any?
         else
           %i[all any].include?(single_access_allowed_request_types)
         end
@@ -1879,30 +1886,6 @@ module Authlogic
 
       def params_key
         build_key(self.class.params_key)
-      end
-
-      def headers_credentials
-        controller.headers[headers_key]
-      end
-
-      def headers_enabled?
-        if !headers_credentials || !klass.column_names.include?("single_access_token")
-          return false
-        end
-        if controller.responds_to_single_access_allowed?
-          return controller.single_access_allowed?
-        end
-        headers_enabled_by_allowed_request_types?
-      end
-
-      def headers_enabled_by_allowed_request_types?
-        case single_access_allowed_request_types
-        when Array
-          single_access_allowed_request_types.include?(controller.request_content_type) ||
-            single_access_allowed_request_types.include?(:all)
-        else
-          %i[all any].include?(single_access_allowed_request_types)
-        end
       end
 
       def headers_key
@@ -1928,19 +1911,17 @@ module Authlogic
       end
 
       def persist_by_params
-        return false unless params_enabled?
-        self.unauthorized_record = search_for_record(
-          "find_by_single_access_token",
-          params_credentials
-        )
-        self.single_access = valid?
+        persist_by_single_access_token(params_credentials) if params_enabled?
       end
 
       def persist_by_headers
-        return false unless headers_enabled?
+        persist_by_single_access_token(headers_credentials) if headers_enabled?
+      end
+
+      def persist_by_single_access_token(credentials)
         self.unauthorized_record = search_for_record(
           "find_by_single_access_token",
-          headers_credentials
+          credentials
         )
         self.single_access = valid?
       end
