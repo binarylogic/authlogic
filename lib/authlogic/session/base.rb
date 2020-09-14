@@ -1878,7 +1878,9 @@ module Authlogic
 
       def single_access_token_allowed_by_request_type?
         if single_access_allowed_request_types.is_a?(Array)
-          (single_access_allowed_request_types & [controller.request_content_type, :all]).any?
+          Set.new(single_access_allowed_request_types).intersect?(
+            Set[controller.request_content_type, :all]
+          )
         else
           %i[all any].include?(single_access_allowed_request_types)
         end
