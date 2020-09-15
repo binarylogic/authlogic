@@ -42,7 +42,7 @@ module SessionTest
       def test_persist_persist_by_headers
         assert_persist_by(:headers)
       end
-      
+
       def assert_persist_by(headers_or_params)
         ben = users(:ben)
         session = UserSession.new
