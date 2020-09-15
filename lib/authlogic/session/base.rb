@@ -244,7 +244,7 @@ module Authlogic
     #
     #   curl -H "user_credentials: 4LiXF7FiGUppIPubBPey" https://www.domain.com
     #
-    # Notice the token in the header parameter, this is a single access token. This headers
+    # Notice the token in the header parameter, this is a single access token. This header's
     # method operates exactly as the params method.
     #
     # You can modify all of this behavior with the Config sub module.
