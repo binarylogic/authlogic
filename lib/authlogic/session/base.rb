@@ -249,6 +249,7 @@ module Authlogic
     #
     # You can modify all of this behavior with the Config sub module.
     #
+    # Disabled by default. To enable, set a non-nil headers_key.
     # Perishable Token
     # ================
     #
