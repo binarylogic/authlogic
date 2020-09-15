@@ -1910,6 +1910,9 @@ module Authlogic
       end
 
       def headers_credentials
+        # Setting headers_key to nil is the accepted way to disable
+        # single_access_token in headers.
+        return nil if headers_key.nil?
         controller.headers[headers_key]
       end
 
