@@ -892,7 +892,7 @@ module Authlogic
         # cookie_key for more details. Also checkout the "Single Access /
         # Private Feeds Access" section in the README.
         #
-        # * <tt>Default:</tt> cookie_key
+        # * <tt>Default:</tt> nil
         # * <tt>Accepts:</tt> String
         def headers_key(value = nil)
           rw_config(:headers_key, value)

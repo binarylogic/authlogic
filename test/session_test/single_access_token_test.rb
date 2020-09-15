@@ -6,6 +6,8 @@ module SessionTest
   module SingleAccessTokenTest
     class ConfigTest < ActiveSupport::TestCase
       def test_params_key
+        assert_equal UserSession.cookie_key, UserSession.params_key
+
         UserSession.params_key = "my_params_key"
         assert_equal "my_params_key", UserSession.params_key
 
@@ -14,6 +16,8 @@ module SessionTest
       end
 
       def test_headers_key
+        assert_equal nil, UserSession.headers_key
+
         UserSession.headers_key = "my_headers_key"
         assert_equal "my_headers_key", UserSession.headers_key
 
@@ -40,6 +44,8 @@ module SessionTest
       end
 
       def test_persist_persist_by_headers
+        # Since default headers_key is nil, set for the test.
+        UserSession.send("headers_key=", "user_credentials")
         assert_persist_by(:headers)
       end
 
