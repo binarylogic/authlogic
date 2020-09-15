@@ -36,14 +36,14 @@ module SessionTest
 
     class InstanceMethodsTest < ActiveSupport::TestCase
       def test_persist_persist_by_params
-        persist_persist_by(:params)
+        assert_persist_by(:params)
       end
 
       def test_persist_persist_by_headers
-        persist_persist_by(:headers)
+        assert_persist_by(:headers)
       end
-
-      def persist_persist_by(headers_or_params)
+      
+      def assert_persist_by(headers_or_params)
         ben = users(:ben)
         session = UserSession.new
 
