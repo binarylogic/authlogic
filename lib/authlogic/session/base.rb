@@ -894,7 +894,7 @@ module Authlogic
         # * <tt>Default:</tt> cookie_key
         # * <tt>Accepts:</tt> String
         def headers_key(value = nil)
-          rw_config(:headers_key, value, cookie_key)
+          rw_config(:headers_key, value)
         end
         alias headers_key= headers_key
 
