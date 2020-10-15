@@ -1803,7 +1803,7 @@ module Authlogic
         end
       end
 
-      def increment_login_cout
+      def increment_login_count
         if record.respond_to?(:login_count)
           record.login_count = (record.login_count.blank? ? 1 : record.login_count + 1)
         end
@@ -2033,7 +2033,7 @@ module Authlogic
       end
 
       def update_info
-        increment_login_cout
+        increment_login_count
         clear_failed_login_count
         update_login_timestamps
         update_login_ip_addresses
