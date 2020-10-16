@@ -870,21 +870,30 @@ module Authlogic
         # validation is actually finding the user and making sure it exists.
         # What method it uses the do this is up to you.
         #
-        # Let's say you have a UserSession that is authenticating a User. By
-        # default UserSession will call User.find_by_login(login). You can
-        # change what method UserSession calls by specifying it here. Then in
-        # your User model you can make that method do anything you want, giving
-        # you complete control of how users are found by the UserSession.
+        # ```
+        # # user_session.rb
+        # record_selection_method :find_by_email
+        # ```
+        #
+        # This is the recommended way to find the user by email address.
+        # The resulting query will be `User.find_by_email(send(login_field))`.
+        # (`login_field` will fall back to `email_field` if there's no `login`
+        # or `username` column).
+        #
+        # In your User model you can make that method do anything you want,
+        # giving you complete control of how users are found by the UserSession.
         #
         # Let's take an example: You want to allow users to login by username or
         # email. Set this to the name of the class method that does this in the
         # User model. Let's call it "find_by_username_or_email"
         #
-        #   class User < ActiveRecord::Base
-        #     def self.find_by_username_or_email(login)
-        #       find_by_username(login) || find_by_email(login)
-        #     end
+        # ```
+        # class User < ActiveRecord::Base
+        #   def self.find_by_username_or_email(login)
+        #     find_by_username(login) || find_by_email(login)
         #   end
+        # end
+        # ```
         #
         # Now just specify the name of this method for this configuration option
         # and you are all set. You can do anything you want here. Maybe you
