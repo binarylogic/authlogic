@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Breaking Changes
   * None
 * Added
-  * None
+  * `find_by_login_method` is deprecated in favor of `record_selection_method`,
+    to avoid confusion with ActiveRecord's "Dynamic Finders".
 * Fixed
   * [#726](https://github.com/binarylogic/authlogic/issues/726) - Thread
     safety in `Authlogic::Session::Base.klass_name`
