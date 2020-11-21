@@ -351,6 +351,13 @@ module Authlogic
         - https://github.com/binarylogic/authlogic/pull/558
         - https://github.com/binarylogic/authlogic/pull/577
       EOS
+      E_DPR_FIND_BY_LOGIN_METHOD = <<~EOS.squish.freeze
+        find_by_login_method is deprecated in favor of record_selection_method,
+        to avoid confusion with ActiveRecord's "Dynamic Finders".
+        (https://guides.rubyonrails.org/v6.0/active_record_querying.html#dynamic-finders)
+        For example, rubocop-rails is confused by the deprecated method.
+        (https://github.com/rubocop-hq/rubocop-rails/blob/master/lib/rubocop/cop/rails/dynamic_find_by.rb)
+      EOS
       VALID_SAME_SITE_VALUES = [nil, "Lax", "Strict", "None"].freeze
 
       # Callbacks
@@ -663,35 +670,10 @@ module Authlogic
           end
         end
 
-        # Authlogic tries to validate the credentials passed to it. One part of
-        # validation is actually finding the user and making sure it exists.
-        # What method it uses the do this is up to you.
-        #
-        # Let's say you have a UserSession that is authenticating a User. By
-        # default UserSession will call User.find_by_login(login). You can
-        # change what method UserSession calls by specifying it here. Then in
-        # your User model you can make that method do anything you want, giving
-        # you complete control of how users are found by the UserSession.
-        #
-        # Let's take an example: You want to allow users to login by username or
-        # email. Set this to the name of the class method that does this in the
-        # User model. Let's call it "find_by_username_or_email"
-        #
-        #   class User < ActiveRecord::Base
-        #     def self.find_by_username_or_email(login)
-        #       find_by_username(login) || find_by_email(login)
-        #     end
-        #   end
-        #
-        # Now just specify the name of this method for this configuration option
-        # and you are all set. You can do anything you want here. Maybe you
-        # allow users to have multiple logins and you want to search a has_many
-        # relationship, etc. The sky is the limit.
-        #
-        # * <tt>Default:</tt> "find_by_smart_case_login_field"
-        # * <tt>Accepts:</tt> Symbol or String
+        # @deprecated in favor of record_selection_method
         def find_by_login_method(value = nil)
-          rw_config(:find_by_login_method, value, "find_by_smart_case_login_field")
+          ::ActiveSupport::Deprecation.warn(E_DPR_FIND_BY_LOGIN_METHOD)
+          record_selection_method(value)
         end
         alias find_by_login_method= find_by_login_method
 
@@ -800,8 +782,8 @@ module Authlogic
         # Authlogic::Session, if you want it can be something completely
         # different than the field in your model. So if you wanted people to
         # login with a field called "login" and then find users by email this is
-        # completely doable. See the find_by_login_method configuration option
-        # for more details.
+        # completely doable. See the `record_selection_method` configuration
+        # option for details.
         #
         # * <tt>Default:</tt> klass.login_field || klass.email_field
         # * <tt>Accepts:</tt> Symbol or String
@@ -883,6 +865,47 @@ module Authlogic
           rw_config(:password_field, value, login_field && :password)
         end
         alias password_field= password_field
+
+        # Authlogic tries to validate the credentials passed to it. One part of
+        # validation is actually finding the user and making sure it exists.
+        # What method it uses the do this is up to you.
+        #
+        # ```
+        # # user_session.rb
+        # record_selection_method :find_by_email
+        # ```
+        #
+        # This is the recommended way to find the user by email address.
+        # The resulting query will be `User.find_by_email(send(login_field))`.
+        # (`login_field` will fall back to `email_field` if there's no `login`
+        # or `username` column).
+        #
+        # In your User model you can make that method do anything you want,
+        # giving you complete control of how users are found by the UserSession.
+        #
+        # Let's take an example: You want to allow users to login by username or
+        # email. Set this to the name of the class method that does this in the
+        # User model. Let's call it "find_by_username_or_email"
+        #
+        # ```
+        # class User < ActiveRecord::Base
+        #   def self.find_by_username_or_email(login)
+        #     find_by_username(login) || find_by_email(login)
+        #   end
+        # end
+        # ```
+        #
+        # Now just specify the name of this method for this configuration option
+        # and you are all set. You can do anything you want here. Maybe you
+        # allow users to have multiple logins and you want to search a has_many
+        # relationship, etc. The sky is the limit.
+        #
+        # * <tt>Default:</tt> "find_by_smart_case_login_field"
+        # * <tt>Accepts:</tt> Symbol or String
+        def record_selection_method(value = nil)
+          rw_config(:record_selection_method, value, "find_by_smart_case_login_field")
+        end
+        alias record_selection_method= record_selection_method
 
         # Whether or not to request HTTP authentication
         #
@@ -1748,8 +1771,10 @@ module Authlogic
           attempted_record.failed_login_count >= consecutive_failed_logins_limit
       end
 
+      # @deprecated in favor of `self.class.record_selection_method`
       def find_by_login_method
-        self.class.find_by_login_method
+        ::ActiveSupport::Deprecation.warn(E_DPR_FIND_BY_LOGIN_METHOD)
+        self.class.record_selection_method
       end
 
       def generalize_credentials_error_messages?
@@ -2080,7 +2105,10 @@ module Authlogic
         self.invalid_password = false
         validate_by_password__blank_fields
         return if errors.count > 0
-        self.attempted_record = search_for_record(find_by_login_method, send(login_field))
+        self.attempted_record = search_for_record(
+          self.class.record_selection_method,
+          send(login_field)
+        )
         if attempted_record.blank?
           add_login_not_found_error
           return

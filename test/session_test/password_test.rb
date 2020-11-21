@@ -5,12 +5,28 @@ require "test_helper"
 module SessionTest
   module PasswordTest
     class ConfigTest < ActiveSupport::TestCase
-      def test_find_by_login_method
-        UserSession.find_by_login_method = "my_login_method"
-        assert_equal "my_login_method", UserSession.find_by_login_method
+      def test_find_by_login_method_is_deprecated
+        expected_warning = Regexp.new(
+          Regexp.escape(::Authlogic::Session::Base::E_DPR_FIND_BY_LOGIN_METHOD)
+        )
 
-        UserSession.find_by_login_method "find_by_login"
-        assert_equal "find_by_login", UserSession.find_by_login_method
+        assert_output(nil, expected_warning) do
+          UserSession.find_by_login_method = "my_login_method"
+        end
+        assert_equal "my_login_method", UserSession.record_selection_method
+
+        assert_output(nil, expected_warning) do
+          UserSession.find_by_login_method "find_by_login"
+        end
+        assert_equal "find_by_login", UserSession.record_selection_method
+      end
+
+      def test_record_selection_method
+        UserSession.record_selection_method = "my_login_method"
+        assert_equal "my_login_method", UserSession.record_selection_method
+
+        UserSession.record_selection_method "find_by_login"
+        assert_equal "find_by_login", UserSession.record_selection_method
       end
 
       def test_verify_password_method
