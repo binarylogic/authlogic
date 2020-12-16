@@ -32,13 +32,13 @@ rvm:
 # policy](http://guides.rubyonrails.org/maintenance_policy.html)
 gemfile:
   - gemfiles/rails_5.2.rb
-  - gemfiles/rails_6.1.rb
+  - gemfiles/rails_6.0.rb
 
 matrix:
   exclude:
     # rails 6 requires ruby >= 2.5.0
     - rvm: 2.4.9
-      gemfile: gemfiles/rails_6.1.rb
+      gemfile: gemfiles/rails_6.0.rb
   fast_finish: true
 
 services:
