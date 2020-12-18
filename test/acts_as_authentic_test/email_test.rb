@@ -19,17 +19,13 @@ module ActsAsAuthenticTest
       assert I18n.available_locales.include?(:lol), "Test locale failed to load"
 
       I18n.with_locale("lol") do
-        message = I18n.t("authlogic.error_messages.email_invalid")
-
         cat = User.new
         cat.email = "meow"
-        cat.valid?
-
-        # filter duplicate error messages
-        error = cat.errors[:email]
-        error = error.first if error.is_a?(Array)
-
-        assert_equal message, error
+        cat.validate
+        assert_includes(
+          cat.errors[:email],
+          I18n.t("authlogic.error_messages.email_invalid")
+        )
       end
     end
   end
