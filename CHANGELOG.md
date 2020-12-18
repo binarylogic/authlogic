@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Breaking Changes
   * None
 * Added
+  * None
+* Fixed
+  * None
+
+## 6.3.0 (2020-12-17)
+
+* Breaking Changes
+  * None
+* Added
+  * [#733](https://github.com/binarylogic/authlogic/pull/733) - Raisl 6.1 support
   * `find_by_login_method` is deprecated in favor of `record_selection_method`,
     to avoid confusion with ActiveRecord's "Dynamic Finders".
 * Fixed
