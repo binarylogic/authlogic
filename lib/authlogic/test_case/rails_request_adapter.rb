@@ -12,7 +12,7 @@ module Authlogic
       def cookies
         new_cookies = MockCookieJar.new
         super.each do |key, value|
-          new_cookies[key] = value[:value]
+          new_cookies[key] = cookie_value(value)
         end
         new_cookies
       end
@@ -27,6 +27,12 @@ module Authlogic
 
       def request_content_type
         request.format.to_s
+      end
+
+      private
+
+      def cookie_value(value)
+        value.is_a?(Hash) ? value[:value] : value
       end
     end
   end
