@@ -245,6 +245,28 @@ module SessionTest
         assert session.destroy
         refute controller.cookies["user_credentials"]
       end
+
+      def test_string_cookie
+        payload = "bar"
+        controller.cookies["foo"] = payload
+        assert_equal(payload, controller.cookies["foo"])
+      end
+
+      def test_string_cookie_signed
+        payload = "bar"
+        session = UserSession.new
+        session.sign_cookie = true
+        controller.cookies["foo"] = payload
+        assert_equal(payload, controller.cookies.signed["foo"])
+      end
+
+      def test_string_cookie_encrypted
+        payload = "bar"
+        session = UserSession.new
+        session.encrypt_cookie = true
+        controller.cookies["foo"] = payload
+        assert_equal(payload, controller.cookies.encrypted["foo"])
+      end
     end
   end
 end
