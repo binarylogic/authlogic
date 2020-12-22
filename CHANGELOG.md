@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Breaking Changes
   * None
 * Added
-  * None
+  * [#734](https://github.com/binarylogic/authlogic/pull/734) - Support for
+    string cookies when using TestCase and friends
 * Fixed
   * None
 
@@ -19,7 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Breaking Changes
   * None
 * Added
-  * [#733](https://github.com/binarylogic/authlogic/pull/733) - Raisl 6.1 support
+  * [#733](https://github.com/binarylogic/authlogic/pull/733) - Rails 6.1 support
   * `find_by_login_method` is deprecated in favor of `record_selection_method`,
     to avoid confusion with ActiveRecord's "Dynamic Finders".
 * Fixed
