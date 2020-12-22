@@ -3,6 +3,7 @@
 module Authlogic
   module TestCase
     # A mock of `ActionDispatch::Cookies::CookieJar`.
+    # See action_dispatch/middleware/cookies.rb
     class MockCookieJar < Hash # :nodoc:
       attr_accessor :set_cookies
 
@@ -11,10 +12,12 @@ module Authlogic
         hash && hash[:value]
       end
 
+      # @param options - "the cookie's value [usually a string] or a hash of
+      # options as documented above [in action_dispatch/middleware/cookies.rb]"
       def []=(key, options)
-        options = { value: options } unless options.is_a?(Hash)
-        (@set_cookies ||= {})[key.to_s] = options
-        super
+        opt = cookie_options_to_hash(options)
+        (@set_cookies ||= {})[key.to_s] = opt
+        super(key, opt)
       end
 
       def delete(key, _options = {})
@@ -27,6 +30,17 @@ module Authlogic
 
       def encrypted
         @encrypted ||= MockEncryptedCookieJar.new(self)
+      end
+
+      private
+
+      # @api private
+      def cookie_options_to_hash(options)
+        if options.is_a?(Hash)
+          options
+        else
+          { value: options }
+        end
       end
     end
 
@@ -53,9 +67,9 @@ module Authlogic
       end
 
       def []=(key, options)
-        options = { value: options } unless options.is_a?(Hash)
-        options[:value] = "#{options[:value]}--#{Digest::SHA1.hexdigest options[:value]}"
-        @parent_jar[key] = options
+        opt = cookie_options_to_hash(options)
+        opt[:value] = "#{opt[:value]}--#{Digest::SHA1.hexdigest opt[:value]}"
+        @parent_jar[key] = opt
       end
     end
 
@@ -77,9 +91,9 @@ module Authlogic
       end
 
       def []=(key, options)
-        options = { value: options } unless options.is_a?(Hash)
-        options[:value] = self.class.encrypt(options[:value])
-        @parent_jar[key] = options
+        opt = cookie_options_to_hash(options)
+        opt[:value] = self.class.encrypt(opt[:value])
+        @parent_jar[key] = opt
       end
 
       # simple caesar cipher for testing
