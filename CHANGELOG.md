@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Breaking Changes
   * None
 * Added
+  * None
+* Fixed
+  * None
+
+## 6.4.0 (2020-12-22)
+
+* Breaking Changes
+  * None
+* Added
   * [#734](https://github.com/binarylogic/authlogic/pull/734) - Support for
     string cookies when using TestCase and friends
 * Fixed
