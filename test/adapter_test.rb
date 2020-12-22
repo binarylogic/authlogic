@@ -30,5 +30,26 @@ module Authlogic
         assert_nil adapter.cookies
       end
     end
+
+    class RailsRequestAdapterTest < ActiveSupport::TestCase
+      def test_adapter_with_string_cookie
+        controller = MockController.new
+        controller.cookies["foo"] = "bar"
+        adapter = Authlogic::TestCase::RailsRequestAdapter.new(controller)
+
+        assert adapter.cookies
+      end
+
+      def test_adapter_with_hash_cookie
+        controller = MockController.new
+        controller.cookies["foo"] = {
+          value: "bar",
+          expires: nil
+        }
+        adapter = Authlogic::TestCase::RailsRequestAdapter.new(controller)
+
+        assert adapter.cookies
+      end
+    end
   end
 end

@@ -12,6 +12,7 @@ module Authlogic
       end
 
       def []=(key, options)
+        options = { value: options } unless options.is_a?(Hash)
         (@set_cookies ||= {})[key.to_s] = options
         super
       end
@@ -52,6 +53,7 @@ module Authlogic
       end
 
       def []=(key, options)
+        options = { value: options } unless options.is_a?(Hash)
         options[:value] = "#{options[:value]}--#{Digest::SHA1.hexdigest options[:value]}"
         @parent_jar[key] = options
       end
@@ -75,6 +77,7 @@ module Authlogic
       end
 
       def []=(key, options)
+        options = { value: options } unless options.is_a?(Hash)
         options[:value] = self.class.encrypt(options[:value])
         @parent_jar[key] = options
       end
