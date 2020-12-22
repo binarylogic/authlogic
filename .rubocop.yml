@@ -10,6 +10,8 @@ AllCops:
   # file, we wouldn't have to specify this (https://bit.ly/2vNTsue), but we
   # don't commit that file because that would interfere with testing multiple
   # rubies on CI.
+  #
+  # Should be same as `ruby-version` in `.github/workflows/test.yml`
   TargetRubyVersion: 2.4
 
 # Avoid empty lines in methods, they are a sign the method is too big.

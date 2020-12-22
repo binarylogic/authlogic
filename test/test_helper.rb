@@ -28,16 +28,24 @@ Minitest::Reporters.use!(Minitest::Reporters::SpecReporter.new)
 
 I18n.load_path << File.dirname(__FILE__) + "/i18n/lol.yml"
 
-# https://docs.travis-ci.com/user/database-setup
 case ENV["DB"]
 when "mysql"
   ActiveRecord::Base.establish_connection(
     adapter: "mysql2",
-    database: "authlogic",
-    username: "root"
+    database: ENV.fetch("AUTHLOGIC_DB_NAME", "authlogic"),
+    host: ENV.fetch("AUTHLOGIC_DB_HOST", nil),
+    port: ENV.fetch("AUTHLOGIC_DB_PORT", nil),
+    username: ENV.fetch("AUTHLOGIC_DB_USER", "root")
   )
 when "postgres"
-  ActiveRecord::Base.establish_connection(adapter: "postgresql", database: "authlogic")
+  ActiveRecord::Base.establish_connection(
+    adapter: "postgresql",
+    database: ENV.fetch("AUTHLOGIC_DB_NAME", "authlogic"),
+    host: ENV.fetch("AUTHLOGIC_DB_HOST", nil),
+    password: ENV.fetch("AUTHLOGIC_DB_PASSWORD", nil),
+    port: ENV.fetch("AUTHLOGIC_DB_PORT", nil),
+    username: ENV.fetch("AUTHLOGIC_DB_USER", nil)
+  )
 else
   ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 end
