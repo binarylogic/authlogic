@@ -8,6 +8,7 @@ module Authlogic
     class AbstractAdapter
       E_COOKIE_DOMAIN_ADAPTER = "The cookie_domain method has not been " \
         "implemented by the controller adapter"
+      ENV_SESSION_OPTIONS = "rack.session.options"
 
       attr_accessor :controller
 
@@ -42,6 +43,26 @@ module Authlogic
 
       def request_content_type
         request.content_type
+      end
+
+      # Inform Rack that we would like a new session ID to be assigned. Changes
+      # the ID, but not the contents of the session.
+      #
+      # The `:renew` option is read by `rack/session/abstract/id.rb`.
+      #
+      # This is how Devise (via warden) implements defense against Session
+      # Fixation. Our implementation is copied directly from the warden gem
+      # (set_user in warden/proxy.rb)
+      def renew_session_id
+        env = request.env
+        options = env[ENV_SESSION_OPTIONS]
+        if options
+          if options.frozen?
+            env[ENV_SESSION_OPTIONS] = options.merge(renew: true).freeze
+          else
+            options[:renew] = true
+          end
+        end
       end
 
       def session

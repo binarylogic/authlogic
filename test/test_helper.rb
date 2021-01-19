@@ -238,6 +238,13 @@ module ActiveSupport
       end
     end
 
+    def env_session_options
+      controller.request.env.fetch(
+        ::Authlogic::ControllerAdapters::AbstractAdapter::ENV_SESSION_OPTIONS,
+        {}
+      ).with_indifferent_access
+    end
+
     def password_for(user)
       case user
       when users(:ben)

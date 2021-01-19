@@ -21,9 +21,12 @@ module SessionTest
         assert session = UserSession.find
         assert_equal ben, session.record
         assert_equal ben.persistence_token, controller.session["user_credentials"]
+        refute_includes env_session_options, :renew
       end
 
-      def test_persist_persist_by_session_with_session_fixation_attack
+      # A SQL injection attack to steal the persistence_token.
+      # TODO: Explain how `:select` is used, and sanitized.
+      def test_persist_persist_by_session_with_sql_injection_attack
         ben = users(:ben)
         controller.session["user_credentials"] = "neo"
         controller.session["user_credentials_id"] = {
@@ -33,7 +36,7 @@ module SessionTest
         assert @user_session.blank?
       end
 
-      def test_persist_persist_by_session_with_sql_injection_attack
+      def test_persist_persist_by_session_with_sql_injection_attack_2
         controller.session["user_credentials"] = { select: "ABRA CADABRA" }
         controller.session["user_credentials_id"] = nil
         assert_nothing_raised do
@@ -49,6 +52,7 @@ module SessionTest
         session = UserSession.find
         assert_equal ben, session.record
         assert_equal ben.persistence_token, controller.session["user_credentials"]
+        refute_includes env_session_options, :renew
       end
 
       def test_after_save_update_session
@@ -57,6 +61,7 @@ module SessionTest
         assert controller.session["user_credentials"].blank?
         assert session.save
         assert_equal ben.persistence_token, controller.session["user_credentials"]
+        assert_equal env_session_options[:renew], true
       end
 
       def test_after_destroy_update_session
@@ -66,6 +71,7 @@ module SessionTest
         assert session = UserSession.find
         assert session.destroy
         assert controller.session["user_credentials"].blank?
+        refute_includes env_session_options, :renew
       end
 
       def test_after_persisting_update_session
@@ -74,6 +80,7 @@ module SessionTest
         assert controller.session["user_credentials"].blank?
         assert UserSession.find
         assert_equal ben.persistence_token, controller.session["user_credentials"]
+        refute_includes env_session_options, :renew
       end
     end
   end

@@ -424,6 +424,7 @@ module Authlogic
       after_save :reset_perishable_token!
       after_save :save_cookie, if: :cookie_enabled?
       after_save :update_session
+      after_create :renew_session_id
 
       after_destroy :destroy_cookie, if: :cookie_enabled?
       after_destroy :update_session
@@ -975,6 +976,16 @@ module Authlogic
           rw_config(:secure, value, true)
         end
         alias secure= secure
+
+        # Should the Rack session ID be reset after authentication, to protect
+        # against Session Fixation attacks?
+        #
+        # * <tt>Default:</tt> true
+        # * <tt>Accepts:</tt> Boolean
+        def session_fixation_defense(value = nil)
+          rw_config(:session_fixation_defense, value, true)
+        end
+        alias session_fixation_defense= session_fixation_defense
 
         # Should the cookie be signed? If the controller adapter supports it, this is a
         # measure against cookie tampering.
@@ -1679,6 +1690,13 @@ module Authlogic
       def configure_password_methods
         define_login_field_methods
         define_password_field_methods
+      end
+
+      # Assign a new controller-session ID, to defend against Session Fixation.
+      # https://guides.rubyonrails.org/v6.0/security.html#session-fixation
+      def renew_session_id
+        return unless self.class.session_fixation_defense
+        controller.renew_session_id
       end
 
       def define_login_field_methods
