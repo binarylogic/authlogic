@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Breaking Changes
   * None
 * Added
+  * None
+* Fixed
+  * None
+
+## 6.4.1 (2021-02-22)
+
+* Breaking Changes
+  * None
+* Added
   * `Authlogic::Session::Base.session_fixation_defense` - Reset the Rack
     session ID after authentication, to protect against Session Fixation
     attacks. (https://guides.rubyonrails.org/security.html#session-fixation)
