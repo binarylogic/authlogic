@@ -9,6 +9,12 @@ module Authlogic
         self.controller = controller
       end
 
+      def env
+        @env ||= {
+          ControllerAdapters::AbstractAdapter::ENV_SESSION_OPTIONS => {}
+        }
+      end
+
       def format
         controller.request_content_type if controller.respond_to? :request_content_type
       end

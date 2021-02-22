@@ -117,6 +117,7 @@ module SessionTest
         assert_equal 1, session.record.login_count
         assert Time.now >= session.record.current_login_at
         assert_equal "1.1.1.1", session.record.current_login_ip
+        assert_equal env_session_options[:renew], true
       end
     end
   end
