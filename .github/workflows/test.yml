@@ -14,7 +14,7 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           # Set to `TargetRubyVersion` in `.rubocopy.yml`
-          ruby-version: 2.4
+          ruby-version: 2.6
       - name: Bundle
         run: |
           gem install bundler
@@ -56,19 +56,17 @@ jobs:
       # have set this up with each database as a separate job, but then we'd be
       # duplicating the matrix configuration three times.
       matrix:
-        gemfile: [ 'rails_5.2', 'rails_6.0', 'rails_6.1' ]
+        gemfile: [ 'rails_5.2', 'rails_6.0', 'rails_6.1', 'rails_7.0' ]
 
         # To keep matrix size down, only test highest and lowest rubies. In
         # `.rubocopy.yml`, set `TargetRubyVersion`, to the lowest ruby version
         # tested here.
-        ruby: [ '2.4', '2.7' ]
+        ruby: [ '2.6', '2.7' ]
 
         exclude:
-          # rails 6 requires ruby >= 2.5.0
-          - ruby: '2.4'
-            gemfile: 'rails_6.0'
-          - ruby: '2.4'
-            gemfile: 'rails_6.1'
+          # rails 7 requires ruby >= 2.7.0
+          - ruby: '2.6'
+            gemfile: 'rails_7.0'
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
