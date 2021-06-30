@@ -22,12 +22,12 @@ require "authlogic/version"
   s.summary = "An unobtrusive ruby authentication library based on ActiveRecord."
   s.license = "MIT"
 
-  s.required_ruby_version = ">= 2.7.0"
+  s.required_ruby_version = ">= 2.6.0"
 
   # See doc/rails_support_in_authlogic_5.0.md
-  s.add_dependency "activemodel", [">= 5.2", "<= 7.0"]
-  s.add_dependency "activerecord", [">= 5.2", "<= 7.0"]
-  s.add_dependency "activesupport", [">= 5.2", "<= 7.0"]
+  s.add_dependency "activemodel", [">= 5.2", "< 7.1"]
+  s.add_dependency "activerecord", [">= 5.2", "< 7.1"]
+  s.add_dependency "activesupport", [">= 5.2", "< 7.1"]
   s.add_dependency "request_store", "~> 1.0"
   s.add_development_dependency "bcrypt", "~> 3.1"
   s.add_development_dependency "byebug", "~> 10.0"
