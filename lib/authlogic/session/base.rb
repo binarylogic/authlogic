@@ -1354,6 +1354,7 @@ module Authlogic
       #
       # This is the method that the class level method find uses to ultimately
       # persist the session.
+      # rubocop:disable Metrics/AbcSize
       def persisting?
         return true unless record.nil?
         self.attempted_record = nil
@@ -1371,6 +1372,7 @@ module Authlogic
           false
         end
       end
+      # rubocop:enable Metrics/AbcSize
 
       def save_record(alternate_record = nil)
         r = alternate_record || record
