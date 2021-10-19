@@ -2031,7 +2031,7 @@ module Authlogic
 
       # @api private
       def set_last_request_at
-        current_time = klass.default_timezone == :utc ? Time.now.utc : Time.now
+        current_time = Time.current
         MagicColumn::AssignsLastRequestAt
           .new(current_time, record, controller, last_request_at_threshold)
           .assign
