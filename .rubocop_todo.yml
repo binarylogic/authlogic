@@ -34,7 +34,7 @@ Style/ClassVars:
     - 'lib/authlogic/i18n.rb'
 
 # Offense count: 4
-Lint/MissingSuper:
+Style/MethodMissingSuper:
   Exclude:
     - 'lib/authlogic/controller_adapters/abstract_adapter.rb'
     - 'lib/authlogic/controller_adapters/sinatra_adapter.rb'
