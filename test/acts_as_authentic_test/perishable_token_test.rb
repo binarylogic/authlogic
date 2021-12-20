@@ -63,7 +63,7 @@ module ActsAsAuthenticTest
     def test_find_using_perishable_token_when_perished
       ben = users(:ben)
       ActiveRecord::Base.connection.execute(
-        "UPDATE users set updated_at = '#{1.week.ago.to_s(:db)}' where id = #{ben.id}"
+        "UPDATE users set updated_at = '#{1.week.ago.to_formatted_s(:db)}' where id = #{ben.id}"
       )
       assert_nil User.find_using_perishable_token(ben.perishable_token)
     end
@@ -72,7 +72,7 @@ module ActsAsAuthenticTest
       User.perishable_token_valid_for = 1.minute
       ben = users(:ben)
       ActiveRecord::Base.connection.execute(
-        "UPDATE users set updated_at = '#{2.minutes.ago.to_s(:db)}' where id = #{ben.id}"
+        "UPDATE users set updated_at = '#{2.minutes.ago.to_formatted_s(:db)}' where id = #{ben.id}"
       )
       assert_nil User.find_using_perishable_token(ben.perishable_token)
       User.perishable_token_valid_for = 10.minutes
@@ -82,7 +82,7 @@ module ActsAsAuthenticTest
       User.perishable_token_valid_for = 1.minute
       ben = users(:ben)
       ActiveRecord::Base.connection.execute(
-        "UPDATE users set updated_at = '#{10.minutes.ago.to_s(:db)}' where id = #{ben.id}"
+        "UPDATE users set updated_at = '#{10.minutes.ago.to_formatted_s(:db)}' where id = #{ben.id}"
       )
       assert_nil User.find_using_perishable_token(ben.perishable_token, 5.minutes)
       assert_equal ben, User.find_using_perishable_token(ben.perishable_token, 20.minutes)
