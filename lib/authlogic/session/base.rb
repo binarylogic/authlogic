@@ -2096,7 +2096,7 @@ module Authlogic
       def update_login_timestamps
         if record.respond_to?(:current_login_at)
           record.last_login_at = record.current_login_at if record.respond_to?(:last_login_at)
-          record.current_login_at = a_r_default_timezone == :utc ? Time.now.utc : Time.now
+          record.current_login_at = Time.current
         end
       end
 
