@@ -21,7 +21,7 @@ Please use github issues only for bug reports and feature suggestions.
 ### Usage Questions
 
 Please ask usage questions on
-[stackoverflow](http://stackoverflow.com/questions/tagged/authlogic).
+[Stack Overflow](http://stackoverflow.com/questions/tagged/authlogic).
 
 ## Development
 
@@ -33,8 +33,21 @@ ruby. See `required_ruby_version` in the gemspec.
 Tests can be run against different versions of Rails:
 
 ```
+# Rails 5.2
+BUNDLE_GEMFILE=gemfiles/rails_5.2.rb bundle install
+BUNDLE_GEMFILE=gemfiles/rails_5.2.rb bundle exec rake
+
+# Rails 6.0
 BUNDLE_GEMFILE=gemfiles/rails_6.0.rb bundle install
 BUNDLE_GEMFILE=gemfiles/rails_6.0.rb bundle exec rake
+
+# Rails 6.1
+BUNDLE_GEMFILE=gemfiles/rails_6.1.rb bundle install
+BUNDLE_GEMFILE=gemfiles/rails_6.1.rb bundle exec rake
+
+# Rails 7.0
+BUNDLE_GEMFILE=gemfiles/rails_7.0.rb bundle install
+BUNDLE_GEMFILE=gemfiles/rails_7.0.rb bundle exec rake
 ```
 
 To run a single test:
