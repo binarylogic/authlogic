@@ -75,7 +75,8 @@ module SessionTest
         end
 
         ActiveRecord::Base.connection.execute(
-          "update users set updated_at = '#{1.day.ago.to_s(:db)}' where login = '#{ben.login}'"
+          "update users set updated_at = '#{1.day.ago.to_formatted_s(:db)}'
+           where login = '#{ben.login}'"
         )
         session = UserSession.new(login: ben.login, password: "benrocks")
         assert session.save
@@ -97,7 +98,8 @@ module SessionTest
         end
 
         ActiveRecord::Base.connection.execute(
-          "update users set updated_at = '#{1.day.ago.to_s(:db)}' where login = '#{ben.login}'"
+          "update users set updated_at = '#{1.day.ago.to_formatted_s(:db)}'
+           where login = '#{ben.login}'"
         )
         session = UserSession.new(login: ben.login, password: "badpassword1")
         refute session.save
