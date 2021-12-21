@@ -12,8 +12,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Added
   * None
 * Fixed
+  * None
+
+## 6.4.2 (2021-12-21)
+
+* Breaking Changes
+  * None
+* Added
+  * None
+* Fixed
   * [#743](https://github.com/binarylogic/authlogic/pull/743) - Fixed
     deprecation warning in Rails 7 re: `ActiveRecord::Base.default_timezone`
+  * [#745](https://github.com/binarylogic/authlogic/pull/745) - Fixed more
+    deprecation warnings in Rails 7
 
 ## 6.4.1 (2021-02-22)
 

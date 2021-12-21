@@ -17,6 +17,6 @@ module Authlogic
   #
   # @api public
   def self.gem_version
-    ::Gem::Version.new("6.4.1")
+    ::Gem::Version.new("6.4.2")
   end
 end
