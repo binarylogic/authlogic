@@ -2089,10 +2089,6 @@ module Authlogic
         end
       end
 
-      def a_r_default_timezone
-        (ActiveRecord.respond_to?(:default_timezone) ? ActiveRecord : klass).default_timezone
-      end
-
       def update_login_timestamps
         if record.respond_to?(:current_login_at)
           record.last_login_at = record.current_login_at if record.respond_to?(:last_login_at)
