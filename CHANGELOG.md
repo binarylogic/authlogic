@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Breaking Changes
   * None
 * Added
-  * None
+  * Rubygems MFA requirement for authors added to gemspec.
 * Fixed
   * None
 

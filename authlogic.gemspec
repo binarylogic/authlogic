@@ -21,7 +21,7 @@ require "authlogic/version"
   s.homepage = "https://github.com/binarylogic/authlogic"
   s.summary = "An unobtrusive ruby authentication library based on ActiveRecord."
   s.license = "MIT"
-
+  s.metadata = { "rubygems_mfa_required" => "true" }
   s.required_ruby_version = ">= 2.6.0"
 
   # See doc/rails_support_in_authlogic_5.0.md
