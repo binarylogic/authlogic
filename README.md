@@ -6,12 +6,6 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 
 [![Coverage Status](https://coveralls.io/repos/github/binarylogic/authlogic/badge.svg?branch=master)](https://coveralls.io/github/binarylogic/authlogic?branch=master)
 
-## Sponsors
-
-[![Timber Logging](http://res.cloudinary.com/timber/image/upload/v1490556810/pricing/sponsorship.png)](https://timber.io?utm_source=github&utm_medium=authlogic)
-
-[Tail Authlogic users](https://timber.io/docs/app/console/tail-a-user) in your logs!
-
 ## Documentation
 
 | Version    | Documentation                                                     |
