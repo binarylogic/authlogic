@@ -67,6 +67,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Added
   * [#684](https://github.com/binarylogic/authlogic/pull/684) - Use cookies
     only when available. Support for `ActionController::API`
+  * [#728](https://github.com/binarylogic/authlogic/pull/728) - Allow
+    single_access_token to be supplied using Headers in addition to Params.
 * Fixed
   * [#725](https://github.com/binarylogic/authlogic/pull/725) - `NoMethodError`
     when setting `sign_cookie` or `encrypt_cookie` before `controller` is

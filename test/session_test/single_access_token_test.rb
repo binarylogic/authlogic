@@ -3,14 +3,26 @@
 require "test_helper"
 
 module SessionTest
-  module ParamsTest
+  module SingleAccessTokenTest
     class ConfigTest < ActiveSupport::TestCase
       def test_params_key
+        assert_equal UserSession.cookie_key, UserSession.params_key
+
         UserSession.params_key = "my_params_key"
         assert_equal "my_params_key", UserSession.params_key
 
         UserSession.params_key "user_credentials"
         assert_equal "user_credentials", UserSession.params_key
+      end
+
+      def test_headers_key
+        assert_equal nil, UserSession.headers_key
+
+        UserSession.headers_key = "my_headers_key"
+        assert_equal "my_headers_key", UserSession.headers_key
+
+        UserSession.headers_key "user_credentials"
+        assert_equal "user_credentials", UserSession.headers_key
       end
 
       def test_single_access_allowed_request_types
@@ -28,11 +40,21 @@ module SessionTest
 
     class InstanceMethodsTest < ActiveSupport::TestCase
       def test_persist_persist_by_params
+        assert_persist_by(:params)
+      end
+
+      def test_persist_persist_by_headers
+        # Since default headers_key is nil, set for the test.
+        UserSession.send("headers_key=", "user_credentials")
+        assert_persist_by(:headers)
+      end
+
+      def assert_persist_by(headers_or_params)
         ben = users(:ben)
         session = UserSession.new
 
         refute session.persisting?
-        set_params_for(ben)
+        send("set_#{headers_or_params}_for", ben)
 
         refute session.persisting?
         refute session.unauthorized_record
