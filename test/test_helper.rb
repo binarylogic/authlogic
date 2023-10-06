@@ -62,7 +62,11 @@ if ActiveSupport.respond_to?(:test_order)
   ActiveSupport.test_order = :sorted
 end
 
-ActiveRecord::Base.default_timezone = :local
+if ActiveRecord::VERSION::STRING < "7.1"
+  ActiveRecord::Base.default_timezone = :local
+else
+  ActiveRecord.default_timezone = :local
+end
 ActiveRecord::Schema.define(version: 1) do
   create_table :companies do |t|
     t.datetime  :created_at, limit: 6
