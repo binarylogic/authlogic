@@ -56,7 +56,7 @@ jobs:
       # have set this up with each database as a separate job, but then we'd be
       # duplicating the matrix configuration three times.
       matrix:
-        gemfile: [ 'rails_5.2', 'rails_6.0', 'rails_6.1', 'rails_7.0' ]
+        gemfile: [ 'rails_5.2', 'rails_6.0', 'rails_6.1', 'rails_7.0', 'rails_7.1' ]
 
         # To keep matrix size down, only test highest and lowest rubies. In
         # `.rubocopy.yml`, set `TargetRubyVersion`, to the lowest ruby version
@@ -67,6 +67,8 @@ jobs:
           # rails 7 requires ruby >= 2.7.0
           - ruby: '2.6'
             gemfile: 'rails_7.0'
+          - ruby: '2.6'
+            gemfile: 'rails_7.1'
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
