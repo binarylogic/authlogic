@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Fixed
   * None
 
+## 6.4.3 (2023-12-13)
+
+* Breaking Changes
+  * None
+* Added
+  * None
+* Fixed
+  * [#768](https://github.com/binarylogic/authlogic/issues/768) - Fixed
+    compatibility issues with Rails 7.1
+
 ## 6.4.2 (2021-12-21)
 
 * Breaking Changes

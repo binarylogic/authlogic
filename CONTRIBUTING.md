@@ -48,6 +48,10 @@ BUNDLE_GEMFILE=gemfiles/rails_6.1.rb bundle exec rake
 # Rails 7.0
 BUNDLE_GEMFILE=gemfiles/rails_7.0.rb bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7.0.rb bundle exec rake
+
+# Rails 7.1
+BUNDLE_GEMFILE=gemfiles/rails_7.1.rb bundle install
+BUNDLE_GEMFILE=gemfiles/rails_7.1.rb bundle exec rake
 ```
 
 To run a single test:
