@@ -6,7 +6,7 @@ jobs:
   # and secondarily because jobs are performed concurrently.
   gha-job-authlogic-lint:
     name: Lint
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -25,7 +25,7 @@ jobs:
   # The test job is a matrix of ruby/rails versions.
   gha-job-authlogic-test:
     name: Ruby ${{ matrix.ruby }}, ${{ matrix.gemfile }}.rb
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     services:
       gha-service-authlogic-mysql:
         env:
