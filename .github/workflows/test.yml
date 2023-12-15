@@ -11,7 +11,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
       - name: Setup ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           # Set to `TargetRubyVersion` in `.rubocopy.yml`
           ruby-version: 2.6
@@ -73,7 +73,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
       - name: Setup ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
       - name: Bundle
