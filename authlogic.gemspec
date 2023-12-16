@@ -25,13 +25,14 @@ require "authlogic/version"
   s.required_ruby_version = ">= 2.6.0"
 
   # See doc/rails_support_in_authlogic_5.0.md
-  s.add_dependency "activemodel", [">= 5.2", "< 7.1"]
-  s.add_dependency "activerecord", [">= 5.2", "< 7.1"]
-  s.add_dependency "activesupport", [">= 5.2", "< 7.1"]
+  s.add_dependency "activemodel", [">= 5.2", "< 7.2"]
+  s.add_dependency "activerecord", [">= 5.2", "< 7.2"]
+  s.add_dependency "activesupport", [">= 5.2", "< 7.2"]
   s.add_dependency "request_store", "~> 1.0"
   s.add_development_dependency "bcrypt", "~> 3.1"
   s.add_development_dependency "byebug", "~> 10.0"
   s.add_development_dependency "coveralls", "~> 0.8.22"
+  s.add_development_dependency "minitest", "< 5.19.0" # See https://github.com/binarylogic/authlogic/issues/766
   s.add_development_dependency "minitest-reporters", "~> 1.3"
   s.add_development_dependency "mysql2", "~> 0.5.2"
   s.add_development_dependency "pg", "~> 1.1.4"
