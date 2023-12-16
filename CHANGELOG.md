@@ -7,88 +7,89 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
-* Breaking Changes
-  * None
-* Added
-  * Rubygems MFA requirement for authors added to gemspec.
-* Fixed
-  * None
+- Breaking Changes
+  - None
+- Added
+  - Rubygems MFA requirement for authors added to gemspec.
+- Fixed
+  - [#767](https://github.com/binarylogic/authlogic/pull/767) - Adds support for Rails 7.1
 
 ## 6.4.2 (2021-12-21)
 
-* Breaking Changes
-  * None
-* Added
-  * None
-* Fixed
-  * [#743](https://github.com/binarylogic/authlogic/pull/743) - Fixed
+- Breaking Changes
+  - None
+- Added
+  - None
+- Fixed
+  - [#743](https://github.com/binarylogic/authlogic/pull/743) - Fixed
     deprecation warning in Rails 7 re: `ActiveRecord::Base.default_timezone`
-  * [#745](https://github.com/binarylogic/authlogic/pull/745) - Fixed more
+  - [#745](https://github.com/binarylogic/authlogic/pull/745) - Fixed more
     deprecation warnings in Rails 7
 
 ## 6.4.1 (2021-02-22)
 
-* Breaking Changes
-  * None
-* Added
-  * `Authlogic::Session::Base.session_fixation_defense` - Reset the Rack
+- Breaking Changes
+  - None
+- Added
+  - `Authlogic::Session::Base.session_fixation_defense` - Reset the Rack
     session ID after authentication, to protect against Session Fixation
     attacks. (https://guides.rubyonrails.org/security.html#session-fixation)
     Default: true
-* Fixed
-  * None
+- Fixed
+  - None
 
 ## 6.4.0 (2020-12-22)
 
-* Breaking Changes
-  * None
-* Added
-  * [#734](https://github.com/binarylogic/authlogic/pull/734) - Support for
+- Breaking Changes
+  - None
+- Added
+  - [#734](https://github.com/binarylogic/authlogic/pull/734) - Support for
     string cookies when using TestCase and friends
-* Fixed
-  * None
+- Fixed
+  - None
 
 ## 6.3.0 (2020-12-17)
 
-* Breaking Changes
-  * None
-* Added
-  * [#733](https://github.com/binarylogic/authlogic/pull/733) - Rails 6.1 support
-  * `find_by_login_method` is deprecated in favor of `record_selection_method`,
+- Breaking Changes
+  - None
+- Added
+  - [#733](https://github.com/binarylogic/authlogic/pull/733) - Rails 6.1 support
+  - `find_by_login_method` is deprecated in favor of `record_selection_method`,
     to avoid confusion with ActiveRecord's "Dynamic Finders".
-* Fixed
-  * [#726](https://github.com/binarylogic/authlogic/issues/726) - Thread
+- Fixed
+  - [#726](https://github.com/binarylogic/authlogic/issues/726) - Thread
     safety in `Authlogic::Session::Base.klass_name`
 
 ## 6.2.0 (2020-09-03)
 
-* Breaking Changes
-  * None
-* Added
-  * [#684](https://github.com/binarylogic/authlogic/pull/684) - Use cookies
+- Breaking Changes
+  - None
+- Added
+  - [#684](https://github.com/binarylogic/authlogic/pull/684) - Use cookies
     only when available. Support for `ActionController::API`
-* Fixed
-  * [#725](https://github.com/binarylogic/authlogic/pull/725) - `NoMethodError`
+- Fixed
+  - [#725](https://github.com/binarylogic/authlogic/pull/725) - `NoMethodError`
     when setting `sign_cookie` or `encrypt_cookie` before `controller` is
     defined.
 
 ## 6.1.0 (2020-05-03)
 
-* Breaking Changes
-  * None
-* Added
-  * [#666](https://github.com/binarylogic/authlogic/pull/666) -
+- Breaking Changes
+  - None
+- Added
+  - [#666](https://github.com/binarylogic/authlogic/pull/666) -
     Forwardported Authlogic::Session::Cookies.encrypt_cookie option
-  * [#723](https://github.com/binarylogic/authlogic/pull/723) -
+  - [#723](https://github.com/binarylogic/authlogic/pull/723) -
     Option to raise a `Authlogic::ModelSetupError` when your database is not
     configured correctly.
-* Fixed
-  * None
+- Fixed
+  - None
 
 ## 6.0.0 (2020-03-23)
 
-* Breaking Changes, Major
-  * There is no longer a default `crypto_provider`. We still recommend SCrypt,
+- Breaking Changes, Major
+
+  - There is no longer a default `crypto_provider`. We still recommend SCrypt,
     but don't want users of other providers to be forced to install it. You
     must now explicitly specify your `crypto_provider`, eg. in your `user.rb`.
 
@@ -100,23 +101,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
         gem "scrypt", "~> 3.0"
 
-* Breaking Changes, Minor
-  * To set your crypto provider, you must use `crypto_provider=`, not
+- Breaking Changes, Minor
+  - To set your crypto provider, you must use `crypto_provider=`, not
     `crypto_provider`. The arity of the later has changed from -1 (one optional
     arg) to 0 (no arguments).
-* Added
-  * [#702](https://github.com/binarylogic/authlogic/pull/702) - The ability to
+- Added
+  - [#702](https://github.com/binarylogic/authlogic/pull/702) - The ability to
     specify "None" as a valid SameSite attribute
-* Fixed
-  * [#686](https://github.com/binarylogic/authlogic/pull/686) - Respect
+- Fixed
+  - [#686](https://github.com/binarylogic/authlogic/pull/686) - Respect
     the `log_in_after_create` setting when creating a new logged-out user
-  * [#668](https://github.com/binarylogic/authlogic/pull/668) -
+  - [#668](https://github.com/binarylogic/authlogic/pull/668) -
     BCrypt user forced to load SCrypt
-  * [#697](https://github.com/binarylogic/authlogic/issues/697) - Add V2
+  - [#697](https://github.com/binarylogic/authlogic/issues/697) - Add V2
     CryptoProviders for MD5 and SHA schemes that fix key stretching by hashing
     the byte digests instead of the hex strings representing those digests
-* Dependencies
-  * Drop support for ruby 2.3 (reached EOL on 2019-04-01)
+- Dependencies
+  - Drop support for ruby 2.3 (reached EOL on 2019-04-01)
 
 ## Previous major version
 
