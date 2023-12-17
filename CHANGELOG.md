@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Fixed
   * [#768](https://github.com/binarylogic/authlogic/issues/768) - Fixed
     compatibility issues with Rails 7.1
+   * [#769](https://github.com/binarylogic/authlogic/issues/769) - Fixed GH workflow
 
 ## 6.4.2 (2021-12-21)
 
