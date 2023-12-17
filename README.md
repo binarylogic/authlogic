@@ -291,7 +291,7 @@ class UserSessionsController < ApplicationController
     if @user_session.save
       redirect_to root_url
     else
-      render :action => :new
+      render :new, status: 422
     end
   end
 
