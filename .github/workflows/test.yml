@@ -6,18 +6,18 @@ jobs:
   # and secondarily because jobs are performed concurrently.
   gha-job-authlogic-lint:
     name: Lint
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
       - name: Setup ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           # Set to `TargetRubyVersion` in `.rubocopy.yml`
           ruby-version: 2.6
       - name: Bundle
         run: |
-          gem install bundler
+          gem install bundler -v 2.4.22
           bundle install --jobs 4 --retry 3
       - name: Lint
         run: bundle exec rubocop
@@ -25,7 +25,7 @@ jobs:
   # The test job is a matrix of ruby/rails versions.
   gha-job-authlogic-test:
     name: Ruby ${{ matrix.ruby }}, ${{ matrix.gemfile }}.rb
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     services:
       gha-service-authlogic-mysql:
         env:
@@ -73,12 +73,12 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
       - name: Setup ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
       - name: Bundle
         run: |
-          gem install bundler
+          gem install bundler -v 2.4.22
           bundle install --jobs 4 --retry 3
         env:
           BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.rb
