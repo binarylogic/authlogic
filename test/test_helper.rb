@@ -67,7 +67,6 @@ if ActiveRecord::VERSION::STRING < "7.1"
 else
   ActiveRecord.default_timezone = :local
 end
-
 ActiveRecord::Schema.define(version: 1) do
   create_table :companies do |t|
     t.datetime  :created_at, limit: 6
