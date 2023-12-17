@@ -17,7 +17,7 @@ jobs:
           ruby-version: 2.6
       - name: Bundle
         run: |
-          gem install bundler
+          gem install bundler -v 2.4.22
           bundle install --jobs 4 --retry 3
       - name: Lint
         run: bundle exec rubocop
@@ -78,7 +78,7 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
       - name: Bundle
         run: |
-          gem install bundler
+          gem install bundler -v 2.4.22
           bundle install --jobs 4 --retry 3
         env:
           BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.rb
