@@ -9,9 +9,9 @@ An unobtrusive ruby authentication library based on ActiveRecord.
 ## Documentation
 
 | Version    | Documentation                                                     |
-|------------|-------------------------------------------------------------------|
+| ---------- | ----------------------------------------------------------------- |
 | Unreleased | https://github.com/binarylogic/authlogic/blob/master/README.md    |
-| 6.4.2      | https://github.com/binarylogic/authlogic/blob/v6.4.2/README.md    |
+| 6.4.3      | https://github.com/binarylogic/authlogic/blob/v6.4.3/README.md    |
 | 5.2.0      | https://github.com/binarylogic/authlogic/blob/v5.2.0/README.md    |
 | 4.5.0      | https://github.com/binarylogic/authlogic/blob/v4.5.0/README.md    |
 | 3.7.0      | https://github.com/binarylogic/authlogic/blob/v3.7.0/README.md    |
@@ -77,14 +77,14 @@ The above handles the entire authentication process for you by:
 
 You can also log out (i.e. **destroying** the session):
 
-``` ruby
+```ruby
 session.destroy
 ```
 
 After a session has been created, you can persist it (i.e. **finding** the
 record) across requests. Thus keeping the user logged in:
 
-``` ruby
+```ruby
 session = UserSession.find
 ```
 
@@ -106,7 +106,7 @@ is all you will need to do.
 You may specify how passwords are cryptographically hashed (or encrypted) by
 setting the Authlogic::CryptoProvider option:
 
-``` ruby
+```ruby
 c.crypto_provider = Authlogic::CryptoProviders::BCrypt
 ```
 
@@ -114,7 +114,7 @@ Also, sessions are automatically maintained. You can switch this on and off with
 configuration, but the following will automatically log a user in after a
 successful registration:
 
-``` ruby
+```ruby
 User.create(params[:user])
 ```
 
@@ -152,17 +152,17 @@ code is organized.** There are 2 models, your Authlogic model and your
 ActiveRecord model:
 
 1. **Authlogic::Session**, your session models that
-  extend `Authlogic::Session::Base`.
+   extend `Authlogic::Session::Base`.
 2. **Authlogic::ActsAsAuthentic**, which adds in functionality to your
-  ActiveRecord model when you call `acts_as_authentic`.
+   ActiveRecord model when you call `acts_as_authentic`.
 
 ### 1.c. Installation
 
 To install Authlogic, add this to your Gemfile:
 
- `gem 'authlogic'`
+`gem 'authlogic'`
 
- And run `bundle install`.
+And run `bundle install`.
 
 ## 2. Rails
 
@@ -173,7 +173,7 @@ Let's walk through a typical rails setup. ([Compatibility](#90-compatibility))
 If you want to enable all the features of Authlogic, a migration to create a
 `User` model might look like this:
 
-``` ruby
+```ruby
 class CreateUser < ActiveRecord::Migration
   def change
     create_table :users do |t|
@@ -344,6 +344,7 @@ end
 > Because ActionController::API does not include ActionController::Cookies
 > metal and ActionDispatch::Cookies rack module, Therefore, our controller can
 > not use the cookies method.
+>
 > - [#684](https://github.com/binarylogic/authlogic/pull/684).
 
 ### 2.c. View
@@ -406,6 +407,7 @@ end
 ```
 
 ### 2.e. SameSite Cookie Attribute
+
 The SameSite attribute tells browsers when and how to fire cookies in first- or third-party situations. SameSite is used by a variety of browsers to identify whether or not to allow a cookie to be accessed.
 
 Up until recently, the standard default value when SameSite was not explicitly defined was to allow cookies in both first- and third-party contexts. However, starting with Chrome 80+, the SameSite attribute will not default to Lax behavior meaning cookies will only be permitted in first-party contexts.
@@ -420,25 +422,25 @@ See [Authlogic::TestCase](https://github.com/binarylogic/authlogic/blob/master/l
 
 ## 4. Helpful links
 
-* <b>API Reference:</b> http://www.rubydoc.info/github/binarylogic/authlogic
-* <b>Repository:</b> https://github.com/binarylogic/authlogic/tree/master
-* <b>Railscasts Screencast:</b> http://railscasts.com/episodes/160-authlogic
-* <b>Example repository with tutorial in README:</b> https://github.com/binarylogic/authlogic_example/tree/master
-* <b>Tutorial</b>: Rails Authentication with Authlogic https://www.sitepoint.com/rails-authentication-with-authlogic
-* <b>Issues:</b> https://github.com/binarylogic/authlogic/issues
-* <b>Chrome is not logging out on browser close</b> https://productforums.google.com/forum/#!topic/chrome/9l-gKYIUg50/discussion
+- <b>API Reference:</b> http://www.rubydoc.info/github/binarylogic/authlogic
+- <b>Repository:</b> https://github.com/binarylogic/authlogic/tree/master
+- <b>Railscasts Screencast:</b> http://railscasts.com/episodes/160-authlogic
+- <b>Example repository with tutorial in README:</b> https://github.com/binarylogic/authlogic_example/tree/master
+- <b>Tutorial</b>: Rails Authentication with Authlogic https://www.sitepoint.com/rails-authentication-with-authlogic
+- <b>Issues:</b> https://github.com/binarylogic/authlogic/issues
+- <b>Chrome is not logging out on browser close</b> https://productforums.google.com/forum/#!topic/chrome/9l-gKYIUg50/discussion
 
 ## 5. Add-ons
 
-* <b>Authlogic OpenID addon:</b> https://github.com/binarylogic/authlogic_openid
-* <b>Authlogic LDAP addon:</b> https://github.com/binarylogic/authlogic_ldap
-* <b>Authlogic Facebook Connect:</b> https://github.com/kalasjocke/authlogic-facebook-connect
-* <b>Authlogic Facebook Connect (New JS API):</b> https://github.com/studybyte/authlogic_facebook_connect
-* <b>Authlogic Facebook Shim</b> https://github.com/james2m/authlogic_facebook_shim
-* <b>Authlogic OAuth (Twitter):</b> https://github.com/jrallison/authlogic_oauth
-* <b>Authlogic Oauth and OpenID:</b> https://github.com/lancejpollard/authlogic-connect
-* <b>Authlogic PAM:</b> https://github.com/nbudin/authlogic_pam
-* <b>Authlogic x509:</b> https://github.com/auth-scc/authlogic_x509
+- <b>Authlogic OpenID addon:</b> https://github.com/binarylogic/authlogic_openid
+- <b>Authlogic LDAP addon:</b> https://github.com/binarylogic/authlogic_ldap
+- <b>Authlogic Facebook Connect:</b> https://github.com/kalasjocke/authlogic-facebook-connect
+- <b>Authlogic Facebook Connect (New JS API):</b> https://github.com/studybyte/authlogic_facebook_connect
+- <b>Authlogic Facebook Shim</b> https://github.com/james2m/authlogic_facebook_shim
+- <b>Authlogic OAuth (Twitter):</b> https://github.com/jrallison/authlogic_oauth
+- <b>Authlogic Oauth and OpenID:</b> https://github.com/lancejpollard/authlogic-connect
+- <b>Authlogic PAM:</b> https://github.com/nbudin/authlogic_pam
+- <b>Authlogic x509:</b> https://github.com/auth-scc/authlogic_x509
 
 If you create one of your own, please let us know about it so we can add it to
 this list. Or just fork the project, add your link, and send us a pull request.
@@ -486,16 +488,16 @@ in `authlogic/session/base.rb`.
 
 ## 90. Compatibility
 
-| Version | branch       | ruby     | activerecord  |
-| ------- | ------------ | -------- | ------------- |
-| 6.4.2   | 6-4-stable   | >= 2.4.0 | >= 5.2, < 7.1 |
-| 5.2     | 5-2-stable   | >= 2.3.0 | >= 5.2, < 6.1 |
-| 4.5     | 4-5-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
-| 4.3     | 4-3-stable   | >= 2.3.0 | >= 4.2, < 5.3 |
-| 4.2     | 4-2-stable   | >= 2.2.0 | >= 4.2, < 5.3 |
-| 3       | 3-stable     | >= 1.9.3 | >= 3.2, < 5.3 |
-| 2       | rails2       | >= 1.9.3 | ~> 2.3.0      |
-| 1       | ?            | ?        | ?             |
+| Version | branch     | ruby     | activerecord  |
+| ------- | ---------- | -------- | ------------- |
+| 6.4.3   | 6-4-stable | >= 2.4.0 | >= 5.2, < 7.2 |
+| 5.2     | 5-2-stable | >= 2.3.0 | >= 5.2, < 6.1 |
+| 4.5     | 4-5-stable | >= 2.3.0 | >= 4.2, < 5.3 |
+| 4.3     | 4-3-stable | >= 2.3.0 | >= 4.2, < 5.3 |
+| 4.2     | 4-2-stable | >= 2.2.0 | >= 4.2, < 5.3 |
+| 3       | 3-stable   | >= 1.9.3 | >= 3.2, < 5.3 |
+| 2       | rails2     | >= 1.9.3 | ~> 2.3.0      |
+| 1       | ?          | ?        | ?             |
 
 Under SemVer, [changes to dependencies][10] do not require a major release.
 
