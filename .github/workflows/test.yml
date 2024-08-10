@@ -23,7 +23,7 @@ jobs:
 
   # The test job is a matrix of ruby/rails versions.
   gha-job-authlogic-test:
-    name: Ruby ${{ matrix.ruby }}, ${{ matrix.gemfile }}.rb
+    name: Ruby ${{ matrix.ruby }}, Rails ${{ matrix.rails }}
     runs-on: ubuntu-latest
     services:
       gha-service-authlogic-mysql:
@@ -50,28 +50,30 @@ jobs:
         ports:
           - 5432:5432
     strategy:
+      fail-fast: false
       # Unlike TravisCI, the database will not be part of the matrix. Each
       # sub-job in the matrix tests all three databases. Alternatively, we could
       # have set this up with each database as a separate job, but then we'd be
       # duplicating the matrix configuration three times.
       matrix:
-        gemfile:
-          ["rails_5.2", "rails_6.0", "rails_6.1", "rails_7.0", "rails_7.1"]
-
         # To keep matrix size down, only test highest and lowest rubies. In
-        # `.rubocopy.yml`, set `TargetRubyVersion`, to the lowest ruby version
+        # `.rubocop.yml`, set `TargetRubyVersion`, to the lowest ruby version
         # tested here.
-        ruby: ["2.6", "2.7"]
-
+        ruby: ["2.6", "3.3"]
+        rails: ["5.2", "6.0", "6.1", "7.0", "7.1", "7.2"]
         exclude:
           # rails 7 requires ruby >= 2.7.0
           - ruby: "2.6"
-            gemfile: "rails_7.0"
+            rails: "7.0"
           - ruby: "2.6"
-            gemfile: "rails_7.1"
+            rails: "7.1"
+          - ruby: "2.6"
+            rails: "7.2"
+          - ruby: "3.3"
+            rails: "5.2"
     steps:
       - name: Checkout source
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -81,7 +83,7 @@ jobs:
           gem install bundler -v 2.4.22
           bundle install --jobs 4 --retry 3
         env:
-          BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.rb
+          BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.rb
 
       # MySQL db was created above, sqlite will be created during test suite,
       # when migrations occur, so we only need to create the postgres db. I
@@ -105,13 +107,13 @@ jobs:
       - name: Test, sqlite
         run: bundle exec rake test
         env:
-          BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.rb
+          BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.rb
           DB: sqlite
       - name: Test, mysql
         run: bundle exec rake test
         env:
           BACKTRACE: 1
-          BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.rb
+          BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.rb
           DB: mysql
           AUTHLOGIC_DB_NAME: authlogic
           AUTHLOGIC_DB_USER: root
@@ -121,7 +123,7 @@ jobs:
         run: bundle exec rake test
         env:
           BACKTRACE: 1
-          BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.rb
+          BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.rb
           DB: postgres
           AUTHLOGIC_DB_NAME: authlogic
           AUTHLOGIC_DB_USER: postgres

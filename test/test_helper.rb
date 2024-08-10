@@ -183,7 +183,11 @@ require "libs/admin"
 module ActiveSupport
   class TestCase
     include ActiveRecord::TestFixtures
-    self.fixture_path = File.dirname(__FILE__) + "/fixtures"
+    if respond_to?(:fixture_paths=)
+      self.fixture_paths = [File.dirname(__FILE__) + "/fixtures"]
+    else
+      self.fixture_path = File.dirname(__FILE__) + "/fixtures"
+    end
 
     # use_transactional_fixtures= is deprecated and will be removed from Rails 5.1
     # (use use_transactional_tests= instead)

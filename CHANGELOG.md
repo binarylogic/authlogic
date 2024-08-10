@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added
   - None
 - Fixed
-  - None
+  - [#770](https://github.com/binarylogic/authlogic/pull/770) - Adds support for Rails 7.2
 
 ## 6.4.3 (2023-12-17)
 

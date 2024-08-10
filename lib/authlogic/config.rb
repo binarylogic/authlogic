@@ -24,7 +24,7 @@ module Authlogic
     private
 
     def deprecate_authlogic_config(method_name)
-      ::ActiveSupport::Deprecation.warn(
+      ::ActiveSupport::Deprecation.new.warn(
         format(E_USE_NORMAL_RAILS_VALIDATION, method_name)
       )
     end
