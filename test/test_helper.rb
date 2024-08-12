@@ -192,14 +192,7 @@ module ActiveSupport
       self.fixture_path = File.dirname(__FILE__) + "/fixtures"
     end
 
-    # `use_transactional_fixtures=` was deprecated in favor of
-    # `use_transactional_tests=` in Rails 5.0, removed in Rails 5.1.
-    if respond_to?(:use_transactional_tests=)
-      self.use_transactional_tests = false
-    else
-      self.use_transactional_fixtures = false
-    end
-
+    self.use_transactional_tests = false
     self.use_instantiated_fixtures = false
     self.pre_loaded_fixtures = false
     fixtures :all
