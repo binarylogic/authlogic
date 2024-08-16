@@ -12,7 +12,7 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = false
 
   # Set interpreter warning level to 2 (verbose)
-  test.ruby_opts += [format("-W%d", 2)]
+  test.ruby_opts << "-W2"
 end
 
 require "rubocop/rake_task"
