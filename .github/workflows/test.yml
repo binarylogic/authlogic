@@ -60,7 +60,7 @@ jobs:
         # `.rubocop.yml`, set `TargetRubyVersion`, to the lowest ruby version
         # tested here.
         ruby: ["2.6", "3.3"]
-        rails: ["5.2", "6.0", "6.1", "7.0", "7.1", "7.2"]
+        rails: ["5.2", "6.0", "6.1", "7.0", "7.1", "7.2", "8.0"]
         exclude:
           # rails 7 requires ruby >= 2.7.0
           - ruby: "2.6"
@@ -69,6 +69,8 @@ jobs:
             rails: "7.1"
           - ruby: "2.6"
             rails: "7.2"
+          - ruby: "2.6"
+            rails: "8.0"
           - ruby: "3.3"
             rails: "5.2"
     steps:

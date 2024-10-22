@@ -25,9 +25,9 @@ require "authlogic/version"
   s.required_ruby_version = ">= 2.6.0"
 
   # See doc/rails_support_in_authlogic_5.0.md
-  s.add_dependency "activemodel", [">= 5.2", "< 8.0"]
-  s.add_dependency "activerecord", [">= 5.2", "< 8.0"]
-  s.add_dependency "activesupport", [">= 5.2", "< 8.0"]
+  s.add_dependency "activemodel", [">= 5.2", "< 8.1"]
+  s.add_dependency "activerecord", [">= 5.2", "< 8.1"]
+  s.add_dependency "activesupport", [">= 5.2", "< 8.1"]
   s.add_dependency "request_store", "~> 1.0"
   s.add_development_dependency "bcrypt", "~> 3.1"
   s.add_development_dependency "byebug", "~> 11.1.3"
