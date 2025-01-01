@@ -673,7 +673,7 @@ module Authlogic
 
         # @deprecated in favor of record_selection_method
         def find_by_login_method(value = nil)
-          ::ActiveSupport::Deprecation.warn(E_DPR_FIND_BY_LOGIN_METHOD)
+          ::ActiveSupport::Deprecation.new.warn(E_DPR_FIND_BY_LOGIN_METHOD)
           record_selection_method(value)
         end
         alias find_by_login_method= find_by_login_method
@@ -1791,7 +1791,7 @@ module Authlogic
 
       # @deprecated in favor of `self.class.record_selection_method`
       def find_by_login_method
-        ::ActiveSupport::Deprecation.warn(E_DPR_FIND_BY_LOGIN_METHOD)
+        ::ActiveSupport::Deprecation.new.warn(E_DPR_FIND_BY_LOGIN_METHOD)
         self.class.record_selection_method
       end
 
