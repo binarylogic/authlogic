@@ -34,6 +34,7 @@ require "authlogic/version"
   s.add_development_dependency "coveralls_reborn", "~> 0.28.0"
   s.add_development_dependency "minitest", "< 5.19.0" # See https://github.com/binarylogic/authlogic/issues/766
   s.add_development_dependency "minitest-reporters", "~> 1.3"
+  s.add_development_dependency "mutex_m", "~> 0.3.0"
   s.add_development_dependency "rake", "~> 13.0"
   s.add_development_dependency "rubocop", "~> 0.80.1"
   s.add_development_dependency "rubocop-performance", "~> 1.1"
