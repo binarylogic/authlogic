@@ -82,7 +82,8 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
       - name: Bundle
         run: |
-          gem install bundler -v 2.4.22
+          gem update --system
+          gem install bundler
           bundle install --jobs 4 --retry 3
         env:
           BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.rb
