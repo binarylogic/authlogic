@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require "English"
-$LOAD_PATH.push File.expand_path("lib", __dir__)
-require "authlogic/version"
+
+require_relative "lib/authlogic/version"
 
 ::Gem::Specification.new do |s|
   s.name = "authlogic"
