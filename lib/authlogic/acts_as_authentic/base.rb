@@ -104,13 +104,15 @@ module Authlogic
   end
 end
 
-::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::Base
-::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::Email
-::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::LoggedInStatus
-::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::Login
-::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::MagicColumns
-::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::Password
-::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::PerishableToken
-::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::PersistenceToken
-::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::SessionMaintenance
-::ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::SingleAccessToken
+ActiveSupport.on_load :active_record do
+  ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::Base
+  ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::Email
+  ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::LoggedInStatus
+  ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::Login
+  ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::MagicColumns
+  ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::Password
+  ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::PerishableToken
+  ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::PersistenceToken
+  ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::SessionMaintenance
+  ActiveRecord::Base.send :include, Authlogic::ActsAsAuthentic::SingleAccessToken
+end
