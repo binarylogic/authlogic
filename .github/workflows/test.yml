@@ -82,7 +82,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-
+          bundler-cache: true
       # MySQL db was created above, sqlite will be created during test suite,
       # when migrations occur, so we only need to create the postgres db. I
       # tried something like `cd .....dummy_app && ....db:create`, but couldn't
