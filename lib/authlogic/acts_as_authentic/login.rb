@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "authlogic/acts_as_authentic/queries/case_sensitivity"
-require "authlogic/acts_as_authentic/queries/find_with_case"
+require_relative "queries/case_sensitivity"
+require_relative "queries/find_with_case"
 
 module Authlogic
   module ActsAsAuthentic

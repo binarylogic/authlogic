@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "authlogic/i18n/translator"
+require_relative "i18n/translator"
 
 module Authlogic
   # This class allows any message in Authlogic to use internationalization. In
