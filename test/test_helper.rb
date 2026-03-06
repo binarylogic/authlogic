@@ -274,6 +274,14 @@ module ActiveSupport
       controller.params["user_credentials"] = nil
     end
 
+    def set_headers_for(user)
+      controller.request.headers["HTTP_USER_CREDENTIALS"] = user.single_access_token
+    end
+
+    def unset_headers
+      controller.request.headers["HTTP_USER_CREDENTIALS"] = nil
+    end
+
     def set_request_content_type(type)
       controller.request_content_type = type
     end
