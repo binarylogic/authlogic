@@ -1913,7 +1913,7 @@ module Authlogic
         # Setting headers_key to nil is the accepted way to disable
         # single_access_token in headers.
         return nil if headers_key.nil?
-        controller.headers[headers_key]
+        controller.request.headers[headers_key]
       end
 
       def params_enabled?
@@ -1946,7 +1946,13 @@ module Authlogic
       end
 
       def headers_key
-        build_key(self.class.headers_key)
+        # Rack servers uppercase header names, convert hyphens to underscores,
+        # and prefix with "HTTP_" to comply with CGI. We transform the key in
+        # the same way Rails does:
+        # https://github.com/rails/rails/blob/6-0-stable/actionpack/lib/action_dispatch/http/headers.rb#L123-L126
+        key = build_key(self.class.headers_key)
+        return nil if key.nil?
+        "HTTP_" + key.upcase.tr("-", "_")
       end
 
       def password_field

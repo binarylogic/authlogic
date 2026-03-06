@@ -19,6 +19,10 @@ module Authlogic
         controller.request_content_type if controller.respond_to? :request_content_type
       end
 
+      def headers
+        @headers ||= {}
+      end
+
       def ip
         controller&.respond_to?(:env) &&
           controller.env.is_a?(Hash) &&
