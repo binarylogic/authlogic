@@ -163,6 +163,11 @@ require "authlogic/test_case"
 Authlogic::CryptoProviders::SCrypt.max_time = 0.001 # 1ms
 Authlogic::CryptoProviders::SCrypt.max_mem = 1024 * 1024 # 1MB, the minimum SCrypt allows
 
+# Configure Argon2id to be as fast as possible for tests.
+Authlogic::CryptoProviders::Argon2id.t_cost = 1
+Authlogic::CryptoProviders::Argon2id.m_cost = 3 # 2^3 = 8 KiB, minimum Argon2 allows
+Authlogic::CryptoProviders::Argon2id.p_cost = 1
+
 require "libs/project"
 require "libs/affiliate"
 require "libs/employee"

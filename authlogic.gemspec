@@ -28,6 +28,7 @@ require_relative "lib/authlogic/version"
   s.add_dependency "activerecord", [">= 7.2", "< 8.2"]
   s.add_dependency "activesupport", [">= 7.2", "< 8.2"]
   s.add_dependency "request_store", "~> 1.0"
+  s.add_development_dependency "argon2", "~> 2.0"
   s.add_development_dependency "bcrypt", "~> 3.1"
   s.add_development_dependency "byebug", "~> 11.1.3"
   s.add_development_dependency "coveralls_reborn", "~> 0.29.0"
