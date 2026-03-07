@@ -27,8 +27,9 @@ module Authlogic
     autoload :Sha1,   "authlogic/crypto_providers/sha1"
     autoload :Sha256, "authlogic/crypto_providers/sha256"
     autoload :Sha512, "authlogic/crypto_providers/sha512"
-    autoload :BCrypt, "authlogic/crypto_providers/bcrypt"
-    autoload :SCrypt, "authlogic/crypto_providers/scrypt"
+    autoload :BCrypt,   "authlogic/crypto_providers/bcrypt"
+    autoload :SCrypt,   "authlogic/crypto_providers/scrypt"
+    autoload :Argon2id, "authlogic/crypto_providers/argon2id"
 
     # Guide users to choose a better crypto provider.
     class Guidance

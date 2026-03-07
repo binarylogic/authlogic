@@ -92,6 +92,49 @@ module ActsAsAuthenticTest
       )
     end
 
+    def test_transitioning_password_to_argon2id
+      ben = users(:ben)
+      transition_password_to(Authlogic::CryptoProviders::Argon2id, ben)
+    end
+
+    def test_transitioning_password_from_argon2id
+      ben = users(:ben)
+      transition_password_to(Authlogic::CryptoProviders::Argon2id, ben)
+      transition_password_to(
+        Authlogic::CryptoProviders::SCrypt,
+        ben,
+        Authlogic::CryptoProviders::Argon2id
+      )
+    end
+
+    def test_argon2id_cost_migration
+      ben = users(:aaron)
+      original_t_cost = Authlogic::CryptoProviders::Argon2id.t_cost
+
+      # Set up user with Argon2id
+      User.acts_as_authentic do |c|
+        c.crypto_provider = Authlogic::CryptoProviders::Argon2id
+        c.transition_from_crypto_providers = []
+      end
+      ben.password = "aaronrocks"
+      ben.password_confirmation = "aaronrocks"
+      ben.save(validate: false)
+
+      old_hash = ben.crypted_password
+      assert Authlogic::CryptoProviders::Argon2id.cost_matches?(old_hash)
+
+      # Increase cost
+      Authlogic::CryptoProviders::Argon2id.t_cost = original_t_cost + 1
+      refute Authlogic::CryptoProviders::Argon2id.cost_matches?(old_hash)
+
+      # On next valid_password?, it should re-hash
+      assert ben.valid_password?("aaronrocks")
+      assert_not_equal old_hash, ben.crypted_password
+      assert Authlogic::CryptoProviders::Argon2id.cost_matches?(ben.crypted_password)
+    ensure
+      Authlogic::CryptoProviders::Argon2id.t_cost = original_t_cost
+    end
+
     def test_v2_crypto_provider_transition
       ben = users(:ben)
 
